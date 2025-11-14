@@ -3,11 +3,13 @@ Memory Embeddings Processor
 
 Generate and display embeddings for all Serena memory files.
 Demonstrates practical embedding usage with real learning data.
+Saves embeddings to ChromaDB for semantic search.
 
-Run with: uv run python phase1_foundations/04_embeddings_intro/memory_embeddings.py
+Run with: uv run python phase1_foundations/playground/embeddings_demo/memory_embeddings.py
 
 Requirements:
 - sentence-transformers
+- chromadb
 """
 
 import numpy as np
@@ -15,6 +17,8 @@ from pathlib import Path
 from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
 from typing import Dict, List, Tuple
+import chromadb
+from chromadb.config import Settings
 
 
 def print_section(title: str) -> None:

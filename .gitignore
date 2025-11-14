@@ -56,4 +56,5 @@ data/raw/          # Keep structure, ignore data
 data/processed/
 models/checkpoints/
 *.log
-chromadb/          # Vector DB storage
+.chromadb/         # Vector DB storage
+.chromadb
