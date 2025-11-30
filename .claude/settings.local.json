@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__serena__list_memories",
+      "mcp__serena__activate_project",
+      "Bash(tree:*)",
+      "Bash(uv sync:*)",
+      "Bash(uv run python:*)",
+      "mcp__serena__write_memory",
+      "mcp__serena__read_memory",
+      "Bash(git add:*)",
+      "mcp__serena__get_current_config",
+      "mcp__serena__jet_brains_get_symbols_overview"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

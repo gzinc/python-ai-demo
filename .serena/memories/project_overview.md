@@ -59,17 +59,6 @@
 - pytest: Testing
 - ruff: Linting/formatting
 
-## Communication Preferences
-
-**Response Formatting**:
-- Always start responses with long separator line for easy navigation:
-  ```
-  ================================================================================
-
-  [Response content]
-  ```
-- Helps user find their place in long conversations
-
 ## Notes
 
 - This project complements ../python-demo (FastAPI learning)

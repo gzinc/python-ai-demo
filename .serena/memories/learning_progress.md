@@ -5,12 +5,12 @@ Track your journey through AI development. Update after each session.
 ## Phase 1: Foundations
 
 ### NumPy Basics
-- [ ] Array creation and manipulation
-- [ ] Vectorized operations
-- [ ] Broadcasting
-- [ ] Indexing and slicing
+- [x] Array creation and manipulation
+- [x] Vectorized operations
+- [x] Broadcasting
+- [x] Indexing and slicing
 - [ ] Reshaping and stacking
-- [ ] Performance optimization
+- [x] Performance optimization
 - [ ] Exercises completed
 - [ ] Project: Similarity search
 
@@ -32,7 +32,7 @@ Track your journey through AI development. Update after each session.
 - [ ] Exercises completed
 - [ ] Project: Data pipeline
 
-**Phase 1 Completion**: ___% (0/3 modules completed)
+**Phase 1 Completion**: 33% (1/3 modules in progress)
 
 ---
 
@@ -53,19 +53,20 @@ Track your journey through AI development. Update after each session.
 - [ ] Cost optimization
 
 ### Embeddings
-- [ ] Text embeddings basics
-- [ ] Semantic similarity
-- [ ] Vector databases
-- [ ] Similarity search
-- [ ] ChromaDB integration
+- [x] Text embeddings basics
+- [x] Semantic similarity
+- [x] Vector databases
+- [x] Similarity search
+- [x] ChromaDB integration
 
-**Phase 2 Completion**: ___% (0/3 modules completed)
+**Phase 2 Completion**: 33% (1/3 modules completed - Embeddings!)
 
 ---
 
 ## Phase 3: LLM Applications
 
 ### RAG System
+- [x] RAG architecture understanding (docs created)
 - [ ] Document ingestion
 - [ ] Chunking strategies
 - [ ] Retrieval pipeline
@@ -86,7 +87,7 @@ Track your journey through AI development. Update after each session.
 - [ ] Multi-tool orchestration
 - [ ] Function calling project
 
-**Phase 3 Completion**: ___% (0/3 modules completed)
+**Phase 3 Completion**: 10% (RAG docs created, implementation pending)
 
 ---
 
@@ -113,7 +114,7 @@ Track your journey through AI development. Update after each session.
 - [ ] Orchestration
 - [ ] Multi-agent system
 
-**Phase 4 Completion**: ___% (0/3 modules completed)
+**Phase 4 Completion**: 0% (0/3 modules completed)
 
 ---
 
@@ -140,16 +141,19 @@ Track your journey through AI development. Update after each session.
 - [ ] Rate limiting
 - [ ] Deployment
 
-**Phase 5 Completion**: ___% (0/3 modules completed)
+**Phase 5 Completion**: 0% (0/3 modules completed)
 
 ---
 
 ## Overall Progress
 
-**Total Completion**: ___% (0/15 modules completed)
+**Total Completion**: ~15% (Making good progress on foundations!)
 
 **Milestones Achieved**:
 - [x] Understanding Embeddings (Critical conceptual breakthrough!)
+- [x] ChromaDB hands-on experience
+- [x] Semantic search working demo
+- [x] RAG documentation comprehensive
 - [ ] Phase 1 completed
 - [ ] Phase 2 completed
 - [ ] Phase 3 completed
@@ -157,14 +161,16 @@ Track your journey through AI development. Update after each session.
 - [ ] Phase 5 completed
 
 **Projects Built**:
-- (none yet - starting Phase 1)
+- embeddings_demo: Memory files → ChromaDB → Semantic search ✅
 
 **Skills Acquired**:
 - Understanding of embeddings and their role in AI
-- Mental model of RAG architecture
+- Mental model of RAG architecture (detailed!)
 - Knowledge of vector databases (ChromaDB, Pinecone, etc.)
 - Connection between NumPy and AI applications
 - Cost models for embeddings (API vs open-source)
+- Hands-on ChromaDB experience
+- Semantic search implementation
 
 ---
 
@@ -174,17 +180,19 @@ Track your journey through AI development. Update after each session.
 - Strong conceptual understanding of embeddings
 - Clear mental model of how AI apps work (RAG pattern)
 - Good grasp of cost/tool trade-offs
+- Hands-on experience with ChromaDB
 
 **Areas for Improvement**:
-- Need hands-on practice with NumPy
-- Need to complete Phase 1 modules
-- Need to actually build something
+- Complete Phase 1 NumPy exercises
+- Build more hands-on projects
+- Practice Pandas for data processing
 
 **Interesting Discoveries**:
 - Embeddings are just numbers that encode meaning!
 - Can build real AI apps with free tools (sentence-transformers + ChromaDB)
 - NumPy is critical because embeddings ARE NumPy arrays
 - Vector databases exist specifically for high-dimensional vectors
+- 95% of RAG cost is LLM generation, not retrieval!
 
 **Questions to Explore**:
 - How exactly are embeddings generated internally?
@@ -204,16 +212,13 @@ Track your journey through AI development. Update after each session.
 - Session time: ~90 minutes
 - Confidence gain: Significant
 
-## Notes
-
-**Strengths**:
--
-
-**Areas for Improvement**:
--
-
-**Interesting Discoveries**:
--
-
-**Questions to Explore**:
--
+### 2025-11-30: RAG Deep Dive & ChromaDB Hands-On
+- ✅ Enhanced rag_explained.md with 600+ lines of detailed content
+- ✅ Added flow diagrams with timing/cost breakdowns
+- ✅ Added stage-by-stage deep dive (Indexing, Retrieval, Augmentation, Generation)
+- ✅ Added storage pattern economics (critical cost optimization patterns)
+- ✅ Ran ChromaDB demo successfully
+- ✅ Stored learning memories in vector database
+- ✅ Performed semantic search over memories
+- Session focus: RAG understanding + hands-on vector DB
+- Confidence gain: Strong practical foundation
