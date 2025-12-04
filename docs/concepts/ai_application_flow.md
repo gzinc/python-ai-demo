@@ -20,15 +20,43 @@ Understanding the end-to-end flow of AI applications using embeddings, vector da
 Every AI/LLM application follows a standard pattern of 5 stages:
 
 ```
-1. SETUP (One-time)
-   ↓
-2. INDEXING (When you add content)
-   ↓
-3. USER QUERY (Every request)
-   ↓
-4. RETRIEVAL (Find relevant info)
-   ↓
-5. GENERATION (LLM creates answer)
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                        AI APPLICATION FLOW                                  │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│   ╔═══════════════════════════════════════════════════════════════════╗    │
+│   ║                    ONE-TIME SETUP PHASE                           ║    │
+│   ╠═══════════════════════════════════════════════════════════════════╣    │
+│   ║  ┌──────────┐         ┌──────────┐         ┌──────────┐          ║    │
+│   ║  │ 1.SETUP  │────────►│2.INDEXING│────────►│  STORED  │          ║    │
+│   ║  │ Configure│         │ Chunk &  │         │ Vectors  │          ║    │
+│   ║  │ Tools    │         │ Embed    │         │ Ready!   │          ║    │
+│   ║  └──────────┘         └──────────┘         └──────────┘          ║    │
+│   ╚═══════════════════════════════════════════════════════════════════╝    │
+│                                                       │                     │
+│                                                       ▼                     │
+│   ╔═══════════════════════════════════════════════════════════════════╗    │
+│   ║                    PER-REQUEST PHASE                              ║    │
+│   ╠═══════════════════════════════════════════════════════════════════╣    │
+│   ║  ┌──────────┐         ┌──────────┐         ┌──────────┐          ║    │
+│   ║  │ 3.QUERY  │────────►│4.RETRIEVE│────────►│5.GENERATE│          ║    │
+│   ║  │ User     │         │ Find     │         │ LLM      │          ║    │
+│   ║  │ Question │         │ Relevant │         │ Answer   │          ║    │
+│   ║  └──────────┘         └──────────┘         └──────────┘          ║    │
+│   ╚═══════════════════════════════════════════════════════════════════╝    │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+TIMING & COST BREAKDOWN:
+┌─────────────┬────────────────┬──────────────┬────────────────────────────┐
+│   Stage     │     When       │    Cost      │         Time               │
+├─────────────┼────────────────┼──────────────┼────────────────────────────┤
+│ 1. Setup    │ Once/project   │ $0           │ 5 minutes                  │
+│ 2. Indexing │ Per document   │ ~$0.001/doc  │ ~1 second/doc              │
+│ 3. Query    │ Per request    │ $0           │ instant                    │
+│ 4. Retrieve │ Per request    │ $0           │ 10-50ms                    │
+│ 5. Generate │ Per request    │ $0.001-0.01  │ 1-5 seconds                │
+└─────────────┴────────────────┴──────────────┴────────────────────────────┘
 ```
 
 **Key principle**: Prepare once (expensive), execute many times (cheap and fast).
