@@ -114,16 +114,16 @@ uv run python phase1_foundations/02_pandas_basics/examples.py
 
 ## Prerequisites
 
-- Completed NumPy basics
+- Completed [NumPy basics](../01_numpy_basics/)
 - Understanding of embeddings concept
 - Python fundamentals
 
 ## Next Steps
 
 After completing this module:
-1. **Phase 1**: ML Concepts (train/test splits, features)
-2. **Phase 2**: Use Pandas to load docs for embedding
-3. **Phase 3**: Build document ingestion pipeline for RAG
+1. **Phase 1**: [ML Concepts](../03_ml_concepts/) (train/test splits, features)
+2. **Phase 2**: Use Pandas to load docs for [embedding](../../phase2_llm_fundamentals/)
+3. **Phase 3**: Build document ingestion pipeline for [RAG](../../phase3_llm_applications/01_rag_system/)
 
 ---
 

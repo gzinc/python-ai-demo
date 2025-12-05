@@ -319,7 +319,7 @@ def add_vectorized(arr1, arr2):
 ## 🔄 Next: Pandas Data Manipulation
 
 Once comfortable with NumPy:
-- Move to `02_pandas_data/`
+- Move to [02_pandas_basics/](../02_pandas_basics/)
 - DataFrames build on NumPy arrays
 - Learn data manipulation for LLM applications
 

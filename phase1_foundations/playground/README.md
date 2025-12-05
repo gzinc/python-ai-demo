@@ -19,7 +19,7 @@ The playground demos are meant to be discovered **organically** during your lear
 
 ## Available Demos
 
-### embeddings_demo/
+### [embeddings_demo/](embeddings_demo/)
 **When to explore**: After learning NumPy arrays and cosine similarity
 
 **Real question it answers**: "How do NumPy arrays relate to actual LLM applications?"
@@ -34,7 +34,7 @@ uv run python phase1_foundations/playground/embeddings_demo/memory_embeddings.py
 **Key insights**:
 - Embeddings are just NumPy arrays
 - Cosine similarity measures semantic meaning
-- This is the foundation for RAG systems (Phase 3)
+- This is the foundation for RAG systems ([Phase 3](../../phase3_llm_applications/))
 
 ## Philosophy
 

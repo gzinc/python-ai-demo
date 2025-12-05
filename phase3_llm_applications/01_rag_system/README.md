@@ -11,9 +11,9 @@ By the end of this module, you will:
 
 ## Prerequisites
 
-- Phase 2 complete (Prompt Engineering, API Integration, Embeddings)
-- ChromaDB experience from playground
-- Understanding of RAG architecture (docs/concepts/rag_explained.md)
+- [Phase 2](../../phase2_llm_fundamentals/) complete (Prompt Engineering, API Integration, Embeddings)
+- ChromaDB experience from [playground](../../phase1_foundations/playground/)
+- Understanding of RAG architecture ([docs/concepts/rag_explained.md](../../docs/concepts/rag_explained.md))
 
 ## RAG Architecture Diagram
 
@@ -203,10 +203,10 @@ Solution: Limit chunks or use summarization
 
 | File | Purpose |
 |------|---------|
-| `rag_pipeline.py` | Main orchestrator - RAGPipeline class coordinating all components |
-| `chunking.py` | Document/Chunk dataclasses + 3 strategies (paragraph, sentence, fixed) |
-| `retrieval.py` | RetrievalResult dataclass + Retriever class + context assembly |
-| `examples.py` | Comprehensive demos showing different usage patterns |
+| [rag_pipeline.py](rag_pipeline.py) | Main orchestrator - RAGPipeline class coordinating all components |
+| [chunking.py](chunking.py) | Document/Chunk dataclasses + 3 strategies (paragraph, sentence, fixed) |
+| [retrieval.py](retrieval.py) | RetrievalResult dataclass + Retriever class + context assembly |
+| [examples.py](examples.py) | Comprehensive demos showing different usage patterns |
 
 ## Module Architecture
 
@@ -281,5 +281,5 @@ uv run python phase3_llm_applications/01_rag_system/rag_pipeline.py # quick pipe
 ## Next Steps
 
 After completing this module:
-- → Module 2: Chat Interface (conversation memory)
-- → Module 3: Function Calling (tool integration)
+- → [Module 2: Chat Interface](../02_chat_interface/) (conversation memory)
+- → [Module 3: Function Calling](../03_function_calling/) (tool integration)

@@ -25,41 +25,24 @@ This roadmap follows a progressive structure:
 
 ## 📁 Project Structure
 
-```
-python-ai-demo/
-├── phase1_foundations/          # Python for AI basics
-│   ├── 01_numpy_basics/
-│   ├── 02_pandas_data/
-│   ├── 03_ml_concepts/
-│   └── README.md
-├── phase2_llm_fundamentals/     # LLM basics
-│   ├── 01_prompt_engineering/
-│   ├── 02_api_integration/
-│   ├── 03_embeddings/
-│   └── README.md
-├── phase3_llm_applications/     # Building with LLMs
-│   ├── 01_rag_system/
-│   ├── 02_chat_interface/
-│   ├── 03_function_calling/
-│   └── README.md
-├── phase4_ai_agents/            # Agent systems
-│   ├── 01_simple_agent/
-│   ├── 02_tool_use/
-│   ├── 03_multi_agent/
-│   └── README.md
-├── phase5_production/           # Production deployment
-│   ├── 01_api_design/
-│   ├── 02_monitoring/
-│   ├── 03_optimization/
-│   └── README.md
-├── docs/                        # Learning resources
-│   ├── concepts/               # Theoretical background
-│   ├── guides/                 # Step-by-step tutorials
-│   └── references/             # Quick references
-├── .serena/memories/           # Your learning progress
-├── pyproject.toml              # Dependencies
-└── README.md                   # This file
-```
+| Directory | Purpose |
+|-----------|---------|
+| [phase1_foundations/](phase1_foundations/) | Python for AI basics |
+| ↳ [01_numpy_basics/](phase1_foundations/01_numpy_basics/) | NumPy arrays and operations |
+| ↳ [02_pandas_basics/](phase1_foundations/02_pandas_basics/) | Pandas DataFrames |
+| [phase2_llm_fundamentals/](phase2_llm_fundamentals/) | LLM basics |
+| ↳ [01_prompt_engineering/](phase2_llm_fundamentals/01_prompt_engineering/) | Prompt techniques |
+| ↳ [02_api_integration/](phase2_llm_fundamentals/02_api_integration/) | LLM API usage |
+| [phase3_llm_applications/](phase3_llm_applications/) | Building with LLMs |
+| ↳ [01_rag_system/](phase3_llm_applications/01_rag_system/) | RAG pipeline |
+| ↳ [02_chat_interface/](phase3_llm_applications/02_chat_interface/) | Chat with memory |
+| [phase4_ai_agents/](phase4_ai_agents/) | Agent systems |
+| [phase5_production/](phase5_production/) | Production deployment |
+| [docs/](docs/) | Learning resources |
+| ↳ [docs/concepts/](docs/concepts/) | Theoretical background |
+| ↳ [docs/guides/](docs/guides/) | Step-by-step tutorials |
+| ↳ [docs/references/](docs/references/) | Quick references |
+| [.serena/memories/](.serena/memories/) | Your learning progress |
 
 ---
 
@@ -113,10 +96,10 @@ python-ai-demo/
 3. **ML Prep**: Feature engineering and data preprocessing
 
 ### Learning Approach
-- **Theory**: Read `phase1_foundations/README.md`
+- **Theory**: Read [phase1_foundations/README.md](phase1_foundations/README.md)
 - **Practice**: Complete exercises in each subfolder
 - **Build**: Create your own data analysis project
-- **Review**: Check `docs/concepts/` for detailed explanations
+- **Review**: Check [docs/concepts/](docs/concepts/) for detailed explanations
 
 ---
 
@@ -241,15 +224,15 @@ Return to user
 - **LlamaIndex**: https://docs.llamaindex.ai
 
 ### Key Concepts Reference
-Located in `docs/concepts/`:
-- `llm_fundamentals.md`: How LLMs work
-- `prompting_guide.md`: Effective prompt engineering
-- `rag_architecture.md`: Building RAG systems
-- `agent_patterns.md`: Agent design patterns
-- `embeddings_guide.md`: Semantic search with vectors
+Located in [docs/concepts/](docs/concepts/):
+- [llm_fundamentals.md](docs/concepts/llm_fundamentals.md): How LLMs work
+- [prompting_guide.md](docs/concepts/prompting_guide.md): Effective prompt engineering
+- [rag_architecture.md](docs/concepts/rag_architecture.md): Building RAG systems
+- [agent_patterns.md](docs/concepts/agent_patterns.md): Agent design patterns
+- [embeddings_guide.md](docs/concepts/embeddings_guide.md): Semantic search with vectors
 
 ### Guides
-Located in `docs/guides/`:
+Located in [docs/guides/](docs/guides/):
 - Step-by-step tutorials for each project
 - Troubleshooting common issues
 - Integration patterns
@@ -287,13 +270,13 @@ uv run mypy .
 
 ## 📊 Progress Tracking
 
-Your learning progress is tracked in `.serena/memories/`:
+Your learning progress is tracked in [.serena/memories/](.serena/memories/):
 
-- `project_overview.md`: High-level goals and status
+- [project_overview.md](.serena/memories/project_overview.md): High-level goals and status
 - `session_YYYY_MM_DD_*.md`: Daily learning sessions
-- `concepts_learned.md`: Key concepts you've mastered
-- `projects_completed.md`: Projects you've built
-- `questions_and_notes.md`: Your questions and insights
+- [concepts_learned.md](.serena/memories/concepts_learned.md): Key concepts you've mastered
+- [projects_completed.md](.serena/memories/projects_completed.md): Projects you've built
+- [questions_and_notes.md](.serena/memories/questions_and_notes.md): Your questions and insights
 
 ### Recommended Session Pattern
 1. Start: Review previous session memory
@@ -398,10 +381,10 @@ Installed via `uv sync`:
 
 ## 📖 Next Steps
 
-1. ✅ **Start with Phase 1**: `cd phase1_foundations && cat README.md`
+1. ✅ **Start with Phase 1**: [phase1_foundations/README.md](phase1_foundations/README.md)
 2. ✅ **Set up environment**: Create `.env` with API keys
-3. ✅ **Run first example**: Try NumPy basics
-4. ✅ **Document progress**: Update Serena memories
+3. ✅ **Run first example**: Try [NumPy basics](phase1_foundations/01_numpy_basics/)
+4. ✅ **Document progress**: Update [Serena memories](.serena/memories/)
 5. ✅ **Build habit**: 1-2 hours daily, consistent progress
 
 ---

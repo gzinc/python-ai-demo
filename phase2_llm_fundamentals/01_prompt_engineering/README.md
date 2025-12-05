@@ -296,9 +296,9 @@ uv run python phase2_llm_fundamentals/01_prompt_engineering/examples.py
 ## Next Steps
 
 After this module:
-1. **02_api_integration**: Connect to OpenAI/Anthropic APIs
-2. **03_embeddings**: Generate embeddings programmatically
-3. **Phase 3**: Build complete RAG systems
+1. [02_api_integration](../02_api_integration/): Connect to OpenAI/Anthropic APIs
+2. [03_embeddings](../03_embeddings/): Generate embeddings programmatically
+3. [Phase 3](../../phase3_llm_applications/): Build complete RAG systems
 
 ---
 

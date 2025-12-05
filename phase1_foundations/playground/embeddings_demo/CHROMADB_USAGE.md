@@ -5,9 +5,9 @@ This demonstrates how to save embeddings to a **vector database** for semantic s
 ## Files
 
 ### Core Files
-- `vector_db.py` - **VectorDB class** for ChromaDB operations (standard pattern)
-- `save_to_chromadb.py` - **Script** that uses VectorDB to save memories
-- `memory_embeddings.py` - **Original** demo (display only, no database)
+- [vector_db.py](vector_db.py) - **VectorDB class** for ChromaDB operations (standard pattern)
+- [save_to_chromadb.py](save_to_chromadb.py) - **Script** that uses VectorDB to save memories
+- [memory_embeddings.py](memory_embeddings.py) - **Original** demo (display only, no database)
 
 ### Database Storage
 - `.chromadb/` - **Persistent storage** for vector database (gitignored)
@@ -230,9 +230,9 @@ Answer based on the context above.
 3. **Interactive search**:
    Create a simple script that accepts user input for queries
 
-### Phase 3 Preview
+### [Phase 3](../../../phase3_llm_applications/) Preview
 
-In **Phase 3**, you'll build a complete RAG system:
+In **[Phase 3](../../../phase3_llm_applications/)**, you'll build a complete RAG system:
 - ✅ Document ingestion (chunking)
 - ✅ Embedding generation (you know this!)
 - ✅ Vector database storage (you know this!)

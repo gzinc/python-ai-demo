@@ -38,21 +38,11 @@ uv run python phase1_foundations/01_numpy_basics/examples.py
 
 ### Recommended First Day
 
-1. **Read the main README**:
-   ```bash
-   cat README.md
-   ```
+1. **Read the main README**: [README.md](README.md)
 
-2. **Review Phase 1 overview**:
-   ```bash
-   cat phase1_foundations/README.md
-   ```
+2. **Review Phase 1 overview**: [phase1_foundations/README.md](phase1_foundations/README.md)
 
-3. **Study NumPy module**:
-   ```bash
-   cd phase1_foundations/01_numpy_basics
-   cat README.md
-   ```
+3. **Study NumPy module**: [phase1_foundations/01_numpy_basics/README.md](phase1_foundations/01_numpy_basics/README.md)
 
 4. **Run examples**:
    ```bash
@@ -111,9 +101,9 @@ make test
 ## 7. Getting Help
 
 **Within this project**:
-- Check `docs/concepts/` for theory
-- Check `docs/guides/` for tutorials
-- Check `docs/references/` for quick lookup
+- Check [docs/concepts/](docs/concepts/) for theory
+- Check [docs/guides/](docs/guides/) for tutorials
+- Check [docs/references/](docs/references/) for quick lookup
 
 **External resources**:
 - NumPy docs: https://numpy.org/doc/

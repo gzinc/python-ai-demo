@@ -1240,8 +1240,8 @@ answer = llm.generate(context + user_question)
 - **Cohere Rerank**: Reranking API for better retrieval
 
 ### Phase 3 Preview
-In Phase 3, you'll build all of these RAG applications:
-1. Document Q&A system (PDF, text files)
+In [Phase 3](../../phase3_llm_applications/), you'll build all of these RAG applications:
+1. Document Q&A system (PDF, text files) - [01_rag_system](../../phase3_llm_applications/01_rag_system/)
 2. Customer support bot (help documentation)
 3. Code documentation assistant (your codebase)
 4. Research assistant (academic papers)

@@ -12,7 +12,7 @@ By the end of this module, you will:
 
 ## Prerequisites
 
-- Phase 2 Module 1: Prompt Engineering
+- [Phase 2 Module 1: Prompt Engineering](../01_prompt_engineering/)
 - API keys (at least one):
   - OpenAI: https://platform.openai.com/api-keys
   - Anthropic: https://console.anthropic.com/
@@ -202,9 +202,9 @@ for item in items:
 
 | File | Purpose |
 |------|---------|
-| `examples.py` | API integration patterns (works without keys using mocks) |
-| `live_examples.py` | Real API calls (requires keys) |
-| `exercises.py` | Practice problems |
+| [examples.py](examples.py) | API integration patterns (works without keys using mocks) |
+| [live_examples.py](live_examples.py) | Real API calls (requires keys) |
+| [exercises.py](exercises.py) | Practice problems |
 
 ## Setup
 
@@ -253,5 +253,5 @@ uv run python phase2_llm_fundamentals/02_api_integration/live_examples.py
 ## Next Steps
 
 After completing this module:
-- → Module 3: Embeddings (vector representations)
-- → Phase 3: Build RAG systems with real APIs
+- → [Module 3: Embeddings](../03_embeddings/) (vector representations)
+- → [Phase 3](../../phase3_llm_applications/): Build RAG systems with real APIs

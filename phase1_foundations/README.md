@@ -15,7 +15,7 @@ By the end of this phase, you will:
 ## 📚 Module Overview
 
 ### Module 1: NumPy Basics (3-4 days)
-**Location**: `01_numpy_basics/`
+**Location**: [01_numpy_basics/](01_numpy_basics/)
 
 **Topics**:
 - Array creation and manipulation
@@ -53,7 +53,7 @@ matrix + arr  # NumPy handles the dimensions
 ---
 
 ### Module 2: Pandas Data Manipulation (4-5 days)
-**Location**: `02_pandas_data/`
+**Location**: [02_pandas_basics/](02_pandas_basics/)
 
 **Topics**:
 - DataFrames and Series
@@ -98,7 +98,7 @@ df.dropna()
 ---
 
 ### Module 3: ML Concepts & Preparation (3-4 days)
-**Location**: `03_ml_concepts/`
+**Location**: [03_ml_concepts/](03_ml_concepts/)
 
 **Topics**:
 - Features and labels
@@ -155,7 +155,7 @@ X_test_scaled = scaler.transform(X_test)
    - Document your learnings
 
 4. **Track progress**:
-   - Update `.serena/memories/phase1_progress.md`
+   - Update [.serena/memories/phase1_progress.md](../.serena/memories/phase1_progress.md)
    - Note challenges and solutions
    - Record "aha!" moments
 
@@ -212,9 +212,9 @@ result = [x * 2 for x in arr]  # List comprehension
 - Scikit-learn: https://scikit-learn.org/stable/
 
 ### Recommended Reading
-- `docs/concepts/numpy_fundamentals.md`
-- `docs/concepts/pandas_guide.md`
-- `docs/guides/data_preparation.md`
+- [docs/concepts/numpy_fundamentals.md](../docs/concepts/numpy_fundamentals.md)
+- [docs/concepts/pandas_guide.md](../docs/concepts/pandas_guide.md)
+- [docs/guides/data_preparation.md](../docs/guides/data_preparation.md)
 
 ### Practice Datasets
 Located in `data/`:

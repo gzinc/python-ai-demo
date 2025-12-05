@@ -5,7 +5,7 @@
 Embeddings are the foundation of modern AI and LLM applications. This module introduces you to text embeddings through a practical example: processing your learning journey memories.
 
 **Learning Time**: 1-2 hours
-**Prerequisites**: NumPy basics
+**Prerequisites**: [NumPy basics](../../01_numpy_basics/)
 
 ## What You'll Learn
 
@@ -69,8 +69,8 @@ Embeddings are the foundation of modern AI and LLM applications. This module int
 ```
 
 **Phase 1**: Learn what embeddings are (this module)
-**Phase 2**: Use embeddings with LLM APIs
-**Phase 3**: Build RAG systems with embeddings + retrieval
+**[Phase 2](../../../phase2_llm_fundamentals/)**: Use embeddings with LLM APIs
+**[Phase 3](../../../phase3_llm_applications/)**: Build RAG systems with embeddings + retrieval
 
 ## Hands-On: Process Your Learning Memories
 

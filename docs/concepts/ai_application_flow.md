@@ -887,14 +887,12 @@ async def search_and_stream(query):
 - [Sentence Transformers](https://www.sbert.net/)
 
 ### Example Projects
-- `phase3_llm_applications/01_rag_system/` - You'll build this!
-- `phase3_llm_applications/02_chat_interface/` - Coming soon
-- `phase3_llm_applications/03_function_calling/` - Advanced
+- [phase3_llm_applications/01_rag_system/](../../phase3_llm_applications/01_rag_system/) - You'll build this!
+- [phase3_llm_applications/02_chat_interface/](../../phase3_llm_applications/02_chat_interface/) - Coming soon
+- [phase3_llm_applications/03_function_calling/](../../phase3_llm_applications/03_function_calling/) - Advanced
 
 ### Related Concepts
-- `embeddings_guide.md` - Deep dive into embeddings
-- `rag_architecture.md` - RAG system design patterns
-- `vector_databases.md` - Choosing the right vector DB
+- [rag_explained.md](rag_explained.md) - Deep dive into RAG architecture
 
 ---
 
