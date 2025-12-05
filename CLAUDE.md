@@ -11,17 +11,16 @@ This file provides guidance to Claude Code when working with this AI development
 
 ## Project Structure
 
-```
-python-ai-demo/
-├── phase1_foundations/          # NumPy, Pandas, ML basics
-├── phase2_llm_fundamentals/     # Prompting, APIs, embeddings
-├── phase3_llm_applications/     # RAG, chat, function calling
-├── phase4_ai_agents/            # Agent systems and orchestration
-├── phase5_production/           # Deployment and monitoring
-├── docs/                        # Learning resources
-├── .serena/memories/            # Progress tracking
-└── tests/                       # Test suites
-```
+| Directory | Purpose |
+|-----------|---------|
+| [phase1_foundations/](phase1_foundations/) | NumPy, Pandas, ML basics |
+| [phase2_llm_fundamentals/](phase2_llm_fundamentals/) | Prompting, APIs, embeddings |
+| [phase3_llm_applications/](phase3_llm_applications/) | RAG, chat, function calling |
+| [phase4_ai_agents/](phase4_ai_agents/) | Agent systems and orchestration |
+| [phase5_production/](phase5_production/) | Deployment and monitoring |
+| [docs/](docs/) | Learning resources |
+| [.serena/memories/](.serena/memories/) | Progress tracking |
+| [tests/](tests/) | Test suites |
 
 ## Essential Commands
 
@@ -58,7 +57,7 @@ cat .serena/memories/learning_progress.md
 - Portfolio-worthy projects
 
 ### Documentation-Driven
-- Session memories in `.serena/memories/`
+- Session memories in [.serena/memories/](.serena/memories/)
 - Progress tracking after each session
 - Concepts, questions, and insights documented
 - Pattern: `session_YYYY_MM_DD_topic.md`
@@ -68,7 +67,7 @@ cat .serena/memories/learning_progress.md
 ### When Adding New Content
 
 1. **Match Existing Style**:
-   - Look at `phase1_foundations/01_numpy_basics/` for reference
+   - Look at [phase1_foundations/01_numpy_basics/](phase1_foundations/01_numpy_basics/) for reference
    - Include: README, examples.py, exercises.py
    - Add AI-specific applications, not just generic tutorials
 
@@ -90,11 +89,11 @@ cat .serena/memories/learning_progress.md
 - Building projects
 - Overcoming challenges
 
-**Memory files**:
-- `project_overview.md` - High-level status
-- `learning_progress.md` - Module completion tracking
+**Memory files** (in [.serena/memories/](.serena/memories/)):
+- [project_overview.md](.serena/memories/project_overview.md) - High-level status
+- [learning_progress.md](.serena/memories/learning_progress.md) - Module completion tracking
 - `session_YYYY_MM_DD_*.md` - Daily sessions
-- `concepts_learned.md` - Key insights
+- [concepts_learned.md](.serena/memories/concepts_learned.md) - Key insights
 
 ### Code Style
 
@@ -150,7 +149,7 @@ cat .serena/memories/learning_progress.md
 4. Create `exercises.py` with practice problems
 5. Create `solutions/` directory
 6. Update phase README
-7. Update `.serena/memories/learning_progress.md`
+7. Update [.serena/memories/learning_progress.md](.serena/memories/learning_progress.md)
 
 ### Adding Examples
 
@@ -193,17 +192,17 @@ if __name__ == "__main__":
 
 ### Adding Documentation
 
-**In `docs/concepts/`**:
+**In [docs/concepts/](docs/concepts/)**:
 - Theoretical background
 - "How it works" explanations
 - References to research/papers
 
-**In `docs/guides/`**:
+**In [docs/guides/](docs/guides/)**:
 - Step-by-step tutorials
 - Best practices
 - Troubleshooting
 
-**In `docs/references/`**:
+**In [docs/references/](docs/references/)**:
 - Quick lookup tables
 - Command references
 - API cheat sheets
@@ -259,7 +258,7 @@ if __name__ == "__main__":
 3. **Practice**: Complete exercises
 4. **Build**: Apply to project
 5. **Document**: Update session memory
-6. **Track**: Update learning_progress.md
+6. **Track**: Update [learning_progress.md](.serena/memories/learning_progress.md)
 
 **Session Memory Template**:
 ```markdown
