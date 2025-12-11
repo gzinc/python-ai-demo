@@ -7,7 +7,7 @@ Keeps track of all registered tools and provides them in API-specific formats.
 
 from typing import Any, Optional
 
-from models import Tool
+from schemas import Tool
 
 
 class ToolRegistry:

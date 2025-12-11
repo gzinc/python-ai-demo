@@ -219,6 +219,8 @@ Implementation:
 
 | File | Purpose |
 |------|---------|
+| [schemas/](schemas/) | Data classes: Role enum, Message dataclass |
+| [engine.py](engine.py) | ChatEngine - orchestrates memory and LLM generation |
 | [chat_memory.py](chat_memory.py) | ChatMemory class with different memory strategies |
 | [streaming.py](streaming.py) | Streaming utilities for both OpenAI and Anthropic |
 | [examples.py](examples.py) | Interactive chat demos and usage patterns |
@@ -233,24 +235,35 @@ Implementation:
 │  ┌─────────────────────────────────────────────────────────┐   │
 │  │                    examples.py                           │   │
 │  │                  (Interactive Demos)                     │   │
-│  │                                                          │   │
 │  │  • example_basic_chat() - Simple conversation           │   │
 │  │  • example_memory_strategies() - Compare approaches     │   │
 │  │  • example_streaming() - Real-time responses            │   │
-│  │  • example_interactive() - REPL-style chat              │   │
+│  └──────────────────────────┬──────────────────────────────┘   │
+│                             │                                    │
+│                             ▼                                    │
+│  ┌─────────────────────────────────────────────────────────┐   │
+│  │                     engine.py                            │   │
+│  │                   (ChatEngine)                           │   │
+│  │  • Orchestrates memory + LLM generation                 │   │
+│  │  • chat() - main conversation loop                      │   │
+│  │  • Handles streaming vs sync                            │   │
 │  └──────────────────────────┬──────────────────────────────┘   │
 │                             │                                    │
 │              ┌──────────────┴──────────────┐                    │
-│              │                             │                     │
 │              ▼                             ▼                     │
 │  ┌─────────────────────────┐   ┌─────────────────────────┐     │
 │  │     chat_memory.py      │   │     streaming.py        │     │
-│  │                         │   │                         │     │
 │  │  • ChatMemory class     │   │  • stream_openai()      │     │
-│  │  • sliding_window()     │   │  • stream_anthropic()   │     │
-│  │  • summarize_history()  │   │  • StreamPrinter        │     │
-│  │  • token_budget()       │   │  • collect_stream()     │     │
-│  └─────────────────────────┘   └─────────────────────────┘     │
+│  │  • SummarizingMemory    │   │  • stream_anthropic()   │     │
+│  └───────────┬─────────────┘   └─────────────────────────┘     │
+│              │                                                   │
+│              ▼                                                   │
+│  ┌─────────────────────────────────────────────────────────┐   │
+│  │                       schemas/                            │   │
+│  │                    (Data Classes)                        │   │
+│  │  • Role - message role enum (SYSTEM, USER, ASSISTANT)   │   │
+│  │  • Message - chat message with role and content         │   │
+│  └─────────────────────────────────────────────────────────┘   │
 │                                                                  │
 └─────────────────────────────────────────────────────────────────┘
 ```

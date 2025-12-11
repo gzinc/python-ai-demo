@@ -26,8 +26,9 @@ from typing import Optional
 
 from dotenv import load_dotenv
 
-from chunking import Document, Chunk, chunk_by_paragraph
-from retrieval import RetrievalResult, Retriever, assemble_context
+from schemas import Document, Chunk, RetrievalResult
+from chunking import chunk_by_paragraph
+from retrieval import Retriever, assemble_context
 
 load_dotenv()
 

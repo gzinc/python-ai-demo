@@ -7,6 +7,13 @@ This module implements different strategies for managing conversation history:
 3. Token budget - keep messages within token limit
 4. Summarization - compress old messages into summary
 
+Module Structure:
+- schemas/        → Role enum, Message dataclass
+- chat_memory.py → ChatMemory, SummarizingMemory (this file)
+- streaming.py   → Streaming utilities
+- engine.py      → ChatEngine orchestrator
+- examples.py    → Demo functions
+
 Memory Flow:
 ┌──────────┐    ┌──────────┐    ┌──────────┐    ┌──────────┐
 │   Add    │───►│  Check   │───►│  Trim    │───►│  Return  │
@@ -18,29 +25,8 @@ Run with: uv run python phase3_llm_applications/02_chat_interface/chat_memory.py
 
 from dataclasses import dataclass, field
 from typing import Literal, Optional
-from enum import Enum
 
-
-class Role(str, Enum):
-    """message roles in chat"""
-    SYSTEM = "system"
-    USER = "user"
-    ASSISTANT = "assistant"
-
-
-@dataclass
-class Message:
-    """single chat message"""
-    role: Role
-    content: str
-
-    def to_dict(self) -> dict:
-        """convert to API format"""
-        return {"role": self.role.value, "content": self.content}
-
-    def __repr__(self) -> str:
-        preview = self.content[:50].replace("\n", " ")
-        return f"Message({self.role.value}: '{preview}...')"
+from schemas import Role, Message
 
 
 @dataclass
@@ -50,15 +36,15 @@ class ChatMemory:
 
     Architecture:
     ┌─────────────────────────────────────────────────────────────┐
-    │                      ChatMemory                              │
-    │                                                              │
-    │  ┌─────────────┐  ┌─────────────┐  ┌─────────────────────┐ │
-    │  │   system    │  │  messages   │  │     strategy        │ │
-    │  │   prompt    │  │    list     │  │  (window/budget)    │ │
-    │  └─────────────┘  └─────────────┘  └─────────────────────┘ │
+    │                      ChatMemory                             │
+    │                                                             │
+    │  ┌─────────────┐  ┌─────────────┐  ┌─────────────────────┐  │
+    │  │   system    │  │  messages   │  │     strategy        │  │
+    │  │   prompt    │  │    list     │  │  (window/budget)    │  │
+    │  └─────────────┘  └─────────────┘  └─────────────────────┘  │
     │         │                │                   │              │
     │         └────────────────┼───────────────────┘              │
-    │                          ▼                                   │
+    │                          ▼                                  │
     │                  ┌─────────────┐                            │
     │                  │ get_messages│ → API-ready format         │
     │                  └─────────────┘                            │
@@ -171,17 +157,17 @@ class SummarizingMemory(ChatMemory):
 
     Architecture:
     ┌─────────────────────────────────────────────────────────────┐
-    │                   SummarizingMemory                          │
-    │                                                              │
+    │                   SummarizingMemory                         │
+    │                                                             │
     │  ┌───────────────────────────────────────────────────────┐  │
-    │  │                    messages                            │  │
-    │  │  [old_summary] [recent messages...]                    │  │
-    │  │       ↑                                                │  │
-    │  │       │                                                │  │
-    │  │   When messages exceed threshold,                      │  │
-    │  │   old ones are summarized into this                    │  │
+    │  │                    messages                           │  │
+    │  │  [old_summary] [recent messages...]                   │  │
+    │  │       ↑                                               │  │
+    │  │       │                                               │  │
+    │  │   When messages exceed threshold,                     │  │
+    │  │   old ones are summarized into this                   │  │
     │  └───────────────────────────────────────────────────────┘  │
-    │                                                              │
+    │                                                             │
     └─────────────────────────────────────────────────────────────┘
     """
 

@@ -11,7 +11,7 @@ Contains:
 import math
 from typing import Optional
 
-from models import Tool, ToolParameter
+from schemas import Tool, ToolParameter
 
 
 # ─────────────────────────────────────────────────────────────

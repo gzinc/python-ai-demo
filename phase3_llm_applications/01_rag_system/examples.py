@@ -11,7 +11,8 @@ Run with: uv run python phase3_llm_applications/01_rag_system/examples.py
 """
 
 from rag_pipeline import RAGPipeline
-from chunking import Document, chunk_document
+from schemas import Document
+from chunking import chunk_document
 
 
 def print_section(title: str) -> None:

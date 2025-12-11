@@ -4,6 +4,13 @@ Chunking Module - Document splitting strategies for RAG
 This module provides different strategies for splitting documents into chunks
 optimized for embedding and retrieval.
 
+Module Structure:
+- schemas/         → Document, Chunk, RetrievalResult (data classes)
+- chunking.py     → Chunking strategies (this file)
+- retrieval.py    → Retriever class
+- rag_pipeline.py → RAGPipeline orchestrator
+- examples.py     → Demo functions
+
 Chunking Strategies:
 ┌─────────────────────────────────────────────────────────────────┐
 │                    Chunking Approaches                          │
@@ -17,38 +24,10 @@ Chunking Strategies:
 Run with: uv run python phase3_llm_applications/01_rag_system/chunking.py
 """
 
-from dataclasses import dataclass, field
-import hashlib
 import re
 from typing import Callable
 
-
-@dataclass
-class Document:
-    """represents a document with metadata"""
-
-    content: str
-    source: str
-    doc_id: str = field(default="")
-
-    def __post_init__(self):
-        if not self.doc_id:
-            # generate id from content hash
-            self.doc_id = hashlib.md5(self.content.encode()).hexdigest()[:12]
-
-
-@dataclass
-class Chunk:
-    """represents a chunk of a document"""
-
-    content: str
-    doc_id: str
-    chunk_index: int
-    source: str
-
-    @property
-    def chunk_id(self) -> str:
-        return f"{self.doc_id}_{self.chunk_index}"
+from schemas import Document, Chunk
 
 
 # ─────────────────────────────────────────────────────────────

@@ -3,7 +3,7 @@ Function Calling Examples - Practical demos
 
 This file contains ONLY the demo/example functions.
 All implementation classes are in their own files:
-- models/        → Tool, ToolParameter, ToolResult
+- schemas/        → Tool, ToolParameter, ToolResult
 - registry.py    → ToolRegistry
 - executor.py    → ToolExecutor
 - common_tools.py → create_*_tool(), implementations
@@ -14,7 +14,7 @@ Run with: uv run python phase3_llm_applications/03_function_calling/examples.py
 
 from dotenv import load_dotenv
 
-from models import Tool, ToolParameter
+from schemas import Tool, ToolParameter
 from engine import FunctionCallingEngine
 from common_tools import (
     create_weather_tool,

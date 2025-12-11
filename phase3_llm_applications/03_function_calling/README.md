@@ -251,7 +251,7 @@ By the end of this module, you will:
 
 | File | Purpose |
 |------|---------|
-| [models/](models/) | Data classes (Tool, ToolParameter, ToolResult) |
+| [schemas/](schemas/) | Data classes (Tool, ToolParameter, ToolResult) |
 | [registry.py](registry.py) | ToolRegistry - manages available tools |
 | [executor.py](executor.py) | ToolExecutor - safe execution with error handling |
 | [common_tools.py](common_tools.py) | Tool factories + implementations |
@@ -292,7 +292,7 @@ By the end of this module, you will:
 │         └────────┬────────┘                                     │
 │                  ▼                                              │
 │  ┌─────────────────────────────────────────────────────────┐    │
-│  │                     models/                             │    │
+│  │                     schemas/                             │    │
 │  │  ┌─────────────┐  ┌──────────────┐  ┌────────────────┐  │    │
 │  │  │  tool.py    │  │tool_result.py│  │  __init__.py   │  │    │
 │  │  │             │  │              │  │                │  │    │
@@ -309,8 +309,8 @@ By the end of this module, you will:
 **Java Equivalents:**
 | Python | Java |
 |--------|------|
-| models/tool.py | Tool.java (POJO) |
-| models/tool_result.py | ToolResult.java (Response wrapper) |
+| schemas/tool.py | Tool.java (POJO) |
+| schemas/tool_result.py | ToolResult.java (Response wrapper) |
 | registry.py | ToolRegistry.java (Service registry) |
 | executor.py | ToolExecutor.java (Command executor) |
 | common_tools.py | ToolFactory.java |

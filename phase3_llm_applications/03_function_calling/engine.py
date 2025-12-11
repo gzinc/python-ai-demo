@@ -8,7 +8,7 @@ This is the main class you'd use in your application.
 import os
 from typing import Optional
 
-from models import Tool
+from schemas import Tool
 from registry import ToolRegistry
 from executor import ToolExecutor
 from common_tools import get_weather

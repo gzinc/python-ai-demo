@@ -6,6 +6,13 @@ This module handles the retrieval phase of RAG:
 - Result ranking and filtering
 - Context assembly for generation
 
+Module Structure:
+- models/         → Document, Chunk, RetrievalResult (data classes)
+- chunking.py     → Chunking strategies
+- retrieval.py    → Retriever class (this file)
+- rag_pipeline.py → RAGPipeline orchestrator
+- examples.py     → Demo functions
+
 Retrieval Flow:
 ┌─────────────────────────────────────────────────────────────────┐
 │                     Retrieval Pipeline                          │
@@ -17,22 +24,9 @@ Retrieval Flow:
 Run with: uv run python phase3_llm_applications/01_rag_system/retrieval.py
 """
 
-from dataclasses import dataclass
 from typing import Optional, Any
 
-
-@dataclass
-class RetrievalResult:
-    """result from retrieval with metadata"""
-
-    content: str
-    source: str
-    similarity: float
-    chunk_id: str
-
-    def __repr__(self) -> str:
-        preview = self.content[:50].replace("\n", " ")
-        return f"RetrievalResult(source={self.source}, sim={self.similarity:.3f}, preview='{preview}...')"
+from schemas import RetrievalResult
 
 
 class Retriever:
@@ -43,16 +37,16 @@ class Retriever:
     ┌──────────────────────────────────────────────────────────────┐
     │                        Retriever                             │
     │                                                              │
-    │  ┌─────────┐    ┌─────────────┐    ┌─────────────────────┐  │
-    │  │  Query  │───►│ ChromaDB    │───►│ Post-processing     │  │
-    │  │         │    │ collection  │    │ (rank, filter)      │  │
-    │  └─────────┘    └─────────────┘    └─────────────────────┘  │
+    │  ┌─────────┐    ┌─────────────┐    ┌─────────────────────┐   │
+    │  │  Query  │───►│ ChromaDB    │───►│ Post-processing     │   │
+    │  │         │    │ collection  │    │ (rank, filter)      │   │
+    │  └─────────┘    └─────────────┘    └─────────────────────┘   │
     │                                              │               │
     │                                              ▼               │
-    │                                    ┌─────────────────┐      │
-    │                                    │ RetrievalResult │      │
-    │                                    │     list        │      │
-    │                                    └─────────────────┘      │
+    │                                    ┌─────────────────┐       │
+    │                                    │ RetrievalResult │       │
+    │                                    │     list        │       │
+    │                                    └─────────────────┘       │
     └──────────────────────────────────────────────────────────────┘
     """
 
@@ -188,20 +182,20 @@ def assemble_context(
     Context assembly:
     ┌─────────────────────────────────────────────────────────┐
     │  Retrieved Chunks                                       │
-    │  ┌─────┐ ┌─────┐ ┌─────┐                               │
-    │  │ C1  │ │ C2  │ │ C3  │                               │
-    │  └──┬──┘ └──┬──┘ └──┬──┘                               │
-    │     │      │      │                                    │
-    │     └──────┼──────┘                                    │
-    │            │                                           │
-    │            ▼                                           │
-    │  ┌─────────────────────────────────────────────────┐  │
-    │  │ [Source 1: doc1.txt]                            │  │
-    │  │ Content from chunk 1...                         │  │
-    │  │                                                 │  │
-    │  │ [Source 2: doc2.txt]                            │  │
-    │  │ Content from chunk 2...                         │  │
-    │  └─────────────────────────────────────────────────┘  │
+    │  ┌─────┐ ┌─────┐ ┌─────┐                                │
+    │  │ C1  │ │ C2  │ │ C3  │                                │
+    │  └──┬──┘ └──┬──┘ └──┬──┘                                │
+    │     │      │      │                                     │
+    │     └──────┼──────┘                                     │
+    │            │                                            │
+    │            ▼                                            │
+    │  ┌─────────────────────────────────────────────────┐    │
+    │  │ [Source 1: doc1.txt]                            │    │
+    │  │ Content from chunk 1...                         │    │
+    │  │                                                 │    │
+    │  │ [Source 2: doc2.txt]                            │    │
+    │  │ Content from chunk 2...                         │    │
+    │  └─────────────────────────────────────────────────┘    │
     └─────────────────────────────────────────────────────────┘
 
     Args:

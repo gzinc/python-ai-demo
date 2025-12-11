@@ -203,9 +203,10 @@ Solution: Limit chunks or use summarization
 
 | File | Purpose |
 |------|---------|
+| [schemas/](schemas/) | Data classes: Document, Chunk, RetrievalResult |
 | [rag_pipeline.py](rag_pipeline.py) | Main orchestrator - RAGPipeline class coordinating all components |
-| [chunking.py](chunking.py) | Document/Chunk dataclasses + 3 strategies (paragraph, sentence, fixed) |
-| [retrieval.py](retrieval.py) | RetrievalResult dataclass + Retriever class + context assembly |
+| [chunking.py](chunking.py) | Chunking strategies (paragraph, sentence, fixed) |
+| [retrieval.py](retrieval.py) | Retriever class + context assembly |
 | [examples.py](examples.py) | Comprehensive demos showing different usage patterns |
 
 ## Module Architecture
@@ -231,20 +232,19 @@ Solution: Limit chunks or use summarization
 │  ┌─────────────────────────┐   ┌─────────────────────────┐                 │
 │  │     chunking.py         │   │     retrieval.py        │                 │
 │  │                         │   │                         │                 │
-│  │  • Document dataclass   │   │  • RetrievalResult      │                 │
-│  │  • Chunk dataclass      │   │  • Retriever class      │                 │
-│  │  • chunk_by_paragraph() │   │  • assemble_context()   │                 │
-│  │  • chunk_by_sentence()  │   │  • format_results()     │                 │
-│  │  • chunk_fixed_size()   │   │                         │                 │
-│  └─────────────────────────┘   └─────────────────────────┘                 │
-│                                                                             │
+│  │  • chunk_by_paragraph() │   │  • Retriever class      │                 │
+│  │  • chunk_by_sentence()  │   │  • assemble_context()   │                 │
+│  │  • chunk_fixed_size()   │   │  • format_results()     │                 │
+│  └───────────┬─────────────┘   └────────────┬────────────┘                 │
+│              │                              │                               │
+│              └──────────────┬───────────────┘                               │
+│                             ▼                                               │
 │  ┌─────────────────────────────────────────────────────────────────────┐   │
-│  │                        examples.py                                   │   │
-│  │                                                                      │   │
-│  │  • example_basic_rag() - Add docs, query, full pipeline             │   │
-│  │  • example_chunking_strategies() - Compare strategies               │   │
-│  │  • example_retrieval_tuning() - Different top_k values              │   │
-│  │  • example_interactive() - Sample Q&A session                       │   │
+│  │                         schemas/                                      │   │
+│  │                    (Data Classes)                                    │   │
+│  │  • Document - source document with metadata                         │   │
+│  │  • Chunk - piece of document after chunking                         │   │
+│  │  • RetrievalResult - search result with similarity score            │   │
 │  └─────────────────────────────────────────────────────────────────────┘   │
 │                                                                             │
 └─────────────────────────────────────────────────────────────────────────────┘

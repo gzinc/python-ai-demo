@@ -8,7 +8,7 @@ Handles validation, error handling, and result formatting.
 from typing import Any, Callable, Optional
 import json
 
-from models import ToolResult
+from schemas import ToolResult
 
 
 class ToolExecutor:
