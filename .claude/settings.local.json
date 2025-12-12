@@ -12,7 +12,11 @@
       "mcp__serena__get_current_config",
       "mcp__serena__jet_brains_get_symbols_overview",
       "mcp__serena__edit_memory",
-      "Bash(mkdir:*)"
+      "Bash(mkdir:*)",
+      "mcp__serena__get_symbols_overview",
+      "mcp__serena__list_dir",
+      "mcp__serena__find_symbol",
+      "mcp__time__get_current_time"
     ],
     "deny": [],
     "ask": []
