@@ -283,3 +283,9 @@ uv run python phase3_llm_applications/01_rag_system/rag_pipeline.py # quick pipe
 After completing this module:
 - → [Module 2: Chat Interface](../02_chat_interface/) (conversation memory)
 - → [Module 3: Function Calling](../03_function_calling/) (tool integration)
+
+## Further Reading
+
+- [Phase 3 Overview](../README.md) - How this module fits into LLM Applications
+- [RAG Explained](../../docs/concepts/rag_explained.md) - Deep dive into RAG architecture
+- [Phase 2: Embeddings](../../phase2_llm_fundamentals/03_embeddings/) - Foundation for RAG retrieval

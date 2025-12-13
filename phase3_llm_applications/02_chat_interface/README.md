@@ -300,3 +300,8 @@ uv run python phase3_llm_applications/02_chat_interface/streaming.py
 After completing this module:
 - → [Module 3: Function Calling](../03_function_calling/) (tool integration)
 - → [Phase 4: AI Agents](../../phase4_ai_agents/) (autonomous systems)
+
+## Further Reading
+
+- [Phase 3 Overview](../README.md) - How this module fits into LLM Applications
+- [Phase 2: API Integration](../../phase2_llm_fundamentals/02_api_integration/) - Foundation for chat APIs

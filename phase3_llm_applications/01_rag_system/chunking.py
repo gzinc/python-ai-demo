@@ -46,9 +46,9 @@ def chunk_by_paragraph(
     Strategy visualization:
     ┌────────────────────────────────────────────────────────┐
     │                   Original Document                    │
-    │  Paragraph 1                                          │
-    │  Paragraph 2                                          │
-    │  Paragraph 3                                          │
+    │  Paragraph 1                                           │
+    │  Paragraph 2                                           │
+    │  Paragraph 3                                           │
     └────────────────────────────────────────────────────────┘
                           │
                           ▼

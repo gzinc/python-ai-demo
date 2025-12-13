@@ -324,7 +324,7 @@ uv run python phase3_llm_applications/03_function_calling/examples.py
 
 # test imports (verify structure)
 cd phase3_llm_applications/03_function_calling
-uv run python -c "from models import Tool, ToolResult; print('OK')"
+uv run python -c "from schemas import Tool, ToolResult; print('OK')"
 uv run python -c "from engine import FunctionCallingEngine; print('OK')"
 ```
 
@@ -368,3 +368,9 @@ uv run python -c "from engine import FunctionCallingEngine; print('OK')"
 
 After completing this module:
 - → [Phase 4: AI Agents](../../phase4_ai_agents/) (autonomous systems with tools)
+
+## Further Reading
+
+- [Phase 3 Overview](../README.md) - How this module fits into LLM Applications
+- [Phase 4: AI Agents](../../phase4_ai_agents/) - Build autonomous systems using these tools
+- [Phase 4 Concepts](../../phase4_ai_agents/CONCEPTS.md) - Agent fundamentals (ReAct, semantic binding)
