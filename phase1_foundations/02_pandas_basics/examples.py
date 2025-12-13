@@ -10,6 +10,8 @@ This module covers essential Pandas operations for AI/LLM applications:
 Run with: uv run python phase1_foundations/02_pandas_basics/examples.py
 """
 
+from textwrap import dedent
+
 import pandas as pd
 import numpy as np
 from typing import List, Dict
@@ -201,30 +203,30 @@ def document_chunking() -> None:
     print_section("5. Document Chunking for RAG")
 
     # simulate a long document
-    long_doc = """
-    Chapter 1: Introduction to AI
+    long_doc = dedent("""
+        Chapter 1: Introduction to AI
 
-    Artificial Intelligence (AI) is transforming how we build software.
-    Machine learning models can now understand natural language, generate
-    code, and assist with complex tasks.
+        Artificial Intelligence (AI) is transforming how we build software.
+        Machine learning models can now understand natural language, generate
+        code, and assist with complex tasks.
 
-    Chapter 2: Embeddings
+        Chapter 2: Embeddings
 
-    Embeddings convert text into numerical vectors that capture semantic
-    meaning. Similar concepts have similar embeddings. This enables
-    semantic search and RAG systems.
+        Embeddings convert text into numerical vectors that capture semantic
+        meaning. Similar concepts have similar embeddings. This enables
+        semantic search and RAG systems.
 
-    Chapter 3: RAG Systems
+        Chapter 3: RAG Systems
 
-    Retrieval Augmented Generation combines search with LLM generation.
-    First, relevant documents are retrieved. Then, they're used as
-    context for the LLM to generate accurate answers.
+        Retrieval Augmented Generation combines search with LLM generation.
+        First, relevant documents are retrieved. Then, they're used as
+        context for the LLM to generate accurate answers.
 
-    Chapter 4: Production
+        Chapter 4: Production
 
-    Deploying AI systems requires careful attention to cost, latency,
-    and reliability. Caching, monitoring, and optimization are essential.
-    """
+        Deploying AI systems requires careful attention to cost, latency,
+        and reliability. Caching, monitoring, and optimization are essential.
+    """).strip()
 
     print(f"original document: {len(long_doc)} characters")
 

@@ -11,6 +11,7 @@ Run with: uv run python phase2_llm_fundamentals/02_api_integration/examples.py
 import os
 import time
 import json
+from textwrap import dedent
 from typing import Generator
 from dataclasses import dataclass
 
@@ -132,26 +133,26 @@ def example_real_openai_code() -> None:
     """show actual OpenAI code (for reference)"""
     print_section("2. Real OpenAI Code (Reference)")
 
-    code = '''
-# actual OpenAI code (requires: pip install openai)
-from openai import OpenAI
+    code = dedent('''
+        # actual OpenAI code (requires: pip install openai)
+        from openai import OpenAI
 
-client = OpenAI()  # uses OPENAI_API_KEY env var
+        client = OpenAI()  # uses OPENAI_API_KEY env var
 
-response = client.chat.completions.create(
-    model="gpt-4o",
-    messages=[
-        {"role": "system", "content": "You are a helpful assistant."},
-        {"role": "user", "content": "Write a haiku about programming"},
-    ],
-    temperature=0.7,
-    max_tokens=100,
-)
+        response = client.chat.completions.create(
+            model="gpt-4o",
+            messages=[
+                {"role": "system", "content": "You are a helpful assistant."},
+                {"role": "user", "content": "Write a haiku about programming"},
+            ],
+            temperature=0.7,
+            max_tokens=100,
+        )
 
-# access the response
-print(response.choices[0].message.content)
-print(f"Tokens used: {response.usage.total_tokens}")
-'''
+        # access the response
+        print(response.choices[0].message.content)
+        print(f"Tokens used: {response.usage.total_tokens}")
+    ''').strip()
     print(code)
 
 
@@ -159,25 +160,25 @@ def example_real_anthropic_code() -> None:
     """show actual Anthropic code (for reference)"""
     print_section("3. Real Anthropic Code (Reference)")
 
-    code = '''
-# actual Anthropic code (requires: pip install anthropic)
-from anthropic import Anthropic
+    code = dedent('''
+        # actual Anthropic code (requires: pip install anthropic)
+        from anthropic import Anthropic
 
-client = Anthropic()  # uses ANTHROPIC_API_KEY env var
+        client = Anthropic()  # uses ANTHROPIC_API_KEY env var
 
-response = client.messages.create(
-    model="claude-sonnet-4-20250514",
-    max_tokens=1024,
-    system="You are a helpful assistant.",  # system is separate!
-    messages=[
-        {"role": "user", "content": "Write a haiku about programming"},
-    ],
-)
+        response = client.messages.create(
+            model="claude-sonnet-4-20250514",
+            max_tokens=1024,
+            system="You are a helpful assistant.",  # system is separate!
+            messages=[
+                {"role": "user", "content": "Write a haiku about programming"},
+            ],
+        )
 
-# access the response (slightly different structure)
-print(response.content[0].text)
-print(f"Tokens: {response.usage.input_tokens} in, {response.usage.output_tokens} out")
-'''
+        # access the response (slightly different structure)
+        print(response.content[0].text)
+        print(f"Tokens: {response.usage.input_tokens} in, {response.usage.output_tokens} out")
+    ''').strip()
     print(code)
 
     print("\nKey difference: Anthropic separates 'system' from 'messages'")
@@ -253,38 +254,38 @@ def example_error_handling() -> None:
     """demonstrate error handling patterns"""
     print_section("6. Error Handling Patterns")
 
-    code = '''
-import time
-from openai import OpenAI, RateLimitError, APIError
+    code = dedent('''
+        import time
+        from openai import OpenAI, RateLimitError, APIError
 
-client = OpenAI()
+        client = OpenAI()
 
-def call_with_retry(messages, max_retries=3):
-    """call API with exponential backoff retry"""
-    for attempt in range(max_retries):
-        try:
-            response = client.chat.completions.create(
-                model="gpt-4o",
-                messages=messages,
-            )
-            return response
+        def call_with_retry(messages, max_retries=3):
+            """call API with exponential backoff retry"""
+            for attempt in range(max_retries):
+                try:
+                    response = client.chat.completions.create(
+                        model="gpt-4o",
+                        messages=messages,
+                    )
+                    return response
 
-        except RateLimitError:
-            # rate limited - wait and retry
-            wait_time = 2 ** attempt  # 1, 2, 4 seconds
-            print(f"Rate limited. Waiting {wait_time}s...")
-            time.sleep(wait_time)
+                except RateLimitError:
+                    # rate limited - wait and retry
+                    wait_time = 2 ** attempt  # 1, 2, 4 seconds
+                    print(f"Rate limited. Waiting {wait_time}s...")
+                    time.sleep(wait_time)
 
-        except APIError as e:
-            # server error - might be temporary
-            if attempt < max_retries - 1:
-                print(f"API error: {e}. Retrying...")
-                time.sleep(1)
-            else:
-                raise
+                except APIError as e:
+                    # server error - might be temporary
+                    if attempt < max_retries - 1:
+                        print(f"API error: {e}. Retrying...")
+                        time.sleep(1)
+                    else:
+                        raise
 
-    raise Exception("Max retries exceeded")
-'''
+            raise Exception("Max retries exceeded")
+    ''').strip()
     print(code)
 
     print("\nCommon errors to handle:")
@@ -309,19 +310,19 @@ def example_streaming() -> None:
     print("Streaming shows tokens as they're generated (better UX):")
     print()
 
-    code = '''
-# real streaming code
-stream = client.chat.completions.create(
-    model="gpt-4o",
-    messages=[{"role": "user", "content": "Write a greeting function"}],
-    stream=True,  # enable streaming
-)
+    code = dedent('''
+        # real streaming code
+        stream = client.chat.completions.create(
+            model="gpt-4o",
+            messages=[{"role": "user", "content": "Write a greeting function"}],
+            stream=True,  # enable streaming
+        )
 
-for chunk in stream:
-    content = chunk.choices[0].delta.content
-    if content:
-        print(content, end="", flush=True)
-'''
+        for chunk in stream:
+            content = chunk.choices[0].delta.content
+            if content:
+                print(content, end="", flush=True)
+    ''').strip()
     print(code)
     print()
 
@@ -371,26 +372,26 @@ def example_conversation_history() -> None:
     print("  - Long conversations = more tokens = more cost")
     print("  - May need to summarize or truncate old messages")
 
-    code = '''
-# practical pattern
-MAX_HISTORY = 10  # keep last N messages
+    code = dedent('''
+        # practical pattern
+        MAX_HISTORY = 10  # keep last N messages
 
-def chat(user_message, history):
-    history.append({"role": "user", "content": user_message})
+        def chat(user_message, history):
+            history.append({"role": "user", "content": user_message})
 
-    # truncate if too long
-    messages_to_send = history[-MAX_HISTORY:]
+            # truncate if too long
+            messages_to_send = history[-MAX_HISTORY:]
 
-    response = client.chat.completions.create(
-        model="gpt-4o",
-        messages=messages_to_send,
-    )
+            response = client.chat.completions.create(
+                model="gpt-4o",
+                messages=messages_to_send,
+            )
 
-    assistant_message = response.choices[0].message.content
-    history.append({"role": "assistant", "content": assistant_message})
+            assistant_message = response.choices[0].message.content
+            history.append({"role": "assistant", "content": assistant_message})
 
-    return assistant_message
-'''
+            return assistant_message
+    ''').strip()
     print()
     print("Truncation pattern:")
     print(code)
@@ -402,37 +403,37 @@ def example_provider_comparison() -> None:
 
     print("OpenAI (GPT-4o):")
     print("-" * 40)
-    openai_code = '''
-from openai import OpenAI
-client = OpenAI()
+    openai_code = dedent('''
+        from openai import OpenAI
+        client = OpenAI()
 
-response = client.chat.completions.create(
-    model="gpt-4o",
-    messages=[
-        {"role": "system", "content": "Be concise."},
-        {"role": "user", "content": "Hi!"},
-    ],
-)
-text = response.choices[0].message.content
-'''
+        response = client.chat.completions.create(
+            model="gpt-4o",
+            messages=[
+                {"role": "system", "content": "Be concise."},
+                {"role": "user", "content": "Hi!"},
+            ],
+        )
+        text = response.choices[0].message.content
+    ''').strip()
     print(openai_code)
 
     print("Anthropic (Claude):")
     print("-" * 40)
-    anthropic_code = '''
-from anthropic import Anthropic
-client = Anthropic()
+    anthropic_code = dedent('''
+        from anthropic import Anthropic
+        client = Anthropic()
 
-response = client.messages.create(
-    model="claude-sonnet-4-20250514",
-    max_tokens=1024,  # required!
-    system="Be concise.",  # separate param
-    messages=[
-        {"role": "user", "content": "Hi!"},
-    ],
-)
-text = response.content[0].text
-'''
+        response = client.messages.create(
+            model="claude-sonnet-4-20250514",
+            max_tokens=1024,  # required!
+            system="Be concise.",  # separate param
+            messages=[
+                {"role": "user", "content": "Hi!"},
+            ],
+        )
+        text = response.content[0].text
+    ''').strip()
     print(anthropic_code)
 
     print("Key differences:")
@@ -446,62 +447,62 @@ def example_complete_pattern() -> None:
     """show a complete, production-ready pattern"""
     print_section("10. Complete Production Pattern")
 
-    code = '''
-import os
-from openai import OpenAI, RateLimitError
-import time
+    code = dedent('''
+        import os
+        from openai import OpenAI, RateLimitError
+        import time
 
-class LLMClient:
-    """production-ready LLM client with retry and tracking"""
+        class LLMClient:
+            """production-ready LLM client with retry and tracking"""
 
-    def __init__(self):
-        self.client = OpenAI()
-        self.total_tokens = 0
-        self.total_cost = 0.0
+            def __init__(self):
+                self.client = OpenAI()
+                self.total_tokens = 0
+                self.total_cost = 0.0
 
-    def chat(self, messages, model="gpt-4o", temperature=0.0, max_retries=3):
-        """make API call with retry logic and cost tracking"""
-        for attempt in range(max_retries):
-            try:
-                response = self.client.chat.completions.create(
-                    model=model,
-                    messages=messages,
-                    temperature=temperature,
-                )
+            def chat(self, messages, model="gpt-4o", temperature=0.0, max_retries=3):
+                """make API call with retry logic and cost tracking"""
+                for attempt in range(max_retries):
+                    try:
+                        response = self.client.chat.completions.create(
+                            model=model,
+                            messages=messages,
+                            temperature=temperature,
+                        )
 
-                # track usage
-                self.total_tokens += response.usage.total_tokens
-                self._update_cost(response.usage, model)
+                        # track usage
+                        self.total_tokens += response.usage.total_tokens
+                        self._update_cost(response.usage, model)
 
-                return response.choices[0].message.content
+                        return response.choices[0].message.content
 
-            except RateLimitError:
-                wait = 2 ** attempt
-                print(f"rate limited, waiting {wait}s...")
-                time.sleep(wait)
+                    except RateLimitError:
+                        wait = 2 ** attempt
+                        print(f"rate limited, waiting {wait}s...")
+                        time.sleep(wait)
 
-        raise Exception("max retries exceeded")
+                raise Exception("max retries exceeded")
 
-    def _update_cost(self, usage, model):
-        # simplified pricing
-        if "gpt-4" in model:
-            cost = (usage.prompt_tokens * 2.5 + usage.completion_tokens * 10) / 1_000_000
-        else:
-            cost = usage.total_tokens * 0.5 / 1_000_000
-        self.total_cost += cost
+            def _update_cost(self, usage, model):
+                # simplified pricing
+                if "gpt-4" in model:
+                    cost = (usage.prompt_tokens * 2.5 + usage.completion_tokens * 10) / 1_000_000
+                else:
+                    cost = usage.total_tokens * 0.5 / 1_000_000
+                self.total_cost += cost
 
-    def get_stats(self):
-        return {
-            "total_tokens": self.total_tokens,
-            "total_cost": f"${self.total_cost:.4f}",
-        }
+            def get_stats(self):
+                return {
+                    "total_tokens": self.total_tokens,
+                    "total_cost": f"${self.total_cost:.4f}",
+                }
 
-# usage
-client = LLMClient()
-response = client.chat([{"role": "user", "content": "Hello!"}])
-print(response)
-print(client.get_stats())
-'''
+        # usage
+        client = LLMClient()
+        response = client.chat([{"role": "user", "content": "Hello!"}])
+        print(response)
+        print(client.get_stats())
+    ''').strip()
     print(code)
 
 
@@ -524,17 +525,17 @@ def main() -> None:
     example_complete_pattern()
 
     print_section("Summary")
-    print("""
-Key patterns learned:
-  1. Messages format: [{"role": "...", "content": "..."}]
-  2. Temperature: 0.0 for consistency, higher for creativity
-  3. Token tracking: Monitor usage for cost control
-  4. Error handling: Retry with exponential backoff
-  5. Streaming: Better UX for chat interfaces
-  6. History management: Send full context, truncate if needed
+    print(dedent("""
+        Key patterns learned:
+          1. Messages format: [{"role": "...", "content": "..."}]
+          2. Temperature: 0.0 for consistency, higher for creativity
+          3. Token tracking: Monitor usage for cost control
+          4. Error handling: Retry with exponential backoff
+          5. Streaming: Better UX for chat interfaces
+          6. History management: Send full context, truncate if needed
 
-Next: Run live_examples.py to make real API calls!
-    """)
+        Next: Run live_examples.py to make real API calls!
+    """).strip())
 
 
 if __name__ == "__main__":

@@ -25,6 +25,7 @@ Run with: uv run python phase3_llm_applications/01_rag_system/chunking.py
 """
 
 import re
+from textwrap import dedent
 from typing import Callable
 
 from schemas import Document, Chunk
@@ -286,23 +287,23 @@ def main():
     print("  Chunking Strategies Demo")
     print("=" * 60)
 
-    sample_text = """
-Introduction to Machine Learning
+    sample_text = dedent("""
+        Introduction to Machine Learning
 
-Machine learning is a subset of artificial intelligence that enables systems to learn from data. Instead of being explicitly programmed, these systems identify patterns and make decisions with minimal human intervention.
+        Machine learning is a subset of artificial intelligence that enables systems to learn from data. Instead of being explicitly programmed, these systems identify patterns and make decisions with minimal human intervention.
 
-Types of Machine Learning
+        Types of Machine Learning
 
-There are three main types: supervised learning, unsupervised learning, and reinforcement learning. Supervised learning uses labeled data to train models. Unsupervised learning finds patterns in unlabeled data. Reinforcement learning learns through trial and error.
+        There are three main types: supervised learning, unsupervised learning, and reinforcement learning. Supervised learning uses labeled data to train models. Unsupervised learning finds patterns in unlabeled data. Reinforcement learning learns through trial and error.
 
-Applications
+        Applications
 
-Machine learning powers many modern applications. These include recommendation systems, fraud detection, image recognition, and natural language processing. The field continues to evolve rapidly with new breakthroughs.
+        Machine learning powers many modern applications. These include recommendation systems, fraud detection, image recognition, and natural language processing. The field continues to evolve rapidly with new breakthroughs.
 
-Getting Started
+        Getting Started
 
-To begin with machine learning, you should first learn Python and basic statistics. Then explore libraries like scikit-learn, TensorFlow, or PyTorch. Practice with real datasets to build your skills.
-"""
+        To begin with machine learning, you should first learn Python and basic statistics. Then explore libraries like scikit-learn, TensorFlow, or PyTorch. Practice with real datasets to build your skills.
+    """).strip()
 
     doc = Document(content=sample_text, source="ml_intro.md")
 

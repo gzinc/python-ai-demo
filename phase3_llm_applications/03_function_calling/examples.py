@@ -12,6 +12,7 @@ All implementation classes are in their own files:
 Run with: uv run python phase3_llm_applications/03_function_calling/examples.py
 """
 
+from textwrap import dedent
 from dotenv import load_dotenv
 
 from schemas import Tool, ToolParameter
@@ -167,32 +168,32 @@ def example_agent_loop_pattern():
     """
     print_section("Example 6: Agent Loop Pattern (Preview)")
 
-    print("""
-    The Agent Loop:
-    ┌─────────────────────────────────────────────────────────────┐
-    │                                                             │
-    │  def agent_loop(task):                                      │
-    │      messages = [{"role": "user", "content": task}]         │
-    │                                                             │
-    │      while True:                                            │
-    │          response = llm.chat(messages, tools=tools)         │
-    │                                                             │
-    │          if response.has_tool_calls:                        │
-    │              # LLM wants to use a tool                      │
-    │              for tool_call in response.tool_calls:          │
-    │                  result = execute(tool_call)                │
-    │                  messages.append(result)                    │
-    │              # Continue loop for more processing            │
-    │                                                             │
-    │          else:                                              │
-    │              # LLM is done - return final answer            │
-    │              return response.content                        │
-    │                                                             │
-    └─────────────────────────────────────────────────────────────┘
+    print(dedent("""
+        The Agent Loop:
+        ┌─────────────────────────────────────────────────────────────┐
+        │                                                             │
+        │  def agent_loop(task):                                      │
+        │      messages = [{"role": "user", "content": task}]         │
+        │                                                             │
+        │      while True:                                            │
+        │          response = llm.chat(messages, tools=tools)         │
+        │                                                             │
+        │          if response.has_tool_calls:                        │
+        │              # LLM wants to use a tool                      │
+        │              for tool_call in response.tool_calls:          │
+        │                  result = execute(tool_call)                │
+        │                  messages.append(result)                    │
+        │              # Continue loop for more processing            │
+        │                                                             │
+        │          else:                                              │
+        │              # LLM is done - return final answer            │
+        │              return response.content                        │
+        │                                                             │
+        └─────────────────────────────────────────────────────────────┘
 
-    This pattern is implemented in FunctionCallingEngine.chat()
-    and will be expanded in Phase 4: AI Agents!
-    """)
+        This pattern is implemented in FunctionCallingEngine.chat()
+        and will be expanded in Phase 4: AI Agents!
+    """).strip())
 
     # demonstrate with actual engine
     engine = FunctionCallingEngine()
