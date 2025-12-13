@@ -224,3 +224,7 @@ After this module:
 
 > The agent is just a **loop around function calling** with added reasoning.
 > The LLM's job changes from "pick a tool" to "think about the task, then pick a tool or finish."
+
+## Further Reading
+
+- [CONCEPTS.md](../CONCEPTS.md) - Core agent concepts and terminology

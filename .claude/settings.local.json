@@ -16,7 +16,8 @@
       "mcp__serena__get_symbols_overview",
       "mcp__serena__list_dir",
       "mcp__serena__find_symbol",
-      "mcp__time__get_current_time"
+      "mcp__time__get_current_time",
+      "Bash(ls:*)"
     ],
     "deny": [],
     "ask": []

@@ -107,11 +107,11 @@ Track your journey through AI development. Update after each session.
 - [x] Agent project (6 demos: simple, multi-step, knowledge+calc, compare, history, timeout)
 
 ### Tool Use
-- [ ] Tool definitions
-- [ ] Web search integration
-- [ ] File operations
-- [ ] API calls
-- [ ] Tool orchestration
+- [x] Tool definitions (BaseTool abstract class, ToolDefinition, ToolParameter)
+- [x] Web search integration (WebSearchTool with mock + real Tavily)
+- [x] File operations (ReadFileTool, WriteFileTool, ListDirectoryTool)
+- [x] API calls (HttpGetTool with mock + real httpx)
+- [x] Tool orchestration (ToolRegistry service container pattern)
 
 ### Multi-Agent
 - [ ] Agent collaboration
@@ -120,7 +120,7 @@ Track your journey through AI development. Update after each session.
 - [ ] Orchestration
 - [ ] Multi-agent system
 
-**Phase 4 Completion**: 33% (1/3 modules completed - Simple Agent ✅)
+**Phase 4 Completion**: 67% (2/3 modules completed - Simple Agent ✅, Tool Use ✅)
 
 ---
 
@@ -313,3 +313,32 @@ Track your journey through AI development. Update after each session.
 - Key insight: Agent = loop around function calling + reasoning
 - Key insight: LLM job changes from "pick a tool" to "think, then pick tool or finish"
 - Key pattern: THOUGHT: + ACTION: prompting format for structured agent responses
+
+### 2025-12-12: Phase 4 Module 2: Tool Use
+- ✅ Built real tool system with BaseTool abstract class (like Java interface)
+- ✅ Created ToolRegistry (service container / DI pattern)
+- ✅ Implemented file tools: ReadFileTool, WriteFileTool, ListDirectoryTool
+- ✅ Implemented WebSearchTool with mock + real Tavily support
+- ✅ Implemented HttpGetTool with mock + real httpx support
+- ✅ Added security features: allowed_directories, allowed_domains
+- ✅ Created ToolResult with factory methods: ok(), fail()
+- ✅ Built tool_agent.py integrating tools with ReActAgent
+- Key insight: Tools = interface + definition + execute (3 parts)
+- Key insight: Mock mode allows testing without API keys
+- Key pattern: Service Registry pattern for tool management
+- Java equivalents: Interface Tool, ToolRegistry @Component, Result<T,E>
+
+### 2025-12-13: Agent Concepts Deep Dive + Module 2 Cleanup
+- ✅ Made Module 2 fully self-contained (duplicated agent code, no imports from Module 1)
+- ✅ Removed Java equivalent comments from code (kept in README for reference)
+- ✅ Cleaned up sys.path hacks - now using pathlib for cleaner imports
+- ✅ Created comprehensive CONCEPTS.md with core agent concepts
+- ✅ Created phase4 README.md linking all modules
+- ✅ Updated module READMEs with links to CONCEPTS.md
+- Key insight: Agent = LLM + Tools + Decision Loop
+- Key insight: Tool = Function + Description (metadata for LLM understanding)
+- Key insight: LLM binds arguments semantically (by meaning) not syntactically (by position)
+- Key insight: Static code = compile-time decisions; Agent = runtime semantic decisions
+- Discussion: ReAct pattern (Think → Act → Observe → Repeat)
+- Discussion: Alternative patterns (Plan-and-Execute, Reflexion, Tree of Thoughts)
+- Reference: ReAct paper (Yao et al., 2022) - arxiv.org/abs/2210.03629
