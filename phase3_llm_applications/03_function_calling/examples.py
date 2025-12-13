@@ -12,7 +12,7 @@ All implementation classes are in their own files:
 Run with: uv run python phase3_llm_applications/03_function_calling/examples.py
 """
 
-from textwrap import dedent
+from inspect import cleandoc
 from dotenv import load_dotenv
 
 from schemas import Tool, ToolParameter
@@ -168,7 +168,7 @@ def example_agent_loop_pattern():
     """
     print_section("Example 6: Agent Loop Pattern (Preview)")
 
-    print(dedent("""
+    print(cleandoc("""
         The Agent Loop:
         ┌─────────────────────────────────────────────────────────────┐
         │                                                             │
@@ -193,7 +193,7 @@ def example_agent_loop_pattern():
 
         This pattern is implemented in FunctionCallingEngine.chat()
         and will be expanded in Phase 4: AI Agents!
-    """).strip())
+    """))
 
     # demonstrate with actual engine
     engine = FunctionCallingEngine()

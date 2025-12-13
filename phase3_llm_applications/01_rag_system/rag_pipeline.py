@@ -22,7 +22,7 @@ Run with: uv run python phase3_llm_applications/01_rag_system/rag_pipeline.py
 
 import os
 from pathlib import Path
-from textwrap import dedent
+from inspect import cleandoc
 from typing import Optional
 
 from dotenv import load_dotenv
@@ -216,7 +216,7 @@ class RAGPipeline:
         """
         context = assemble_context(context_chunks)
 
-        prompt = dedent(f"""
+        prompt = cleandoc(f"""
             You are a helpful assistant that answers questions based on the provided context.
             Use ONLY the information from the context below. If the answer is not in the context, say "I don't have enough information to answer that."
 
@@ -232,7 +232,7 @@ class RAGPipeline:
             - If unsure, say so
 
             Answer:
-        """).strip()
+        """)
 
         return prompt
 

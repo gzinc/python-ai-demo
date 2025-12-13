@@ -103,6 +103,23 @@ cat .serena/memories/learning_progress.md
 - lowercase comments (per global CLAUDE.md)
 - Descriptive variable names
 
+**Multi-line Strings**: Always use `inspect.cleandoc()` for multi-line strings inside functions:
+```python
+from inspect import cleandoc
+
+def example():
+    # ✅ correct - cleandoc handles dedent + strip in one call
+    text = cleandoc('''
+        content here
+        indented with code
+    ''')
+
+    # ❌ wrong - flush-left inside function
+    text = '''
+content at column 0
+'''
+```
+
 **AI-Specific**:
 - Comment why techniques matter for AI
 - Show performance comparisons

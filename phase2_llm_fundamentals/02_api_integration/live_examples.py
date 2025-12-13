@@ -13,7 +13,7 @@ Run with: uv run python phase2_llm_fundamentals/02_api_integration/live_examples
 
 import os
 import sys
-from textwrap import dedent
+from inspect import cleandoc
 from dotenv import load_dotenv
 
 # load .env file (must be called before checking keys)
@@ -266,7 +266,7 @@ def main() -> None:
         pass
 
     print_section("Complete!")
-    print(dedent("""
+    print(cleandoc("""
         You've seen real LLM API calls in action.
 
         Key observations:
@@ -279,7 +279,7 @@ def main() -> None:
           - Experiment with different temperatures
           - Try longer conversations
           - Move to Module 3: Embeddings
-    """).strip())
+    """))
 
 
 if __name__ == "__main__":

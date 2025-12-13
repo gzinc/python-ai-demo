@@ -11,7 +11,7 @@ Run with: uv run python phase2_llm_fundamentals/02_api_integration/examples.py
 import os
 import time
 import json
-from textwrap import dedent
+from inspect import cleandoc
 from typing import Generator
 from dataclasses import dataclass
 
@@ -133,7 +133,7 @@ def example_real_openai_code() -> None:
     """show actual OpenAI code (for reference)"""
     print_section("2. Real OpenAI Code (Reference)")
 
-    code = dedent('''
+    code = cleandoc('''
         # actual OpenAI code (requires: pip install openai)
         from openai import OpenAI
 
@@ -152,7 +152,7 @@ def example_real_openai_code() -> None:
         # access the response
         print(response.choices[0].message.content)
         print(f"Tokens used: {response.usage.total_tokens}")
-    ''').strip()
+    ''')
     print(code)
 
 
@@ -160,7 +160,7 @@ def example_real_anthropic_code() -> None:
     """show actual Anthropic code (for reference)"""
     print_section("3. Real Anthropic Code (Reference)")
 
-    code = dedent('''
+    code = cleandoc('''
         # actual Anthropic code (requires: pip install anthropic)
         from anthropic import Anthropic
 
@@ -178,7 +178,7 @@ def example_real_anthropic_code() -> None:
         # access the response (slightly different structure)
         print(response.content[0].text)
         print(f"Tokens: {response.usage.input_tokens} in, {response.usage.output_tokens} out")
-    ''').strip()
+    ''')
     print(code)
 
     print("\nKey difference: Anthropic separates 'system' from 'messages'")
@@ -254,7 +254,7 @@ def example_error_handling() -> None:
     """demonstrate error handling patterns"""
     print_section("6. Error Handling Patterns")
 
-    code = dedent('''
+    code = cleandoc('''
         import time
         from openai import OpenAI, RateLimitError, APIError
 
@@ -285,7 +285,7 @@ def example_error_handling() -> None:
                         raise
 
             raise Exception("Max retries exceeded")
-    ''').strip()
+    ''')
     print(code)
 
     print("\nCommon errors to handle:")
@@ -310,7 +310,7 @@ def example_streaming() -> None:
     print("Streaming shows tokens as they're generated (better UX):")
     print()
 
-    code = dedent('''
+    code = cleandoc('''
         # real streaming code
         stream = client.chat.completions.create(
             model="gpt-4o",
@@ -322,7 +322,7 @@ def example_streaming() -> None:
             content = chunk.choices[0].delta.content
             if content:
                 print(content, end="", flush=True)
-    ''').strip()
+    ''')
     print(code)
     print()
 
@@ -372,7 +372,7 @@ def example_conversation_history() -> None:
     print("  - Long conversations = more tokens = more cost")
     print("  - May need to summarize or truncate old messages")
 
-    code = dedent('''
+    code = cleandoc('''
         # practical pattern
         MAX_HISTORY = 10  # keep last N messages
 
@@ -391,7 +391,7 @@ def example_conversation_history() -> None:
             history.append({"role": "assistant", "content": assistant_message})
 
             return assistant_message
-    ''').strip()
+    ''')
     print()
     print("Truncation pattern:")
     print(code)
@@ -403,7 +403,7 @@ def example_provider_comparison() -> None:
 
     print("OpenAI (GPT-4o):")
     print("-" * 40)
-    openai_code = dedent('''
+    openai_code = cleandoc('''
         from openai import OpenAI
         client = OpenAI()
 
@@ -415,12 +415,12 @@ def example_provider_comparison() -> None:
             ],
         )
         text = response.choices[0].message.content
-    ''').strip()
+    ''')
     print(openai_code)
 
     print("Anthropic (Claude):")
     print("-" * 40)
-    anthropic_code = dedent('''
+    anthropic_code = cleandoc('''
         from anthropic import Anthropic
         client = Anthropic()
 
@@ -433,7 +433,7 @@ def example_provider_comparison() -> None:
             ],
         )
         text = response.content[0].text
-    ''').strip()
+    ''')
     print(anthropic_code)
 
     print("Key differences:")
@@ -447,7 +447,7 @@ def example_complete_pattern() -> None:
     """show a complete, production-ready pattern"""
     print_section("10. Complete Production Pattern")
 
-    code = dedent('''
+    code = cleandoc('''
         import os
         from openai import OpenAI, RateLimitError
         import time
@@ -502,7 +502,7 @@ def example_complete_pattern() -> None:
         response = client.chat([{"role": "user", "content": "Hello!"}])
         print(response)
         print(client.get_stats())
-    ''').strip()
+    ''')
     print(code)
 
 
@@ -525,7 +525,7 @@ def main() -> None:
     example_complete_pattern()
 
     print_section("Summary")
-    print(dedent("""
+    print(cleandoc("""
         Key patterns learned:
           1. Messages format: [{"role": "...", "content": "..."}]
           2. Temperature: 0.0 for consistency, higher for creativity
@@ -535,7 +535,7 @@ def main() -> None:
           6. History management: Send full context, truncate if needed
 
         Next: Run live_examples.py to make real API calls!
-    """).strip())
+    """))
 
 
 if __name__ == "__main__":

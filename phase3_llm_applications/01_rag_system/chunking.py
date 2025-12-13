@@ -25,7 +25,7 @@ Run with: uv run python phase3_llm_applications/01_rag_system/chunking.py
 """
 
 import re
-from textwrap import dedent
+from inspect import cleandoc
 from typing import Callable
 
 from schemas import Document, Chunk
@@ -287,7 +287,7 @@ def main():
     print("  Chunking Strategies Demo")
     print("=" * 60)
 
-    sample_text = dedent("""
+    sample_text = cleandoc("""
         Introduction to Machine Learning
 
         Machine learning is a subset of artificial intelligence that enables systems to learn from data. Instead of being explicitly programmed, these systems identify patterns and make decisions with minimal human intervention.
@@ -303,7 +303,7 @@ def main():
         Getting Started
 
         To begin with machine learning, you should first learn Python and basic statistics. Then explore libraries like scikit-learn, TensorFlow, or PyTorch. Practice with real datasets to build your skills.
-    """).strip()
+    """)
 
     doc = Document(content=sample_text, source="ml_intro.md")
 
