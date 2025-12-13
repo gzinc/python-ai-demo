@@ -17,7 +17,11 @@
       "mcp__serena__list_dir",
       "mcp__serena__find_symbol",
       "mcp__time__get_current_time",
-      "Bash(ls:*)"
+      "Bash(ls:*)",
+      "Bash(cat:*)",
+      "Bash(python -m py_compile:*)",
+      "Bash(grep:*)",
+      "mcp__serena__delete_memory"
     ],
     "deny": [],
     "ask": []

@@ -7,7 +7,7 @@ Build autonomous AI agents that reason, act, and accomplish goals.
 - The ReAct pattern (Reasoning + Acting)
 - Building tools for agents to use
 - Agent decision loops and state management
-- Multi-agent collaboration (coming soon)
+- Multi-agent collaboration and orchestration
 
 ## Prerequisites
 
@@ -20,7 +20,7 @@ Build autonomous AI agents that reason, act, and accomplish goals.
 |--------|-------|--------------|
 | [01_simple_agent](01_simple_agent/) | ReAct Pattern | Agent loop, reasoning, observations |
 | [02_tool_use](02_tool_use/) | Real Tools | Tool interface, registry, file/web tools |
-| [03_multi_agent](03_multi_agent/) | Multi-Agent | Collaboration, orchestration (coming) |
+| [03_multi_agent](03_multi_agent/) | Multi-Agent | Hierarchical orchestration, specialist agents |
 
 ## Core Concepts
 
@@ -41,8 +41,12 @@ uv run python examples.py
 cd phase4_ai_agents/02_tool_use
 uv run python examples.py
 
+# Module 3: Multi-Agent (orchestration)
+cd phase4_ai_agents/03_multi_agent
+uv run python examples.py
+
 # With API key for full demos
-OPENAI_API_KEY=your-key uv run python tool_agent.py
+OPENAI_API_KEY=your-key uv run python examples.py
 ```
 
 ## The Big Picture
