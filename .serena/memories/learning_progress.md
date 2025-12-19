@@ -133,11 +133,11 @@ Track your journey through AI development. Update after each session.
 - Note: FastAPI basics already known from ac-agent
 
 ### Evaluation (Module 2)
-- [ ] Distributed tracing
-- [ ] Metrics collection
-- [ ] RAG evaluation
-- [ ] Logging patterns
-- [ ] Observability dashboard
+- [x] RAG evaluation metrics (relevance, groundedness, faithfulness, answer relevance)
+- [x] LLM-as-judge pattern for quality metrics
+- [x] Hallucination detection (groundedness < 0.7)
+- [x] LLM tracing with spans (OpenTelemetry-style)
+- [x] Trace hierarchy (parent/child spans)
 
 ### Optimization (Module 3)
 - [ ] Caching strategies
@@ -146,7 +146,7 @@ Track your journey through AI development. Update after each session.
 - [ ] Token management
 - [ ] Deployment patterns
 
-**Phase 5 Completion**: 33% (1/3 modules completed)
+**Phase 5 Completion**: 66% (2/3 modules completed)
 
 ---
 
@@ -357,3 +357,19 @@ Track your journey through AI development. Update after each session.
 - Key insight: Cost tracking essential for production budget control
 - Key pattern: datetime.now(timezone.utc) not datetime.utcnow() (Python 3.12+)
 - Note: Skipped generic FastAPI patterns - already known from ac-agent
+
+### 2025-12-14: Phase 5 Module 2 - Evaluation & Observability
+- ✅ Built rag_metrics.py (Ragas-style evaluation with 3 backends)
+- ✅ Implemented 4 metrics: context relevance, groundedness, faithfulness, answer relevance
+- ✅ Built 3 evaluation backends: EmbeddingScorer, LLMJudgeScorer, CrossEncoderScorer
+- ✅ Built llm_tracing.py (OpenTelemetry-style spans)
+- ✅ Implemented Span/Trace hierarchy with timing and attributes
+- ✅ Built rag_eval_production.py (real API examples with all 3 options)
+- Key insight: Different metrics need different backends!
+  - Relevance → Embedding/CrossEncoder (semantic similarity, no reasoning)
+  - Groundedness/Faithfulness → LLM-as-judge (needs reasoning about claims)
+- Key insight: EmbeddingScorer = fast, cheap; LLMJudge = accurate, expensive
+- Key insight: CrossEncoder = best accuracy for relevance, FREE (local model)
+- Key insight: Groundedness < 0.7 indicates likely hallucination
+- Cost comparison: Embedding ~$0.02/1K, LLM ~$0.15-3/1K, CrossEncoder FREE
+- Tools: Ragas, TruLens, Phoenix for eval; LangSmith, W&B for tracing
