@@ -58,3 +58,8 @@ models/checkpoints/
 *.log
 .chromadb/         # Vector DB storage
 .chromadb
+
+# Phase 6: Model Customization
+mnist_model.pt     # trained model output
+data/MNIST/        # downloaded MNIST dataset
+

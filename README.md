@@ -21,6 +21,9 @@ This roadmap follows a progressive structure:
 **Phase 5: Production Systems** (3-4 weeks)
 → Deployment, monitoring, optimization, scaling
 
+**Phase 6: Model Customization** (exploratory)
+→ Training fundamentals, fine-tuning, LoRA/QLoRA, dataset prep
+
 ---
 
 ## 📁 Project Structure
@@ -38,6 +41,7 @@ This roadmap follows a progressive structure:
 | ↳ [02_chat_interface/](phase3_llm_applications/02_chat_interface/) | Chat with memory |
 | [phase4_ai_agents/](phase4_ai_agents/) | Agent systems |
 | [phase5_production/](phase5_production/) | Production deployment |
+| [phase6_model_customization/](phase6_model_customization/) | Training & fine-tuning |
 | [docs/](docs/) | Learning resources |
 | ↳ [docs/concepts/](docs/concepts/) | Theoretical background |
 | ↳ [docs/guides/](docs/guides/) | Step-by-step tutorials |
@@ -212,6 +216,33 @@ Return to user
 - **Fallbacks**: Handle API failures gracefully
 - **Evaluation**: Test LLM outputs systematically
 - **Guardrails**: Input/output validation and safety
+
+---
+
+## 📚 Phase 6: Model Customization (Exploratory)
+
+**Goal**: Understand and apply model training and fine-tuning
+
+### Topics Covered
+- ⬜ Training loop fundamentals (forward → loss → backward → update)
+- ⬜ Fine-tuning pre-trained models (BERT, small LLMs)
+- ⬜ LoRA/QLoRA for efficient fine-tuning
+- ⬜ Dataset preparation and quality
+- ⬜ When to fine-tune vs prompt engineer vs RAG
+
+### Projects
+1. **MNIST From Scratch**: Train a simple neural network, see the training loop
+2. **BERT Classification**: Fine-tune BERT for sentiment analysis
+3. **LoRA Experiment**: Fine-tune a small LLM on your GPU
+4. **Custom Dataset**: Prepare data for instruction tuning
+
+### Hardware
+- Requires GPU for meaningful experimentation
+- RTX 5070 Ti (16GB) can handle LoRA on 7B models
+
+### Note
+This phase is **exploratory** - jump between modules based on interest.
+Not required for production AI engineering, but deepens understanding.
 
 ---
 

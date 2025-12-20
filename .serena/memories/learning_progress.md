@@ -140,13 +140,47 @@ Track your journey through AI development. Update after each session.
 - [x] Trace hierarchy (parent/child spans)
 
 ### Optimization (Module 3)
-- [ ] Caching strategies
-- [ ] Rate limiting
-- [ ] Cost control
-- [ ] Token management
-- [ ] Deployment patterns
+- [x] Prompt compression (LLMLingua-2 deep dive - tensors, PyTorch, CUDA, model weights)
+- [ ] Batching strategies (code exists, not learned)
+- [ ] Rate limiting (code exists, not learned)
+- [ ] Cost budgets (code exists, not learned)
 
-**Phase 5 Completion**: 66% (2/3 modules completed)
+**Phase 5 Completion**: 40% (Module 1 done, Module 2 not learned, Module 3 compression only)
+
+---
+
+## Phase 6: Model Customization (Exploratory)
+
+### Training Fundamentals (Module 1)
+- [ ] Training loop (forward → loss → backward → update)
+- [ ] Gradients and backpropagation
+- [ ] GPU vs CPU training
+- [ ] Learning rate, batch size, epochs
+- [ ] MNIST from scratch experiment
+
+### Fine-Tuning Basics (Module 2)
+- [ ] Transfer learning concept
+- [ ] BERT fine-tuning
+- [ ] Freezing layers
+- [ ] Overfitting prevention
+
+### LoRA/QLoRA (Module 3)
+- [ ] LoRA concept (low-rank adaptation)
+- [ ] QLoRA (quantized LoRA)
+- [ ] PEFT library
+- [ ] Small LLM fine-tuning
+
+### Dataset Preparation (Module 4)
+- [ ] Data formats (instruction, chat, completion)
+- [ ] Quality vs quantity
+- [ ] Synthetic data generation
+
+### Evaluation & Selection (Module 5)
+- [ ] When to fine-tune vs prompt engineer vs RAG
+- [ ] Evaluation metrics
+- [ ] Cost analysis
+
+**Phase 6 Completion**: 0% (Structure scaffolded, ready to explore)
 
 ---
 
@@ -167,6 +201,7 @@ Track your journey through AI development. Update after each session.
 - [x] Phase 4 completed ✅
 - [ ] Phase 1 completed
 - [ ] Phase 5 completed
+- [ ] Phase 6 scaffolded ⬜ (exploratory)
 
 **Projects Built**:
 - embeddings_demo: Memory files → ChromaDB → Semantic search ✅
@@ -373,3 +408,31 @@ Track your journey through AI development. Update after each session.
 - Key insight: Groundedness < 0.7 indicates likely hallucination
 - Cost comparison: Embedding ~$0.02/1K, LLM ~$0.15-3/1K, CrossEncoder FREE
 - Tools: Ragas, TruLens, Phoenix for eval; LangSmith, W&B for tracing
+
+### 2025-12-20: LLMLingua-2 Deep Dive + PyTorch/CUDA Fundamentals
+- ✅ Replaced naive regex compression with production LLMLingua-2
+- ✅ Split Module 3 into modular subdirectories (01_compression, 02_throughput, 03_cost_control)
+- ✅ Deep dive: What's in a 677MB model file (177M floating point weights)
+- ✅ Explored HuggingFace cache structure (~/.cache/huggingface/hub/)
+- ✅ Learned: Tensor = multi-dimensional array of numbers
+- ✅ Learned: PyTorch = NumPy + GPU support + auto-gradients
+- ✅ Learned: CUDA = NVIDIA's parallel computing platform for GPUs
+- ✅ Benchmarked GPU vs CPU (RTX 5070 Ti: 2.4x faster inference)
+- ✅ Learned lazy import pattern (heavy deps inside __init__, not top-level)
+- ✅ Researched current state of prompt compression (LLMLingua-2 still best OSS)
+- Key insight: Model loading slow because 677MB deserialized every instantiation
+- Key insight: BERT model = embeddings (92M) + 12 transformer layers (85M) + classifier
+- Key insight: zip() stops at shortest list (use strict=True for safety)
+- Next: Module 2 (evaluation) and rest of Module 3 (batching, rate limiting, cost)
+
+### 2025-12-20: Phase 6 Scaffolded + Career Discussion
+- ✅ Created Phase 6: Model Customization (exploratory phase)
+- ✅ Scaffolded 5 modules: training fundamentals, fine-tuning, LoRA/QLoRA, dataset prep, evaluation
+- ✅ Created runnable MNIST experiment for hands-on training loop learning
+- ✅ Updated project README and learning progress with Phase 6
+- ✅ Career discussion: AI Engineer / AI Solutions Architect roles
+- ✅ Researched salaries: US + Israel markets for AI engineer roles
+- Key insight: Fine-tuning is rare skill that differentiates from API-only engineers
+- Key insight: Phase 6 is exploratory - jump based on interest, not linear
+- Discussion: User's skill combination (Java+AWS+Salesforce+Python+AI) = AI Solutions Architect level
+- Hardware: RTX 5070 Ti (16GB) capable of LoRA on 7B models
