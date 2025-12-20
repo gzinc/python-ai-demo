@@ -35,6 +35,9 @@ dependencies = [
     "rich>=13.7.0", # Beautiful terminal output
     "tqdm>=4.66.0", # Progress bars
     "tiktoken>=0.5.0", # Token counting
+    "llmlingua>=0.2.2",
+    # Model Training (Phase 6)
+    "torchvision>=0.19.0", # MNIST and image datasets
 ]
 
 [project.optional-dependencies]
@@ -58,7 +61,8 @@ packages = [
     "phase2_llm_fundamentals",
     "phase3_llm_applications",
     "phase4_ai_agents",
-    "phase5_production"
+    "phase5_production",
+    "phase6_model_customization"
 ]
 
 [tool.ruff]

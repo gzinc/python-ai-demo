@@ -255,4 +255,159 @@ similarities = np.dot(stored_embs, query_emb)  # Math (free)
 
 ---
 
-Last updated: 2025-01-13
+---
+
+## Session: 2025-12-20 - Deep Learning Fundamentals
+
+### Tensors (★★★★★ Critical Concept)
+
+**What**: Multi-dimensional arrays of numbers - the data structure of deep learning
+
+```python
+# 0D: scalar     42
+# 1D: vector     [1, 2, 3]           ← embeddings are 1D tensors
+# 2D: matrix     [[1, 2], [3, 4]]    ← weight matrices
+# 3D+: stacks    [[[...]]]           ← batches, sequences
+```
+
+**Why It Matters**:
+- Neural networks = tensor operations
+- Inputs, outputs, weights - all tensors
+- Understanding shapes is key to debugging AI code
+
+---
+
+### PyTorch (★★★★★ Critical Library)
+
+**What**: Python library for tensor operations with GPU support and auto-gradients
+
+**Why It Exists**:
+- NumPy can't run on GPU
+- NumPy can't auto-compute gradients (needed for training)
+- PyTorch = "NumPy that runs on GPU + auto-gradients"
+
+```python
+import torch
+
+x = torch.tensor([1.0, 2.0, 3.0])
+x = x.to('cuda')  # move to GPU
+x.requires_grad = True  # enable gradient tracking
+```
+
+**Ecosystem**:
+- torch → core tensor operations
+- torchvision → image models
+- transformers (HuggingFace) → LLMs, built on PyTorch
+
+---
+
+### CUDA (★★★★ Important for Performance)
+
+**What**: NVIDIA's parallel computing platform for running code on GPUs
+
+```
+CPU: 4-16 powerful cores     → sequential, complex logic
+GPU: 1000s of tiny cores     → parallel, same math on many numbers
+```
+
+**Why GPUs for AI**:
+- Neural nets = massive matrix multiplications
+- Each multiplication is independent (parallelizable)
+- GPUs are 2-100x faster for AI workloads
+
+**In Code**:
+```python
+model.to('cpu')   # uses CPU (Intel/AMD)
+model.to('cuda')  # uses GPU via CUDA (NVIDIA)
+```
+
+---
+
+### Model Weights (★★★★★ Core Understanding)
+
+**What**: The learned parameters stored in model files
+
+**Example - LLMLingua-2 BERT model**:
+- 677MB file = 177 million floating point numbers
+- Format: SafeTensors (modern) or pickle (legacy)
+- Structure:
+  - Embeddings: 92M params (word → vector lookup)
+  - 12 Transformer layers: 85M params (attention + feed-forward)
+  - Classifier head: keep/drop decision
+
+**Why Loading is Slow (even when cached)**:
+1. Download: once (first run only)
+2. Load from disk: every time (~677MB read)
+3. Allocate RAM: create tensor objects
+4. Build compute graph: prepare for inference
+
+**Storage Location**:
+```
+~/.cache/huggingface/hub/models--<org>--<model>/
+├── blobs/      # actual weight files (SHA-addressed)
+├── snapshots/  # symlinks by version
+└── refs/       # branch pointers
+```
+
+---
+
+### Lazy Import Pattern (★★★ Practical Pattern)
+
+**What**: Import heavy dependencies inside functions, not at module level
+
+```python
+# ❌ Eager: loads torch on import
+import torch
+class MyClass:
+    pass
+
+# ✅ Lazy: loads torch only when instantiated
+class MyClass:
+    def __init__(self):
+        import torch  # deferred
+```
+
+**When to Use**:
+- Heavy dependencies (torch, tensorflow)
+- Optional features
+- CLI tools where not all code paths are used
+
+---
+
+### Prompt Compression (★★★★ Production Pattern)
+
+**What**: Reduce token count while preserving meaning → reduce cost
+
+**LLMLingua-2 (state-of-the-art 2025)**:
+- BERT model trained on GPT-4 compression examples
+- Per-token binary classification: keep or drop
+- 50-70% reduction with minimal quality loss
+
+**Results**:
+| Rate | Meaning | Actual Reduction |
+|------|---------|------------------|
+| 0.7 | Keep 70% | 32.9% savings |
+| 0.5 | Keep 50% | 52.9% savings |
+| 0.3 | Keep 30% | 70.6% savings |
+
+**Alternatives**:
+- Naive regex: ~25% (poor quality)
+- LLM summarization: good quality but slow + costs API
+- Soft prompts: different approach (learned embeddings)
+
+---
+
+## Updated Confidence Tracker
+
+| Concept | Confidence | Notes |
+|---------|-----------|-------|
+| Embeddings | ★★★★★ | Clear mental model |
+| Tensors | ★★★★★ | Understand shapes and operations |
+| PyTorch | ★★★★☆ | Know purpose, need more practice |
+| CUDA/GPU | ★★★★☆ | Understand why, tested on RTX 5070 Ti |
+| Model Weights | ★★★★★ | Inspected actual file structure |
+| Prompt Compression | ★★★★★ | Built production implementation |
+
+---
+
+Last updated: 2025-12-20
