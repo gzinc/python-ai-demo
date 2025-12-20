@@ -140,13 +140,12 @@ Track your journey through AI development. Update after each session.
 - [x] Trace hierarchy (parent/child spans)
 
 ### Optimization (Module 3)
-- [ ] Caching strategies
-- [ ] Rate limiting
-- [ ] Cost control
-- [ ] Token management
-- [ ] Deployment patterns
+- [x] Prompt compression (LLMLingua-2 deep dive - tensors, PyTorch, CUDA, model weights)
+- [ ] Batching strategies (code exists, not learned)
+- [ ] Rate limiting (code exists, not learned)
+- [ ] Cost budgets (code exists, not learned)
 
-**Phase 5 Completion**: 66% (2/3 modules completed)
+**Phase 5 Completion**: 40% (Module 1 done, Module 2 not learned, Module 3 compression only)
 
 ---
 
@@ -373,3 +372,19 @@ Track your journey through AI development. Update after each session.
 - Key insight: Groundedness < 0.7 indicates likely hallucination
 - Cost comparison: Embedding ~$0.02/1K, LLM ~$0.15-3/1K, CrossEncoder FREE
 - Tools: Ragas, TruLens, Phoenix for eval; LangSmith, W&B for tracing
+
+### 2025-12-20: LLMLingua-2 Deep Dive + PyTorch/CUDA Fundamentals
+- ✅ Replaced naive regex compression with production LLMLingua-2
+- ✅ Split Module 3 into modular subdirectories (01_compression, 02_throughput, 03_cost_control)
+- ✅ Deep dive: What's in a 677MB model file (177M floating point weights)
+- ✅ Explored HuggingFace cache structure (~/.cache/huggingface/hub/)
+- ✅ Learned: Tensor = multi-dimensional array of numbers
+- ✅ Learned: PyTorch = NumPy + GPU support + auto-gradients
+- ✅ Learned: CUDA = NVIDIA's parallel computing platform for GPUs
+- ✅ Benchmarked GPU vs CPU (RTX 5070 Ti: 2.4x faster inference)
+- ✅ Learned lazy import pattern (heavy deps inside __init__, not top-level)
+- ✅ Researched current state of prompt compression (LLMLingua-2 still best OSS)
+- Key insight: Model loading slow because 677MB deserialized every instantiation
+- Key insight: BERT model = embeddings (92M) + 12 transformer layers (85M) + classifier
+- Key insight: zip() stops at shortest list (use strict=True for safety)
+- Next: Module 2 (evaluation) and rest of Module 3 (batching, rate limiting, cost)
