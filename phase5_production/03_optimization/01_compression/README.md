@@ -6,6 +6,18 @@ Production-grade prompt compression using Microsoft LLMLingua-2.
 
 Tokens = cost. A 50% reduction in prompt tokens = 50% lower API bill.
 
+## Module Structure
+
+```
+01_compression/
+├── schemas.py         # TokenStats dataclass
+├── compressors.py     # PromptCompressor ABC, LLMLingua2, Naive
+├── truncation.py      # ContextTruncator
+├── response_limits.py # ResponseLimiter
+├── examples.py        # Demo functions
+└── README.md
+```
+
 ## Approaches
 
 | Approach | Quality | Speed | Cost |
@@ -19,7 +31,7 @@ Tokens = cost. A 50% reduction in prompt tokens = 50% lower API bill.
 Uses a BERT model trained specifically for compression - learns which tokens are **essential for meaning**, not just which are predictable.
 
 ```python
-from token_optimization import LLMLingua2Compressor
+from phase5_production.03_optimization.01_compression import LLMLingua2Compressor
 
 compressor = LLMLingua2Compressor()
 
@@ -45,7 +57,7 @@ Downloads ~400MB model from HuggingFace. Subsequent runs use cached model.
 For RAG systems - keep most relevant chunks within token budget:
 
 ```python
-from token_optimization import ContextTruncator
+from phase5_production.03_optimization.01_compression import ContextTruncator
 
 truncator = ContextTruncator(max_tokens=2000)
 kept_chunks, stats = truncator.truncate_chunks(chunks, relevance_scores)
@@ -56,22 +68,30 @@ kept_chunks, stats = truncator.truncate_chunks(chunks, relevance_scores)
 Set appropriate `max_tokens` by task type:
 
 ```python
-from token_optimization import ResponseLimiter
+from phase5_production.03_optimization.01_compression import ResponseLimiter
 
 limiter = ResponseLimiter()
 max_tokens = limiter.get_limit('summarization')  # 500
 max_tokens = limiter.get_limit('classification')  # 50
 ```
 
-## Run Demo
+## Run Demos
 
 ```bash
-uv run python -m phase5_production.03_optimization.01_compression.token_optimization
+# all demos
+uv run python -m phase5_production.03_optimization.01_compression.examples
+
+# individual modules
+uv run python -m phase5_production.03_optimization.01_compression.compressors
+uv run python -m phase5_production.03_optimization.01_compression.truncation
+uv run python -m phase5_production.03_optimization.01_compression.response_limits
 ```
 
 ## Key Classes
 
-- `LLMLingua2Compressor` - Production compressor using Microsoft LLMLingua-2
-- `NaiveCompressor` - Demo/fallback using regex (not for production)
-- `ContextTruncator` - Keep top chunks within token budget
-- `ResponseLimiter` - Task-appropriate max_tokens settings
+| File | Classes | Purpose |
+|------|---------|---------|
+| `schemas.py` | `TokenStats` | Track original/optimized tokens |
+| `compressors.py` | `PromptCompressor`, `LLMLingua2Compressor`, `NaiveCompressor` | Prompt compression |
+| `truncation.py` | `ContextTruncator` | Keep top chunks within budget |
+| `response_limits.py` | `ResponseLimiter` | Task-appropriate max_tokens |

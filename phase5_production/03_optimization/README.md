@@ -26,7 +26,11 @@ Unoptimized LLM App              Optimized LLM App
 ```
 03_optimization/
 ├── 01_compression/           # Token optimization
-│   ├── token_optimization.py # LLMLingua-2, context truncation
+│   ├── schemas.py            # TokenStats dataclass
+│   ├── compressors.py        # LLMLingua-2, NaiveCompressor
+│   ├── truncation.py         # ContextTruncator
+│   ├── response_limits.py    # ResponseLimiter
+│   ├── examples.py           # Demo functions
 │   └── README.md
 │
 ├── 02_throughput/            # Speed optimization
@@ -52,7 +56,7 @@ Reduce tokens = reduce cost.
 - **Response limits**: Task-appropriate max_tokens
 
 ```bash
-uv run python -m phase5_production.03_optimization.01_compression.token_optimization
+uv run python -m phase5_production.03_optimization.01_compression.examples
 ```
 
 ### [02_throughput](02_throughput/) - Speed Optimization

@@ -2,6 +2,15 @@
 
 Maximize requests per second while respecting API limits.
 
+## Module Structure
+
+```
+02_throughput/
+├── batching.py      # EmbeddingBatcher, ParallelExecutor, BatchScheduler
+├── rate_limiter.py  # TokenBucket, SlidingWindow, AdaptiveRateLimiter
+└── README.md
+```
+
 ## Batching
 
 Reduce API calls by batching operations.
@@ -11,21 +20,21 @@ Reduce API calls by batching operations.
 Instead of N separate calls, send 1 batch:
 
 ```python
-from batching import EmbeddingBatcher
+from phase5_production.03_optimization.02_throughput.batching import EmbeddingBatcher
 
 batcher = EmbeddingBatcher(client, batch_size=100)
 embeddings, stats = batcher.embed_all(texts)
 print(f"Processed {stats.total_items} in {stats.num_batches} batches")
 ```
 
-**Cost savings**: 100 texts = 1 API call instead of 100.
+**Key insight**: Batching reduces latency, not cost - same tokens, fewer round-trips.
 
 ### Parallel LLM Calls
 
 Run independent LLM calls concurrently:
 
 ```python
-from batching import ParallelExecutor
+from phase5_production.03_optimization.02_throughput.batching import ParallelExecutor
 
 executor = ParallelExecutor(max_concurrent=5)
 results, stats = executor.execute_parallel(llm_call, prompts)
@@ -41,7 +50,7 @@ Prevent 429 errors by controlling request rate.
 Classic algorithm - allows bursts within limits:
 
 ```python
-from rate_limiter import TokenBucket
+from phase5_production.03_optimization.02_throughput.rate_limiter import TokenBucket
 
 limiter = TokenBucket(rate=10, capacity=100)  # 10/sec, burst 100
 
@@ -54,7 +63,7 @@ if limiter.acquire():
 Smooth rate limiting over time window:
 
 ```python
-from rate_limiter import SlidingWindow
+from phase5_production.03_optimization.02_throughput.rate_limiter import SlidingWindow
 
 limiter = SlidingWindow(max_requests=100, window_seconds=60)
 
@@ -67,7 +76,7 @@ if limiter.acquire():
 Adjusts rate based on API responses:
 
 ```python
-from rate_limiter import AdaptiveRateLimiter
+from phase5_production.03_optimization.02_throughput.rate_limiter import AdaptiveRateLimiter
 
 limiter = AdaptiveRateLimiter(initial_rate=10)
 
@@ -90,12 +99,7 @@ uv run python -m phase5_production.03_optimization.02_throughput.rate_limiter
 
 ## Key Classes
 
-**Batching:**
-- `EmbeddingBatcher` - Batch embedding API calls
-- `ParallelExecutor` - Concurrent LLM calls
-- `BatchScheduler` - Manage batch queue
-
-**Rate Limiting:**
-- `TokenBucket` - Classic burst-allowing limiter
-- `SlidingWindow` - Smooth rate limiting
-- `AdaptiveRateLimiter` - Self-adjusting based on responses
+| File | Classes | Purpose |
+|------|---------|---------|
+| `batching.py` | `EmbeddingBatcher`, `ParallelExecutor`, `BatchScheduler` | Batch operations |
+| `rate_limiter.py` | `TokenBucket`, `SlidingWindow`, `AdaptiveRateLimiter` | Rate control |
