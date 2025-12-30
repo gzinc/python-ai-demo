@@ -1,6 +1,10 @@
 # Phase 1: Foundations - Python for AI Development
 
-**Duration**: 2-3 weeks
+> ⚡ **OPTIONAL FOR AI APP DEVELOPERS**: If you're building LLM apps with LangChain/LangGraph,
+> you can skip to Phase 2. These foundations help with debugging and optimization but aren't
+> required for day-to-day AI application development. Come back when needed.
+
+**Duration**: 2-3 weeks (optional)
 **Goal**: Master Python libraries essential for AI/ML work
 
 ## 🎯 Learning Objectives

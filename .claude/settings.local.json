@@ -16,12 +16,19 @@
       "mcp__serena__get_symbols_overview",
       "mcp__serena__list_dir",
       "mcp__serena__find_symbol",
-      "mcp__time__get_current_time",
       "Bash(ls:*)",
       "Bash(cat:*)",
       "Bash(python -m py_compile:*)",
       "Bash(grep:*)",
-      "mcp__serena__delete_memory"
+      "mcp__serena__delete_memory",
+      "mcp__tavily__tavily-search",
+      "mcp__sequential-thinking__sequentialthinking",
+      "Bash(touch:*)",
+      "mcp__context7__resolve-library-id",
+      "mcp__context7__get-library-docs",
+      "Bash(uv run pip show:*)",
+      "Bash(mv:*)",
+      "Bash(rm:*)"
     ],
     "deny": [],
     "ask": []

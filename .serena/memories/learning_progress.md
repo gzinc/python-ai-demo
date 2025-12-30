@@ -2,7 +2,10 @@
 
 Track your journey through AI development. Update after each session.
 
-## Phase 1: Foundations
+## Phase 1: Foundations ⏸️ OPTIONAL
+
+> **Decision (2025-12-30)**: Skipped to focus on practical AI app development.
+> Exercises created but not completed. Can return if needed for debugging/optimization.
 
 ### NumPy Basics
 - [x] Array creation and manipulation
@@ -11,28 +14,18 @@ Track your journey through AI development. Update after each session.
 - [x] Indexing and slicing
 - [ ] Reshaping and stacking
 - [x] Performance optimization
-- [ ] Exercises completed
+- [ ] Exercises completed (7 exercises ready in solutions/exercise_solutions.py)
 - [ ] Project: Similarity search
 
 ### Pandas Data Manipulation
-- [ ] DataFrames and Series
-- [ ] Loading and saving data
-- [ ] Data cleaning
-- [ ] Filtering and grouping
-- [ ] Merging datasets
-- [ ] Exercises completed
+- [ ] DataFrames and Series (examples.py exists)
+- [ ] Exercises completed (8 exercises ready in solutions/exercise_solutions.py)
 - [ ] Project: Data analysis report
 
 ### ML Concepts
-- [ ] Features and labels
-- [ ] Train/test splits
-- [ ] Feature engineering
-- [ ] Normalization
-- [ ] Basic ML workflow
-- [ ] Exercises completed
-- [ ] Project: Data pipeline
+- [ ] Not started (module not created)
 
-**Phase 1 Completion**: 33% (1/3 modules in progress)
+**Phase 1 Status**: OPTIONAL - exercises scaffolded, skip to Phase 2
 
 ---
 
@@ -246,9 +239,8 @@ Track your journey through AI development. Update after each session.
 - Hands-on experience with ChromaDB
 
 **Areas for Improvement**:
-- Complete Phase 1 NumPy exercises
 - Build more hands-on projects
-- Practice Pandas for data processing
+- Return to Phase 1 if debugging embeddings/performance issues
 
 **Interesting Discoveries**:
 - Embeddings are just numbers that encode meaning!
@@ -436,3 +428,14 @@ Track your journey through AI development. Update after each session.
 - Key insight: Phase 6 is exploratory - jump based on interest, not linear
 - Discussion: User's skill combination (Java+AWS+Salesforce+Python+AI) = AI Solutions Architect level
 - Hardware: RTX 5070 Ti (16GB) capable of LoRA on 7B models
+
+### 2025-12-30: Phase 1 Made Optional + Learning Path Adjustment
+- ✅ Created NumPy exercises (7 exercises with skeleton solutions)
+- ✅ Created Pandas exercises (8 exercises with skeleton solutions)
+- ✅ Fixed bug in examples.py (jagged array)
+- ✅ Decided to skip Phase 1 math foundations - not needed for AI app development
+- ✅ Phase 1 marked as OPTIONAL (can return if needed for debugging/optimization)
+- Key insight: NumPy/Pandas not needed for LangChain/LangGraph agent development
+- Key insight: Libraries abstract away the math - focus on building apps
+- Decision: Skip to Phase 2 (LLM APIs) → practical AI development path
+- Exercises preserved: Can return to Phase 1 if hit issues needing low-level understanding

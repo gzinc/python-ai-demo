@@ -24,8 +24,8 @@ def array_creation_examples() -> None:
     print(f"From list: {arr}")
     print(f"Shape: {arr.shape}, Dtype: {arr.dtype}")
 
-    # 2D array (matrix)
-    matrix = np.array([[1, 2, 3], [4, 5]])
+    # 2D array (matrix) - all rows must have same length!
+    matrix = np.array([[1, 2, 3], [4, 5, 6]])
     print(f"\n2D array:\n{matrix}")
     print(f"Shape: {matrix.shape} (rows, cols)")
 

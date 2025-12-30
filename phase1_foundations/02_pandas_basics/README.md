@@ -73,8 +73,8 @@ documents["est_tokens"] = documents["char_count"] // 4
 02_pandas_basics/
 ├── README.md          # This file
 ├── examples.py        # Runnable examples (start here!)
-├── exercises.py       # Practice problems (coming soon)
-└── solutions/         # Exercise solutions (coming soon)
+├── exercises.py       # Practice problems (8 exercises)
+└── solutions/         # Exercise skeletons to implement
 ```
 
 ## Quick Start
