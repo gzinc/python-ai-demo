@@ -123,9 +123,7 @@ TOOL_DESCRIPTIONS = {
 
 
 # ─────────────────────────────────────────────────────────────
-# DEMOS
-# ─────────────────────────────────────────────────────────────
-
+# region Demo Functions
 
 def demo_simple_query():
     """
@@ -336,6 +334,8 @@ def main():
     print("\n" + "=" * 60)
     print("  Demos complete!")
     print("=" * 60)
+
+# endregion
 
 
 if __name__ == "__main__":

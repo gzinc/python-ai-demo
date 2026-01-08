@@ -137,6 +137,8 @@ class CostTracker:
         self._requests.clear()
 
 
+# region Demo Functions
+
 def demo_cost_tracking() -> None:
     """demonstrate cost tracking"""
     print("=" * 60)
@@ -177,6 +179,8 @@ def demo_cost_tracking() -> None:
     print("\n" + "=" * 60)
     print("  Key insight: Track costs per-request for budget control")
     print("=" * 60)
+
+# endregion
 
 
 if __name__ == "__main__":

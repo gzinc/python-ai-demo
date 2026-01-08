@@ -49,9 +49,9 @@ class EmbeddingBatcher:
     """
 
     def __init__(
-        self,
-        embed_fn: Callable[[list[str]], list[list[float]]],
-        max_batch_size: int = 100,
+            self,
+            embed_fn: Callable[[list[str]], list[list[float]]],
+            max_batch_size: int = 100,
     ):
         """
         Args:
@@ -91,9 +91,9 @@ class ParallelExecutor:
         self.max_workers = max_workers
 
     def execute_parallel(
-        self,
-        fn: Callable,
-        items: list,
+            self,
+            fn: Callable,
+            items: list,
     ) -> tuple[list, BatchResult]:
         """
         Execute function on all items in parallel.
@@ -113,9 +113,9 @@ class ParallelExecutor:
         return results, BatchResult(len(items), elapsed_ms, avg_ms)
 
     async def execute_parallel_async(
-        self,
-        fn: Callable,
-        items: list,
+            self,
+            fn: Callable,
+            items: list,
     ) -> tuple[list, BatchResult]:
         """async version for async functions"""
         start = time.perf_counter()
@@ -138,10 +138,10 @@ class BatchScheduler:
     """
 
     def __init__(
-        self,
-        process_fn: Callable[[list], list],
-        batch_size: int = 10,
-        max_wait_ms: float = 100,
+            self,
+            process_fn: Callable[[list], list],
+            batch_size: int = 10,
+            max_wait_ms: float = 100,
     ):
         """
         Args:
@@ -191,14 +191,13 @@ class BatchScheduler:
         self._queue.clear()
 
 
-def demo_batching() -> None:
-    """demonstrate batching strategies"""
-    print("=" * 60)
-    print("  Batching Strategies Demo")
-    print("=" * 60)
+# region Demo Functions
 
-    # 1. embedding batching
-    print("\n1. EMBEDDING BATCHING\n")
+def demo_embedding_batching() -> None:
+    """demonstrate embedding batching vs sequential calls"""
+    print("\n" + "-" * 60)
+    print("  1. EMBEDDING BATCHING")
+    print("-" * 60 + "\n")
 
     def mock_embed_single(text: str) -> list[float]:
         """simulate single embedding call (slow)"""
@@ -217,7 +216,7 @@ def demo_batching() -> None:
     start = time.perf_counter()
     sequential_results = [mock_embed_single(t) for t in texts]
     sequential_ms = (time.perf_counter() - start) * 1000
-    print(f"  Time: {sequential_ms:.1f}ms ({sequential_ms/len(texts):.1f}ms/item)")
+    print(f"  Time: {sequential_ms:.1f}ms ({sequential_ms / len(texts):.1f}ms/item)")
 
     # batched (fast)
     print("\nBatched (1 call):")
@@ -226,9 +225,12 @@ def demo_batching() -> None:
     print(f"  {stats}")
     print(f"  Speedup: {sequential_ms / stats.total_time_ms:.1f}x faster")
 
-    # 2. parallel execution
+
+def demo_parallel_llm_calls() -> None:
+    """demonstrate parallel LLM call execution"""
     print("\n" + "-" * 60)
-    print("\n2. PARALLEL LLM CALLS\n")
+    print("  2. PARALLEL LLM CALLS")
+    print("-" * 60 + "\n")
 
     def mock_llm_call(prompt: str) -> str:
         """simulate LLM call"""
@@ -251,9 +253,12 @@ def demo_batching() -> None:
     print(f"  {stats}")
     print(f"  Speedup: {seq_ms / stats.total_time_ms:.1f}x faster")
 
-    # 3. batch scheduling
+
+def demo_batch_scheduling() -> None:
+    """demonstrate batch scheduling with queue"""
     print("\n" + "-" * 60)
-    print("\n3. BATCH SCHEDULING\n")
+    print("  3. BATCH SCHEDULING")
+    print("-" * 60 + "\n")
 
     def process_batch(items: list) -> list:
         """process items in batch"""
@@ -280,11 +285,24 @@ def demo_batching() -> None:
         print(f"  Ticket {ticket}: {result}")
     print("  ...")
 
+
+def demo_batching() -> None:
+    """demonstrate all batching strategies"""
+    print("=" * 60)
+    print("  Batching Strategies Demo")
+    print("=" * 60)
+
+    demo_embedding_batching()
+    demo_parallel_llm_calls()
+    demo_batch_scheduling()
+
     print("\n" + "=" * 60)
     print("  Key Insight: Batching reduces latency, not cost")
     print("  (same tokens, fewer round-trips)")
     print("=" * 60)
 
+
+# endregion
 
 if __name__ == "__main__":
     demo_batching()

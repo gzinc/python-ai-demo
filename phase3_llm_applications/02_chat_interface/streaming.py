@@ -282,6 +282,8 @@ def print_section(title: str) -> None:
     print("=" * 60)
 
 
+# region Demo Functions
+
 def demo_simulated_streaming():
     """demonstrate streaming with simulated data"""
     print_section("Simulated Streaming")
@@ -390,6 +392,8 @@ def main():
     print("\n" + "=" * 60)
     print("  Streaming Demos Complete!")
     print("=" * 60)
+
+# endregion
 
 
 if __name__ == "__main__":

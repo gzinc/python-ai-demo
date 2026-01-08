@@ -178,6 +178,8 @@ class LLMTracer:
         return self._traces
 
 
+# region Demo Functions
+
 def demo_llm_tracing() -> None:
     """demonstrate LLM tracing"""
     import time
@@ -230,6 +232,8 @@ def demo_llm_tracing() -> None:
     print("  Key insight: Trace every LLM operation for debugging")
     print("  Tools: OpenTelemetry, LangSmith, Weights & Biases")
     print("=" * 60)
+
+# endregion
 
 
 if __name__ == "__main__":

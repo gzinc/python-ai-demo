@@ -252,6 +252,8 @@ class CostGuard:
         return cost
 
 
+# region Demo Functions
+
 def demo_cost_budget() -> None:
     """demonstrate cost budget features"""
     print("=" * 60)
@@ -355,6 +357,8 @@ def demo_cost_budget() -> None:
     print("  Key Insight: Budget checks BEFORE the API call")
     print("  prevent surprises on your bill")
     print("=" * 60)
+
+# endregion
 
 
 if __name__ == "__main__":

@@ -123,6 +123,8 @@ class MockEmbedder:
         return np.random.randn(self.dim).astype(np.float32)
 
 
+# region Demo Functions
+
 def demo_semantic_cache() -> None:
     """demonstrate semantic caching behavior"""
     print("=" * 60)
@@ -163,6 +165,8 @@ def demo_semantic_cache() -> None:
     print("\n" + "=" * 60)
     print("  Key insight: Similar queries hit cache, reducing LLM costs")
     print("=" * 60)
+
+# endregion
 
 
 if __name__ == "__main__":

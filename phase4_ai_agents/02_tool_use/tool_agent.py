@@ -163,6 +163,8 @@ def print_section(title: str) -> None:
     print('=' * 60)
 
 
+# region Demo Functions
+
 def demo_tool_registry():
     """Demonstrate the tool registry."""
     print_section("Tool Registry Demo")
@@ -219,6 +221,8 @@ def main():
     else:
         print("\n[Skipping agent demo - no API key found]")
         print("Set OPENAI_API_KEY or ANTHROPIC_API_KEY to run the full demo")
+
+# endregion
 
 
 if __name__ == "__main__":

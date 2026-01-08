@@ -402,9 +402,7 @@ class RAGEvaluator:
 
 
 # =============================================================================
-# Demo
-# =============================================================================
-
+# region Demo Functions
 
 def demo_rag_evaluation() -> None:
     """demonstrate RAG evaluation with different backends"""
@@ -519,6 +517,8 @@ def demo_rag_evaluation() -> None:
         Tools: Ragas, TruLens, Phoenix (Arize), DeepEval
     '''))
     print("=" * 60)
+
+# endregion
 
 
 if __name__ == "__main__":

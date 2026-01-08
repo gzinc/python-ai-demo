@@ -263,6 +263,8 @@ class AdaptiveRateLimiter:
         return f"Adaptive: {self.current_rps:.1f} RPS (streak: {self.success_streak})"
 
 
+# region Demo Functions
+
 def demo_rate_limiting() -> None:
     """demonstrate rate limiting strategies"""
     print("=" * 60)
@@ -335,6 +337,8 @@ def demo_rate_limiting() -> None:
     print("  Key Insight: Client-side limits prevent 429 errors")
     print("  and make your app a good API citizen")
     print("=" * 60)
+
+# endregion
 
 
 if __name__ == "__main__":

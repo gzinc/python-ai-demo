@@ -101,6 +101,8 @@ async def demo_sse_format(prompt: str) -> None:
         print(sse, end="")
 
 
+# region Demo Functions
+
 def demo_fastapi_streaming() -> None:
     """show FastAPI streaming endpoint pattern"""
     from inspect import cleandoc
@@ -171,6 +173,8 @@ async def main() -> None:
     print("=" * 60)
     print("  Key insight: Streaming shows progress during slow LLM calls")
     print("=" * 60)
+
+# endregion
 
 
 if __name__ == "__main__":

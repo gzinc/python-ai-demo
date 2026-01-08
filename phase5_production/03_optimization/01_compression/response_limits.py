@@ -141,6 +141,8 @@ def calculate_savings(
     }
 
 
+# region Demo Functions
+
 def demo_real_openai_comparison() -> None:
     """
     Real OpenAI demo showing token savings with response limits.
@@ -273,6 +275,8 @@ def demo_multiple_tasks() -> None:
         print(f"  Input: {text[:50]}...")
         print(f"  Output: {result}")
         print(f"  Tokens: {tokens}")
+
+# endregion
 
 
 if __name__ == "__main__":

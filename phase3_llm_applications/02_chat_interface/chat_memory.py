@@ -234,6 +234,8 @@ def print_section(title: str) -> None:
     print("=" * 60)
 
 
+# region Demo Functions
+
 def demo_basic_memory():
     """demonstrate basic chat memory"""
     print_section("Basic Chat Memory")
@@ -345,6 +347,8 @@ def main():
     print("\n" + "=" * 60)
     print("  Chat Memory Demos Complete!")
     print("=" * 60)
+
+# endregion
 
 
 if __name__ == "__main__":
