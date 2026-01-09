@@ -24,6 +24,9 @@ This roadmap follows a progressive structure:
 **Phase 6: Model Customization** (exploratory)
 → Training fundamentals, fine-tuning, LoRA/QLoRA, dataset prep
 
+**Phase 7: Production Frameworks** (2-3 weeks)
+→ LangChain, LangGraph, LlamaIndex, framework comparison
+
 ---
 
 ## 📁 Project Structure
@@ -42,6 +45,7 @@ This roadmap follows a progressive structure:
 | [phase4_ai_agents/](phase4_ai_agents/) | Agent systems |
 | [phase5_production/](phase5_production/) | Production deployment |
 | [phase6_model_customization/](phase6_model_customization/) | Training & fine-tuning |
+| [phase7_frameworks/](phase7_frameworks/) | LangChain, LangGraph, LlamaIndex |
 | [docs/](docs/) | Learning resources |
 | ↳ [docs/concepts/](docs/concepts/) | Theoretical background |
 | ↳ [docs/guides/](docs/guides/) | Step-by-step tutorials |
@@ -243,6 +247,38 @@ Return to user
 ### Note
 This phase is **exploratory** - jump between modules based on interest.
 Not required for production AI engineering, but deepens understanding.
+
+---
+
+## 📚 Phase 7: Production Frameworks (2-3 weeks)
+
+**Goal**: Learn industry-standard frameworks after understanding fundamentals
+
+### Topics Covered
+- ⬜ LangChain basics (chains, prompts, memory, agents)
+- ⬜ LangGraph (state machines, multi-agent workflows)
+- ⬜ LlamaIndex (RAG-focused framework)
+- ⬜ Framework comparison and decision making
+
+### Projects
+1. **LangChain Migration**: Convert Phase 3/4 code to LangChain
+2. **LangGraph Multi-Agent**: Rebuild multi-agent system with graphs
+3. **LlamaIndex RAG**: Compare RAG approaches (yours vs LlamaIndex)
+4. **Hybrid App**: Mix frameworks + raw API for optimal solution
+
+### Why Phase 7 Comes Last
+You've built everything from scratch (Phases 2-6), so you now understand:
+- What these frameworks do under the hood
+- When to customize vs use defaults
+- How to debug when things break
+- Whether you actually need a framework
+
+### Decision Framework
+- **Pure RAG app** → LlamaIndex
+- **Agents + tools** → LangChain
+- **Multi-agent workflows** → LangGraph
+- **Simple tasks** → Skip frameworks, use raw API
+- **Complex hybrid** → Mix frameworks + custom code
 
 ---
 
