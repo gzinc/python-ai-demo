@@ -134,11 +134,11 @@ Track your journey through AI development. Update after each session.
 
 ### Optimization (Module 3)
 - [x] Prompt compression (LLMLingua-2 deep dive - tensors, PyTorch, CUDA, model weights)
-- [ ] Batching strategies (code exists, not learned)
-- [ ] Rate limiting (code exists, not learned)
-- [ ] Cost budgets (code exists, not learned)
+- [x] Batching strategies (EmbeddingBatcher, ParallelExecutor, BatchScheduler - 10x+ speedup)
+- [x] Rate limiting (TokenBucket, SlidingWindow, AdaptiveRateLimiter - prevent 429 errors)
+- [x] Cost budgets (RequestBudget, UserBudget, CostGuard - pre-flight budget checks)
 
-**Phase 5 Completion**: 40% (Module 1 done, Module 2 not learned, Module 3 compression only)
+**Phase 5 Completion**: 100% (All 3 modules complete! API Design, Evaluation, Optimization) ✅
 
 ---
 
@@ -177,9 +177,46 @@ Track your journey through AI development. Update after each session.
 
 ---
 
+## Phase 7: Production Frameworks
+
+### LangChain Basics (Module 1)
+- [ ] Prompts & templates (PromptTemplate, ChatPromptTemplate)
+- [ ] LLM integration (ChatOpenAI, ChatAnthropic unified interface)
+- [ ] Chains (LLMChain, SequentialChain, LCEL syntax)
+- [ ] Memory (ConversationBufferMemory, ConversationSummaryMemory)
+- [ ] RAG (RetrievalQA, vector stores, document loaders)
+- [ ] Agents & tools (create_react_agent, @tool decorator)
+
+### LangGraph (Module 2)
+- [ ] State basics (StateGraph, nodes, edges)
+- [ ] Conditional routing (conditional edges based on state)
+- [ ] Multi-agent collaboration (specialist agents, hierarchical orchestration)
+- [ ] Human-in-the-loop (checkpoints, interrupts, approvals)
+- [ ] Graph visualization (mermaid/graphviz rendering)
+
+### LlamaIndex (Module 3)
+- [ ] Data loading (SimpleDirectoryReader, various loaders)
+- [ ] Indexing (VectorStoreIndex, TreeIndex, SummaryIndex)
+- [ ] Query engines (basic, filtered, streaming queries)
+- [ ] Chat engines (conversational RAG with memory)
+- [ ] Advanced retrieval (hybrid search, auto-merging)
+- [ ] Metadata filtering (date, category filters)
+
+### Framework Comparison (Module 4)
+- [ ] Decision framework (when to use which framework)
+- [ ] Performance comparison (framework vs raw API benchmarks)
+- [ ] Migration strategies (raw → framework, framework → raw, hybrid)
+- [ ] Real-world scenarios (10+ use cases analyzed)
+
+**Phase 7 Completion**: 0% (Scaffolding complete - comprehensive READMEs created for all 4 modules)
+
+**Note**: Phase 7 created 2026-01-09. Philosophy: Learn frameworks AFTER building from scratch (Phases 2-6) to understand what they do under the hood, when to use them, and when to skip them entirely.
+
+---
+
 ## Overall Progress
 
-**Total Completion**: ~75% (Phase 2 + Phase 3 + Phase 4 complete!)
+**Total Completion**: ~85% (Phase 2 + Phase 3 + Phase 4 + Phase 5 complete!)
 
 **Milestones Achieved**:
 - [x] Understanding Embeddings (Critical conceptual breakthrough!)
@@ -193,7 +230,8 @@ Track your journey through AI development. Update after each session.
 - [x] Phase 3 completed ✅
 - [x] Phase 4 completed ✅
 - [ ] Phase 1 completed
-- [ ] Phase 5 completed
+- [x] Phase 5 completed ✅
+- [x] Phase 7 scaffolded (framework learning path ready) ⬜
 - [ ] Phase 6 scaffolded ⬜ (exploratory)
 
 **Projects Built**:
@@ -227,6 +265,11 @@ Track your journey through AI development. Update after each session.
 - Tool schema definitions (OpenAI and Anthropic formats)
 - Safe tool execution with validation and error handling
 - Agent loop pattern (foundation for AI agents)
+- Production optimization patterns (batching, rate limiting, cost budgets)
+- Batching strategies for reducing API latency (10x+ speedup)
+- Rate limiting algorithms (TokenBucket, SlidingWindow, Adaptive)
+- Pre-flight budget checks to prevent cost overruns
+- Framework landscape (LangChain, LangGraph, LlamaIndex decision framework)
 
 ---
 
@@ -439,3 +482,18 @@ Track your journey through AI development. Update after each session.
 - Key insight: Libraries abstract away the math - focus on building apps
 - Decision: Skip to Phase 2 (LLM APIs) → practical AI development path
 - Exercises preserved: Can return to Phase 1 if hit issues needing low-level understanding
+
+### 2026-01-09: Phase 5 Complete + Phase 7 Scaffolding
+- ✅ Completed Phase 5 Module 3: Optimization (batching, rate limiting, cost budgets)
+- ✅ Learned batching strategies: EmbeddingBatcher (10x speedup), ParallelExecutor, BatchScheduler
+- ✅ Learned rate limiting: TokenBucket (burstable), SlidingWindow (smooth), AdaptiveRateLimiter (smart)
+- ✅ Learned cost budgets: RequestBudget, UserBudget, CostGuard (pre-flight checks)
+- ✅ Created Phase 7: Production Frameworks (LangChain, LangGraph, LlamaIndex)
+- ✅ Scaffolded 4 modules with comprehensive READMEs
+- Key insight: Batching reduces latency (fewer round-trips), not cost (same tokens)
+- Key insight: Rate limiting prevents 429 errors, makes app a good API citizen
+- Key insight: Budget checks BEFORE API call prevent surprises on bill
+- Key insight: Frameworks learned AFTER fundamentals = critical understanding
+- Discussion: LiteLLM covers cost tracking + budgets in production
+- Discussion: LangChain vs LlamaIndex vs LangGraph decision framework
+- Phase 5 complete! Phase 7 scaffolded and ready to learn.
