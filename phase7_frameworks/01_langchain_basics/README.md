@@ -137,15 +137,18 @@ agent = create_react_agent(llm=llm, tools=tools, prompt=prompt)
 ├── migration_examples.py        # ✅ Side-by-side: Your code → LangChain (6 comparisons)
 ├── langchain_concepts_demo.py   # ✅ Conceptual overview with comparisons
 ├── langchain_rag_chatbot.py     # ✅ Step-by-step RAG chatbot walkthrough
-├── prompts_templates.py         # ⬜ PromptTemplate, ChatPromptTemplate, FewShotPromptTemplate
-├── llm_integration.py           # ⬜ ChatOpenAI, ChatAnthropic, unified interface
-├── chains.py                    # ⬜ LLMChain, SequentialChain, LCEL syntax
-├── memory.py                    # ⬜ ConversationBufferMemory, ConversationSummaryMemory
-├── rag.py                       # ⬜ RetrievalQA, vector stores, document loaders
-└── agents_tools.py              # ⬜ create_react_agent, @tool, AgentExecutor
+├── 01_prompts/                  # ✅ PromptTemplate, ChatPromptTemplate, FewShotPromptTemplate
+│   ├── README.md
+│   ├── concepts.py              # Conceptual (no API key)
+│   └── practical.py             # Hands-on (requires API key)
+├── 02_llm_integration/          # ⬜ ChatOpenAI, ChatAnthropic, unified interface
+├── 03_chains/                   # ⬜ LLMChain, SequentialChain, LCEL syntax
+├── 04_memory/                   # ⬜ ConversationBufferMemory, ConversationSummaryMemory
+├── 05_rag/                      # ⬜ RetrievalQA, vector stores, document loaders
+└── 06_agents_tools/             # ⬜ create_react_agent, @tool, AgentExecutor
 ```
 
-**Current Status**: Migration examples and conceptual demos complete. Full LangChain now installed!
+**Current Status**: Conceptual foundation complete. Prompts module ready for practice!
 
 ---
 
@@ -227,21 +230,28 @@ uv add langchain langchain-openai langchain-anthropic langchain-chroma langchain
 ## Running Examples
 
 ```bash
-# ✅ Available Now (Conceptual demos - no API key needed):
+# ✅ Conceptual Foundation (no API key needed):
 uv run python -m phase7_frameworks.01_langchain_basics.migration_examples
 uv run python -m phase7_frameworks.01_langchain_basics.langchain_concepts_demo
 uv run python -m phase7_frameworks.01_langchain_basics.langchain_rag_chatbot
 
-# ⬜ Coming Soon (Hands-on with LangChain + API):
-# uv run python -m phase7_frameworks.01_langchain_basics.prompts_templates
-# uv run python -m phase7_frameworks.01_langchain_basics.llm_integration
-# uv run python -m phase7_frameworks.01_langchain_basics.chains
-# uv run python -m phase7_frameworks.01_langchain_basics.memory
-# uv run python -m phase7_frameworks.01_langchain_basics.rag
-# uv run python -m phase7_frameworks.01_langchain_basics.agents_tools
+# ✅ Prompts Module:
+# Conceptual (no API key):
+uv run python -m phase7_frameworks.01_langchain_basics.01_prompts.concepts
+# Practical (requires OPENAI_API_KEY):
+uv run python -m phase7_frameworks.01_langchain_basics.01_prompts.practical
+
+# ⬜ Coming Soon:
+# uv run python -m phase7_frameworks.01_langchain_basics.02_llm_integration.concepts
+# uv run python -m phase7_frameworks.01_langchain_basics.02_llm_integration.practical
+# uv run python -m phase7_frameworks.01_langchain_basics.03_chains.concepts
+# uv run python -m phase7_frameworks.01_langchain_basics.03_chains.practical
+# ... (and so on for memory, rag, agents_tools)
 ```
 
-**Note**: Conceptual demos run without API keys. For hands-on examples, set `OPENAI_API_KEY` in your `.env` file.
+**Organization**: Each module has:
+- `concepts.py` - Learn patterns without API key
+- `practical.py` - Practice with real LLM calls (requires `OPENAI_API_KEY` in `.env`)
 
 ---
 
