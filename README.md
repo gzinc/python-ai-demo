@@ -255,13 +255,16 @@ Not required for production AI engineering, but deepens understanding.
 **Goal**: Learn industry-standard frameworks after understanding fundamentals
 
 ### Topics Covered
-- ⬜ LangChain basics (chains, prompts, memory, agents)
+- 🔄 **LangChain basics** (chains, prompts, memory, agents) - In Progress
+  - ✅ Conceptual demos complete (migration examples, patterns, RAG walkthrough)
+  - ✅ Full LangChain installed (langchain==1.0.5 + integrations)
+  - ⬜ Hands-on examples with API (prompts, chains, memory, RAG, agents)
 - ⬜ LangGraph (state machines, multi-agent workflows)
 - ⬜ LlamaIndex (RAG-focused framework)
 - ⬜ Framework comparison and decision making
 
 ### Projects
-1. **LangChain Migration**: Convert Phase 3/4 code to LangChain
+1. **LangChain Migration**: Convert Phase 3/4 code to LangChain *(In Progress)*
 2. **LangGraph Multi-Agent**: Rebuild multi-agent system with graphs
 3. **LlamaIndex RAG**: Compare RAG approaches (yours vs LlamaIndex)
 4. **Hybrid App**: Mix frameworks + raw API for optimal solution
@@ -279,6 +282,12 @@ You've built everything from scratch (Phases 2-6), so you now understand:
 - **Multi-agent workflows** → LangGraph
 - **Simple tasks** → Skip frameworks, use raw API
 - **Complex hybrid** → Mix frameworks + custom code
+
+### Current Status
+**Module 1: LangChain Basics** - conceptual foundation complete, hands-on examples in development
+- Side-by-side comparisons showing Phase 3/4 vs LangChain patterns
+- Understanding when frameworks help vs add overhead
+- Ready for hands-on practice with installed packages
 
 ---
 

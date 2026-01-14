@@ -12,12 +12,27 @@
 
 ## Module Overview
 
-| Module | Focus | Key Concepts |
-|--------|-------|--------------|
-| **01_langchain_basics** | Chains, prompts, memory, agents | LangChain foundation |
-| **02_langgraph** | State machines, multi-agent workflows | Graph-based orchestration |
-| **03_llamaindex** | RAG-focused alternative | Document-centric apps |
-| **04_framework_comparison** | Decision framework | When to use what |
+| Module | Status | Focus | Key Concepts |
+|--------|--------|-------|--------------|
+| **01_langchain_basics** | 🔄 In Progress | Chains, prompts, memory, agents | LangChain foundation |
+| **02_langgraph** | ⬜ Planned | State machines, multi-agent workflows | Graph-based orchestration |
+| **03_llamaindex** | ⬜ Planned | RAG-focused alternative | Document-centric apps |
+| **04_framework_comparison** | ⬜ Planned | Decision framework | When to use what |
+
+### Module 1 Progress
+✅ **Conceptual Foundation Complete**:
+- `migration_examples.py` - 6 side-by-side comparisons (Phase 3/4 vs LangChain)
+- `langchain_concepts_demo.py` - 7 sections explaining patterns
+- `langchain_rag_chatbot.py` - RAG chatbot architecture walkthrough
+- Full LangChain installation (langchain==1.0.5 + integrations)
+
+⬜ **Hands-On Examples** (Next):
+- `prompts_templates.py` - PromptTemplate, ChatPromptTemplate
+- `llm_integration.py` - ChatOpenAI, ChatAnthropic
+- `chains.py` - LCEL syntax, SequentialChain
+- `memory.py` - ConversationBufferMemory strategies
+- `rag.py` - RetrievalQA with vector stores
+- `agents_tools.py` - create_react_agent, @tool
 
 ---
 

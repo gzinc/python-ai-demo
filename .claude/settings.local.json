@@ -28,7 +28,13 @@
       "mcp__context7__get-library-docs",
       "Bash(uv run pip show:*)",
       "Bash(mv:*)",
-      "Bash(rm:*)"
+      "Bash(rm:*)",
+      "mcp__ide__getDiagnostics",
+      "Bash(uv add:*)",
+      "Bash(test:*)",
+      "mcp__serena__check_onboarding_performed",
+      "mcp__serena__onboarding",
+      "Bash(uv pip list:*)"
     ],
     "deny": [],
     "ask": []
