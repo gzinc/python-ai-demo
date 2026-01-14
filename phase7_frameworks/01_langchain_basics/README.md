@@ -141,14 +141,17 @@ agent = create_react_agent(llm=llm, tools=tools, prompt=prompt)
 │   ├── README.md
 │   ├── concepts.py              # Conceptual (no API key)
 │   └── practical.py             # Hands-on (requires API key)
-├── 02_llm_integration/          # ⬜ ChatOpenAI, ChatAnthropic, unified interface
+├── 02_llm_integration/          # ✅ ChatOpenAI, ChatAnthropic, unified interface
+│   ├── README.md
+│   ├── concepts.py              # Conceptual (no API key)
+│   └── practical.py             # Hands-on (requires API keys)
 ├── 03_chains/                   # ⬜ LLMChain, SequentialChain, LCEL syntax
 ├── 04_memory/                   # ⬜ ConversationBufferMemory, ConversationSummaryMemory
 ├── 05_rag/                      # ⬜ RetrievalQA, vector stores, document loaders
 └── 06_agents_tools/             # ⬜ create_react_agent, @tool, AgentExecutor
 ```
 
-**Current Status**: Conceptual foundation complete. Prompts module ready for practice!
+**Current Status**: Prompts and LLM integration modules complete!
 
 ---
 
