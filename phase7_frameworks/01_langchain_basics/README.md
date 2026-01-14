@@ -134,14 +134,18 @@ agent = create_react_agent(llm=llm, tools=tools, prompt=prompt)
 ```
 01_langchain_basics/
 ├── README.md                    # This file
-├── prompts_templates.py         # PromptTemplate, ChatPromptTemplate, FewShotPromptTemplate
-├── llm_integration.py           # ChatOpenAI, ChatAnthropic, unified interface
-├── chains.py                    # LLMChain, SequentialChain, LCEL syntax
-├── memory.py                    # ConversationBufferMemory, ConversationSummaryMemory
-├── rag.py                       # RetrievalQA, vector stores, document loaders
-├── agents_tools.py              # create_react_agent, @tool, AgentExecutor
-└── migration_examples.py        # Side-by-side: Your code → LangChain
+├── migration_examples.py        # ✅ Side-by-side: Your code → LangChain (6 comparisons)
+├── langchain_concepts_demo.py   # ✅ Conceptual overview with comparisons
+├── langchain_rag_chatbot.py     # ✅ Step-by-step RAG chatbot walkthrough
+├── prompts_templates.py         # ⬜ PromptTemplate, ChatPromptTemplate, FewShotPromptTemplate
+├── llm_integration.py           # ⬜ ChatOpenAI, ChatAnthropic, unified interface
+├── chains.py                    # ⬜ LLMChain, SequentialChain, LCEL syntax
+├── memory.py                    # ⬜ ConversationBufferMemory, ConversationSummaryMemory
+├── rag.py                       # ⬜ RetrievalQA, vector stores, document loaders
+└── agents_tools.py              # ⬜ create_react_agent, @tool, AgentExecutor
 ```
+
+**Current Status**: Migration examples and conceptual demos complete. Full LangChain now installed!
 
 ---
 
@@ -153,16 +157,16 @@ agent = create_react_agent(llm=llm, tools=tools, prompt=prompt)
 ┌─────────────────────────────────────────────────────┐
 │         Your Application Logic                      │
 ├─────────────────────────────────────────────────────┤
-│  Chains/Agents (High-level orchestration)          │
-│    - RetrievalQA, ConversationalRetrievalChain     │
-│    - create_react_agent, AgentExecutor             │
+│  Chains/Agents (High-level orchestration)           │
+│    - RetrievalQA, ConversationalRetrievalChain      │
+│    - create_react_agent, AgentExecutor              │
 ├─────────────────────────────────────────────────────┤
-│  Components (Mid-level building blocks)            │
-│    - Prompts, Memory, Callbacks                    │
-│    - Vector Stores, Document Loaders               │
+│  Components (Mid-level building blocks)             │
+│    - Prompts, Memory, Callbacks                     │
+│    - Vector Stores, Document Loaders                │
 ├─────────────────────────────────────────────────────┤
-│  LLMs (Low-level provider integration)             │
-│    - ChatOpenAI, ChatAnthropic, HuggingFace        │
+│  LLMs (Low-level provider integration)              │
+│    - ChatOpenAI, ChatAnthropic, HuggingFace         │
 ├─────────────────────────────────────────────────────┤
 │         Provider APIs (OpenAI, Anthropic, etc.)     │
 └─────────────────────────────────────────────────────┘
@@ -201,19 +205,21 @@ Before starting this module:
 
 ## Installation
 
-```bash
-# Core LangChain
-pip install langchain langchain-core langchain-community
+✅ **Already Installed!** All LangChain packages are now available:
 
-# Specific integrations
-pip install langchain-openai      # OpenAI models
-pip install langchain-anthropic   # Claude models
-pip install chromadb              # Vector store
+```bash
+# Installed packages:
+# - langchain==1.0.5
+# - langchain-openai==1.0.2
+# - langchain-anthropic==1.0.3
+# - langchain-chroma==1.0.0
+# - langchain-community==0.4.1
+# - langchain-core==1.0.4
 ```
 
-Or with uv:
+To install in a new environment:
 ```bash
-uv pip install langchain langchain-openai langchain-anthropic chromadb
+uv add langchain langchain-openai langchain-anthropic langchain-chroma langchain-community
 ```
 
 ---
@@ -221,17 +227,21 @@ uv pip install langchain langchain-openai langchain-anthropic chromadb
 ## Running Examples
 
 ```bash
-# Individual examples
-uv run python -m phase7_frameworks.01_langchain_basics.prompts_templates
-uv run python -m phase7_frameworks.01_langchain_basics.llm_integration
-uv run python -m phase7_frameworks.01_langchain_basics.chains
-uv run python -m phase7_frameworks.01_langchain_basics.memory
-uv run python -m phase7_frameworks.01_langchain_basics.rag
-uv run python -m phase7_frameworks.01_langchain_basics.agents_tools
-
-# Side-by-side comparison
+# ✅ Available Now (Conceptual demos - no API key needed):
 uv run python -m phase7_frameworks.01_langchain_basics.migration_examples
+uv run python -m phase7_frameworks.01_langchain_basics.langchain_concepts_demo
+uv run python -m phase7_frameworks.01_langchain_basics.langchain_rag_chatbot
+
+# ⬜ Coming Soon (Hands-on with LangChain + API):
+# uv run python -m phase7_frameworks.01_langchain_basics.prompts_templates
+# uv run python -m phase7_frameworks.01_langchain_basics.llm_integration
+# uv run python -m phase7_frameworks.01_langchain_basics.chains
+# uv run python -m phase7_frameworks.01_langchain_basics.memory
+# uv run python -m phase7_frameworks.01_langchain_basics.rag
+# uv run python -m phase7_frameworks.01_langchain_basics.agents_tools
 ```
+
+**Note**: Conceptual demos run without API keys. For hands-on examples, set `OPENAI_API_KEY` in your `.env` file.
 
 ---
 
