@@ -145,13 +145,16 @@ agent = create_react_agent(llm=llm, tools=tools, prompt=prompt)
 │   ├── README.md
 │   ├── concepts.py              # Conceptual (no API key)
 │   └── practical.py             # Hands-on (requires API keys)
-├── 03_chains/                   # ⬜ LLMChain, SequentialChain, LCEL syntax
+├── 03_chains/                   # ✅ LLMChain, SequentialChain, LCEL syntax
+│   ├── README.md
+│   ├── concepts.py              # Conceptual (no API key)
+│   └── practical.py             # Hands-on (requires API keys)
 ├── 04_memory/                   # ⬜ ConversationBufferMemory, ConversationSummaryMemory
 ├── 05_rag/                      # ⬜ RetrievalQA, vector stores, document loaders
 └── 06_agents_tools/             # ⬜ create_react_agent, @tool, AgentExecutor
 ```
 
-**Current Status**: Prompts and LLM integration modules complete!
+**Current Status**: Prompts, LLM integration, and chains modules complete!
 
 ---
 

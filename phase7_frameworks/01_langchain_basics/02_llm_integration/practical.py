@@ -7,29 +7,17 @@ unified interface. Requires OPENAI_API_KEY and/or ANTHROPIC_API_KEY in .env
 Run: uv run python -m phase7_frameworks.01_langchain_basics.02_llm_integration.practical
 """
 
-import os
 from inspect import cleandoc
 
-from dotenv import load_dotenv
 from langchain_core.messages import HumanMessage, SystemMessage
 
-# Load environment variables
-load_dotenv()
-
-
-def print_section(title: str) -> None:
-    """print section header"""
-    print(f"\n{'=' * 70}")
-    print(f"  {title}")
-    print('=' * 70)
-
-
-def check_api_keys() -> tuple[bool, bool]:
-    """check which API keys are available"""
-    openai_key = os.getenv("OPENAI_API_KEY")
-    anthropic_key = os.getenv("ANTHROPIC_API_KEY")
-
-    return bool(openai_key), bool(anthropic_key)
+from phase7_frameworks.utils import (
+    check_api_keys,
+    print_section,
+    requires_anthropic,
+    requires_both_keys,
+    requires_openai,
+)
 
 
 # region Demo 1: ChatOpenAI Basic Usage
@@ -125,14 +113,11 @@ def demo_chatanthropic_basic() -> None:
 # region Demo 3: Temperature and Creativity Control
 
 
+@requires_openai
 def demo_temperature_control() -> None:
     """demonstrate how temperature affects output"""
     print_section("Demo 3: Temperature and Creativity Control")
 
-    has_openai, _ = check_api_keys()
-    if not has_openai:
-        print("⚠️  OPENAI_API_KEY not found - skipping demo")
-        return
 
     from langchain_openai import ChatOpenAI
 
@@ -157,14 +142,11 @@ def demo_temperature_control() -> None:
 # region Demo 4: Streaming Responses
 
 
+@requires_openai
 def demo_streaming() -> None:
     """demonstrate real-time streaming responses"""
     print_section("Demo 4: Streaming Responses")
 
-    has_openai, _ = check_api_keys()
-    if not has_openai:
-        print("⚠️  OPENAI_API_KEY not found - skipping demo")
-        return
 
     from langchain_openai import ChatOpenAI
 
@@ -274,14 +256,11 @@ def demo_fallback_chain() -> None:
 # region Demo 7: Token Usage Tracking
 
 
+@requires_openai
 def demo_token_tracking() -> None:
     """demonstrate tracking token usage and costs"""
     print_section("Demo 7: Token Usage Tracking")
 
-    has_openai, _ = check_api_keys()
-    if not has_openai:
-        print("⚠️  OPENAI_API_KEY not found - skipping demo")
-        return
 
     from langchain.callbacks import get_openai_callback
     from langchain_openai import ChatOpenAI
@@ -317,14 +296,11 @@ def demo_token_tracking() -> None:
 # region Demo 8: LCEL Integration
 
 
+@requires_openai
 def demo_lcel_integration() -> None:
     """demonstrate LangChain Expression Language integration"""
     print_section("Demo 8: LCEL Integration with LLMs")
 
-    has_openai, _ = check_api_keys()
-    if not has_openai:
-        print("⚠️  OPENAI_API_KEY not found - skipping demo")
-        return
 
     from langchain_core.output_parsers import StrOutputParser
     from langchain_core.prompts import ChatPromptTemplate

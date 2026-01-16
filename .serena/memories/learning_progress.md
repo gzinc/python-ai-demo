@@ -183,9 +183,10 @@ Track your journey through AI development. Update after each session.
 - [x] Migration examples (side-by-side comparisons of Phase 3/4 vs LangChain)
 - [x] Conceptual demos (patterns, RAG walkthrough without dependencies)
 - [x] LangChain installation (langchain==1.0.5 + integrations)
-- [ ] Prompts & templates (PromptTemplate, ChatPromptTemplate)
-- [ ] LLM integration (ChatOpenAI, ChatAnthropic unified interface)
-- [ ] Chains (LLMChain, SequentialChain, LCEL syntax)
+- [x] Prompts & templates (01_prompts/ subfolder: concepts.py + practical.py)
+- [x] LLM integration (02_llm_integration/ subfolder: concepts.py + practical.py)
+- [x] Chains (03_chains/ subfolder: concepts.py + practical.py - briefly reviewed)
+- [x] Shared utilities refactoring (phase7_frameworks/utils.py for all modules)
 - [ ] Memory (ConversationBufferMemory, ConversationSummaryMemory)
 - [ ] RAG (RetrievalQA, vector stores, document loaders)
 - [ ] Agents & tools (create_react_agent, @tool decorator)
@@ -211,7 +212,7 @@ Track your journey through AI development. Update after each session.
 - [ ] Migration strategies (raw → framework, framework → raw, hybrid)
 - [ ] Real-world scenarios (10+ use cases analyzed)
 
-**Phase 7 Completion**: 15% (Module 1 conceptual foundation complete - migration examples, patterns, installation)
+**Phase 7 Completion**: 33% (Module 1: prompts + LLM integration complete)
 
 **Note**: Phase 7 created 2026-01-09. Philosophy: Learn frameworks AFTER building from scratch (Phases 2-6) to understand what they do under the hood, when to use them, and when to skip them entirely.
 
@@ -525,3 +526,31 @@ Track your journey through AI development. Update after each session.
 - Key insight: Module 1 foundation complete - ready for hands-on examples
 - Session focus: Conceptual understanding + environment setup
 - Next: Build hands-on examples (prompts, chains, memory, RAG, agents)
+
+### 2026-01-14: Phase 7 - Prompts Module Complete
+- ✅ Created 01_prompts/ subfolder with concepts/practical split
+- ✅ Built concepts.py (8 demos, no API key): templates, partials, chat, few-shot, composition, decision framework
+- ✅ Built practical.py (7 demos with LLM): LCEL integration, MessagesPlaceholder, output parsers, runtime context
+- ✅ Fixed LangChain 1.x imports (langchain_core instead of langchain)
+- ✅ Tested both files (briefly reviewed and validated)
+- ✅ Initialized MCP memory graph (developer profile, project, learning preferences)
+- Key insight: Subfolder organization (concepts + practical) scales well for remaining modules
+- Key insight: PromptTemplate validation prevents missing required variables (vs f-strings)
+- Key insight: LCEL pipe operator (|) chains components elegantly
+- Key insight: Output parsers (String, List, JSON) convert LLM text to structured data
+- Session focus: Hands-on LangChain prompt templates with real API integration
+- Next: 02_llm_integration/ (ChatOpenAI, ChatAnthropic unified interface)
+
+### 2026-01-14: Phase 7 - LLM Integration Module Complete
+- ✅ Created 02_llm_integration/ subfolder with concepts/practical split
+- ✅ Built concepts.py (8 demos, no API): unified interface, message types, configuration, streaming patterns, provider comparison, error handling, retry/fallback, token/cost estimation
+- ✅ Built practical.py (8 demos with API): ChatOpenAI, ChatAnthropic, temperature control, streaming, provider switching, fallback chains, token tracking, LCEL integration
+- ✅ Tested concepts.py successfully (all demos run without API keys)
+- ✅ Lightly reviewed and committed (can revisit as needed)
+- Key insight: Unified chat interface (invoke/stream/batch) works across all providers
+- Key insight: Provider fallback pattern: primary.with_fallbacks([fallback1, fallback2])
+- Key insight: Temperature controls creativity (0.0=deterministic, 1.0=creative)
+- Key insight: Streaming improves UX with progressive token delivery
+- Key insight: Token tracking with callbacks enables cost monitoring
+- Session focus: Understanding LangChain's provider abstraction and configuration patterns
+- Next: 03_chains/ (LLMChain, SequentialChain, LCEL composition)

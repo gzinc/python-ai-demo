@@ -9,10 +9,9 @@ Run: uv run python -m phase7_frameworks.01_langchain_basics.01_prompts.practical
 Requires: OPENAI_API_KEY in .env
 """
 
-import os
 from inspect import cleandoc
+from typing import TYPE_CHECKING
 
-from dotenv import load_dotenv
 from langchain_core.prompts import (
     ChatPromptTemplate,
     FewShotChatMessagePromptTemplate,
@@ -22,24 +21,13 @@ from langchain_core.prompts import (
 )
 from langchain_core.messages import AIMessage, HumanMessage
 
-# Load environment variables
-load_dotenv()
+from phase7_frameworks.utils import check_api_keys, print_section, requires_openai
 
-# Check for API key
-HAS_API_KEY = bool(os.getenv("OPENAI_API_KEY"))
-
-if HAS_API_KEY:
+if TYPE_CHECKING:
     from langchain_openai import ChatOpenAI
 
 
 # region Helper Functions
-
-
-def print_section(title: str) -> None:
-    """print section header"""
-    print(f"\n{'=' * 70}")
-    print(f"  {title}")
-    print('=' * 70)
 
 
 def print_subsection(title: str) -> None:
@@ -55,8 +43,10 @@ def print_llm_output(label: str, response: str) -> None:
     print(f"  {response}")
 
 
-def get_llm(temperature: float = 0.7) -> ChatOpenAI:
+def get_llm(temperature: float = 0.7) -> "ChatOpenAI":
     """create configured LLM instance"""
+    from langchain_openai import ChatOpenAI
+
     return ChatOpenAI(
         model="gpt-4o-mini",
         temperature=temperature,
@@ -550,7 +540,8 @@ def demo_partial_with_runtime() -> None:
 
 def main() -> None:
     """run all practical demonstrations"""
-    if not HAS_API_KEY:
+    has_openai, _ = check_api_keys()
+    if not has_openai:
         print("\n" + "=" * 70)
         print("  ERROR: OPENAI_API_KEY not found in environment")
         print("=" * 70)

@@ -34,7 +34,13 @@
       "Bash(test:*)",
       "mcp__serena__check_onboarding_performed",
       "mcp__serena__onboarding",
-      "Bash(uv pip list:*)"
+      "Bash(uv pip list:*)",
+      "mcp__memory__read_graph",
+      "mcp__memory__create_entities",
+      "mcp__memory__create_relations",
+      "mcp__memory__search_nodes",
+      "mcp__memory__add_observations",
+      "mcp__context7__query-docs"
     ],
     "deny": [],
     "ask": []
