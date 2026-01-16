@@ -187,7 +187,7 @@ Track your journey through AI development. Update after each session.
 - [x] LLM integration (02_llm_integration/ subfolder: concepts.py + practical.py)
 - [x] Chains (03_chains/ subfolder: concepts.py + practical.py - briefly reviewed)
 - [x] Shared utilities refactoring (phase7_frameworks/utils.py for all modules)
-- [ ] Memory (ConversationBufferMemory, ConversationSummaryMemory)
+- [x] Memory (04_memory/ subfolder: modern RunnableWithMessageHistory API, Pydantic fix applied - partially reviewed)
 - [ ] RAG (RetrievalQA, vector stores, document loaders)
 - [ ] Agents & tools (create_react_agent, @tool decorator)
 
