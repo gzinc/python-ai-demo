@@ -133,12 +133,12 @@ def chunk_by_sentence(
 
     Strategy:
     ┌─────────────────────────────────────────────────────────┐
-    │  "First sentence. Second sentence. Third sentence..."  │
+    │  "First sentence. Second sentence. Third sentence..."   │
     └─────────────────────────────────────────────────────────┘
                               │
                               ▼
     ┌──────────────────────────────┐
-    │ "First sentence. Second..." │  ← Complete sentences only
+    │ "First sentence. Second..."  │  ← Complete sentences only
     └──────────────────────────────┘
     """
     text = document.content
@@ -203,10 +203,10 @@ def chunk_fixed_size(
 
     Strategy:
     ┌─────────────────────────────────────────────────────────┐
-    │  "The quick brown fox jumps over the lazy dog and..."  │
-    │   |<----- 500 chars ----->|                            │
-    │                    |<----- 500 chars ----->|           │
-    │                       ^overlap^                        │
+    │  "The quick brown fox jumps over the lazy dog and..."   │
+    │   |<----- 500 chars ----->|                             │
+    │                    |<----- 500 chars ----->|            │
+    │                       ^overlap^                         │
     └─────────────────────────────────────────────────────────┘
     """
     text = document.content

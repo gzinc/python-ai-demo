@@ -149,12 +149,18 @@ agent = create_react_agent(llm=llm, tools=tools, prompt=prompt)
 │   ├── README.md
 │   ├── concepts.py              # Conceptual (no API key)
 │   └── practical.py             # Hands-on (requires API keys)
-├── 04_memory/                   # ⬜ ConversationBufferMemory, ConversationSummaryMemory
-├── 05_rag/                      # ⬜ RetrievalQA, vector stores, document loaders
+├── 04_memory/                   # ✅ ConversationBufferMemory, ConversationSummaryMemory
+│   ├── README.md
+│   ├── concepts.py              # Conceptual (no API key)
+│   └── practical.py             # Hands-on (requires API key)
+├── 05_rag/                      # ✅ RetrievalQA, vector stores, document loaders
+│   ├── README.md
+│   ├── concepts.py              # Conceptual (no API key)
+│   └── practical.py             # Hands-on (requires API key)
 └── 06_agents_tools/             # ⬜ create_react_agent, @tool, AgentExecutor
 ```
 
-**Current Status**: Prompts, LLM integration, and chains modules complete!
+**Current Status**: Prompts, LLM integration, chains, memory, and RAG modules complete!
 
 ---
 
@@ -242,22 +248,57 @@ uv run python -m phase7_frameworks.01_langchain_basics.langchain_concepts_demo
 uv run python -m phase7_frameworks.01_langchain_basics.langchain_rag_chatbot
 
 # ✅ Prompts Module:
-# Conceptual (no API key):
 uv run python -m phase7_frameworks.01_langchain_basics.01_prompts.concepts
-# Practical (requires OPENAI_API_KEY):
 uv run python -m phase7_frameworks.01_langchain_basics.01_prompts.practical
 
-# ⬜ Coming Soon:
-# uv run python -m phase7_frameworks.01_langchain_basics.02_llm_integration.concepts
-# uv run python -m phase7_frameworks.01_langchain_basics.02_llm_integration.practical
-# uv run python -m phase7_frameworks.01_langchain_basics.03_chains.concepts
-# uv run python -m phase7_frameworks.01_langchain_basics.03_chains.practical
-# ... (and so on for memory, rag, agents_tools)
+# ✅ LLM Integration Module:
+uv run python -m phase7_frameworks.01_langchain_basics.02_llm_integration.concepts
+uv run python -m phase7_frameworks.01_langchain_basics.02_llm_integration.practical
+
+# ✅ Chains Module:
+uv run python -m phase7_frameworks.01_langchain_basics.03_chains.concepts
+uv run python -m phase7_frameworks.01_langchain_basics.03_chains.practical
+
+# ✅ Memory Module:
+uv run python -m phase7_frameworks.01_langchain_basics.04_memory.concepts
+uv run python -m phase7_frameworks.01_langchain_basics.04_memory.practical
+
+# ✅ RAG Module:
+uv run python -m phase7_frameworks.01_langchain_basics.05_rag.concepts
+uv run python -m phase7_frameworks.01_langchain_basics.05_rag.practical
+
+# ⬜ Coming Soon: Agents & Tools Module
 ```
 
 **Organization**: Each module has:
 - `concepts.py` - Learn patterns without API key
 - `practical.py` - Practice with real LLM calls (requires `OPENAI_API_KEY` in `.env`)
+
+**✨ New Feature - Visual Documentation**: All 41 demos across 5 modules now include comprehensive ASCII diagrams showing:
+- 📊 Architecture and workflow visualization
+- → Step-by-step data flow with arrows
+- ✅ Benefits highlighted for each pattern
+- ⚠️  Important limitations and cautions
+- 💡 Implementation details and code patterns
+- 🎯 Real-world use cases
+
+Example from Memory module:
+```
+Buffer Memory Pattern:
+┌─────────────────────────────────────────────────────────────┐
+│       Buffer Memory: Full Conversation History Storage      │
+│                                                             │
+│  Turn 1:                                                    │
+│     User: "Hi, I'm learning about LangChain memory"         │
+│           ▼                                                 │
+│     Memory: [] (empty) → Store message                      │
+│           ▼                                                 │
+│     LLM: "Great! LangChain memory helps..."                 │
+│                                                             │
+│  ✅ Benefit: Perfect recall (all context retained)          │
+│  ⚠️  Caution: Unbounded token growth over time              │
+└─────────────────────────────────────────────────────────────┘
+```
 
 ---
 

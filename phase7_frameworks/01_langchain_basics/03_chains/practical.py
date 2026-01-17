@@ -24,7 +24,50 @@ from phase7_frameworks.utils import (
 
 @requires_openai
 def demo_basic_lcel_chain() -> None:
-    """demonstrate basic prompt → llm → parser chain"""
+    """
+    demonstrate basic prompt → llm → parser chain
+
+    Basic LCEL Chain Pattern:
+    ┌─────────────────────────────────────────────────────────────┐
+    │           LCEL: Prompt | LLM | Parser Pipeline              │
+    │                                                             │
+    │  Three Concepts Processed Through Same Chain:               │
+    │                                                             │
+    │  Input 1: {"concept": "embeddings"}                         │
+    │      │                                                      │
+    │      ▼                                                      │
+    │  ┌──────────────────────┐                                   │
+    │  │ ChatPromptTemplate   │ "Explain {concept} in one..."     │
+    │  └──────────┬───────────┘                                   │
+    │             │ Formatted: "Explain embeddings in one..."     │
+    │             ▼                                               │
+    │  ┌──────────────────────┐                                   │
+    │  │ ChatOpenAI (GPT-3.5) │ Process prompt                    │
+    │  └──────────┬───────────┘                                   │
+    │             │ AIMessage("Embeddings are...")                │
+    │             ▼                                               │
+    │  ┌──────────────────────┐                                   │
+    │  │ StrOutputParser      │ Extract .content                  │
+    │  └──────────┬───────────┘                                   │
+    │             │                                               │
+    │             ▼                                               │
+    │  Output: "Embeddings are numerical representations..."      │
+    │                                                             │
+    │  LCEL Syntax:                                               │
+    │     chain = prompt | llm | parser                           │
+    │                ↑      ↑      ↑                              │
+    │                │      │      └─ Extract string              │
+    │                │      └──────── Generate response           │
+    │                └───────────── Format template               │
+    │                                                             │
+    │  Same chain processes: embeddings → RAG → LCEL             │
+    │                                                             │
+    │  ✅ Benefit: Pipe operator (|) chains components            │
+    │  ✅ Benefit: Reusable pipeline for multiple inputs          │
+    │  ✅ Benefit: Clean, readable composition                    │
+    │  ✅ Benefit: Type-safe data flow                            │
+    └─────────────────────────────────────────────────────────────┘
+    """
     print_section("Demo 1: Basic LCEL Chain (Prompt → LLM → Parser)")
 
     from langchain_core.output_parsers import StrOutputParser
@@ -56,7 +99,48 @@ def demo_basic_lcel_chain() -> None:
 
 @requires_openai
 def demo_multi_message_chain() -> None:
-    """demonstrate chain with system + user messages"""
+    """
+    demonstrate chain with system + user messages
+
+    Multi-Message Chain Pattern:
+    ┌─────────────────────────────────────────────────────────────┐
+    │       Multi-Message Templates: System + User Pattern        │
+    │                                                             │
+    │  Input: {role: "Python expert", task: "Explain lists"}      │
+    │      │                                                      │
+    │      ▼                                                      │
+    │  ┌───────────────────────────────────────┐                  │
+    │  │ ChatPromptTemplate.from_messages([    │                  │
+    │  │   ("system", "You are a {role}"),     │                  │
+    │  │   ("human", "{task}")                 │                  │
+    │  │ ])                                    │                  │
+    │  └──────────────┬────────────────────────┘                  │
+    │                 │                                           │
+    │                 ▼                                           │
+    │  Formatted Messages:                                        │
+    │  [SystemMessage("You are a Python expert"),                 │
+    │   HumanMessage("Explain list comprehensions")]              │
+    │                 │                                           │
+    │                 ▼                                           │
+    │  ┌────────────────────────┐                                 │
+    │  │ ChatOpenAI processes   │                                 │
+    │  │ with system context    │                                 │
+    │  └──────────┬─────────────┘                                 │
+    │             │                                               │
+    │             ▼                                               │
+    │  Response tailored to role (Python expert voice)            │
+    │                                                             │
+    │  Role Switching Example:                                    │
+    │  • role="Python expert" → Technical, code-focused           │
+    │  • role="data scientist" → Statistical, data-focused        │
+    │  • Same template, different personalities                   │
+    │                                                             │
+    │  ✅ Benefit: System message sets assistant personality      │
+    │  ✅ Benefit: Reusable template for different roles          │
+    │  ✅ Benefit: Consistent behavior across sessions            │
+    │  ✅ Benefit: Separate system context from user input        │
+    └─────────────────────────────────────────────────────────────┘
+    """
     print_section("Demo 2: Multi-Message Prompt Chain")
 
     from langchain_core.output_parsers import StrOutputParser
@@ -95,7 +179,46 @@ def demo_multi_message_chain() -> None:
 
 @requires_openai
 def demo_streaming_chain() -> None:
-    """demonstrate real-time streaming with LCEL"""
+    """
+    demonstrate real-time streaming with LCEL
+
+    Streaming Chain Pattern:
+    ┌─────────────────────────────────────────────────────────────┐
+    │         Streaming: Progressive Token-by-Token Output        │
+    │                                                             │
+    │  Chain: prompt | llm (streaming=True) | parser              │
+    │                                                             │
+    │  for chunk in chain.stream(input):                          │
+    │      │                                                      │
+    │      ▼                                                      │
+    │  Chunk 1: "RAG"           ← Immediate                       │
+    │  Chunk 2: " is"           ← 50ms later                      │
+    │  Chunk 3: " Retrieval"    ← 100ms later                     │
+    │  Chunk 4: "-Augmented"    ← 150ms later                     │
+    │  Chunk 5: " Generation"   ← 200ms later                     │
+    │  ...                                                        │
+    │                                                             │
+    │  User Experience:                                           │
+    │  ┌──────────────────────────────────┐                       │
+    │  │ Time 0ms:   "R"                  │                       │
+    │  │ Time 50ms:  "RA"                 │                       │
+    │  │ Time 100ms: "RAG"                │                       │
+    │  │ Time 150ms: "RAG is"             │                       │
+    │  │ ...progressive display...        │                       │
+    │  └──────────────────────────────────┘                       │
+    │                                                             │
+    │  vs. Non-Streaming:                                         │
+    │  ┌──────────────────────────────────┐                       │
+    │  │ Time 0-500ms: ⏳ waiting...      │                       │
+    │  │ Time 500ms:   Full response      │                       │
+    │  └──────────────────────────────────┘                       │
+    │                                                             │
+    │  ✅ Benefit: Better perceived performance                   │
+    │  ✅ Benefit: User sees immediate progress                   │
+    │  ✅ Benefit: Can interrupt long generations                 │
+    │  ✅ Benefit: Critical for chat UI experiences               │
+    └─────────────────────────────────────────────────────────────┘
+    """
     print_section("Demo 3: Streaming Chain Execution")
 
     from langchain_core.output_parsers import StrOutputParser
@@ -127,7 +250,55 @@ def demo_streaming_chain() -> None:
 
 @requires_openai
 def demo_parallel_chains() -> None:
-    """demonstrate parallel chain execution with RunnableParallel"""
+    """
+    demonstrate parallel chain execution with RunnableParallel
+
+    Parallel Chain Pattern:
+    ┌─────────────────────────────────────────────────────────────┐
+    │      RunnableParallel: Concurrent Independent Chains        │
+    │                                                             │
+    │  Input: {text: "AI is transforming software development"}   │
+    │             │                                               │
+    │      ┌──────┴──────┐                                        │
+    │      │             │                                        │
+    │      ▼             ▼                                        │
+    │  ┌─────────┐   ┌─────────┐                                 │
+    │  │Summary  │   │Keywords │  (Run simultaneously)            │
+    │  │Chain    │   │Chain    │                                 │
+    │  └────┬────┘   └────┬────┘                                 │
+    │       │             │                                       │
+    │       │ "AI transforms software"                           │
+    │       │             │ "AI, software, transform"            │
+    │       │             │                                       │
+    │       └──────┬──────┘                                       │
+    │              │                                              │
+    │              ▼                                              │
+    │  Output: {                                                  │
+    │    "summary": "AI transforms software",                     │
+    │    "keywords": "AI, software, transform"                    │
+    │  }                                                          │
+    │                                                             │
+    │  Parallel Execution vs Sequential:                          │
+    │                                                             │
+    │  Sequential:  Summary → Wait → Keywords → Wait             │
+    │  Total time:  500ms + 500ms = 1000ms                        │
+    │                                                             │
+    │  Parallel:    Summary ┐                                     │
+    │               Keywords┘ (Both at once)                      │
+    │  Total time:  max(500ms, 500ms) = 500ms                     │
+    │                                                             │
+    │  Implementation:                                            │
+    │     RunnableParallel({                                      │
+    │         "summary": summary_chain,                           │
+    │         "keywords": keyword_chain                           │
+    │     })                                                      │
+    │                                                             │
+    │  ✅ Benefit: 2x speedup (or more) for independent chains    │
+    │  ✅ Benefit: Single input, multiple analyses                │
+    │  ✅ Benefit: Structured output with named results           │
+    │  ✅ Benefit: Optimal for RAG with multiple retrievers       │
+    └─────────────────────────────────────────────────────────────┘
+    """
     print_section("Demo 4: Parallel Chain Execution")
 
     from langchain_core.output_parsers import StrOutputParser
@@ -174,7 +345,57 @@ def demo_parallel_chains() -> None:
 
 @requires_openai
 def demo_passthrough_pattern() -> None:
-    """demonstrate passthrough pattern for RAG-like workflows"""
+    """
+    demonstrate passthrough pattern for RAG-like workflows
+
+    Passthrough Pattern (RAG):
+    ┌─────────────────────────────────────────────────────────────┐
+    │       RunnablePassthrough: Preserve + Transform Pattern     │
+    │                                                             │
+    │  Question: "What are embeddings?"                           │
+    │      │                                                      │
+    │      ▼                                                      │
+    │  ┌────────────────────────────────────┐                     │
+    │  │ {                                  │                     │
+    │  │   "context": Passthrough → Retriever                     │
+    │  │   "question": Passthrough (unchanged)                    │
+    │  │ }                                  │                     │
+    │  └──────────┬─────────────────────────┘                     │
+    │             │                                               │
+    │      ┌──────┴──────┐                                        │
+    │      │             │                                        │
+    │      ▼             ▼                                        │
+    │  context:      question:                                    │
+    │  "Retrieved:   "What are embeddings?"                       │
+    │   Embeddings   (original preserved)                         │
+    │   are vector                                               │
+    │   representations"                                          │
+    │      │             │                                        │
+    │      └──────┬──────┘                                        │
+    │             │                                               │
+    │             ▼                                               │
+    │  ┌──────────────────────────────────┐                       │
+    │  │ ChatPromptTemplate:              │                       │
+    │  │ "Answer using context:           │                       │
+    │  │  Context: {context}              │                       │
+    │  │  Question: {question}"           │                       │
+    │  └──────────┬───────────────────────┘                       │
+    │             │                                               │
+    │             ▼                                               │
+    │  Formatted prompt with both values → LLM → Answer           │
+    │                                                             │
+    │  Why RunnablePassthrough?                                   │
+    │  • Preserves original input unchanged                       │
+    │  • Allows parallel transformations                          │
+    │  • Critical for RAG: context (retrieved) + question (raw)   │
+    │  • Enables complex data routing                             │
+    │                                                             │
+    │  ✅ Benefit: Preserve input alongside transformations       │
+    │  ✅ Benefit: Foundation for RAG pipelines                   │
+    │  ✅ Benefit: Clean data routing in chains                   │
+    │  ✅ Benefit: Combine processed + original data              │
+    └─────────────────────────────────────────────────────────────┘
+    """
     print_section("Demo 5: Passthrough Pattern (RAG Simulation)")
 
     from langchain_core.output_parsers import StrOutputParser
@@ -224,7 +445,56 @@ def demo_passthrough_pattern() -> None:
 
 @requires_both_keys
 def demo_fallback_chain() -> None:
-    """demonstrate fallback between primary and secondary models"""
+    """
+    demonstrate fallback between primary and secondary models
+
+    Fallback Chain Pattern:
+    ┌─────────────────────────────────────────────────────────────┐
+    │         Fallback Chain: Primary → Secondary Resilience      │
+    │                                                             │
+    │  Normal Execution (Primary succeeds):                       │
+    │     Input → GPT-4 (Primary)                                 │
+    │                  │                                          │
+    │                  ✓ Success                                  │
+    │                  │                                          │
+    │                  ▼                                          │
+    │     Output: High-quality GPT-4 response                     │
+    │                                                             │
+    │  Fallback Execution (Primary fails):                        │
+    │     Input → GPT-4 (Primary)                                 │
+    │                  │                                          │
+    │                  ✗ Timeout / Error / Rate limit             │
+    │                  │                                          │
+    │                  ▼                                          │
+    │     Automatic switch to Claude Haiku (Fallback)             │
+    │                  │                                          │
+    │                  ✓ Success                                  │
+    │                  │                                          │
+    │                  ▼                                          │
+    │     Output: Claude Haiku response (still gets answer!)      │
+    │                                                             │
+    │  Configuration:                                             │
+    │     primary_chain.with_fallbacks([fallback_chain])          │
+    │                                                             │
+    │  Failure Scenarios Handled:                                 │
+    │  • Network timeouts                                         │
+    │  • API rate limits                                          │
+    │  • Provider outages                                         │
+    │  • Model unavailability                                     │
+    │  • Token/billing issues                                     │
+    │                                                             │
+    │  Use Cases:                                                 │
+    │  • Production reliability (99.9% uptime)                    │
+    │  • Multi-provider redundancy                                │
+    │  • Cost optimization (cheap fallback for failures)          │
+    │  • Geographic failover                                      │
+    │                                                             │
+    │  ✅ Benefit: Zero downtime from single provider failures    │
+    │  ✅ Benefit: Automatic failover (no manual intervention)    │
+    │  ✅ Benefit: Cost-effective (fallback only when needed)     │
+    │  ✅ Benefit: Production-grade reliability                   │
+    └─────────────────────────────────────────────────────────────┘
+    """
     print_section("Demo 6: Fallback Chain (Reliability Pattern)")
 
     from langchain_anthropic import ChatAnthropic
@@ -270,7 +540,70 @@ def demo_fallback_chain() -> None:
 
 @requires_openai
 def demo_retry_chain() -> None:
-    """demonstrate retry configuration for transient failures"""
+    """
+    demonstrate retry configuration for transient failures
+
+    Retry Configuration Pattern:
+    ┌─────────────────────────────────────────────────────────────┐
+    │      Retry Chain: Exponential Backoff with Jitter           │
+    │                                                             │
+    │  Attempt 1 (Immediate):                                     │
+    │     Request → LLM API                                       │
+    │                │                                            │
+    │                ✗ Transient failure (network timeout)        │
+    │                │                                            │
+    │                ▼                                            │
+    │     Wait: 1 second + random jitter (0-500ms)                │
+    │                │                                            │
+    │                ▼                                            │
+    │  Attempt 2:                                                 │
+    │     Retry → LLM API                                         │
+    │                │                                            │
+    │                ✗ Still failing (rate limit)                 │
+    │                │                                            │
+    │                ▼                                            │
+    │     Wait: 2 seconds + random jitter (0-1000ms)              │
+    │                │                                            │
+    │                ▼                                            │
+    │  Attempt 3 (Final):                                         │
+    │     Retry → LLM API                                         │
+    │                │                                            │
+    │                ✓ Success!                                   │
+    │                │                                            │
+    │                ▼                                            │
+    │     Return response (user never knew about failures)        │
+    │                                                             │
+    │  Exponential Backoff Strategy:                              │
+    │     Attempt 1: 0s wait (immediate)                          │
+    │     Attempt 2: 1s + jitter                                  │
+    │     Attempt 3: 2s + jitter                                  │
+    │     Attempt 4: 4s + jitter (if configured)                  │
+    │     Pattern: 2^(attempt-1) seconds                          │
+    │                                                             │
+    │  Why Add Random Jitter?                                     │
+    │     Without: All clients retry at same time → Thundering    │
+    │              herd problem (overload server again)           │
+    │     With:    Clients retry at random intervals → Spread     │
+    │              load, better success rate                      │
+    │                                                             │
+    │  Configuration:                                             │
+    │     chain.with_retry(                                       │
+    │         stop_after_attempt=3,                               │
+    │         wait_exponential_jitter=True                        │
+    │     )                                                       │
+    │                                                             │
+    │  Handles Transient Failures:                                │
+    │  • Network timeouts (temporary)                             │
+    │  • Rate limits (brief overload)                             │
+    │  • Server 5xx errors (transient)                            │
+    │  • Connection drops                                         │
+    │                                                             │
+    │  ✅ Benefit: Automatic recovery from transient errors       │
+    │  ✅ Benefit: No manual retry logic needed                   │
+    │  ✅ Benefit: Exponential backoff prevents server overload   │
+    │  ✅ Benefit: Jitter prevents thundering herd                │
+    └─────────────────────────────────────────────────────────────┘
+    """
     print_section("Demo 7: Retry Configuration")
 
     from langchain_core.output_parsers import StrOutputParser
@@ -308,7 +641,65 @@ def demo_retry_chain() -> None:
 
 @requires_openai
 def demo_batch_processing() -> None:
-    """demonstrate batch processing for efficiency"""
+    """
+    demonstrate batch processing for efficiency
+
+    Batch Processing Pattern:
+    ┌─────────────────────────────────────────────────────────────┐
+    │       Batch Processing: Parallel Execution for Efficiency   │
+    │                                                             │
+    │  Sequential Execution (Traditional):                        │
+    │     Input 1: "embeddings" → LLM → Result 1 (500ms)          │
+    │                                      │                      │
+    │                                      ▼                      │
+    │     Input 2: "RAG"        → LLM → Result 2 (500ms)          │
+    │                                      │                      │
+    │                                      ▼                      │
+    │     Input 3: "fine-tuning"→ LLM → Result 3 (500ms)          │
+    │                                                             │
+    │     Total time: 500ms + 500ms + 500ms = 1500ms              │
+    │                                                             │
+    │  Batch Execution (Parallel):                                │
+    │                  ┌──────────────────┐                       │
+    │     Input 1 ────→│                  │                       │
+    │     Input 2 ────→│  Batch Request   │                       │
+    │     Input 3 ────→│  (Parallel)      │                       │
+    │                  └────────┬─────────┘                       │
+    │                           │                                 │
+    │                     ┌─────┴─────┐                           │
+    │                     │           │                           │
+    │              Result 1    Result 2    Result 3               │
+    │              (500ms - all at once)                          │
+    │                                                             │
+    │     Total time: max(500ms, 500ms, 500ms) = 500ms            │
+    │     Speedup: 1500ms / 500ms = 3x faster! ⚡                  │
+    │                                                             │
+    │  Implementation:                                            │
+    │     # Sequential (slow)                                     │
+    │     results = [chain.invoke(item) for item in items]        │
+    │                                                             │
+    │     # Batch (fast)                                          │
+    │     results = chain.batch(items)                            │
+    │                                                             │
+    │  LangChain Optimization:                                    │
+    │  • Batches multiple requests into single API call           │
+    │  • Provider processes requests in parallel                  │
+    │  • Results returned in same order as inputs                 │
+    │  • Automatic concurrency management                         │
+    │                                                             │
+    │  When to Use Batch:                                         │
+    │  • Processing multiple similar inputs                       │
+    │  • Bulk data analysis (100s-1000s of items)                 │
+    │  • Report generation (many sections)                        │
+    │  • Dataset labeling/classification                          │
+    │  • Translation of multiple texts                            │
+    │                                                             │
+    │  ✅ Benefit: 2-10x speedup (depends on batch size)          │
+    │  ✅ Benefit: Lower API costs (fewer round trips)            │
+    │  ✅ Benefit: Maintains order (predictable results)          │
+    │  ✅ Benefit: Automatic error handling per item              │
+    └─────────────────────────────────────────────────────────────┘
+    """
     print_section("Demo 8: Batch Processing")
 
     import time
@@ -359,7 +750,71 @@ def demo_batch_processing() -> None:
 
 @requires_openai
 def demo_verbose_debugging() -> None:
-    """demonstrate verbose mode for debugging"""
+    """
+    demonstrate verbose mode for debugging
+
+    Verbose Debugging Mode:
+    ┌─────────────────────────────────────────────────────────────┐
+    │         Verbose Mode: Chain Execution Transparency          │
+    │                                                             │
+    │  Normal Execution (verbose=False):                          │
+    │     chain.invoke(input)                                     │
+    │           │                                                 │
+    │           ▼                                                 │
+    │     Final result only                                       │
+    │     (Black box - no visibility)                             │
+    │                                                             │
+    │  Verbose Execution (verbose=True):                          │
+    │     chain.invoke(input, config={"verbose": True})           │
+    │           │                                                 │
+    │           ▼                                                 │
+    │     ┌─────────────────────────────────────┐                 │
+    │     │ Step 1: PromptTemplate              │                 │
+    │     │   Input: {concept: "LCEL"}          │                 │
+    │     │   Output: "Explain LCEL briefly"    │                 │
+    │     └─────────┬───────────────────────────┘                 │
+    │               │                                             │
+    │               ▼                                             │
+    │     ┌─────────────────────────────────────┐                 │
+    │     │ Step 2: ChatOpenAI                  │                 │
+    │     │   Model: gpt-3.5-turbo              │                 │
+    │     │   Temperature: 0.7                  │                 │
+    │     │   Tokens: 50 max                    │                 │
+    │     │   Response: AIMessage(...)          │                 │
+    │     └─────────┬───────────────────────────┘                 │
+    │               │                                             │
+    │               ▼                                             │
+    │     ┌─────────────────────────────────────┐                 │
+    │     │ Step 3: StrOutputParser             │                 │
+    │     │   Input: AIMessage                  │                 │
+    │     │   Output: "LCEL is..."              │                 │
+    │     └─────────┬───────────────────────────┘                 │
+    │               │                                             │
+    │               ▼                                             │
+    │     Final result with full execution trace                  │
+    │                                                             │
+    │  Debugging Information Shown:                               │
+    │  • Each chain step execution                                │
+    │  • Input/output at each stage                               │
+    │  • Component types being executed                           │
+    │  • Timing information                                       │
+    │  • Token usage (if available)                               │
+    │  • Error locations (when failures occur)                    │
+    │                                                             │
+    │  Use Cases:                                                 │
+    │  • Chain not working as expected                            │
+    │  • Need to understand data transformation                   │
+    │  • Debugging complex multi-step chains                      │
+    │  • Learning how LCEL works internally                       │
+    │  • Performance optimization                                 │
+    │  • Validation of chain structure                            │
+    │                                                             │
+    │  ✅ Benefit: See exactly what each chain step does          │
+    │  ✅ Benefit: Identify where failures occur                  │
+    │  ✅ Benefit: Understand data transformations                │
+    │  ✅ Benefit: Learning tool for LCEL internals               │
+    └─────────────────────────────────────────────────────────────┘
+    """
     print_section("Demo 9: Debugging with Verbose Mode")
 
     from langchain_core.output_parsers import StrOutputParser
@@ -391,7 +846,69 @@ def demo_verbose_debugging() -> None:
 
 @requires_openai
 def demo_custom_transformation() -> None:
-    """demonstrate custom transformation with RunnableLambda"""
+    """
+    demonstrate custom transformation with RunnableLambda
+
+    Custom Transformation Pattern:
+    ┌─────────────────────────────────────────────────────────────┐
+    │      RunnableLambda: Custom Transformations in Chains       │
+    │                                                             │
+    │  Standard Chain (No Custom Logic):                          │
+    │     Prompt → LLM → StrOutputParser                          │
+    │        │      │          │                                  │
+    │        ▼      ▼          ▼                                  │
+    │     Template  Model    String output                        │
+    │                                                             │
+    │  Chain with RunnableLambda:                                 │
+    │     Prompt → LLM → StrOutputParser → RunnableLambda         │
+    │        │      │          │                  │               │
+    │        ▼      ▼          ▼                  ▼               │
+    │     Template  Model    "1. AI\n         Custom function     │
+    │                        2. ML\n         transforms output    │
+    │                        3. NLP"                              │
+    │                                           │                 │
+    │                                           ▼                 │
+    │                                    "📋 SUMMARY:             │
+    │                                     1. AI                   │
+    │                                     2. ML                   │
+    │                                     3. NLP"                 │
+    │                                                             │
+    │  Custom Transformation Function:                            │
+    │     def custom_transform(text: str) -> str:                 │
+    │         # Add formatting                                    │
+    │         return f"📋 SUMMARY:\n{text.upper()}"               │
+    │                                                             │
+    │  Integration:                                               │
+    │     chain = (                                               │
+    │         prompt                                              │
+    │         | llm                                               │
+    │         | parser                                            │
+    │         | RunnableLambda(custom_transform)                  │
+    │     )                                                       │
+    │                                                             │
+    │  What RunnableLambda Can Do:                                │
+    │  • Format output (add headers, styles, emojis)              │
+    │  • Parse and restructure data                               │
+    │  • Filter/validate results                                  │
+    │  • Call external APIs or databases                          │
+    │  • Apply business logic                                     │
+    │  • Transform between formats (JSON → CSV)                   │
+    │  • Clean/sanitize output                                    │
+    │  • Combine multiple results                                 │
+    │                                                             │
+    │  Use Cases:                                                 │
+    │  • Format LLM output for specific UI needs                  │
+    │  • Add metadata or timestamps                               │
+    │  • Integrate with external systems                          │
+    │  • Apply domain-specific transformations                    │
+    │  • Validate and clean LLM responses                         │
+    │                                                             │
+    │  ✅ Benefit: Insert any Python function into chains         │
+    │  ✅ Benefit: Full flexibility for custom logic              │
+    │  ✅ Benefit: Composable with other LCEL components          │
+    │  ✅ Benefit: Maintains streaming and async support          │
+    └─────────────────────────────────────────────────────────────┘
+    """
     print_section("Demo 10: Custom Transformation in Chain")
 
     from langchain_core.output_parsers import StrOutputParser

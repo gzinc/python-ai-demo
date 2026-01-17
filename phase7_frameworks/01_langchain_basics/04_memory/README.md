@@ -489,12 +489,47 @@ After mastering memory:
 
 ---
 
+## ✨ Visual Documentation Feature
+
+All 8 demos in `practical.py` now include **comprehensive ASCII diagrams** that visualize:
+
+- **📊 Memory Patterns**: See how each memory strategy stores and retrieves messages
+- **→ Data Flow**: Follow message flow from user input through memory to LLM response
+- **✅ Benefits**: Understand advantages of each memory type
+- **⚠️ Cautions**: Learn limitations and trade-offs
+- **💡 Implementation**: Key code patterns highlighted
+- **🎯 Use Cases**: Real-world application scenarios
+
+**Example - Buffer Memory Visual:**
+```
+Buffer Memory Pattern:
+┌─────────────────────────────────────────────────────────────┐
+│       Buffer Memory: Full Conversation History Storage      │
+│                                                             │
+│  Turn 1: "Hi, I'm learning about LangChain memory"          │
+│     Memory: [] → Store message                              │
+│     LLM: "Great! LangChain memory helps..."                 │
+│                                                             │
+│  Memory Growth Over Time:                                   │
+│     Turn 1: 2 messages                                      │
+│     Turn 2: 4 messages                                      │
+│     Turn N: 2*N messages → Unlimited growth                 │
+│                                                             │
+│  ✅ Benefit: Perfect recall (all context retained)          │
+│  ⚠️  Caution: Unbounded token growth over time              │
+└─────────────────────────────────────────────────────────────┘
+```
+
+Each demo function docstring contains a complete workflow visualization making it easy to understand memory patterns at a glance!
+
+---
+
 ## Run Examples
 
 ```bash
 # Conceptual demos (no API key required)
 uv run python -m phase7_frameworks.01_langchain_basics.04_memory.concepts
 
-# Practical demos (requires OPENAI_API_KEY)
+# Practical demos (requires OPENAI_API_KEY) - NOW WITH VISUAL DIAGRAMS!
 uv run python -m phase7_frameworks.01_langchain_basics.04_memory.practical
 ```

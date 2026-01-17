@@ -60,7 +60,46 @@ def get_llm(temperature: float = 0.7) -> "ChatOpenAI":
 
 
 def demo_prompt_template_with_llm() -> None:
-    """demonstrate PromptTemplate with actual LLM calls"""
+    """
+    demonstrate PromptTemplate with actual LLM calls
+
+    LCEL Pattern: Template | LLM
+    ┌─────────────────────────────────────────────────────────────┐
+    │         PromptTemplate with LLM Integration                 │
+    │                                                             │
+    │  1. Variable Input:                                         │
+    │     {topic: "embeddings", style: "simple"}                  │
+    │                    │                                        │
+    │                    ▼                                        │
+    │  2. PromptTemplate:                                         │
+    │     ┌──────────────────────────────────────┐                │
+    │     │ "Explain {topic} in {style} terms,   │                │
+    │     │  using only 2 sentences."            │                │
+    │     └──────────────┬───────────────────────┘                │
+    │                    │                                        │
+    │                    ▼                                        │
+    │     Formatted: "Explain embeddings in simple terms,         │
+    │                 using only 2 sentences."                    │
+    │                    │                                        │
+    │                    ▼                                        │
+    │  3. LLM (gpt-4o-mini):                                      │
+    │     ┌──────────────────────────────────────┐                │
+    │     │  Processes formatted prompt          │                │
+    │     │  Temperature: 0.3 (focused)          │                │
+    │     └──────────────┬───────────────────────┘                │
+    │                    │                                        │
+    │                    ▼                                        │
+    │  4. AIMessage Response:                                     │
+    │     "Embeddings are numerical representations..."           │
+    │                                                             │
+    │  LCEL Syntax: chain = template | llm                        │
+    │              response = chain.invoke(params)                │
+    │                                                             │
+    │  ✅ Benefit: Clean composition with pipe operator           │
+    │  ✅ Benefit: Automatic prompt formatting                    │
+    │  ✅ Benefit: Type-safe variable substitution                │
+    └─────────────────────────────────────────────────────────────┘
+    """
     print_section("1. PromptTemplate with Real LLM Integration")
 
     print_subsection("Simple Template -> LLM")
@@ -108,7 +147,71 @@ def demo_prompt_template_with_llm() -> None:
 
 
 def demo_chat_template_with_llm() -> None:
-    """demonstrate ChatPromptTemplate with actual LLM calls"""
+    """
+    demonstrate ChatPromptTemplate with actual LLM calls
+
+    Multi-Message Template Pattern:
+    ┌─────────────────────────────────────────────────────────────┐
+    │       ChatPromptTemplate: Multi-Message Conversations       │
+    │                                                             │
+    │  1. Input Variables:                                        │
+    │    {domain: "machine learning", concept: "gradient descent"}│
+    │                    │                                        │
+    │                    ▼                                        │
+    │  2. ChatPromptTemplate.from_messages():                     │
+    │     ┌──────────────────────────────────────┐                │
+    │     │ ("system", "You are an expert in     │                │
+    │     │  {domain}. Provide concise answers") │                │
+    │     ├──────────────────────────────────────┤                │
+    │     │ ("human", "Explain {concept} in      │                │
+    │     │  2-3 sentences.")                    │                │
+    │     └──────────────┬───────────────────────┘                │
+    │                    │                                        │
+    │                    ▼                                        │
+    │     Formatted Messages:                                     │
+    │     [SystemMessage: "You are an expert in machine learning"]│
+    │     [HumanMessage: "Explain gradient descent in 2-3..."]    │
+    │                    │                                        │
+    │                    ▼                                        │
+    │  3. LLM Processing:                                         │
+    │     ┌──────────────────────────────────────┐                │
+    │     │  Chat model processes message list   │                │
+    │     │  System message sets behavior        │                │
+    │     │  Human message defines task          │                │
+    │     └──────────────┬───────────────────────┘                │
+    │                    │                                        │
+    │                    ▼                                        │
+    │  4. AIMessage Response:                                     │
+    │     Expert-level explanation following system instruction   │
+    │                                                             │
+    │  ✅ Benefit: System message customizes LLM behavior         │
+    │  ✅ Benefit: Supports multi-turn conversations              │
+    │  ✅ Benefit: Clean separation of role-based messages        │
+    └─────────────────────────────────────────────────────────────┘
+
+    Few-Shot Pattern (Add Examples):
+    ┌─────────────────────────────────────────────────────────────┐
+    │                Teaching Response Style                      │
+    │                                                             │
+    │  Template Structure:                                        │
+    │  ┌────────────────────────────────────────┐                 │
+    │  │ ("system", "You are an educator...")   │                 │
+    │  ├────────────────────────────────────────┤                 │
+    │  │ ("human", "What is a cache?")          │  ← Example 1    │
+    │  ├────────────────────────────────────────┤                 │
+    │  │ ("ai", "A cache is like a desk...")    │  ← Response     │
+    │  ├────────────────────────────────────────┤     style       │
+    │  │ ("human", "What is {concept}?")        │  ← User input   │
+    │  └────────────────────────────────────────┘                 │
+    │                    │                                        │
+    │                    ▼                                        │
+    │  LLM learns tone, structure, and formatting from examples   │
+    │  → Applies same style to new questions                      │
+    │                                                             │
+    │  ✅ Benefit: Consistent response formatting                 │
+    │  ✅ Benefit: Easy to demonstrate desired tone               │
+    └─────────────────────────────────────────────────────────────┘
+    """
     print_section("2. ChatPromptTemplate with Real LLM Integration")
 
     print_subsection("Multi-Message Template -> LLM")
@@ -162,7 +265,46 @@ def demo_chat_template_with_llm() -> None:
 
 
 def demo_messages_placeholder_with_llm() -> None:
-    """demonstrate MessagesPlaceholder for chat memory"""
+    """
+    demonstrate MessagesPlaceholder for chat memory
+
+    Chat History Management Pattern:
+    ┌─────────────────────────────────────────────────────────────┐
+    │        MessagesPlaceholder: Conversational Context          │
+    │                                                             │
+    │  Template Structure:                                        │
+    │  ┌────────────────────────────────────────┐                 │
+    │  │ ("system", "You are an AI assistant")  │                 │
+    │  ├────────────────────────────────────────┤                 │
+    │  │ MessagesPlaceholder("chat_history")    │ ← Expands to    │
+    │  ├────────────────────────────────────────┤   full history  │
+    │  │ ("human", "{question}")                │                 │
+    │  └────────────────────────────────────────┘                 │
+    │                                                             │
+    │  Conversation Flow:                                         │
+    │  ┌──────────────────────────────────────────────┐           │
+    │  │ Turn 1: "What is RAG?"                       │           │
+    │  │   chat_history = []                          │           │
+    │  │   LLM Response → Added to history            │           │
+    │  │                                              │           │
+    │  │ Turn 2: "Can you give me an example?"        │           │
+    │  │   chat_history = [                           │           │
+    │  │     HumanMessage("What is RAG?"),            │           │
+    │  │     AIMessage("RAG is...")                   │           │
+    │  │   ]                                          │           │
+    │  │   LLM sees full context → coherent response  │           │
+    │  │                                              │           │
+    │  │ Turn 3: "What embedding model for that?"     │           │
+    │  │   chat_history = [Turn 1 + Turn 2]           │           │
+    │  │   LLM understands "that" refers to RAG       │           │
+    │  └──────────────────────────────────────────────┘           │
+    │                                                             │
+    │  ✅ Benefit: Automatic context injection                    │
+    │  ✅ Benefit: No manual prompt engineering                   │
+    │  ✅ Benefit: Foundation for chat memory systems             │
+    │  ✅ Benefit: Supports arbitrarily long conversations        │
+    └─────────────────────────────────────────────────────────────┘
+    """
     print_section("3. MessagesPlaceholder with Chat History")
 
     print_subsection("Building Conversational Context")
@@ -239,7 +381,53 @@ def demo_messages_placeholder_with_llm() -> None:
 
 
 def demo_few_shot_with_llm() -> None:
-    """demonstrate FewShotPromptTemplate for in-context learning"""
+    """
+    demonstrate FewShotPromptTemplate for in-context learning
+
+    Few-Shot Learning Pattern:
+    ┌─────────────────────────────────────────────────────────────┐
+    │        FewShotPromptTemplate: In-Context Learning           │
+    │                                                             │
+    │  Prompt Construction:                                       │
+    │  ┌────────────────────────────────────────────────┐         │
+    │  │ PREFIX:                                        │         │
+    │  │ "Classify sentiment as positive/negative..."   │         │
+    │  ├────────────────────────────────────────────────┤         │
+    │  │ EXAMPLES (teach format):                       │         │
+    │  │   Text: "I loved this!"                        │         │
+    │  │   Sentiment: positive                          │         │
+    │  │                                                │         │
+    │  │   Text: "Terrible quality"                     │         │
+    │  │   Sentiment: negative                          │         │
+    │  │                                                │         │
+    │  │   Text: "It's okay"                            │         │
+    │  │   Sentiment: neutral                           │         │
+    │  ├────────────────────────────────────────────────┤         │
+    │  │ SUFFIX (new input):                            │         │
+    │  │   Text: {input}                                │         │
+    │  │   Sentiment:                                   │         │
+    │  └────────────────────────────────────────────────┘         │
+    │                    │                                        │
+    │                    ▼                                        │
+    │  LLM learns pattern from examples                           │
+    │                    │                                        │
+    │                    ▼                                        │
+    │  Consistent Output: "positive" | "negative" | "neutral"     │
+    │                                                             │
+    │  Benefits of Few-Shot Learning:                             │
+    │  ┌────────────────────────────────────────────────┐         │
+    │  │ ✅ No fine-tuning required                     │         │
+    │  │ ✅ Consistent output structure                 │         │
+    │  │ ✅ Easy to update examples                     │         │
+    │  │ ✅ Works with any classification task          │         │
+    │  │ ✅ Temperature=0.0 for reproducibility         │         │
+    │  └────────────────────────────────────────────────┘         │
+    │                                                             │
+    │  Use Cases:                                                 │
+    │  • Sentiment analysis • Text classification                 │
+    │  • Entity extraction • Format standardization               │
+    └─────────────────────────────────────────────────────────────┘
+    """
     print_section("4. FewShotPromptTemplate with In-Context Learning")
 
     print_subsection("Teaching Task Format Through Examples")
@@ -313,7 +501,60 @@ def demo_few_shot_with_llm() -> None:
 
 
 def demo_few_shot_chat_with_llm() -> None:
-    """demonstrate FewShotChatMessagePromptTemplate for response style"""
+    """
+    demonstrate FewShotChatMessagePromptTemplate for response style
+
+    Teaching Response Style with Chat Examples:
+    ┌─────────────────────────────────────────────────────────────┐
+    │     FewShotChatMessagePromptTemplate: Style Learning        │
+    │                                                             │
+    │  Full Template Structure:                                   │
+    │  ┌────────────────────────────────────────────────┐         │
+    │  │ SYSTEM MESSAGE:                                │         │
+    │  │ "You are a technical educator.                 │         │
+    │  │  Follow response style from examples."         │         │
+    │  ├────────────────────────────────────────────────┤         │
+    │  │ EXAMPLE 1:                                     │         │
+    │  │   Human: "What is a REST API?"                 │         │
+    │  │   AI: "REST API is an interface...             │         │
+    │  │                                                │         │
+    │  │        🔑 Key Points:                          │         │
+    │  │        • Uses HTTP methods                     │         │
+    │  │        • Stateless communication               │         │
+    │  │                                                │         │
+    │  │        💡 Example: GET /users/123"             │         │
+    │  ├────────────────────────────────────────────────┤         │
+    │  │ EXAMPLE 2:                                     │         │
+    │  │   Human: "What is GraphQL?"                    │         │
+    │  │   AI: "GraphQL is a query language...          │         │
+    │  │                                                │         │
+    │  │        🔑 Key Points:                          │         │
+    │  │        • Single endpoint                       │         │
+    │  │        ...same structure..."                   │         │
+    │  ├────────────────────────────────────────────────┤         │
+    │  │ USER INPUT:                                    │         │
+    │  │   Human: "{input}"                             │         │
+    │  └────────────────────────────────────────────────┘         │
+    │                    │                                        │
+    │                    ▼                                        │
+    │  LLM Pattern Learning:                                      │
+    │  ┌────────────────────────────────────────────────┐         │
+    │  │ 1. Observe structure across examples           │         │
+    │  │ 2. Extract tone and formatting patterns        │         │
+    │  │ 3. Apply to new question                       │         │
+    │  │ 4. Maintain consistent emoji usage             │         │
+    │  │ 5. Follow example organization                 │         │
+    │  └────────────────────────────────────────────────┘         │
+    │                    │                                        │
+    │                    ▼                                        │
+    │  Styled Response matching example format                    │
+    │                                                             │
+    │  ✅ Benefit: Consistent branded responses                   │
+    │  ✅ Benefit: Easy to update style                           │
+    │  ✅ Benefit: Educational content standardization            │
+    │  ✅ Benefit: Works for any response format                  │
+    └─────────────────────────────────────────────────────────────┘
+    """
     print_section("5. FewShotChatMessagePromptTemplate for Response Style")
 
     print_subsection("Teaching Response Pattern Through Examples")
@@ -396,7 +637,60 @@ def demo_few_shot_chat_with_llm() -> None:
 
 
 def demo_output_parsers() -> None:
-    """demonstrate output parsers for structured responses"""
+    """
+    demonstrate output parsers for structured responses
+
+    Output Parser Pipeline:
+    ┌─────────────────────────────────────────────────────────────┐
+    │           Output Parsers: String → Structured Data          │
+    │                                                             │
+    │  Three Parser Types Demonstrated:                           │
+    │                                                             │
+    │  1. StrOutputParser (String):                               │
+    │     Template | LLM | StrOutputParser()                      │
+    │        │       │           │                                │
+    │        └───────┴───────────┘                                │
+    │                 │                                           │
+    │                 ▼                                           │
+    │     AIMessage.content → str (default extraction)            │
+    │                                                             │
+    │  2. CommaSeparatedListOutputParser (List):                  │
+    │     Template | LLM | CommaSeparatedListOutputParser()       │
+    │        │       │           │                                │
+    │        └───────┴───────────┘                                │
+    │                 │                                           │
+    │                 ▼                                           │
+    │     "Python, Java, Go" → ["Python", "Java", "Go"]           │
+    │                                                             │
+    │  3. JsonOutputParser (Structured):                          │
+    │     Template | LLM | JsonOutputParser(pydantic_object)      │
+    │        │       │           │                                │
+    │        └───────┴───────────┘                                │
+    │                 │                                           │
+    │                 ▼                                           │
+    │     JSON string → Dict[str, Any]                            │
+    │                                                             │
+    │  ┌─────────────────────────────────────────────┐            │
+    │  │ Pydantic Schema Example:                    │            │
+    │  │                                             │            │
+    │  │ class TechStack(BaseModel):                 │            │
+    │  │     frontend: str                           │            │
+    │  │     backend: str                            │            │
+    │  │     database: str                           │            │
+    │  │     reason: str                             │            │
+    │  │                                             │            │
+    │  │ Parser validates against schema             │            │
+    │  │ Returns typed dict                          │            │
+    │  └─────────────────────────────────────────────┘            │
+    │                                                             │
+    │  Benefits of Output Parsers:                                │
+    │  ✅ Type Safety: Structured data instead of strings         │
+    │  ✅ Validation: Ensure LLM follows schema                   │
+    │  ✅ Integration: Easy to use in application code            │
+    │  ✅ Error Handling: Catch malformed responses early         │
+    │  ✅ Documentation: Schema serves as API contract            │
+    └─────────────────────────────────────────────────────────────┘
+    """
     print_section("6. Output Parsers for Structured Data")
 
     print_subsection("String Output Parser (Default)")
@@ -481,7 +775,57 @@ def demo_output_parsers() -> None:
 
 
 def demo_partial_with_runtime() -> None:
-    """demonstrate partial variables with runtime-generated data"""
+    """
+    demonstrate partial variables with runtime-generated data
+
+    Partial Variables: Dynamic Context Injection
+    ┌─────────────────────────────────────────────────────────────┐
+    │         Partial Variables with Runtime Data                 │
+    │                                                             │
+    │  Template Definition:                                       │
+    │  ┌────────────────────────────────────────────────┐         │
+    │  │ PromptTemplate(                                │         │
+    │  │   template="{context}\n\nQuestion: {question}",│         │
+    │  │   input_variables=["question"],                │         │
+    │  │   partial_variables={                          │         │
+    │  │     "context": get_current_context  ←─────┐    │         │
+    │  │   }                                       │    │         │
+    │  │ )                                         │    │         │
+    │  └───────────────────────────────────────────┼────┘         │
+    │                                              │              │
+    │                                              │              │
+    │  Runtime Execution Flow:                     │              │
+    │  ┌───────────────────────────────────────────┼────┐         │
+    │  │ 1. User invokes chain:                    │    │         │
+    │  │    chain.invoke({"question": "..."})      │    │         │
+    │  │                                           │    │         │
+    │  │ 2. Callable executed automatically:       │    │         │
+    │  │    def get_current_context() -> str: ◄────┘    │         │
+    │  │        return f"Current date: {now()}"         │         │
+    │  │                                                │         │
+    │  │ 3. Template formatted:                         │         │
+    │  │    "Current date: 2026-01-18 14:30             │         │
+    │  │                                                │         │
+    │  │     Question: What day is it today?"           │         │
+    │  │                                                │         │
+    │  │ 4. LLM processes with fresh context            │         │
+    │  └────────────────────────────────────────────────┘         │
+    │                                                             │
+    │  Use Cases for Partial Callables:                           │
+    │  ┌────────────────────────────────────────────────┐         │
+    │  │ • Current date/time (always fresh)             │         │
+    │  │ • User session data (per-request)              │         │
+    │  │ • System configuration (runtime values)        │         │
+    │  │ • Environment context (deployment info)        │         │
+    │  │ • Request metadata (headers, auth)             │         │
+    │  └────────────────────────────────────────────────┘         │
+    │                                                             │
+    │  ✅ Benefit: DRY - reuse templates with dynamic data        │
+    │  ✅ Benefit: Consistency - same logic across uses           │
+    │  ✅ Benefit: Automatic - no manual context injection        │
+    │  ✅ Benefit: Type-safe - callable signature validated       │
+    └─────────────────────────────────────────────────────────────┘
+    """
     print_section("7. Partial Variables with Runtime Context")
 
     print_subsection("Dynamic Context Injection")

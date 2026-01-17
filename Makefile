@@ -1,6 +1,6 @@
 # Makefile for AI Development Roadmap
 
-.PHONY: help install sync run test format lint clean
+.PHONY: help install sync run test format lint clean run-numpy run-phase1 run-phase7-rag
 
 help:
 	@echo "AI Development Roadmap - Available Commands"
@@ -10,9 +10,10 @@ help:
 	@echo "  make sync       - Install all dependencies"
 	@echo ""
 	@echo "Development:"
-	@echo "  make run-numpy  - Run NumPy examples"
-	@echo "  make run-phase1 - Run all Phase 1 examples"
-	@echo "  make test       - Run all tests"
+	@echo "  make run-numpy     - Run NumPy examples"
+	@echo "  make run-phase1    - Run all Phase 1 examples"
+	@echo "  make run-phase7-rag - Run Phase 7 RAG practical examples"
+	@echo "  make test          - Run all tests"
 	@echo ""
 	@echo "Code Quality:"
 	@echo "  make format     - Format code with ruff"
@@ -38,6 +39,11 @@ run-numpy:
 run-phase1:
 	@echo "Running Phase 1 examples..."
 	uv run python phase1_foundations/01_numpy_basics/examples.py
+
+run-phase7-rag:
+	@echo "Running Phase 7 RAG practical examples..."
+	@echo "Note: Requires OPENAI_API_KEY environment variable"
+	uv run python -m phase7_frameworks.01_langchain_basics.05_rag.practical
 
 test:
 	@echo "Running tests..."

@@ -40,7 +40,8 @@
       "mcp__memory__create_relations",
       "mcp__memory__search_nodes",
       "mcp__memory__add_observations",
-      "mcp__context7__query-docs"
+      "mcp__context7__query-docs",
+      "Bash(uv run pyright:*)"
     ],
     "deny": [],
     "ask": []
