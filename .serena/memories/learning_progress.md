@@ -179,17 +179,23 @@ Track your journey through AI development. Update after each session.
 
 ## Phase 7: Production Frameworks
 
-### LangChain Basics (Module 1) - 🔄 In Progress
+### LangChain Basics (Module 1) - ✅ Documentation Complete
 - [x] Migration examples (side-by-side comparisons of Phase 3/4 vs LangChain)
 - [x] Conceptual demos (patterns, RAG walkthrough without dependencies)
 - [x] LangChain installation (langchain==1.0.5 + integrations)
 - [x] Prompts & templates (01_prompts/ subfolder: concepts.py + practical.py)
 - [x] LLM integration (02_llm_integration/ subfolder: concepts.py + practical.py)
-- [x] Chains (03_chains/ subfolder: concepts.py + practical.py - briefly reviewed)
+- [x] Chains (03_chains/ subfolder: concepts.py + practical.py)
 - [x] Shared utilities refactoring (phase7_frameworks/utils.py for all modules)
-- [x] Memory (04_memory/ subfolder: modern RunnableWithMessageHistory API, Pydantic fix applied - partially reviewed)
-- [ ] RAG (RetrievalQA, vector stores, document loaders)
-- [ ] Agents & tools (create_react_agent, @tool decorator)
+- [x] Memory (04_memory/ subfolder: modern RunnableWithMessageHistory API)
+- [x] RAG (05_rag/ subfolder: modern LCEL patterns, comprehensive legacy section)
+- [x] Agents & tools (06_agents_tools/ subfolder: modern create_agent API)
+- [x] **API Modernization**: All 6 READMEs updated for LangChain 1.0+ APIs
+  - Modern patterns shown first with ✅ badges
+  - Legacy patterns in "⚠️ DEPRECATED" sections
+  - Migration guides with step-by-step instructions
+  - Standardized "Run Examples" sections across all modules
+  - Visual learning notes added to all modules
 
 ### LangGraph (Module 2)
 - [ ] State basics (StateGraph, nodes, edges)
@@ -540,6 +546,22 @@ Track your journey through AI development. Update after each session.
 - Key insight: Output parsers (String, List, JSON) convert LLM text to structured data
 - Session focus: Hands-on LangChain prompt templates with real API integration
 - Next: 02_llm_integration/ (ChatOpenAI, ChatAnthropic unified interface)
+
+### 2026-01-21: Phase 7 - LangChain API Modernization
+- ✅ Updated all 6 module READMEs for LangChain 1.0+ API consistency
+- ✅ Added comprehensive "Legacy Patterns ⚠️ DEPRECATED" sections
+- ✅ Added migration guides (agents_tools, rag, memory, chains)
+- ✅ Standardized "Run Examples" sections across all modules
+- ✅ Added visual learning notes (ASCII diagrams) to all modules
+- ✅ Deprecated APIs documented: create_react_agent, AgentExecutor, RetrievalQA, ConversationalRetrievalChain, ConversationChain, LLMChain, SequentialChain, .run()
+- ✅ Modern APIs emphasized: create_agent (LangGraph), LCEL patterns, RunnableWithMessageHistory, .invoke()
+- Key insight: RAG module most comprehensive (2 legacy patterns, advanced LCEL examples)
+- Key insight: Message-based APIs are LangChain 1.0+ standard across all modules
+- Key insight: LCEL pipe operators are the foundation (chains, RAG, memory, agents)
+- Key pattern: "Modern pattern ✅" first, "Legacy pattern ⚠️" second with "Why deprecated?"
+- Documentation quality: All modules now have consistent structure, clear deprecation warnings, and migration paths
+- Session focus: Documentation modernization and consistency across all LangChain basics modules
+- Next: Continue with LangGraph module (state graphs, multi-agent collaboration)
 
 ### 2026-01-14: Phase 7 - LLM Integration Module Complete
 - ✅ Created 02_llm_integration/ subfolder with concepts/practical split

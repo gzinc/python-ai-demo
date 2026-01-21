@@ -35,7 +35,10 @@ Input → [Component 1] → [Component 2] → [Component 3] → Output
 
 ## Chain Types
 
-### 1. LLMChain (Legacy Pattern)
+### 1. LLMChain (Legacy Pattern) ⚠️ DEPRECATED
+
+> **⚠️ Deprecation Notice**: `LLMChain` and `.run()` method are deprecated as of LangChain 1.0.
+> Use LCEL (section 3) for new projects. This pattern is shown for reference only.
 
 **Classic approach** (pre-LCEL):
 
@@ -48,22 +51,23 @@ prompt = PromptTemplate.from_template("Explain {concept} in one sentence")
 llm = ChatOpenAI(model="gpt-3.5-turbo")
 
 chain = LLMChain(llm=llm, prompt=prompt)
-result = chain.run(concept="embeddings")
+result = chain.run(concept="embeddings")  # .run() is deprecated
 ```
 
-**Use Cases**:
-- Simple prompt → LLM workflows
-- Single-step operations
-- Legacy code compatibility
+**Modern Alternative**: Use LCEL (see section 3 below)
 
-**Limitations**:
+**Why deprecated?**:
 - Verbose syntax
 - Limited composability
 - No built-in streaming
+- `.run()` method replaced by `.invoke()`
 
 ---
 
-### 2. SequentialChain (Multi-Step Operations)
+### 2. SequentialChain (Multi-Step Operations) ⚠️ DEPRECATED
+
+> **⚠️ Deprecation Notice**: `SequentialChain` is deprecated as of LangChain 1.0.
+> Use LCEL pipe operators (section 3) for new projects. This pattern is shown for reference only.
 
 **Chaining multiple LLMChains**:
 
@@ -87,19 +91,19 @@ result = chain({"text": "Long article text..."})
 # {"summary": "...", "sentiment": "positive"}
 ```
 
-**Use Cases**:
-- Multi-step analysis pipelines
-- Data transformation workflows
-- Complex business logic requiring multiple LLM calls
+**Modern Alternative**: Use LCEL pipe operators (see section 3 below)
 
-**Limitations**:
+**Why deprecated?**:
 - Rigid linear flow
 - Limited error recovery
 - All-or-nothing execution
+- Verbose compared to LCEL
 
 ---
 
-### 3. LCEL (LangChain Expression Language) - Modern Approach
+### 3. LCEL (LangChain Expression Language) - Modern Approach ✅
+
+> **✅ Recommended**: This is the modern, standard way to build chains in LangChain 1.0+
 
 **The pipe operator (`|`)** for composing components:
 
@@ -112,23 +116,33 @@ prompt = ChatPromptTemplate.from_template("Explain {concept} in one sentence")
 llm = ChatOpenAI(model="gpt-3.5-turbo")
 parser = StrOutputParser()
 
-# Modern LCEL composition
+# modern LCEL composition
 chain = prompt | llm | parser
 
+# use .invoke() not .run()
 result = chain.invoke({"concept": "embeddings"})
 ```
 
 **Why LCEL?**
 
-| Feature | Legacy (LLMChain) | LCEL |
+| Feature | Legacy (LLMChain) | LCEL ✅ |
 |---------|-------------------|------|
 | **Syntax** | Verbose | Concise (Unix pipe style) |
 | **Streaming** | Manual setup | Built-in |
 | **Async** | Limited support | Native async |
 | **Composition** | Complex | Simple (`\|` operator) |
 | **Error Handling** | Basic | Advanced (retries, fallbacks) |
+| **Method** | `.run()` (deprecated) | `.invoke()` |
 
-**LCEL is the modern standard** - use it for all new chains.
+**LCEL Benefits:**
+- ✅ Concise pipe syntax (like Unix pipes)
+- ✅ Built-in streaming support
+- ✅ Native async execution
+- ✅ Type-safe composition
+- ✅ Better error handling
+- ✅ Future-proof (LangChain's direction)
+
+**Use LCEL for all new chains** - it's the modern standard.
 
 ---
 
@@ -356,13 +370,15 @@ async def process():
 
 ---
 
-## Running Examples
+## Run Examples
+
+**📊 Visual Learning**: All practical demos include comprehensive ASCII diagrams showing chain composition, data flow, and execution patterns.
 
 ```bash
-# Conceptual (no API key):
+# Conceptual demos (no API key required)
 uv run python -m phase7_frameworks.01_langchain_basics.03_chains.concepts
 
-# Practical (requires OPENAI_API_KEY):
+# Practical demos (requires OPENAI_API_KEY)
 uv run python -m phase7_frameworks.01_langchain_basics.03_chains.practical
 ```
 

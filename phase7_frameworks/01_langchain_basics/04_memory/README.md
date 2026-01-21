@@ -197,8 +197,70 @@ memory.load_memory_variables({})
 
 ## Memory Integration with Chains
 
-### Basic Integration
+### Modern Memory Integration (LCEL) ✅
 
+**Recommended approach** for LangChain 1.0+:
+
+```python
+from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
+from langchain_core.runnables.history import RunnableWithMessageHistory
+from langchain_core.chat_history import InMemoryChatMessageHistory
+from langchain_openai import ChatOpenAI
+
+llm = ChatOpenAI(model="gpt-3.5-turbo")
+
+# define prompt with message history placeholder
+prompt = ChatPromptTemplate.from_messages([
+    ("system", "You are a helpful assistant"),
+    MessagesPlaceholder(variable_name="chat_history"),
+    ("human", "{input}")
+])
+
+# create chain
+chain = prompt | llm
+
+# add memory wrapper with session management
+store = {}  # session_id -> chat history
+
+def get_session_history(session_id: str):
+    if session_id not in store:
+        store[session_id] = InMemoryChatMessageHistory()
+    return store[session_id]
+
+chain_with_memory = RunnableWithMessageHistory(
+    chain,
+    get_session_history,
+    input_messages_key="input",
+    history_messages_key="chat_history"
+)
+
+# use with session ID
+response = chain_with_memory.invoke(
+    {"input": "Hi, I'm Alice"},
+    config={"configurable": {"session_id": "user123"}}
+)
+
+# second interaction (remembers context)
+response = chain_with_memory.invoke(
+    {"input": "What's my name?"},
+    config={"configurable": {"session_id": "user123"}}
+)
+# → "Your name is Alice"
+```
+
+**Modern Benefits:**
+- ✅ Session-based memory (multi-user support)
+- ✅ Works with LCEL chains
+- ✅ Streaming support
+- ✅ Async execution
+- ✅ Type-safe configuration
+
+### Legacy Memory Integration ⚠️ DEPRECATED
+
+> **⚠️ Deprecation Notice**: `ConversationChain` and direct memory usage are deprecated as of LangChain 1.0.
+> Use `RunnableWithMessageHistory` pattern above for new projects.
+
+**Old Pattern** (LangChain < 1.0):
 ```python
 from langchain.chains import ConversationChain
 from langchain.memory import ConversationBufferMemory
@@ -209,38 +271,18 @@ memory = ConversationBufferMemory()
 
 chain = ConversationChain(llm=llm, memory=memory)
 
-# First interaction
+# first interaction
 response = chain.run("Hi, I'm Alice")
-# → "Hello Alice! How can I help you?"
 
-# Second interaction (remembers context)
+# second interaction
 response = chain.run("What's my name?")
-# → "Your name is Alice"
 ```
 
-### LCEL Integration
-
-```python
-from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
-from langchain_core.runnables.history import RunnableWithMessageHistory
-from langchain.memory import ChatMessageHistory
-
-prompt = ChatPromptTemplate.from_messages([
-    ("system", "You are a helpful assistant"),
-    MessagesPlaceholder(variable_name="chat_history"),
-    ("human", "{input}")
-])
-
-chain = prompt | llm
-
-# Add memory wrapper
-chain_with_memory = RunnableWithMessageHistory(
-    chain,
-    lambda session_id: ChatMessageHistory(),
-    input_messages_key="input",
-    history_messages_key="chat_history"
-)
-```
+**Why deprecated?**
+- No session management (single global memory)
+- Doesn't work well with LCEL
+- No streaming support
+- Less flexible configuration
 
 ---
 
@@ -526,10 +568,12 @@ Each demo function docstring contains a complete workflow visualization making i
 
 ## Run Examples
 
+**📊 Visual Learning**: All practical demos include comprehensive ASCII diagrams showing memory patterns, message flows, and retention strategies.
+
 ```bash
 # Conceptual demos (no API key required)
 uv run python -m phase7_frameworks.01_langchain_basics.04_memory.concepts
 
-# Practical demos (requires OPENAI_API_KEY) - NOW WITH VISUAL DIAGRAMS!
+# Practical demos (requires OPENAI_API_KEY)
 uv run python -m phase7_frameworks.01_langchain_basics.04_memory.practical
 ```

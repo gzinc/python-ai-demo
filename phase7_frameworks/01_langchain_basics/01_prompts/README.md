@@ -159,6 +159,20 @@ messages = chat_template.format_messages(topic="embeddings")
 
 ---
 
+## Run Examples
+
+**📊 Visual Learning**: All practical demos include comprehensive ASCII diagrams showing prompt structures, template patterns, and message flows.
+
+```bash
+# Conceptual demos (no API key required)
+uv run python -m phase7_frameworks.01_langchain_basics.01_prompts.concepts
+
+# Practical demos (requires OPENAI_API_KEY)
+uv run python -m phase7_frameworks.01_langchain_basics.01_prompts.practical
+```
+
+---
+
 ## Next Steps
 
 After completing this module:

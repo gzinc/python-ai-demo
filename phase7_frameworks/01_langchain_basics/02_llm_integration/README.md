@@ -158,6 +158,20 @@ for chunk in llm.stream(messages):
 print()  # newline at end
 ```
 
+## Run Examples
+
+**📊 Visual Learning**: All practical demos include comprehensive ASCII diagrams showing LLM integration patterns, API flows, and error handling.
+
+```bash
+# Conceptual demos (no API key required)
+uv run python -m phase7_frameworks.01_langchain_basics.02_llm_integration.concepts
+
+# Practical demos (requires OPENAI_API_KEY and ANTHROPIC_API_KEY)
+uv run python -m phase7_frameworks.01_langchain_basics.02_llm_integration.practical
+```
+
+---
+
 ## Next Steps
 
 After mastering LLM integration, you'll learn:

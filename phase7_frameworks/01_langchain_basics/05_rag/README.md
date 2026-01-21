@@ -279,52 +279,16 @@ compression_retriever = ContextualCompressionRetriever(
 
 ---
 
-### 6. RAG Chains
+### 6. RAG Chains (Modern LCEL Pattern) ✅
 
-Combine retrieval with generation:
-
-```python
-from langchain.chains import RetrievalQA
-from langchain_openai import ChatOpenAI
-
-llm = ChatOpenAI(model="gpt-3.5-turbo")
-
-qa_chain = RetrievalQA.from_chain_type(
-    llm=llm,
-    chain_type="stuff",  # How to combine docs
-    retriever=retriever,
-    return_source_documents=True  # Include sources
-)
-
-result = qa_chain.invoke("What is the main topic?")
-# {
-#   'query': 'What is the main topic?',
-#   'result': 'The main topic is...',
-#   'source_documents': [doc1, doc2, doc3]
-# }
-```
-
-**Chain Types:**
-
-| Type | Description | Token Usage | Best For |
-|------|-------------|-------------|----------|
-| **stuff** | Put all docs in prompt | High | Small doc sets |
-| **map_reduce** | Summarize each, combine | Medium | Large doc sets |
-| **refine** | Iteratively refine answer | High | Detailed answers |
-| **map_rerank** | Score each, pick best | Medium | Multiple sources |
-
----
-
-## Modern RAG Pattern (LCEL)
-
-LangChain 1.0+ uses LCEL (LangChain Expression Language):
+**Modern Approach** (LangChain 1.0+): Use LCEL (LangChain Expression Language) for composable RAG chains:
 
 ```python
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnablePassthrough
 
-# Define prompt
+# define prompt
 template = """Answer based on the following context:
 
 Context: {context}
@@ -335,7 +299,7 @@ Answer:"""
 
 prompt = ChatPromptTemplate.from_template(template)
 
-# Build chain
+# build chain with pipe operators
 def format_docs(docs):
     return "\n\n".join(doc.page_content for doc in docs)
 
@@ -349,15 +313,168 @@ rag_chain = (
     | StrOutputParser()
 )
 
-# Use chain
+# use chain
 answer = rag_chain.invoke("What is the revenue?")
 ```
 
 **LCEL Benefits:**
-- Composable with `|` operator
-- Streaming support
-- Async execution
-- Better error handling
+- ✅ Composable with `|` operator (like Unix pipes)
+- ✅ Streaming support (see responses as they generate)
+- ✅ Async execution (better performance)
+- ✅ Better error handling and debugging
+- ✅ Type safety and validation
+
+### Advanced RAG Patterns
+
+**With Source Citation:**
+```python
+from langchain_core.runnables import RunnableParallel
+
+rag_chain_with_source = RunnableParallel(
+    {
+        "context": retriever,
+        "question": RunnablePassthrough()
+    }
+).assign(
+    answer=lambda x: (
+        {"context": format_docs(x["context"]), "question": x["question"]}
+        | prompt
+        | llm
+        | StrOutputParser()
+    )
+)
+
+# returns both answer and source documents
+result = rag_chain_with_source.invoke("What is the revenue?")
+# {'context': [doc1, doc2], 'question': '...', 'answer': '...'}
+```
+
+**With Streaming:**
+```python
+# stream answer token by token
+for chunk in rag_chain.stream("What is the revenue?"):
+    print(chunk, end="", flush=True)
+```
+
+---
+
+## Legacy RAG Patterns ⚠️ DEPRECATED
+
+> **⚠️ Deprecation Notice**: The following patterns are deprecated as of LangChain 1.0.
+> They are shown for reference when working with legacy codebases.
+> Use the modern LCEL patterns above for new projects.
+
+### RetrievalQA (Legacy)
+
+**Old Pattern** (LangChain < 1.0):
+```python
+from langchain.chains import RetrievalQA
+from langchain_openai import ChatOpenAI
+
+llm = ChatOpenAI(model="gpt-3.5-turbo")
+
+qa_chain = RetrievalQA.from_chain_type(
+    llm=llm,
+    chain_type="stuff",  # how to combine docs
+    retriever=retriever,
+    return_source_documents=True  # include sources
+)
+
+result = qa_chain.invoke("What is the main topic?")
+# {
+#   'query': 'What is the main topic?',
+#   'result': 'The main topic is...',
+#   'source_documents': [doc1, doc2, doc3]
+# }
+```
+
+**Legacy Chain Types:**
+
+| Type | Description | Token Usage | Best For |
+|------|-------------|-------------|----------|
+| **stuff** | Put all docs in prompt | High | Small doc sets |
+| **map_reduce** | Summarize each, combine | Medium | Large doc sets |
+| **refine** | Iteratively refine answer | High | Detailed answers |
+| **map_rerank** | Score each, pick best | Medium | Multiple sources |
+
+**Modern Alternative** (LangChain 1.0+):
+```python
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.output_parsers import StrOutputParser
+from langchain_core.runnables import RunnablePassthrough, RunnableParallel
+
+# modern LCEL pattern with source documents
+rag_chain = RunnableParallel(
+    {
+        "context": retriever,
+        "question": RunnablePassthrough()
+    }
+).assign(
+    answer=lambda x: (
+        {"context": format_docs(x["context"]), "question": x["question"]}
+        | prompt
+        | llm
+        | StrOutputParser()
+    )
+)
+
+result = rag_chain.invoke("What is the main topic?")
+# {'context': [doc1, doc2], 'question': '...', 'answer': '...'}
+```
+
+**Why deprecated?**
+- `RetrievalQA` is less flexible than LCEL
+- LCEL supports streaming (RetrievalQA doesn't)
+- LCEL has better type safety and error handling
+- LCEL is the future direction of LangChain
+
+### ConversationalRetrievalChain (Legacy)
+
+**Old Pattern**:
+```python
+from langchain.chains import ConversationalRetrievalChain
+from langchain.memory import ConversationBufferMemory
+
+memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
+
+qa = ConversationalRetrievalChain.from_llm(
+    llm=llm,
+    retriever=retriever,
+    memory=memory
+)
+
+result = qa({"question": "What is the revenue?"})
+```
+
+**Modern Alternative**:
+```python
+from langchain_core.runnables.history import RunnableWithMessageHistory
+from langchain_core.chat_history import InMemoryChatMessageHistory
+
+# create RAG chain (see modern pattern above)
+rag_chain = (...)  # LCEL RAG chain
+
+# add message history
+store = {}
+
+def get_session_history(session_id: str):
+    if session_id not in store:
+        store[session_id] = InMemoryChatMessageHistory()
+    return store[session_id]
+
+conversational_rag = RunnableWithMessageHistory(
+    rag_chain,
+    get_session_history,
+    input_messages_key="question",
+    history_messages_key="chat_history",
+)
+
+# use with session ID
+conversational_rag.invoke(
+    {"question": "What is the revenue?"},
+    config={"configurable": {"session_id": "user123"}}
+)
+```
 
 ---
 
@@ -645,12 +762,13 @@ After mastering RAG:
 
 ## Run Examples
 
+**📊 Visual Learning**: All practical demos include comprehensive ASCII diagrams showing RAG workflows, retrieval processes, and chain execution.
+
 ```bash
 # Conceptual demos (no API key required)
 uv run python -m phase7_frameworks.01_langchain_basics.05_rag.concepts
 
 # Practical demos (requires OPENAI_API_KEY)
-# ✨ NEW: All 8 demos include comprehensive ASCII diagrams showing RAG workflows!
 uv run python -m phase7_frameworks.01_langchain_basics.05_rag.practical
 ```
 

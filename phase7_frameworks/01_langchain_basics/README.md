@@ -157,10 +157,13 @@ agent = create_react_agent(llm=llm, tools=tools, prompt=prompt)
 │   ├── README.md
 │   ├── concepts.py              # Conceptual (no API key)
 │   └── practical.py             # Hands-on (requires API key)
-└── 06_agents_tools/             # ⬜ create_react_agent, @tool, AgentExecutor
+└── 06_agents_tools/             # ✅ create_react_agent, @tool, AgentExecutor
+    ├── README.md
+    ├── concepts.py              # Conceptual (no API key)
+    └── practical.py             # Hands-on (requires API key)
 ```
 
-**Current Status**: Prompts, LLM integration, chains, memory, and RAG modules complete!
+**Current Status**: All 6 modules complete! (Prompts, LLM integration, chains, memory, RAG, agents & tools)
 
 ---
 
@@ -267,14 +270,16 @@ uv run python -m phase7_frameworks.01_langchain_basics.04_memory.practical
 uv run python -m phase7_frameworks.01_langchain_basics.05_rag.concepts
 uv run python -m phase7_frameworks.01_langchain_basics.05_rag.practical
 
-# ⬜ Coming Soon: Agents & Tools Module
+# ✅ Agents & Tools Module:
+uv run python -m phase7_frameworks.01_langchain_basics.06_agents_tools.concepts
+uv run python -m phase7_frameworks.01_langchain_basics.06_agents_tools.practical
 ```
 
 **Organization**: Each module has:
 - `concepts.py` - Learn patterns without API key
 - `practical.py` - Practice with real LLM calls (requires `OPENAI_API_KEY` in `.env`)
 
-**✨ New Feature - Visual Documentation**: All 41 demos across 5 modules now include comprehensive ASCII diagrams showing:
+**✨ New Feature - Visual Documentation**: All 49 demos across 6 modules now include comprehensive ASCII diagrams showing:
 - 📊 Architecture and workflow visualization
 - → Step-by-step data flow with arrows
 - ✅ Benefits highlighted for each pattern
