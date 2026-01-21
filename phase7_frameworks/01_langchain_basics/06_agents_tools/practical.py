@@ -1,22 +1,23 @@
 """
-Agents & Tools - Practical Demonstrations
+Agents & Tools - Practical Demonstrations (LangChain 1.0+ / LangGraph)
 
-This module provides hands-on examples of LangChain agents and tools.
+This module provides hands-on examples of LangChain agents and tools using
+the modern LangGraph API (LangChain 1.0+).
+
 Requires OPENAI_API_KEY in .env file.
 
 Run with: uv run python -m phase7_frameworks.01_langchain_basics.06_agents_tools.practical
 """
 
 import os
+from datetime import datetime
 from inspect import cleandoc
-from typing import Any
 
 from dotenv import load_dotenv
-from langchain.agents import AgentExecutor, create_react_agent
-from langchain.memory import ConversationBufferMemory
+from langchain.agents import create_agent
 from langchain.tools import BaseTool, tool
 from langchain_community.tools import DuckDuckGoSearchRun
-from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
+from langchain_core.messages import HumanMessage
 from langchain_openai import ChatOpenAI
 from pydantic import Field
 
@@ -74,176 +75,136 @@ def demo_basic_tool_creation() -> None:
     │       • description: "evaluate mathematical expressions"    │
     │       • args_schema: {"expression": str} (from signature)   │
     │                                                             │
-    │  Usage in Agent:                                            │
+    │  Usage in Agent (LangGraph):                                │
     │     tools = [calculator]                                    │
-    │     agent = create_react_agent(llm, tools, prompt)          │
+    │     agent = create_agent(model=llm, tools=tools)            │
     │         │                                                   │
     │         ▼                                                   │
     │     Agent can now use calculator tool automatically!        │
     │                                                             │
     │  Tool Execution Flow:                                       │
-    │     User: "What's 25 * 48 + 100?"                           │
-    │         ↓                                                   │
-    │     Agent: Thought: This is math                            │
-    │            Action: calculator                               │
-    │            Action Input: "25 * 48 + 100"                    │
-    │         ↓                                                   │
-    │     Tool: calculator("25 * 48 + 100")                       │
-    │         ↓                                                   │
-    │     Result: 1300.0                                          │
-    │         ↓                                                   │
-    │     Agent: Final Answer: "The result is 1300"               │
+    │     User Query → Agent → Tool Selection → Tool Execution    │
+    │                    ↓                          ↓             │
+    │                  "2+2"                   calculator("2+2")  │
+    │                    ↓                          ↓             │
+    │                Final Answer  ←  Tool Result (4.0)           │
     │                                                             │
     │  ✅ Benefit: Zero boilerplate (decorator handles metadata)  │
     │  ✅ Benefit: Type hints → automatic schema validation       │
-    │  ✅ Benefit: Docstring → tool description                   │
     │  ⚠️  Caution: eval() is dangerous for untrusted input       │
     └─────────────────────────────────────────────────────────────┘
     """
     print_section("Demo 1: Basic Tool Creation with @tool")
 
-    # define simple calculator tool
+    # define calculator tool
     @tool
-    def calculator(expression: str) -> float:
+    def calculator(expression: str) -> str:
         """evaluate mathematical expressions like '2+2' or '25*48+100'"""
         try:
             result = eval(expression)
-            return float(result)
+            return str(float(result))
         except Exception as e:
             return f"Error: {str(e)}"
 
-    print("\n1. Tool created with @tool decorator")
-    print(f"   Name: {calculator.name}")
-    print(f"   Description: {calculator.description}")
-    print(f"   Args: {calculator.args}")
+    print("1. Tool created with @tool decorator")
+    print("\n2. Tool metadata (automatically extracted):")
+    print(f"   • name: {calculator.name}")
+    print(f"   • description: {calculator.description}")
+    print(f"   • args: {list(calculator.args_schema.model_fields.keys())}")
 
-    print("\n2. Test tool directly:")
-    result = calculator.invoke({"expression": "25 * 48 + 100"})
-    print(f"   calculator('25 * 48 + 100') = {result}")
+    print("\n3. Direct tool execution (without agent):")
+    result = calculator.invoke({"expression": "2 + 2"})
+    print(f"   calculator('2 + 2') = {result}")
 
-    print("\n3. Tool metadata (auto-extracted):")
-    print(f"   • Function name → tool name")
-    print(f"   • Docstring → tool description")
-    print(f"   • Type hints → argument schema")
+    print("\n4. How @tool works:")
+    print("   • Function name → tool name")
+    print("   • Docstring → tool description")
+    print("   • Type hints → argument schema")
 
 
-def demo_create_react_agent() -> None:
+def demo_create_agent() -> None:
     """
-    demonstrate create_react_agent basics with single tool
+    demonstrate create_agent basics with single tool (ReAct pattern)
 
-    ReAct Agent Creation Pattern:
+    ReAct Agent Creation Pattern (LangChain 1.0+ / LangGraph):
     ┌─────────────────────────────────────────────────────────────┐
-    │     create_react_agent: LLM + Tools + Prompt → Agent        │
+    │     create_agent: Model + Tools → CompiledGraph             │
     │                                                             │
     │  Step 1: Define Tools                                       │
     │     @tool                                                   │
     │     def get_time() -> str:                                  │
     │         ""get current time""                                │
-    │         return datetime.now().strftime("%H:%M:%S")          │
+    │         return datetime.now().strftime("%H:%M")             │
     │                                                             │
-    │  Step 2: Create ReAct Prompt                                │
-    │     prompt = ChatPromptTemplate([                           │
-    │         ("system", "You are helpful assistant.              │
-    │                     Tools: {tools}                          │
-    │                     Tool names: {tool_names}"),             │
-    │         ("user", "{input}"),                                │
-    │         ("assistant", "{agent_scratchpad}")                 │
-    │     ])                                                      │
-    │                                                             │
-    │  Step 3: Create Agent                                       │
-    │     agent = create_react_agent(                             │
-    │         llm=ChatOpenAI(model="gpt-4o-mini"),                │
-    │         tools=[get_time],                                   │
-    │         prompt=prompt                                       │
+    │  Step 2: Create Agent (LangGraph simplified API)            │
+    │     agent = create_agent(                                   │
+    │         model=ChatOpenAI(model="gpt-4o-mini"),              │
+    │         tools=[get_time]                                    │
     │     )                                                       │
+    │     # Returns CompiledStateGraph, ready to use!             │
     │                                                             │
-    │  Step 4: Wrap in Executor                                   │
-    │     executor = AgentExecutor(                               │
-    │         agent=agent,                                        │
-    │         tools=[get_time],                                   │
-    │         verbose=True  # show reasoning steps                │
-    │     )                                                       │
+    │  Step 3: Execute Query                                      │
+    │     result = agent.invoke({                                 │
+    │         "messages": [HumanMessage(content="What time?")]    │
+    │     })                                                      │
+    │         ▼                                                   │
+    │     Agent ReAct Loop:                                       │
+    │       Thought: "I need the current time"                    │
+    │       Action: get_time()                                    │
+    │       Observation: "14:30"                                  │
+    │       Thought: "I have the answer"                          │
+    │       Final Answer: "It is 14:30"                           │
     │                                                             │
-    │  Execution Flow:                                            │
-    │     User: "What time is it?"                                │
-    │         ↓                                                   │
-    │     ┌───────────────────────────────────┐                   │
-    │     │ Agent Reasoning Loop:             │                   │
-    │     │                                   │                   │
-    │     │ Thought: Need current time        │                   │
-    │     │ Action: get_time                  │                   │
-    │     │ Action Input: (no params)         │                   │
-    │     │     ↓                             │                   │
-    │     │ Observation: "14:30:45"           │                   │
-    │     │     ↓                             │                   │
-    │     │ Thought: I have the time          │                   │
-    │     │ Action: Final Answer              │                   │
-    │     │ Action Input: "It's 14:30:45"     │                   │
-    │     └───────────────────────────────────┘                   │
-    │         ↓                                                   │
-    │     Output: "It's 14:30:45"                                 │
+    │  Tool → Agent → LLM → Tool → Agent → Answer                 │
     │                                                             │
-    │  ✅ Benefit: Built-in ReAct reasoning loop                  │
-    │  ✅ Benefit: Automatic tool selection and execution         │
-    │  ✅ Benefit: Verbose mode shows agent thinking              │
+    │  ✅ Benefit: Simpler API (no AgentExecutor needed)          │
+    │  ✅ Benefit: LLM decides when to use tools                  │
+    │  ✅ Benefit: Built-in streaming and async support           │
     │  ⚠️  Caution: LLM calls cost money (watch iterations)       │
+    │                                                             │
+    │  ℹ️  Note: LangChain 1.0+ uses LangGraph for agents         │
     └─────────────────────────────────────────────────────────────┘
     """
-    print_section("Demo 2: create_react_agent Basics")
-
-    from datetime import datetime
+    print_section("Demo 2: create_agent Basics - ReAct Pattern (LangChain 1.0+)")
 
     # define time tool
     @tool
     def get_current_time() -> str:
-        """get the current time in HH:MM:SS format"""
-        return datetime.now().strftime("%H:%M:%S")
+        """get the current time in HH:MM format"""
+        return datetime.now().strftime("%H:%M")
 
-    # create react prompt
-    prompt = ChatPromptTemplate.from_messages([
-        ("system", cleandoc("""
-            You are a helpful assistant with access to tools.
-
-            Available tools:
-            {tools}
-
-            Tool names: {tool_names}
-
-            Use the ReAct format:
-            Thought: think about what to do
-            Action: tool to use (one of {tool_names})
-            Action Input: input for the tool
-            Observation: result from the tool
-            ... repeat as needed ...
-            Thought: I now know the answer
-            Final Answer: the final response
-        """)),
-        ("user", "{input}"),
-        ("assistant", "{agent_scratchpad}"),
-    ])
+    print("1. Tool metadata (automatically extracted):")
+    print(f"   • name: {get_current_time.name}")
+    print(f"   • description: {get_current_time.description}")
 
     # create llm and tools
     llm = ChatOpenAI(model="gpt-4o-mini", temperature=0)
     tools = [get_current_time]
 
-    # create agent
-    agent = create_react_agent(llm=llm, tools=tools, prompt=prompt)
+    # create agent (LangGraph simplified API)
+    agent = create_agent(model=llm, tools=tools)
 
-    # create executor
-    executor = AgentExecutor(
-        agent=agent,
-        tools=tools,
-        verbose=True,  # show reasoning steps
-        max_iterations=3,
-    )
+    print("\n2. Agent created (CompiledStateGraph)")
+    print(f"   Type: {type(agent).__name__}")
 
-    print("\n1. Agent created with:")
-    print(f"   LLM: gpt-4o-mini")
-    print(f"   Tools: {[t.name for t in tools]}")
+    print("\n3. Asking agent: 'What time is it?'")
+    print("   (Agent will use ReAct pattern to answer)")
 
-    print("\n2. Asking: 'What time is it?'")
-    result = executor.invoke({"input": "What time is it?"})
-    print(f"\n3. Final answer: {result['output']}")
+    # invoke with messages format
+    result = agent.invoke({"messages": [HumanMessage(content="What time is it?")]})
+
+    # extract final answer from messages
+    final_message = result["messages"][-1]
+    print(f"\n4. Agent result: {final_message.content}")
+
+    print("\n5. ReAct pattern flow:")
+    print("   Thought → Action → Observation → Thought → Answer")
+
+    print("\n6. LangChain 1.0+ / LangGraph simplifications:")
+    print("   • No AgentExecutor needed")
+    print("   • Direct invoke() on agent")
+    print("   • Messages-based interface")
+    print("   • Built-in tool calling")
 
 
 def demo_multi_tool_agent() -> None:
@@ -252,265 +213,121 @@ def demo_multi_tool_agent() -> None:
 
     Multi-Tool Agent Pattern:
     ┌─────────────────────────────────────────────────────────────┐
-    │    Multi-Tool Agent: LLM Selects from Tool Arsenal          │
+    │            Agent with Multiple Tool Options                 │
     │                                                             │
-    │  Tool Arsenal:                                              │
-    │     1. calculator: "evaluate math expressions"              │
-    │     2. string_reverse: "reverse text strings"               │
-    │     3. string_upper: "convert text to uppercase"            │
+    │  Tools Available:                                           │
+    │     1. calculator(expression: str) → float                  │
+    │     2. string_reverse(text: str) → str                      │
+    │     3. string_upper(text: str) → str                        │
     │                                                             │
-    │  Complex Query: "Reverse 'hello' and uppercase it,          │
-    │                  then calculate 5*5"                        │
+    │  Agent Decision Making:                                     │
+    │     User: "What is 25 * 48 + 100?"                          │
+    │       ↓                                                     │
+    │     Agent analyzes query → identifies math task             │
+    │       ↓                                                     │
+    │     Selects calculator tool (not string tools)              │
+    │       ↓                                                     │
+    │     Executes: calculator("25*48+100")                       │
+    │       ↓                                                     │
+    │     Returns: 1300.0                                         │
     │                                                             │
-    │  Agent Reasoning:                                           │
-    │     ┌─────────────────────────────────────┐                 │
-    │     │ Iteration 1:                        │                 │
-    │     │   Thought: Need to reverse "hello"  │                 │
-    │     │   Action: string_reverse            │                 │
-    │     │   Input: "hello"                    │                 │
-    │     │   Observation: "olleh"              │                 │
-    │     ├─────────────────────────────────────┤                 │
-    │     │ Iteration 2:                        │                 │
-    │     │   Thought: Now uppercase "olleh"    │                 │
-    │     │   Action: string_upper              │                 │
-    │     │   Input: "olleh"                    │                 │
-    │     │   Observation: "OLLEH"              │                 │
-    │     ├─────────────────────────────────────┤                 │
-    │     │ Iteration 3:                        │                 │
-    │     │   Thought: Now calculate 5*5        │                 │
-    │     │   Action: calculator                │                 │
-    │     │   Input: "5*5"                      │                 │
-    │     │   Observation: 25.0                 │                 │
-    │     ├─────────────────────────────────────┤                 │
-    │     │ Iteration 4:                        │                 │
-    │     │   Thought: Have all results         │                 │
-    │     │   Action: Final Answer              │                 │
-    │     │   Input: "OLLEH and 25"             │                 │
-    │     └─────────────────────────────────────┘                 │
+    │  Tool Selection Criteria:                                   │
+    │     • Tool name relevance                                   │
+    │     • Tool description match                                │
+    │     • Query context analysis                                │
+    │     • Previous interaction history                          │
     │                                                             │
-    │  Tool Selection Strategy:                                   │
-    │     • LLM reads ALL tool descriptions                       │
-    │     • Matches task to best tool                             │
-    │     • Executes sequentially as needed                       │
-    │     • Chains results together                               │
-    │                                                             │
-    │  ✅ Benefit: Agent handles complex multi-step tasks         │
-    │  ✅ Benefit: Automatic tool sequencing                      │
-    │  ✅ Benefit: No hardcoded workflow required                 │
-    │  ⚠️  Caution: More tools = more tokens in prompt            │
-    │  ⚠️  Caution: Similar tools can confuse LLM selection       │
+    │  ✅ Benefit: Agent chooses appropriate tool                 │
+    │  ✅ Benefit: Multiple capabilities in one agent             │
+    │  ✅ Benefit: Extensible (add more tools easily)             │
+    │  ⚠️  Caution: Too many tools can confuse the agent          │
     └─────────────────────────────────────────────────────────────┘
     """
     print_section("Demo 3: Multi-Tool Agent")
 
     # define multiple tools
     @tool
-    def calculator(expression: str) -> float:
+    def calculator(expression: str) -> str:
         """evaluate mathematical expressions"""
-        return eval(expression)
+        try:
+            return str(float(eval(expression)))
+        except Exception as e:
+            return f"Error: {str(e)}"
 
     @tool
     def string_reverse(text: str) -> str:
-        """reverse a string. useful for text manipulation"""
+        """reverse a string"""
         return text[::-1]
 
     @tool
     def string_upper(text: str) -> str:
-        """convert text to uppercase letters"""
+        """convert string to uppercase"""
         return text.upper()
 
-    # create agent with multiple tools
     llm = ChatOpenAI(model="gpt-4o-mini", temperature=0)
     tools = [calculator, string_reverse, string_upper]
 
-    prompt = ChatPromptTemplate.from_messages([
-        ("system", cleandoc("""
-            You are a helpful assistant with access to tools.
-            Tools: {tools}
-            Tool names: {tool_names}
-
-            Use ReAct format to solve tasks step by step.
-        """)),
-        ("user", "{input}"),
-        ("assistant", "{agent_scratchpad}"),
-    ])
-
-    agent = create_react_agent(llm=llm, tools=tools, prompt=prompt)
-    executor = AgentExecutor(agent=agent, tools=tools, verbose=True, max_iterations=5)
+    agent = create_agent(model=llm, tools=tools)
 
     print("\n1. Agent has 3 tools:")
     for t in tools:
         print(f"   • {t.name}: {t.description}")
 
-    print("\n2. Complex task: 'Reverse hello, uppercase it, then calculate 5*5'")
-    result = executor.invoke({
-        "input": "Reverse the word 'hello', convert it to uppercase, and calculate 5 * 5"
-    })
-    print(f"\n3. Result: {result['output']}")
-    print("\n4. Notice: Agent selected appropriate tools in sequence")
+    # test different queries
+    test_queries = [
+        "What is 25 * 48 + 100?",
+        "Reverse the string 'hello'",
+        "Convert 'python' to uppercase",
+    ]
 
+    for i, query in enumerate(test_queries, 1):
+        print(f"\n{i+1}. Query: {query}")
+        result = agent.invoke({"messages": [HumanMessage(content=query)]})
+        final_answer = result["messages"][-1].content
+        print(f"   Answer: {final_answer}")
 
-def demo_agent_with_memory() -> None:
-    """
-    demonstrate agent with conversational memory
-
-    Agent + Memory Integration Pattern:
-    ┌─────────────────────────────────────────────────────────────┐
-    │      Agent with Memory: Stateful Conversations + Tools      │
-    │                                                             │
-    │  Turn 1: "My favorite number is 42"                         │
-    │     Memory Store: [] (empty)                                │
-    │         ↓                                                   │
-    │     Agent: "I'll remember that your favorite number is 42!" │
-    │         ↓                                                   │
-    │     Memory Store: [                                         │
-    │         User: "My favorite number is 42",                   │
-    │         AI: "I'll remember..."                              │
-    │     ]                                                       │
-    │                                                             │
-    │  Turn 2: "Calculate my favorite number * 2"                 │
-    │     Memory → Agent: [previous conversation]                 │
-    │         ↓                                                   │
-    │     Agent Reasoning:                                        │
-    │       Thought: User's favorite is 42 (from memory)          │
-    │       Thought: Need to calculate 42 * 2                     │
-    │       Action: calculator                                    │
-    │       Input: "42 * 2"                                       │
-    │         ↓                                                   │
-    │     Tool: calculator("42 * 2") → 84.0                       │
-    │         ↓                                                   │
-    │     Agent: Final Answer: "84"                               │
-    │         ↓                                                   │
-    │     Memory Store: [                                         │
-    │         User: "My favorite number is 42",                   │
-    │         AI: "I'll remember...",                             │
-    │         User: "Calculate my favorite * 2",                  │
-    │         AI: "84"                                            │
-    │     ]                                                       │
-    │                                                             │
-    │  Key Flow:                                                  │
-    │     1. Memory provides context to agent                     │
-    │     2. Agent uses context + tools to solve task             │
-    │     3. Results stored back in memory                        │
-    │     4. Next turn has full conversational context            │
-    │                                                             │
-    │  ✅ Benefit: Agent remembers preferences and past actions   │
-    │  ✅ Benefit: Natural multi-turn conversations with tools    │
-    │  ✅ Benefit: Can reference previous tool results            │
-    │  ⚠️  Caution: Memory grows unbounded (use window/summary)   │
-    └─────────────────────────────────────────────────────────────┘
-    """
-    print_section("Demo 4: Agent with Memory")
-
-    # define calculator tool
-    @tool
-    def calculator(expression: str) -> float:
-        """evaluate mathematical expressions"""
-        return eval(expression)
-
-    # create memory
-    memory = ConversationBufferMemory(
-        memory_key="chat_history",
-        return_messages=True,
-    )
-
-    # create prompt with memory placeholder
-    prompt = ChatPromptTemplate.from_messages([
-        ("system", cleandoc("""
-            You are a helpful assistant with access to tools.
-            Tools: {tools}
-            Tool names: {tool_names}
-        """)),
-        MessagesPlaceholder(variable_name="chat_history"),
-        ("user", "{input}"),
-        ("assistant", "{agent_scratchpad}"),
-    ])
-
-    llm = ChatOpenAI(model="gpt-4o-mini", temperature=0)
-    tools = [calculator]
-
-    agent = create_react_agent(llm=llm, tools=tools, prompt=prompt)
-    executor = AgentExecutor(
-        agent=agent,
-        tools=tools,
-        memory=memory,
-        verbose=True,
-        max_iterations=5,
-    )
-
-    print("\n1. Turn 1: Tell agent your favorite number")
-    result1 = executor.invoke({"input": "My favorite number is 42"})
-    print(f"   Agent: {result1['output']}")
-
-    print("\n2. Turn 2: Reference previous context")
-    result2 = executor.invoke({"input": "Calculate my favorite number times 2"})
-    print(f"   Agent: {result2['output']}")
-
-    print("\n3. Memory preserved context:")
-    print(f"   ✓ Agent remembered '42' from Turn 1")
-    print(f"   ✓ Used calculator tool with correct value")
+    print("\n5. Tool selection insights:")
+    print("   • Agent analyzes query semantics")
+    print("   • Matches query to tool description")
+    print("   • Executes most relevant tool")
 
 
 def demo_custom_tool_class() -> None:
     """
-    demonstrate custom tool with BaseTool class
+    demonstrate custom tool using BaseTool class
 
     Custom Tool Class Pattern:
     ┌─────────────────────────────────────────────────────────────┐
-    │     BaseTool: Advanced Tool with State and Validation       │
+    │         BaseTool: Stateful Tools with Advanced Features     │
     │                                                             │
-    │  Class Definition:                                          │
+    │  @tool Decorator (Simple):                                  │
+    │     @tool                                                   │
+    │     def search(query: str) -> str:                          │
+    │         return api_call(query)                              │
+    │                                                             │
+    │  ✅ Good for: Stateless functions                           │
+    │  ❌ Limitations: No state, no complex initialization        │
+    │                                                             │
+    │  BaseTool Class (Advanced):                                 │
     │     class WeatherTool(BaseTool):                            │
     │         name: str = "weather"                               │
-    │         description: str = "get weather for city"           │
-    │         api_key: str = Field(default="demo-key")            │
+    │         description: str = "get weather"                    │
+    │         api_key: str = Field(...)  # state!                 │
     │                                                             │
     │         def _run(self, city: str) -> str:                   │
-    │             # synchronous execution                         │
-    │             return self._fetch_weather(city)                │
+    │             # use self.api_key                              │
+    │             return fetch_weather(city, self.api_key)        │
     │                                                             │
-    │         async def _arun(self, city: str) -> str:            │
-    │             # async execution (optional)                    │
-    │             return await self._fetch_weather_async(city)    │
+    │  ✅ Good for: Stateful tools, API clients, DB connections   │
+    │  ✅ Good for: Async support, error handling, retries        │
+    │  ✅ Good for: Complex initialization logic                  │
     │                                                             │
-    │  Advantages over @tool:                                     │
-    │     ✓ Stateful: Can store configuration (api_key, cache)   │
-    │     ✓ Lifecycle: __init__, cleanup methods                  │
-    │     ✓ Validation: Pydantic models for complex inputs        │
-    │     ✓ Async Support: Built-in async execution              │
-    │     ✓ Error Handling: Centralized exception handling        │
-    │                                                             │
-    │  Execution Flow:                                            │
-    │     User: "What's the weather in Tokyo?"                    │
-    │         ↓                                                   │
-    │     Agent: Action: weather                                  │
-    │            Input: "Tokyo"                                   │
-    │         ↓                                                   │
-    │     WeatherTool._run("Tokyo")                               │
-    │         ↓                                                   │
-    │     1. Validate city name                                   │
-    │     2. Check cache for recent result                        │
-    │     3. If cache miss, fetch from API                        │
-    │     4. Store in cache                                       │
-    │     5. Return formatted result                              │
-    │         ↓                                                   │
-    │     Result: "Tokyo: 25°C, sunny"                            │
-    │         ↓                                                   │
-    │     Agent: Final Answer: "Tokyo is 25°C and sunny"          │
-    │                                                             │
-    │  When to Use BaseTool:                                      │
-    │     • Need to maintain state (connections, caches)          │
-    │     • Complex initialization (API clients, databases)       │
-    │     • Advanced validation (Pydantic schemas)                │
-    │     • Async operations required                             │
-    │                                                             │
-    │  ✅ Benefit: Full control over tool behavior                │
-    │  ✅ Benefit: Can maintain connections and state             │
-    │  ✅ Benefit: Pydantic validation for inputs                 │
-    │  ⚠️  Caution: More complex than @tool decorator             │
+    │  When to use each:                                          │
+    │     @tool → Simple stateless functions                      │
+    │     BaseTool → Stateful tools with configuration            │
     └─────────────────────────────────────────────────────────────┘
     """
-    print_section("Demo 5: Custom Tool with BaseTool")
+    print_section("Demo 4: Custom Tool Class with BaseTool")
 
     # define custom tool class
     class WeatherTool(BaseTool):
@@ -525,354 +342,273 @@ def demo_custom_tool_class() -> None:
                 "tokyo": "25°C, sunny",
                 "london": "15°C, rainy",
                 "paris": "20°C, cloudy",
-                "new york": "18°C, partly cloudy",
             }
-
-            weather = weather_data.get(city.lower(), "Unknown location")
+            weather = weather_data.get(city.lower(), "Weather data not available")
             return f"{city}: {weather}"
 
         async def _arun(self, city: str) -> str:
-            """async execution (required but can raise NotImplementedError)"""
+            """async execution"""
             return self._run(city)
 
-    # create tool instance
+    print("1. Custom tool class created:")
     weather_tool = WeatherTool()
+    print(f"   • name: {weather_tool.name}")
+    print(f"   • description: {weather_tool.description}")
+    print(f"   • api_key: {weather_tool.api_key}")
 
-    print("\n1. Custom tool created:")
-    print(f"   Name: {weather_tool.name}")
-    print(f"   Description: {weather_tool.description}")
-    print(f"   Has state: api_key = {weather_tool.api_key}")
+    print("\n2. Direct tool execution:")
+    result = weather_tool._run("Tokyo")
+    print(f"   {result}")
 
-    print("\n2. Test tool directly:")
-    result = weather_tool.invoke({"city": "Tokyo"})
-    print(f"   weather('Tokyo') = {result}")
-
-    print("\n3. Use in agent:")
+    print("\n3. Using custom tool with agent:")
     llm = ChatOpenAI(model="gpt-4o-mini", temperature=0)
-    prompt = ChatPromptTemplate.from_messages([
-        ("system", "You are a helpful assistant. Tools: {tools}, Tool names: {tool_names}"),
-        ("user", "{input}"),
-        ("assistant", "{agent_scratchpad}"),
-    ])
+    agent = create_agent(model=llm, tools=[weather_tool])
 
-    agent = create_react_agent(llm=llm, tools=[weather_tool], prompt=prompt)
-    executor = AgentExecutor(agent=agent, tools=[weather_tool], verbose=True, max_iterations=3)
+    query = "What's the weather in Paris?"
+    result = agent.invoke({"messages": [HumanMessage(content=query)]})
+    final_answer = result["messages"][-1].content
+    print(f"   Query: {query}")
+    print(f"   Answer: {final_answer}")
 
-    result = executor.invoke({"input": "What's the weather in Paris?"})
-    print(f"\n4. Agent result: {result['output']}")
+    print("\n4. BaseTool advantages:")
+    print("   • State management (api_key)")
+    print("   • Sync and async support")
+    print("   • Complex initialization")
+    print("   • Error handling hooks")
 
 
 def demo_error_handling() -> None:
     """
-    demonstrate agent error handling strategies
+    demonstrate error handling in agent tools
 
-    Error Handling Pattern:
+    Error Handling Strategies:
     ┌─────────────────────────────────────────────────────────────┐
-    │         Agent Error Handling: Graceful Degradation          │
+    │              Tool Error Handling Patterns                   │
     │                                                             │
-    │  Tool with Error Handling:                                  │
+    │  Strategy 1: Graceful Degradation                           │
     │     @tool                                                   │
-    │     def risky_api(query: str) -> str:                       │
+    │     def search(query: str) -> str:                          │
     │         try:                                                │
-    │             return external_api.call(query)                 │
+    │             return api_call(query)                          │
+    │         except APIError:                                    │
+    │             return "Search unavailable"                     │
+    │                                                             │
+    │  Strategy 2: Error Reporting                                │
+    │     @tool                                                   │
+    │     def search(query: str) -> str:                          │
+    │         try:                                                │
+    │             return api_call(query)                          │
     │         except APIError as e:                               │
-    │             return f"Error: {e}. Try different approach"    │
+    │             return f"Error: {str(e)}"                       │
     │                                                             │
-    │  Scenario 1: Tool Failure (Graceful)                        │
-    │     User: "Call the API with 'test'"                        │
-    │         ↓                                                   │
-    │     Agent: Action: risky_api("test")                        │
-    │         ↓                                                   │
-    │     Tool: API fails → returns error message                 │
-    │         ↓                                                   │
-    │     Observation: "Error: Rate limit. Try different..."      │
-    │         ↓                                                   │
-    │     Agent: Thought: API failed, need alternative            │
-    │            Action: backup_tool                              │
-    │         ↓                                                   │
-    │     Agent adapts to failure! ✓                              │
+    │  Strategy 3: Fallback Tools                                 │
+    │     tools = [primary_search, backup_search]                 │
+    │     # Agent tries primary, falls back to backup             │
     │                                                             │
-    │  Scenario 2: Max Iterations Protection                      │
-    │     Iteration 1: tool_a() → needs more info                 │
-    │     Iteration 2: tool_b() → needs more info                 │
-    │     Iteration 3: tool_c() → needs more info                 │
-    │     Iteration 4: tool_d() → needs more info                 │
-    │     Iteration 5: STOP (max_iterations=5)                    │
-    │         ↓                                                   │
-    │     Forced conclusion prevents infinite loop ✓              │
+    │  Strategy 4: Validation                                     │
+    │     @tool                                                   │
+    │     def divide(a: float, b: float) -> str:                  │
+    │         if b == 0:                                          │
+    │             return "Cannot divide by zero"                  │
+    │         return str(a / b)                                   │
     │                                                             │
-    │  Scenario 3: Timeout Protection                             │
-    │     Start: 00:00                                            │
-    │     Tool call: slow_api() → takes 25 seconds                │
-    │     Time: 00:25                                             │
-    │     Another call: another_slow_api() → ...                  │
-    │     Time: 00:31 → TIMEOUT (max_execution_time=30)           │
-    │         ↓                                                   │
-    │     Execution stopped to prevent hanging ✓                  │
-    │                                                             │
-    │  Scenario 4: Parsing Error Handling                         │
-    │     Agent: "Action: invalid_format_here!!!"                 │
-    │         ↓                                                   │
-    │     Parser: Cannot parse action format                      │
-    │         ↓                                                   │
-    │     handle_parsing_errors=True:                             │
-    │       "Invalid format. Use: Action: tool_name"              │
-    │         ↓                                                   │
-    │     Agent: Retries with correct format ✓                    │
-    │                                                             │
-    │  Best Practices:                                            │
-    │     1. max_iterations=5-10 (prevent infinite loops)         │
-    │     2. max_execution_time=30-60s (timeout protection)       │
-    │     3. handle_parsing_errors=True (LLM format errors)       │
-    │     4. Tool try-except with helpful error messages          │
-    │     5. return_intermediate_steps=False (reduce tokens)      │
-    │                                                             │
-    │  ✅ Benefit: Robust agents that handle failures gracefully  │
-    │  ✅ Benefit: Prevents resource exhaustion                   │
-    │  ✅ Benefit: Clear error messages help debugging            │
-    │  ⚠️  Caution: Too strict limits may prevent task completion │
+    │  ✅ Benefit: Agent continues despite tool failures          │
+    │  ✅ Benefit: Clear error messages guide agent               │
+    │  ⚠️  Caution: Don't hide critical errors                    │
     └─────────────────────────────────────────────────────────────┘
     """
-    print_section("Demo 6: Error Handling")
+    print_section("Demo 5: Error Handling in Tools")
 
     # tool with error handling
     @tool
-    def risky_operation(query: str) -> str:
-        """operation that might fail. use this to test error handling"""
-        if "fail" in query.lower():
-            return "Error: Operation failed. Please try a different query."
-        return f"Success: Processed '{query}'"
+    def safe_divide(numerator: float, denominator: float) -> str:
+        """divide two numbers with error handling"""
+        if denominator == 0:
+            return "Error: Cannot divide by zero"
+        try:
+            result = numerator / denominator
+            return str(result)
+        except Exception as e:
+            return f"Error: {str(e)}"
 
-    # backup tool
-    @tool
-    def safe_operation(query: str) -> str:
-        """safe backup operation that always works"""
-        return f"Safe result for: {query}"
+    print("1. Tool with error handling:")
+    print(f"   • {safe_divide.name}: {safe_divide.description}")
 
+    print("\n2. Testing error cases:")
+    test_cases = [
+        (10, 2, "Valid division"),
+        (10, 0, "Division by zero"),
+        (5, 0.5, "Valid division with float"),
+    ]
+
+    for num, den, desc in test_cases:
+        result = safe_divide.invoke({"numerator": num, "denominator": den})
+        print(f"   • {desc}: {num}/{den} = {result}")
+
+    print("\n3. Using with agent:")
     llm = ChatOpenAI(model="gpt-4o-mini", temperature=0)
-    tools = [risky_operation, safe_operation]
+    agent = create_agent(model=llm, tools=[safe_divide])
 
-    prompt = ChatPromptTemplate.from_messages([
-        ("system", cleandoc("""
-            You are a helpful assistant with access to tools.
-            If a tool fails, try an alternative approach.
-            Tools: {tools}
-            Tool names: {tool_names}
-        """)),
-        ("user", "{input}"),
-        ("assistant", "{agent_scratchpad}"),
-    ])
+    queries = [
+        "What is 100 divided by 5?",
+        "What is 10 divided by 0?",
+    ]
 
-    agent = create_react_agent(llm=llm, tools=tools, prompt=prompt)
-    executor = AgentExecutor(
-        agent=agent,
-        tools=tools,
-        verbose=True,
-        max_iterations=5,  # prevent infinite loops
-        max_execution_time=30,  # 30 second timeout
-        handle_parsing_errors=True,  # handle LLM format errors
-    )
+    for query in queries:
+        result = agent.invoke({"messages": [HumanMessage(content=query)]})
+        final_answer = result["messages"][-1].content
+        print(f"\n   Query: {query}")
+        print(f"   Answer: {final_answer}")
 
-    print("\n1. Test 1: Trigger failure, see agent adapt")
-    result = executor.invoke({"input": "Use risky_operation with 'fail please'"})
-    print(f"\n   Result: {result['output']}")
-    print("   ✓ Agent handled error gracefully")
-
-    print("\n2. Error protection configured:")
-    print(f"   • max_iterations: 5")
-    print(f"   • max_execution_time: 30s")
-    print(f"   • handle_parsing_errors: True")
+    print("\n4. Error handling best practices:")
+    print("   • Validate inputs before execution")
+    print("   • Return descriptive error messages")
+    print("   • Don't crash the agent")
+    print("   • Log errors for debugging")
 
 
 def demo_web_search_agent() -> None:
     """
-    demonstrate agent with real web search (DuckDuckGo)
+    demonstrate agent with web search capability
 
     Web Search Agent Pattern:
-    ┌─────────────────────────────────────────────────────────────┐
-    │      Web Search Agent: Real-Time Information Retrieval      │
-    │                                                             │
-    │  Tool: DuckDuckGoSearchRun                                  │
-    │     • No API key required (free)                            │
-    │     • Returns web search results                            │
-    │     • Handles current information queries                   │
-    │                                                             │
-    │  Query: "What are the latest Python features in 2024?"      │
-    │                                                             │
-    │  Agent Reasoning:                                           │
-    │     ┌─────────────────────────────────────┐                 │
-    │     │ Thought: This requires current info │                 │
-    │     │          beyond my training data    │                 │
-    │     │                                     │                 │
-    │     │ Action: duckduckgo_search           │                 │
-    │     │ Input: "Python 2024 new features"   │                 │
-    │     │         ↓                           │                 │
-    │     │ [Web Search Execution]              │                 │
-    │     │         ↓                           │                 │
-    │     │ Observation: "Python 3.12 released  │                 │
-    │     │  with improved error messages,      │                 │
-    │     │  PEP 701, f-strings improvements,   │                 │
-    │     │  per-interpreter GIL..."            │                 │
-    │     │         ↓                           │                 │
-    │     │ Thought: I have comprehensive info  │                 │
-    │     │                                     │                 │
-    │     │ Action: Final Answer                │                 │
-    │     │ Input: [Summarized search results] │                 │
-    │     └─────────────────────────────────────┘                 │
-    │                                                             │
-    │  Use Cases:                                                 │
-    │     • Current events and news                               │
-    │     • Recent product releases                               │
-    │     • Technical documentation updates                       │
-    │     • Real-time data (weather, stocks)                      │
-    │     • Fact-checking recent claims                           │
-    │                                                             │
-    │  Tool Comparison:                                           │
-    │     DuckDuckGo: Free, no key, privacy-focused               │
-    │     Google: Requires API key, more results                  │
-    │     Bing: Requires API key, news focus                      │
-    │     Tavily: Paid, AI-optimized results                      │
-    │                                                             │
-    │  ✅ Benefit: Access to current real-world information       │
-    │  ✅ Benefit: No API key required (DuckDuckGo)               │
-    │  ✅ Benefit: Extends LLM beyond training cutoff             │
-    │  ⚠️  Caution: Search results quality varies                 │
-    │  ⚠️  Caution: May return irrelevant or outdated info        │
-    └─────────────────────────────────────────────────────────────┘
+    ┌───────────────────────────────────────────────────────────────┐
+    │         Agent with Real-World Information Access              │
+    │                                                               │
+    │  Pre-built Tool: DuckDuckGoSearchRun                          │
+    │     from langchain_community.tools import DuckDuckGoSearchRun │
+    │     search = DuckDuckGoSearchRun()                            │
+    │                                                               │
+    │  Agent Flow:                                                  │
+    │     User: "What's the latest news about Python?"              │
+    │       ↓                                                       │
+    │     Agent: "I need current information"                       │
+    │       ↓                                                       │
+    │     Action: search("Python news 2024")                        │
+    │       ↓                                                       │
+    │     Observation: [search results]                             │
+    │       ↓                                                       │
+    │     Agent synthesizes answer from results                     │
+    │                                                               │
+    │  Use Cases:                                                   │
+    │     • Current events and news                                 │
+    │     • Real-time information                                   │
+    │     • Fact-checking                                           │
+    │     • Research and discovery                                  │
+    │                                                               │
+    │  ✅ Benefit: Access to current information                    │
+    │  ✅ Benefit: Grounded in real data                            │
+    │  ⚠️  Caution: Search results may be noisy                     │
+    │  ⚠️  Caution: API rate limits apply                           │
+    └───────────────────────────────────────────────────────────────┘
     """
-    print_section("Demo 7: Web Search Agent (DuckDuckGo)")
+    print_section("Demo 6: Web Search Agent")
 
-    # create web search tool (no API key needed!)
+    print("1. Creating web search tool...")
     search = DuckDuckGoSearchRun()
+    print(f"   • Tool: {search.name}")
+    print(f"   • Description: {search.description}")
 
-    print("\n1. Web search tool created (DuckDuckGo)")
-    print(f"   Name: {search.name}")
-    print(f"   Description: {search.description}")
-
-    # create agent with search capability
+    print("\n2. Creating agent with search capability...")
     llm = ChatOpenAI(model="gpt-4o-mini", temperature=0)
+    agent = create_agent(model=llm, tools=[search])
 
-    prompt = ChatPromptTemplate.from_messages([
-        ("system", cleandoc("""
-            You are a helpful assistant with access to web search.
-            Use search for current information beyond your training data.
-            Tools: {tools}
-            Tool names: {tool_names}
-        """)),
-        ("user", "{input}"),
-        ("assistant", "{agent_scratchpad}"),
-    ])
+    print("\n3. Testing search queries:")
+    queries = [
+        "What is LangChain?",
+        "What is the capital of France?",
+    ]
 
-    agent = create_react_agent(llm=llm, tools=[search], prompt=prompt)
-    executor = AgentExecutor(
-        agent=agent,
-        tools=[search],
-        verbose=True,
-        max_iterations=3,
-    )
+    for query in queries:
+        print(f"\n   Query: {query}")
+        try:
+            result = agent.invoke({"messages": [HumanMessage(content=query)]})
+            final_answer = result["messages"][-1].content
+            # truncate long answers
+            if len(final_answer) > 200:
+                final_answer = final_answer[:200] + "..."
+            print(f"   Answer: {final_answer}")
+        except Exception as e:
+            print(f"   Error: {str(e)}")
 
-    print("\n2. Query requiring current information:")
-    print("   'What are the latest features in Python 3.12?'")
-
-    result = executor.invoke({
-        "input": "What are the latest features in Python 3.12?"
-    })
-
-    print(f"\n3. Agent used web search to find current information")
-    print(f"   Answer: {result['output'][:200]}...")
+    print("\n4. Web search agent insights:")
+    print("   • Provides real-time information")
+    print("   • Complements LLM's training data")
+    print("   • Useful for current events")
+    print("   • Rate limits may apply")
 
 
 def demo_phase4_comparison() -> None:
     """
-    compare Phase 4 custom agent with LangChain agent
+    compare Phase 4 custom agents with LangChain agents
 
     Phase 4 vs LangChain Comparison:
-    ┌────────────────────────────────────────────────────────────┐
-    │         Your Phase 4 Agent vs LangChain Agent              │
-    │                                                            │
-    │  PHASE 4: Custom Implementation                            │
-    │  ──────────────────────────────────────────────────────────│
-    │  Code Structure:                                           │
-    │     class ReActAgent:                                      │
-    │         def __init__(self, registry: ToolRegistry):        │
-    │             self.registry = registry                       │
-    │             self.max_iterations = 5                        │
-    │                                                            │
-    │         def run(self, task: str) -> str:                   │
-    │             for i in range(self.max_iterations):           │
-    │                 # 1. Generate thought/action               │
-    │                 response = self.llm.generate(prompt)       │
-    │                 thought, action, input = parse(response)   │
-    │                                                            │
-    │                 # 2. Execute tool                          │
-    │                 tool = self.registry.get(action)           │
-    │                 observation = tool.execute(input)          │
-    │                                                            │
-    │                 # 3. Check completion                      │
-    │                 if action == "Final Answer":               │
-    │                     return observation                     │
-    │                                                            │
-    │  ✅ Learning value: Understand core concepts               │
-    │  ✅ Full control: Custom logic and behavior                │
-    │  ✅ Explicit: Every step visible and modifiable            │
-    │  ❌ Boilerplate: More code to write                        │
-    │  ❌ Maintenance: Must handle edge cases yourself           │
-    │                                                            │
-    │  LANGCHAIN: Framework Implementation                       │
-    │  ──────────────────────────────────────────────────────────│
-    │  Code Structure:                                           │
-    │     @tool                                                  │
-    │     def calculator(expr: str) -> float:                    │
-    │         return eval(expr)                                  │
-    │                                                            │
-    │     agent = create_react_agent(llm, [calculator], prompt)  │
-    │     executor = AgentExecutor(agent, [calculator])          │
-    │     result = executor.invoke({"input": "2+2"})             │
-    │                                                            │
-    │  ✅ Concise: Less boilerplate code                         │
-    │  ✅ Robust: Built-in error handling                        │
-    │  ✅ Features: Memory, callbacks, streaming built-in        │
-    │  ✅ Community: Pre-built tools and integrations            │
-    │  ❌ Abstraction: Less visible internal logic               │
-    │  ❌ Framework lock-in: Tied to LangChain updates           │
-    │                                                            │
-    │  Side-by-Side Execution:                                   │
-    │  ──────────────────────────────────────────────────────────│
-    │  Task: "Calculate 25 * 48 + 100"                           │
-    │                                                            │
-    │  Phase 4:                          LangChain:              │
-    │    1. Parse LLM response              Automatic            │
-    │    2. Lookup tool in registry         Automatic            │
-    │    3. Execute tool                    Automatic            │
-    │    4. Handle errors                   Automatic            │
-    │    5. Check iterations                Automatic            │
-    │    6. Format output                   Automatic            │
-    │    → Result: 1300                     Result: 1300         │
-    │                                                            │
-    │  When to Use Each:                                         │
-    │  ──────────────────────────────────────────────────────────│
-    │  Phase 4 (Custom):                                          │
-    │    • Learning fundamentals of agent architecture            │
-    │    • Need complete control over behavior                    │
-    │    • Custom logic that doesn't fit frameworks               │
-    │    • Educational projects and experimentation               │
+    ┌─────────────────────────────────────────────────────────────┐
+    │        Custom ReActAgent (Phase 4)                          │
     │                                                             │
-    │  LangChain:                                                 │
-    │    • Production applications needing robust agents          │
-    │    • Rapid prototyping and development                      │
-    │    • Leveraging community tools and integrations            │
-    │    • Standard agent patterns and workflows                  │
+    │  class ReActAgent:                                          │
+    │      def __init__(self, registry: ToolRegistry):            │
+    │          self.registry = registry                           │
+    │          self.max_iterations = 5                            │
     │                                                             │
-    │  Key Insight: Your Phase 4 work taught you HOW agents       │
-    │  work internally. LangChain provides production-ready       │
-    │  implementation of those same concepts.                     │
+    │      def run(self, task: str) -> str:                       │
+    │          for i in range(self.max_iterations):               │
+    │              # 1. Generate thought and action               │
+    │              response = self.llm.generate(prompt)           │
+    │              thought, action, action_input = self.parse()   │
+    │                                                             │
+    │              # 2. Execute tool                              │
+    │              tool = self.registry.get(action)               │
+    │              observation = tool.execute(action_input)       │
+    │                                                             │
+    │              # 3. Check if done                             │
+    │              if action == "Final Answer":                   │
+    │                  return observation                         │
+    │          return "Max iterations reached"                    │
+    │                                                             │
+    │  ✅ Learning: Full control, understand internals            │
+    │  ❌ Production: Manual error handling, no streaming         │
+    │                                                             │
+    ├─────────────────────────────────────────────────────────────┤
+    │        LangChain / LangGraph Agent                          │
+    │                                                             │
+    │  @tool                                                      │
+    │  def calculator(expr: str) -> str:                          │
+    │      return str(eval(expr))                                 │
+    │                                                             │
+    │  agent = create_agent(                                      │
+    │      model=ChatOpenAI(model="gpt-4o-mini"),                 │
+    │      tools=[calculator]                                     │
+    │  )                                                          │
+    │  result = agent.invoke({                                    │
+    │      "messages": [HumanMessage(content="2+2")]              │
+    │  })                                                         │
+    │                                                             │
+    │  ✅ Production: Built-in features, robust, tested           │
+    │  ✅ Concise: Less boilerplate code                          │
+    │  ❌ Learning: Internal logic abstracted                     │
+    │                                                             │
+    ├─────────────────────────────────────────────────────────────┤
+    │                When to Use Each                             │
+    │                                                             │
+    │  Phase 4 Custom:                                            │
+    │    • Learning agent fundamentals                            │
+    │    • Understanding ReAct pattern                            │
+    │    • Prototyping new patterns                               │
+    │    • Educational purposes                                   │
+    │                                                             │
+    │  LangChain / LangGraph:                                     │
+    │    • Production applications                                │
+    │    • Rapid development                                      │
+    │    • Need advanced features                                 │
+    │    • Standard use cases                                     │
     └─────────────────────────────────────────────────────────────┘
     """
-    print_section("Demo 8: Phase 4 vs LangChain Comparison")
+    print_section("Demo 7: Phase 4 vs LangChain Comparison")
 
     print(cleandoc("""
-        YOUR PHASE 4 AGENT:
-        ═══════════════════════════════════════════════════════════
+        Your Phase 4 ReActAgent (Custom Implementation):
+        ================================================
 
         class ReActAgent:
             def __init__(self, registry: ToolRegistry):
@@ -881,79 +617,71 @@ def demo_phase4_comparison() -> None:
 
             def run(self, task: str) -> str:
                 for i in range(self.max_iterations):
-                    # Manual prompt construction
-                    prompt = self._build_prompt(task, history)
-
-                    # Manual LLM call
+                    # 1. Generate thought and action
                     response = self.llm.generate(prompt)
+                    thought, action, action_input = self.parse(response)
 
-                    # Manual parsing
-                    thought, action, input = self._parse(response)
-
-                    # Manual tool lookup
+                    # 2. Execute tool
                     tool = self.registry.get(action)
+                    observation = tool.execute(action_input)
 
-                    # Manual execution
-                    observation = tool.execute(input)
-
-                    # Manual completion check
+                    # 3. Check if done
                     if action == "Final Answer":
                         return observation
 
                 return "Max iterations reached"
 
-        ✅ Learning: Taught you how agents work internally
-        ✅ Control: Complete control over every step
-        ❌ Boilerplate: ~100+ lines of code
+        ✅ Full control: Every step is explicit
+        ✅ Learning: Understand agent internals
+        ✅ Customization: Easy to modify logic
+        ❌ Manual work: Error handling, retries, memory
+        ❌ Missing: Streaming, async, advanced features
+    """))
 
+    print(cleandoc("""
 
-        LANGCHAIN EQUIVALENT:
-        ═══════════════════════════════════════════════════════════
+        LangChain / LangGraph Agent (Framework):
+        =========================================
 
         @tool
-        def calculator(expr: str) -> float:
-            return eval(expr)
+        def calculator(expr: str) -> str:
+            return str(eval(expr))
 
-        agent = create_react_agent(llm, [calculator], prompt)
-        executor = AgentExecutor(agent, [calculator])
-        result = executor.invoke({"input": "Calculate 2+2"})
+        agent = create_agent(
+            model=ChatOpenAI(model="gpt-4o-mini"),
+            tools=[calculator]
+        )
+        result = agent.invoke({
+            "messages": [HumanMessage(content="Calculate 2+2")]
+        })
 
         ✅ Concise: ~10 lines of code
-        ✅ Robust: Built-in error handling, retries, memory
+        ✅ Robust: Built-in error handling, retries
+        ✅ Features: Streaming, async, memory, callbacks
+        ✅ Production: Battle-tested, maintained
         ❌ Abstraction: Internal logic hidden
-
-
-        WHAT YOU LEARNED IN PHASE 4:
-        ═══════════════════════════════════════════════════════════
-
-        1. ReAct Pattern: How Thought → Action → Observation works
-        2. Tool Registry: How to organize and select tools
-        3. Parsing: How to extract actions from LLM responses
-        4. Iteration Control: How to prevent infinite loops
-        5. Error Handling: How to handle tool failures
-
-        → All these concepts are still present in LangChain,
-          just abstracted and production-hardened!
-
-
-        WHEN TO USE EACH:
-        ═══════════════════════════════════════════════════════════
-
-        Use Your Phase 4 Agent:
-            • Learning projects
-            • Complete custom control needed
-            • Non-standard agent architectures
-            • Educational demonstrations
-
-        Use LangChain:
-            • Production applications
-            • Rapid prototyping
-            • Standard agent patterns
-            • Leveraging community tools
-
-        Key Takeaway: Phase 4 taught you the fundamentals.
-        LangChain gives you production-ready implementations.
+        ❌ Less control: Framework makes decisions
     """))
+
+    print("\n\nWhen to Use Each:")
+    print("-" * 70)
+    print("\nPhase 4 Custom Agent:")
+    print("  • Learning how agents work internally")
+    print("  • Understanding ReAct pattern step-by-step")
+    print("  • Prototyping new agent patterns")
+    print("  • Educational and research purposes")
+
+    print("\nLangChain / LangGraph Agent:")
+    print("  • Production applications")
+    print("  • Rapid development and deployment")
+    print("  • Standard use cases and patterns")
+    print("  • Need advanced features out-of-the-box")
+
+    print("\n\nRecommendation:")
+    print("-" * 70)
+    print("  • Learn with Phase 4 custom implementation")
+    print("  • Build with LangChain / LangGraph for production")
+    print("  • Understand both to make informed choices")
 
 
 # endregion
@@ -961,33 +689,43 @@ def demo_phase4_comparison() -> None:
 
 def main() -> None:
     """run all practical demonstrations"""
-    print("\n" + "=" * 70)
-    print("  AGENTS & TOOLS - PRACTICAL DEMONSTRATIONS")
-    print("=" * 70)
-
-    # check API key
-    has_key, message = check_api_key()
-    print(f"\n{message}")
-
-    if not has_key:
-        print("\n" + "=" * 70)
-        print("  ⚠️  Cannot run demos without API key")
-        print("=" * 70)
+    # check api key
+    api_key_ok, message = check_api_key()
+    if not api_key_ok:
+        print(message)
         return
 
-    # run demos
-    demo_basic_tool_creation()
-    demo_create_react_agent()
-    demo_multi_tool_agent()
-    demo_agent_with_memory()
-    demo_custom_tool_class()
-    demo_error_handling()
-    demo_web_search_agent()
-    demo_phase4_comparison()
-
+    print(message)
     print("\n" + "=" * 70)
-    print("  ✅ All practical demonstrations complete!")
+    print("  LangChain Agents & Tools - Practical Demonstrations")
+    print("  Using LangChain 1.0+ / LangGraph API")
     print("=" * 70)
+
+    try:
+        # run demos
+        demo_basic_tool_creation()
+        demo_create_agent()
+        demo_multi_tool_agent()
+        demo_custom_tool_class()
+        demo_error_handling()
+        demo_web_search_agent()
+        demo_phase4_comparison()
+
+        print("\n" + "=" * 70)
+        print("  All demonstrations completed!")
+        print("=" * 70)
+        print("\nNext steps:")
+        print("  • Try modifying the examples")
+        print("  • Create your own tools")
+        print("  • Build a multi-agent system")
+        print("  • Explore exercises in README.md")
+
+    except KeyboardInterrupt:
+        print("\n\nInterrupted by user")
+    except Exception as e:
+        print(f"\n\n❌ Error running demonstrations: {e}")
+        import traceback
+        traceback.print_exc()
 
 
 if __name__ == "__main__":

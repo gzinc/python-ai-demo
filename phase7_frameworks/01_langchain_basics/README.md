@@ -68,22 +68,44 @@ result = chain.invoke({"text": text})
 
 ### 4. Memory
 **What you built**: `ChatMemory` class (Phase 3)
-**LangChain**: `ConversationBufferMemory`, `ConversationSummaryMemory`
+**LangChain**: `RunnableWithMessageHistory` (modern LCEL approach)
 
 ```python
 # Your way (Phase 3)
 memory = ChatMemory(strategy="sliding_window", max_messages=10)
 memory.add_message("user", "Hello")
 
-# LangChain way
-from langchain.memory import ConversationBufferWindowMemory
-memory = ConversationBufferWindowMemory(k=10)
-memory.save_context({"input": "Hello"}, {"output": "Hi there!"})
+# LangChain way (modern LangChain 1.0+ with LCEL)
+from langchain_core.runnables.history import RunnableWithMessageHistory
+from langchain_core.chat_history import InMemoryChatMessageHistory
+
+# simple chain
+chain = prompt | llm
+
+# add message history
+store = {}  # session_id -> chat history
+
+def get_session_history(session_id: str):
+    if session_id not in store:
+        store[session_id] = InMemoryChatMessageHistory()
+    return store[session_id]
+
+chain_with_history = RunnableWithMessageHistory(
+    chain,
+    get_session_history,
+    input_messages_key="input",
+    history_messages_key="history",
+)
+
+# use with session ID
+chain_with_history.invoke({"input": "Hello"}, config={"configurable": {"session_id": "user123"}})
 ```
+
+> **Note**: For legacy `ConversationBufferMemory` pattern, see [04_memory](04_memory/README.md#legacy-patterns--deprecated)
 
 ### 5. RAG
 **What you built**: Full RAG pipeline (Phase 3)
-**LangChain**: `RetrievalQA`, `ConversationalRetrievalChain`
+**LangChain**: LCEL-based RAG chains (modern approach)
 
 ```python
 # Your way (Phase 3)
@@ -94,18 +116,37 @@ results = db.search(query)
 context = assemble_context(results)
 response = llm.generate(prompt + context)
 
-# LangChain way
-from langchain.chains import RetrievalQA
+# LangChain way (modern LangChain 1.0+ with LCEL)
 from langchain_community.vectorstores import Chroma
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.runnables import RunnablePassthrough
 
+# setup vectorstore
 vectorstore = Chroma.from_documents(documents, embeddings)
-qa = RetrievalQA.from_chain_type(llm=llm, retriever=vectorstore.as_retriever())
-response = qa.invoke({"query": query})
+retriever = vectorstore.as_retriever()
+
+# create RAG chain with LCEL
+template = ChatPromptTemplate.from_template("""
+Answer based on context:
+{context}
+
+Question: {question}
+""")
+
+rag_chain = (
+    {"context": retriever, "question": RunnablePassthrough()}
+    | template
+    | llm
+)
+
+response = rag_chain.invoke("your question")
 ```
+
+> **Note**: For legacy `RetrievalQA` pattern, see [05_rag](05_rag/README.md#legacy-patterns--deprecated)
 
 ### 6. Agents & Tools
 **What you built**: `ReActAgent`, `ToolRegistry` (Phase 4)
-**LangChain**: `create_react_agent`, `@tool` decorator
+**LangChain**: `create_agent` (LangGraph), `@tool` decorator
 
 ```python
 # Your way (Phase 4)
@@ -118,14 +159,24 @@ registry = ToolRegistry()
 registry.register(WebSearchTool())
 agent = ReActAgent(registry=registry)
 
-# LangChain way
-from langchain.agents import create_react_agent, Tool
-from langchain_community.tools import DuckDuckGoSearchRun
+# LangChain way (modern LangChain 1.0+)
+from langchain.agents import create_agent
+from langchain.tools import tool
+from langchain_core.messages import HumanMessage
 
-search = DuckDuckGoSearchRun()
-tools = [Tool(name="search", func=search.run, description="Search the web")]
-agent = create_react_agent(llm=llm, tools=tools, prompt=prompt)
+@tool
+def web_search(query: str) -> str:
+    """search the web for information"""
+    return search_api(query)
+
+# create_agent returns executable CompiledStateGraph
+agent = create_agent(model=llm, tools=[web_search])
+
+# execute with message-based API
+result = agent.invoke({"messages": [HumanMessage(content="search for LangChain")]})
 ```
+
+> **Note**: For legacy `create_react_agent` + `AgentExecutor` pattern, see [06_agents_tools](06_agents_tools/README.md#legacy-patterns--deprecated)
 
 ---
 

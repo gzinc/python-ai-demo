@@ -83,9 +83,9 @@ def demo_react_pattern() -> None:
         ┌────────────────────────────────────────────────────────┐
         │  Iteration 1:                                          │
         │                                                        │
-        │  Thought: I need current sports information. My       │
-        │           training data ends in 2023, so I should     │
-        │           search the web for recent results.          │
+        │  Thought: I need current sports information. My        │
+        │           training data ends in 2023, so I should      │
+        │           search the web for recent results.           │
         │                                                        │
         │  Action: web_search                                    │
         │  Action Input: "2023 FIFA World Cup winner"            │

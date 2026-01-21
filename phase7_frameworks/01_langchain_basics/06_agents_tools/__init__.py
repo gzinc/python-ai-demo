@@ -6,10 +6,9 @@ comparing them to the custom agent implementations from Phase 4.
 
 Topics:
 - Tool creation with @tool decorator
-- create_react_agent pattern
-- AgentExecutor orchestration
+- create_agent pattern (LangGraph ReAct)
 - Multi-tool workflows
-- Custom tool implementation
+- Custom tool implementation (BaseTool)
 - Agent memory integration
 - Error handling and retries
 - Phase 4 vs LangChain comparison
