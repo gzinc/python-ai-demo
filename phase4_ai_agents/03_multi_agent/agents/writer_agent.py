@@ -169,7 +169,7 @@ class WriterAgent(BaseSpecialist):
                 ═══════════════════════════════════════════════════════════
 
                 ┌─────────────────────────────────────────────────────────┐
-                │                    KEY HIGHLIGHTS                        │
+                │                    KEY HIGHLIGHTS                       │
                 ├─────────────────────────────────────────────────────────┤
                 │  ✓ Objective achieved                                   │
                 │  ✓ Quality standards met                                │
@@ -178,13 +178,13 @@ class WriterAgent(BaseSpecialist):
                 └─────────────────────────────────────────────────────────┘
 
                 DETAILED BREAKDOWN:
-                ───────────────────
+                -------------------
                 → Phase 1: Complete ████████████ 100%
                 → Phase 2: In Progress ████████░░ 80%
                 → Phase 3: Pending ░░░░░░░░░░░░ 0%
 
                 RECOMMENDATIONS:
-                ───────────────────
+                -------------------
                 1. Approve Phase 2 completion
                 2. Initiate Phase 3 planning
                 3. Allocate resources accordingly

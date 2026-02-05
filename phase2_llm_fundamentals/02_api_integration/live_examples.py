@@ -225,16 +225,77 @@ def interactive_chat() -> None:
             break
 
 
-def main() -> None:
-    """run live API examples"""
+def show_menu(has_openai: bool = True, has_anthropic: bool = True) -> None:
+    """display interactive menu of available demos"""
     print("\n" + "=" * 60)
     print("  Live API Integration Examples")
     print("=" * 60)
+    print("\nAvailable demos:")
+    if has_openai:
+        print("  1. OpenAI examples (basic, streaming, code generation)")
+    if has_anthropic:
+        print("  2. Anthropic examples (basic, streaming, code generation)")
+    if has_openai or has_anthropic:
+        print("  3. interactive chat session")
+    print("\n  [a] Run all demos")
+    print("  [q] Quit")
+    print("=" * 60)
 
+
+def run_selected_demos(selections: str, has_openai: bool = True, has_anthropic: bool = True) -> bool:
+    """run selected demos based on user input"""
+    demo_map = {}
+    if has_openai:
+        demo_map["1"] = ("OpenAI examples", run_openai_examples)
+    if has_anthropic:
+        demo_map["2"] = ("Anthropic examples", run_anthropic_examples)
+    if has_openai or has_anthropic:
+        demo_map["3"] = ("interactive chat", interactive_chat)
+
+    if selections.lower() == "q":
+        return False
+
+    if selections.lower() == "a":
+        print("\n🚀 Running all demos...\n")
+        for name, func in demo_map.values():
+            func()
+        print("\n✅ All demos completed!")
+        print_section("Key Observations")
+        print(cleandoc("""
+            - Response times vary (network latency + model inference)
+            - Streaming feels more responsive
+            - Token counts affect cost
+            - Both providers have similar capabilities
+        """))
+        return True
+
+    # parse comma-separated selections
+    selected = [s.strip() for s in selections.split(",")]
+    valid_selections = [s for s in selected if s in demo_map]
+
+    if not valid_selections:
+        valid_range = f"1-{len(demo_map)}"
+        print(f"❌ Invalid selection. Please enter numbers ({valid_range}), 'a' for all, or 'q' to quit.")
+        return True
+
+    for selection in valid_selections:
+        name, func = demo_map[selection]
+        print(f"\n▶️  Running: {name}")
+        func()
+
+    print("\n✅ Selected demos completed!")
+    return True
+
+
+def main() -> None:
+    """interactive demo runner"""
     # check for keys
     has_openai = check_openai_key()
     has_anthropic = check_anthropic_key()
 
+    print("\n" + "=" * 60)
+    print("  Live API Integration Examples")
+    print("=" * 60)
     print("\nAPI Key Status:")
     print(f"  OpenAI:    {'✅ Found' if has_openai else '❌ Not set'}")
     print(f"  Anthropic: {'✅ Found' if has_anthropic else '❌ Not set'}")
@@ -247,39 +308,20 @@ def main() -> None:
         print("\nRun examples.py instead for pattern demonstrations.")
         sys.exit(1)
 
-    # run examples for available providers
-    if has_openai:
-        run_openai_examples()
+    while True:
+        show_menu(has_openai, has_anthropic)
+        choice = input("\nSelect demos (e.g., '1', '1,2', or 'a' for all): ").strip()
+        should_continue = run_selected_demos(choice, has_openai, has_anthropic)
+        if not should_continue:
+            print("\n👋 Goodbye! Next: Move to Module 3 - Embeddings!\n")
+            break
 
-    if has_anthropic:
-        run_anthropic_examples()
-
-    # offer interactive chat
-    print_section("Try Interactive Chat?")
-    print("Would you like to start an interactive chat session?")
-
-    try:
-        answer = input("Enter 'yes' to start (or press Enter to skip): ").strip().lower()
-        if answer in ("yes", "y"):
-            interactive_chat()
-    except (KeyboardInterrupt, EOFError):
-        pass
-
-    print_section("Complete!")
-    print(cleandoc("""
-        You've seen real LLM API calls in action.
-
-        Key observations:
-          - Response times vary (network latency + model inference)
-          - Streaming feels more responsive
-          - Token counts affect cost
-          - Both providers have similar capabilities
-
-        Next steps:
-          - Experiment with different temperatures
-          - Try longer conversations
-          - Move to Module 3: Embeddings
-    """))
+        # pause before showing menu again
+        try:
+            input("\n⏸️  Press Enter to continue...")
+        except (EOFError, KeyboardInterrupt):
+            print("\n\n👋 Goodbye! Next: Move to Module 3 - Embeddings!\n")
+            break
 
 
 if __name__ == "__main__":

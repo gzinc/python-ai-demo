@@ -62,7 +62,7 @@ Underfitting          Just Right           Overfitting
 (too simple)          (good fit)           (too complex)
      │                    │                     │
      ▼                    ▼                     ▼
-  ───────              ╭─────╮              ╭╮ ╭╮ ╭╮
+  -------              ╭─────╮              ╭╮ ╭╮ ╭╮
                       ╱       ╲            ╱  ╲╱  ╲╱  ╲
  ● ● ●              ●╱  ●   ●  ╲●         ●    ●    ●
   ● ●              ●    ●  ●    ●        ●    ●    ●

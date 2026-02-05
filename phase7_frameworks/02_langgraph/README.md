@@ -30,7 +30,7 @@ LangGraph:
   │ Planner │ --> │ Executor│ --> │ Reviewer│
   └─────────┘     └─────────┘     └─────────┘
        │                                 │
-       └─────── (retry loop) ←──────────┘
+       └─────── (retry loop) ←───────────┘
 ```
 
 ---

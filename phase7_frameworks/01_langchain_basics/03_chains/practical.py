@@ -939,43 +939,151 @@ def demo_custom_transformation() -> None:
 # endregion
 
 
+def show_menu(has_openai: bool, has_anthropic: bool) -> None:
+    """display interactive demo menu"""
+    print("\n" + "=" * 70)
+    print("  Chains - Practical Examples")
+    print("=" * 70)
+    print("\n📚 Available Demos:\n")
+
+    demos = [
+        ("1", "Basic LCEL Chain", "prompt | llm | parser pattern", 'openai'),
+        ("2", "Multi-Message Prompt Chain", "system + user message flows", 'openai'),
+        ("3", "Streaming Chain", "real-time progressive output", 'openai'),
+        ("4", "Parallel Chains", "concurrent execution pattern", 'openai'),
+        ("5", "Passthrough Pattern", "side information with processing", 'openai'),
+        ("6", "Fallback Chain", "multi-provider reliability", 'both'),
+        ("7", "Retry Chain", "automatic error recovery", 'openai'),
+        ("8", "Batch Processing", "efficient multi-input handling", 'openai'),
+        ("9", "Verbose Debugging", "execution trace inspection", 'openai'),
+        ("10", "Custom Transformation", "RunnableLambda integration", 'openai'),
+    ]
+
+    for num, name, desc, requires in demos:
+        needs_both = requires == 'both'
+        has_required = (has_openai and has_anthropic) if needs_both else has_openai
+
+        api_marker = "🔑"
+        status = "" if has_required else f" ⚠️ (needs {'both API keys' if needs_both else 'OpenAI key'})"
+
+        print(f"  {api_marker} [{num}] {name}")
+        print(f"      {desc}{status}")
+        print()
+
+    if not has_openai:
+        print("  ⚠️  OpenAI API key required for most demos")
+        print("     Set OPENAI_API_KEY in .env file")
+        print()
+
+    print("  [a] Run all demos")
+    print("  [q] Quit")
+    print("\n" + "=" * 70)
+
+
+def run_selected_demos(selections: str, has_openai: bool, has_anthropic: bool) -> bool:
+    """run selected demos based on user input"""
+    selections = selections.lower().strip()
+
+    if selections == 'q':
+        return False
+
+    demo_map = {
+        '1': ("Basic LCEL Chain", demo_basic_lcel_chain, 'openai'),
+        '2': ("Multi-Message Chain", demo_multi_message_chain, 'openai'),
+        '3': ("Streaming Chain", demo_streaming_chain, 'openai'),
+        '4': ("Parallel Chains", demo_parallel_chains, 'openai'),
+        '5': ("Passthrough Pattern", demo_passthrough_pattern, 'openai'),
+        '6': ("Fallback Chain", demo_fallback_chain, 'both'),
+        '7': ("Retry Chain", demo_retry_chain, 'openai'),
+        '8': ("Batch Processing", demo_batch_processing, 'openai'),
+        '9': ("Verbose Debugging", demo_verbose_debugging, 'openai'),
+        '10': ("Custom Transformation", demo_custom_transformation, 'openai'),
+    }
+
+    if selections == 'a':
+        # run all demos
+        for name, demo_func, requires in demo_map.values():
+            if requires == 'openai' and not has_openai:
+                print(f"\n⚠️  Skipping {name}: OpenAI API key required")
+                continue
+            if requires == 'both' and not (has_openai and has_anthropic):
+                print(f"\n⚠️  Skipping {name}: Both API keys required")
+                continue
+            try:
+                demo_func()
+            except Exception as e:
+                print(f"\n❌ Error in {name}: {e}")
+    else:
+        # parse comma-separated selections
+        selected = [s.strip() for s in selections.split(',')]
+        for sel in selected:
+            if sel in demo_map:
+                name, demo_func, requires = demo_map[sel]
+
+                # check API key requirements
+                if requires == 'openai' and not has_openai:
+                    print(f"\n⚠️  Cannot run {name}: OpenAI API key required")
+                    continue
+                if requires == 'both' and not (has_openai and has_anthropic):
+                    print(f"\n⚠️  Cannot run {name}: Both API keys required")
+                    continue
+
+                try:
+                    demo_func()
+                except Exception as e:
+                    print(f"\n❌ Error in {name}: {e}")
+            else:
+                print(f"⚠️  Invalid selection: {sel}")
+
+    return True
+
+
 def main() -> None:
-    """run all practical demos"""
-    print(cleandoc('''
-        Chains - Practical Demos
-
-        This module demonstrates real chain execution with LLM calls.
-        Ensure you have API keys set in .env file.
-    '''))
-
+    """run demonstrations with interactive menu"""
     has_openai, has_anthropic = check_api_keys()
 
+    print("\n" + "=" * 70)
+    print("  Chains - Practical Examples")
+    print("  Real chain execution with LLM calls")
+    print("=" * 70)
     print("\n## API Key Status:")
     print(f"OPENAI_API_KEY: {'✓ Found' if has_openai else '✗ Missing'}")
     print(f"ANTHROPIC_API_KEY: {'✓ Found' if has_anthropic else '✗ Missing'}")
 
-    if not (has_openai or has_anthropic):
-        print("\n❌ No API keys found!")
-        print("Set at least one API key in .env to run demos:")
-        print("  OPENAI_API_KEY=your-key-here")
-        print("  ANTHROPIC_API_KEY=your-key-here")
+    if not has_openai:
+        print("\n❌ OpenAI API key required!")
+        print("Set OPENAI_API_KEY in .env to run demos")
         return
 
-    demo_basic_lcel_chain()
-    demo_multi_message_chain()
-    demo_streaming_chain()
-    demo_parallel_chains()
-    demo_passthrough_pattern()
-    demo_fallback_chain()
-    demo_retry_chain()
-    demo_batch_processing()
-    demo_verbose_debugging()
-    demo_custom_transformation()
+    while True:
+        show_menu(has_openai, has_anthropic)
+        selection = input("\nSelect demos to run (comma-separated) or 'a' for all: ").strip()
+
+        if not selection:
+            continue
+
+        if not run_selected_demos(selection, has_openai, has_anthropic):
+            break
+
+        print("\n" + "=" * 70)
+        print("  Demos complete!")
+        print("=" * 70)
+
+        # pause before showing menu again
+        try:
+            input("\n⏸️  Press Enter to continue...")
+        except (EOFError, KeyboardInterrupt):
+            print("\n\n👋 Goodbye!")
+            break
 
     print("\n" + "=" * 70)
-    print("  Practical demos complete! You've mastered chain composition.")
-    print("=" * 70)
+    print("  Thanks for exploring LangChain chains!")
+    print("  You've mastered chain composition and LCEL patterns")
+    print("=" * 70 + "\n")
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except KeyboardInterrupt:
+        print("\n\n👋 Goodbye!")

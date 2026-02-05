@@ -506,36 +506,95 @@ def example_complete_pattern() -> None:
     print(code)
 
 
-def main() -> None:
-    """run all examples"""
+def show_menu() -> None:
+    """display interactive menu of available demos"""
     print("\n" + "=" * 60)
     print("  API Integration - Connecting to Real LLMs")
     print("  (Pattern examples - see live_examples.py for real calls)")
     print("=" * 60)
+    print("\nAvailable demos:")
+    print("  1. basic API call structure")
+    print("  2. real OpenAI code reference")
+    print("  3. real Anthropic code reference")
+    print("  4. temperature effects comparison")
+    print("  5. token tracking and cost calculation")
+    print("  6. error handling patterns")
+    print("  7. streaming responses")
+    print("  8. multi-turn conversation management")
+    print("  9. provider comparison: OpenAI vs Anthropic")
+    print(" 10. complete production pattern")
+    print("\n  [a] Run all demos")
+    print("  [q] Quit")
+    print("=" * 60)
 
-    example_basic_api_call()
-    example_real_openai_code()
-    example_real_anthropic_code()
-    example_temperature_comparison()
-    example_token_tracking()
-    example_error_handling()
-    example_streaming()
-    example_conversation_history()
-    example_provider_comparison()
-    example_complete_pattern()
 
-    print_section("Summary")
-    print(cleandoc("""
-        Key patterns learned:
-          1. Messages format: [{"role": "...", "content": "..."}]
-          2. Temperature: 0.0 for consistency, higher for creativity
-          3. Token tracking: Monitor usage for cost control
-          4. Error handling: Retry with exponential backoff
-          5. Streaming: Better UX for chat interfaces
-          6. History management: Send full context, truncate if needed
+def run_selected_demos(selections: str) -> bool:
+    """run selected demos based on user input"""
+    demo_map = {
+        "1": ("basic API call", example_basic_api_call),
+        "2": ("OpenAI code", example_real_openai_code),
+        "3": ("Anthropic code", example_real_anthropic_code),
+        "4": ("temperature effects", example_temperature_comparison),
+        "5": ("token tracking", example_token_tracking),
+        "6": ("error handling", example_error_handling),
+        "7": ("streaming", example_streaming),
+        "8": ("conversation history", example_conversation_history),
+        "9": ("provider comparison", example_provider_comparison),
+        "10": ("complete pattern", example_complete_pattern),
+    }
 
-        Next: Run live_examples.py to make real API calls!
-    """))
+    if selections.lower() == "q":
+        return False
+
+    if selections.lower() == "a":
+        print("\n🚀 Running all demos...\n")
+        for name, func in demo_map.values():
+            func()
+        print_section("Summary")
+        print(cleandoc("""
+            Key patterns learned:
+              1. Messages format: [{"role": "...", "content": "..."}]
+              2. Temperature: 0.0 for consistency, higher for creativity
+              3. Token tracking: Monitor usage for cost control
+              4. Error handling: Retry with exponential backoff
+              5. Streaming: Better UX for chat interfaces
+              6. History management: Send full context, truncate if needed
+        """))
+        return True
+
+    # parse comma-separated selections
+    selected = [s.strip() for s in selections.split(",")]
+    valid_selections = [s for s in selected if s in demo_map]
+
+    if not valid_selections:
+        print("❌ Invalid selection. Please enter numbers (1-10), 'a' for all, or 'q' to quit.")
+        return True
+
+    for selection in valid_selections:
+        name, func = demo_map[selection]
+        print(f"\n▶️  Running: {name}")
+        func()
+
+    print("\n✅ Selected demos completed!")
+    return True
+
+
+def main() -> None:
+    """interactive demo runner"""
+    while True:
+        show_menu()
+        choice = input("\nSelect demos (e.g., '1', '1,3,5', or 'a' for all): ").strip()
+        should_continue = run_selected_demos(choice)
+        if not should_continue:
+            print("\n👋 Goodbye! Next: Run live_examples.py for real API calls!\n")
+            break
+
+        # pause before showing menu again
+        try:
+            input("\n⏸️  Press Enter to continue...")
+        except (EOFError, KeyboardInterrupt):
+            print("\n\n👋 Goodbye! Next: Phase 3 LLM Applications!\n")
+            break
 
 
 if __name__ == "__main__":

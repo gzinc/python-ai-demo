@@ -574,38 +574,89 @@ def complete_example() -> None:
 # Main
 # =============================================================================
 
-def main() -> None:
-    """run all prompt engineering examples"""
+def show_menu() -> None:
+    """display interactive menu of available demos"""
     print("\n" + "=" * 70)
     print("  PROMPT ENGINEERING")
     print("  Master the art of communicating with LLMs")
     print("=" * 70)
-
-    basic_prompts()
-    system_prompts()
-    few_shot_learning()
-    chain_of_thought()
-    output_formatting()
-    rag_prompt_patterns()
-    error_handling()
-    complete_example()
-
-    print("\n" + "=" * 70)
-    print("  PROMPT ENGINEERING COMPLETE!")
+    print("\nAvailable demos:")
+    print("  1. basic prompts - clarity is key")
+    print("  2. system prompts - setting behavior")
+    print("  3. few-shot learning - teaching by example")
+    print("  4. chain-of-thought - step by step reasoning")
+    print("  5. output formatting - structured responses")
+    print("  6. RAG prompt patterns")
+    print("  7. error handling and edge cases")
+    print("  8. complete production-ready example")
+    print("\n  [a] Run all demos")
+    print("  [q] Quit")
     print("=" * 70)
 
-    print("\n📚 Key Takeaways:")
-    print("   1. Be specific - clarity beats brevity")
-    print("   2. System prompts set the AI's behavior")
-    print("   3. Few-shot examples teach patterns")
-    print("   4. Chain-of-thought improves reasoning")
-    print("   5. Specify output format explicitly")
-    print("   6. Always handle edge cases")
 
-    print("\n🚀 Next Steps:")
-    print("   1. Practice modifying these prompts")
-    print("   2. Move to 02_api_integration (connect to real LLMs!)")
-    print("   3. Apply these patterns in Phase 3 RAG systems")
+def run_selected_demos(selections: str) -> bool:
+    """run selected demos based on user input"""
+    demo_map = {
+        "1": ("basic prompts", basic_prompts),
+        "2": ("system prompts", system_prompts),
+        "3": ("few-shot learning", few_shot_learning),
+        "4": ("chain-of-thought", chain_of_thought),
+        "5": ("output formatting", output_formatting),
+        "6": ("RAG prompt patterns", rag_prompt_patterns),
+        "7": ("error handling", error_handling),
+        "8": ("complete example", complete_example),
+    }
+
+    if selections.lower() == "q":
+        return False
+
+    if selections.lower() == "a":
+        print("\n🚀 Running all demos...\n")
+        for name, func in demo_map.values():
+            func()
+        print("\n✅ All demos completed!")
+        print("\n📚 Key Takeaways:")
+        print("   1. Be specific - clarity beats brevity")
+        print("   2. System prompts set the AI's behavior")
+        print("   3. Few-shot examples teach patterns")
+        print("   4. Chain-of-thought improves reasoning")
+        print("   5. Specify output format explicitly")
+        print("   6. Always handle edge cases")
+        return True
+
+    # parse comma-separated selections
+    selected = [s.strip() for s in selections.split(",")]
+    valid_selections = [s for s in selected if s in demo_map]
+
+    if not valid_selections:
+        print("❌ Invalid selection. Please enter numbers (1-8), 'a' for all, or 'q' to quit.")
+        return True
+
+    for selection in valid_selections:
+        name, func = demo_map[selection]
+        print(f"\n▶️  Running: {name}")
+        func()
+
+    print("\n✅ Selected demos completed!")
+    return True
+
+
+def main() -> None:
+    """interactive demo runner"""
+    while True:
+        show_menu()
+        choice = input("\nSelect demos (e.g., '1', '1,3,5', or 'a' for all): ").strip()
+        should_continue = run_selected_demos(choice)
+        if not should_continue:
+            print("\n👋 Goodbye! Next: 02_api_integration (connect to real LLMs!)\n")
+            break
+
+        # pause before showing menu again
+        try:
+            input("\n⏸️  Press Enter to continue...")
+        except (EOFError, KeyboardInterrupt):
+            print("\n\n👋 Goodbye! Next: 02_api_integration (connect to real LLMs!)\n")
+            break
 
 
 if __name__ == "__main__":

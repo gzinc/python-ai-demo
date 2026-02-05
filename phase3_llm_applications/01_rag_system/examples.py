@@ -250,20 +250,73 @@ def example_interactive():
 # ─────────────────────────────────────────────────────────────
 
 
-def main():
-    """run all examples"""
+def show_menu() -> None:
+    """display interactive menu of available demos"""
     print("\n" + "=" * 60)
     print("  RAG Pipeline Examples")
     print("=" * 60)
-
-    example_basic_rag()
-    example_chunking_strategies()
-    example_retrieval_tuning()
-    example_interactive()
-
-    print("\n" + "=" * 60)
-    print("  All Examples Complete!")
+    print("\nAvailable demos:")
+    print("  1. basic RAG usage - create, add, query")
+    print("  2. chunking strategies comparison")
+    print("  3. retrieval tuning (top_k adjustment)")
+    print("  4. interactive Q&A session")
+    print("\n  [a] Run all demos")
+    print("  [q] Quit")
     print("=" * 60)
+
+
+def run_selected_demos(selections: str) -> bool:
+    """run selected demos based on user input"""
+    demo_map = {
+        "1": ("basic RAG", example_basic_rag),
+        "2": ("chunking strategies", example_chunking_strategies),
+        "3": ("retrieval tuning", example_retrieval_tuning),
+        "4": ("interactive demo", example_interactive),
+    }
+
+    if selections.lower() == "q":
+        return False
+
+    if selections.lower() == "a":
+        print("\n🚀 Running all demos...\n")
+        for name, func in demo_map.values():
+            func()
+        print("\n✅ All demos completed!")
+        return True
+
+    # parse comma-separated selections
+    selected = [s.strip() for s in selections.split(",")]
+    valid_selections = [s for s in selected if s in demo_map]
+
+    if not valid_selections:
+        print("❌ Invalid selection. Please enter numbers (1-4), 'a' for all, or 'q' to quit.")
+        return True
+
+    for selection in valid_selections:
+        name, func = demo_map[selection]
+        print(f"\n▶️  Running: {name}")
+        func()
+
+    print("\n✅ Selected demos completed!")
+    return True
+
+
+def main():
+    """interactive demo runner"""
+    while True:
+        show_menu()
+        choice = input("\nSelect demos (e.g., '1', '1,3', or 'a' for all): ").strip()
+        should_continue = run_selected_demos(choice)
+        if not should_continue:
+            print("\n👋 Goodbye!\n")
+            break
+
+        # pause before showing menu again
+        try:
+            input("\n⏸️  Press Enter to continue...")
+        except (EOFError, KeyboardInterrupt):
+            print("\n\n👋 Goodbye!\n")
+            break
 
 
 if __name__ == "__main__":

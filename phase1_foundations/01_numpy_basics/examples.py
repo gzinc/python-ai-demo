@@ -248,24 +248,79 @@ def performance_comparison() -> None:
     print("\n✨ Vectorization is critical for AI performance!")
 
 
-def main() -> None:
-    """run all examples"""
+def show_menu() -> None:
+    """display interactive menu of available demos"""
     print("\n" + "=" * 60)
     print("  NumPy Basics - AI Development Examples")
     print("=" * 60)
+    print("\nAvailable demos:")
+    print("  1. array creation and basic operations")
+    print("  2. vectorized operations (no loops!)")
+    print("  3. indexing and slicing techniques")
+    print("  4. broadcasting for AI workloads")
+    print("  5. reshaping and transforming arrays")
+    print("  6. AI application examples (RAG, attention)")
+    print("  7. performance comparison: loops vs vectorization")
+    print("\n  [a] Run all demos")
+    print("  [q] Quit")
+    print("=" * 60)
 
-    array_creation_examples()
-    vectorized_operations()
-    indexing_and_slicing()
-    broadcasting_examples()
-    reshaping_examples()
-    ai_application_examples()
-    performance_comparison()
 
-    print("\n" + "=" * 60)
-    print("  ✅ All examples completed!")
-    print("  Next: Try exercises.py")
-    print("=" * 60 + "\n")
+def run_selected_demos(selections: str) -> bool:
+    """run selected demos based on user input"""
+    demo_map = {
+        "1": ("array creation", array_creation_examples),
+        "2": ("vectorized operations", vectorized_operations),
+        "3": ("indexing and slicing", indexing_and_slicing),
+        "4": ("broadcasting", broadcasting_examples),
+        "5": ("reshaping", reshaping_examples),
+        "6": ("AI applications", ai_application_examples),
+        "7": ("performance comparison", performance_comparison),
+    }
+
+    if selections.lower() == "q":
+        return False
+
+    if selections.lower() == "a":
+        print("\n🚀 Running all demos...\n")
+        for name, func in demo_map.values():
+            func()
+        print("\n✅ All demos completed!")
+        return True
+
+    # parse comma-separated selections
+    selected = [s.strip() for s in selections.split(",")]
+    valid_selections = [s for s in selected if s in demo_map]
+
+    if not valid_selections:
+        print("❌ Invalid selection. Please enter numbers (1-7), 'a' for all, or 'q' to quit.")
+        return True
+
+    for selection in valid_selections:
+        name, func = demo_map[selection]
+        print(f"\n▶️  Running: {name}")
+        func()
+
+    print("\n✅ Selected demos completed!")
+    return True
+
+
+def main() -> None:
+    """interactive demo runner"""
+    while True:
+        show_menu()
+        choice = input("\nSelect demos (e.g., '1', '1,3,5', or 'a' for all): ").strip()
+        should_continue = run_selected_demos(choice)
+        if not should_continue:
+            print("\n👋 Goodbye! Next: Try exercises.py\n")
+            break
+
+        # pause before showing menu again
+        try:
+            input("\n⏸️  Press Enter to continue...")
+        except (EOFError, KeyboardInterrupt):
+            print("\n\n👋 Goodbye! Explore more in Phase 2!\n")
+            break
 
 
 if __name__ == "__main__":

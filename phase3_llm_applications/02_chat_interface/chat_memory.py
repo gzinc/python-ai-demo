@@ -333,20 +333,91 @@ def demo_summarizing_memory():
     print(f"Recent messages kept: {len(memory.messages)}")
 
 
+def show_menu() -> None:
+    """display interactive demo menu"""
+    print("\n" + "=" * 70)
+    print("  Chat Memory Module - Conversation Memory Management")
+    print("=" * 70)
+    print("\n📚 Available Demos:\n")
+
+    demos = [
+        ("1", "Basic Memory", "full conversation history storage"),
+        ("2", "Sliding Window", "keep only last N messages"),
+        ("3", "Token Budget", "remove old messages within token limit"),
+        ("4", "Summarizing Memory", "compress old messages into summary"),
+    ]
+
+    for num, name, desc in demos:
+        print(f"   [{num}] {name}")
+        print(f"      {desc}")
+        print()
+
+    print("  [a] Run all demos")
+    print("  [q] Quit")
+    print("\n" + "=" * 70)
+
+
+def run_selected_demos(selections: str) -> bool:
+    """run selected demos based on user input"""
+    selections = selections.strip().lower()
+
+    if selections == 'q':
+        return False
+
+    demo_map = {
+        '1': ('Basic Memory', demo_basic_memory),
+        '2': ('Sliding Window', demo_sliding_window),
+        '3': ('Token Budget', demo_token_budget),
+        '4': ('Summarizing Memory', demo_summarizing_memory),
+    }
+
+    if selections == 'a':
+        demos_to_run = list(demo_map.keys())
+    else:
+        demos_to_run = [s.strip() for s in selections.replace(',', ' ').split() if s.strip() in demo_map]
+
+    if not demos_to_run:
+        print("\n⚠️  invalid selection. please enter demo numbers, 'a' for all, or 'q' to quit")
+        return True
+
+    print(f"\n🚀 Running {len(demos_to_run)} demo(s)...\n")
+
+    for demo_num in demos_to_run:
+        name, func = demo_map[demo_num]
+        try:
+            func()
+        except KeyboardInterrupt:
+            print("\n\n⚠️  demo interrupted by user")
+            return False
+        except Exception as e:
+            print(f"\n❌ error in demo: {e}")
+            continue
+
+    print("\n✅ selected demos complete!")
+    return True
+
+
 def main():
-    """run all demos"""
-    print("\n" + "=" * 60)
-    print("  Chat Memory Module Demos")
-    print("=" * 60)
+    """run demonstrations with interactive menu"""
+    while True:
+        show_menu()
 
-    demo_basic_memory()
-    demo_sliding_window()
-    demo_token_budget()
-    demo_summarizing_memory()
+        try:
+            selection = input("\n🎯 select demo(s) (e.g., '1', '1,3', or 'a' for all): ").strip()
+        except (EOFError, KeyboardInterrupt):
+            print("\n\n👋 goodbye!")
+            break
 
-    print("\n" + "=" * 60)
-    print("  Chat Memory Demos Complete!")
-    print("=" * 60)
+        if not run_selected_demos(selection):
+            print("\n👋 goodbye!")
+            break
+
+        # pause before showing menu again
+        try:
+            input("\n⏸️  Press Enter to continue...")
+        except (EOFError, KeyboardInterrupt):
+            print("\n\n👋 goodbye!")
+            break
 
 # endregion
 

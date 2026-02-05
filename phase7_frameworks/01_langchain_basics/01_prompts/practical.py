@@ -518,7 +518,7 @@ def demo_few_shot_chat_with_llm() -> None:
     │  │   Human: "What is a REST API?"                 │         │
     │  │   AI: "REST API is an interface...             │         │
     │  │                                                │         │
-    │  │        🔑 Key Points:                          │         │
+    │  │        🔑 Key Points:                         │         │
     │  │        • Uses HTTP methods                     │         │
     │  │        • Stateless communication               │         │
     │  │                                                │         │
@@ -882,41 +882,128 @@ def demo_partial_with_runtime() -> None:
 # region Main
 
 
-def main() -> None:
-    """run all practical demonstrations"""
-    has_openai, _ = check_api_keys()
+def show_menu(has_openai: bool) -> None:
+    """display interactive demo menu"""
+    print("\n" + "=" * 70)
+    print("  LangChain Prompts & Templates - Practical Examples")
+    print("=" * 70)
+    print("\n📚 Available Demos:\n")
+
+    demos = [
+        ("1", "PromptTemplate with LLM", "template integration with real API calls", True),
+        ("2", "ChatPromptTemplate with LLM", "multi-message templates in action", True),
+        ("3", "MessagesPlaceholder with Chat History", "conversational context management", True),
+        ("4", "FewShotPromptTemplate with LLM", "in-context learning demonstrations", True),
+        ("5", "FewShotChatMessagePromptTemplate", "teaching response style", True),
+        ("6", "Output Parsers", "structured data extraction", True),
+        ("7", "Partial Variables with Runtime", "dynamic context injection", True),
+    ]
+
+    for num, name, desc, needs_api in demos:
+        api_marker = "🔑" if needs_api else "  "
+        status = "" if has_openai else " ⚠️ (needs API key)"
+        print(f"  {api_marker} [{num}] {name}")
+        print(f"      {desc}{status}")
+        print()
+
     if not has_openai:
-        print("\n" + "=" * 70)
-        print("  ERROR: OPENAI_API_KEY not found in environment")
-        print("=" * 70)
-        print("\nThis module requires an OpenAI API key.")
-        print("Please add OPENAI_API_KEY to your .env file.")
+        print("  ⚠️  OpenAI API key required for all demos")
+        print("     Set OPENAI_API_KEY in .env file")
+        print()
+
+    print("  [a] Run all demos")
+    print("  [q] Quit")
+    print("\n" + "=" * 70)
+
+
+def run_selected_demos(selections: str, has_openai: bool) -> bool:
+    """run selected demos based on user input"""
+    selections = selections.lower().strip()
+
+    if selections == 'q':
+        return False
+
+    if not has_openai:
+        print("\n⚠️  Cannot run demos: OPENAI_API_KEY not found")
+        print("Please add OPENAI_API_KEY to your .env file")
         print("\nFor conceptual demos without API key, run:")
         print("  uv run python -m phase7_frameworks.01_langchain_basics.01_prompts.concepts")
-        print()
-        return
+        return True
+
+    demo_map = {
+        '1': ("PromptTemplate with LLM", demo_prompt_template_with_llm),
+        '2': ("ChatPromptTemplate with LLM", demo_chat_template_with_llm),
+        '3': ("MessagesPlaceholder with Chat History", demo_messages_placeholder_with_llm),
+        '4': ("FewShotPromptTemplate with LLM", demo_few_shot_with_llm),
+        '5': ("FewShotChatMessagePromptTemplate", demo_few_shot_chat_with_llm),
+        '6': ("Output Parsers", demo_output_parsers),
+        '7': ("Partial Variables with Runtime", demo_partial_with_runtime),
+    }
+
+    if selections == 'a':
+        # run all demos
+        for name, demo_func in demo_map.values():
+            try:
+                demo_func()
+            except Exception as e:
+                print(f"\n❌ Error in {name}: {e}")
+    else:
+        # parse comma-separated selections
+        selected = [s.strip() for s in selections.split(',')]
+        for sel in selected:
+            if sel in demo_map:
+                name, demo_func = demo_map[sel]
+                try:
+                    demo_func()
+                except Exception as e:
+                    print(f"\n❌ Error in {name}: {e}")
+            else:
+                print(f"⚠️  Invalid selection: {sel}")
+
+    return True
+
+
+def main() -> None:
+    """run demonstrations with interactive menu"""
+    has_openai, _ = check_api_keys()
 
     print("\n" + "=" * 70)
     print("  LangChain Prompts & Templates - Practical Examples")
     print("  Using OpenAI API for real LLM integration")
     print("=" * 70)
 
-    demo_prompt_template_with_llm()
-    demo_chat_template_with_llm()
-    demo_messages_placeholder_with_llm()
-    demo_few_shot_with_llm()
-    demo_few_shot_chat_with_llm()
-    demo_output_parsers()
-    demo_partial_with_runtime()
+    while True:
+        show_menu(has_openai)
+        selection = input("\nSelect demos to run (comma-separated) or 'a' for all: ").strip()
+
+        if not selection:
+            continue
+
+        if not run_selected_demos(selection, has_openai):
+            break
+
+        print("\n" + "=" * 70)
+        print("  Demos complete!")
+        print("=" * 70)
+
+        # pause before showing menu again
+        try:
+            input("\n⏸️  Press Enter to continue...")
+        except (EOFError, KeyboardInterrupt):
+            print("\n\n👋 Goodbye!")
+            break
 
     print("\n" + "=" * 70)
-    print("  Practical demos complete!")
-    print("  You now understand LangChain prompt templates with real LLM integration")
+    print("  Thanks for exploring LangChain prompts!")
+    print("  You now understand prompt templates with real LLM integration")
     print("=" * 70 + "\n")
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except KeyboardInterrupt:
+        print("\n\n👋 Goodbye!")
 
 
 # endregion

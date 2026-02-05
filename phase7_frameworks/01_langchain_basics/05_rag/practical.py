@@ -998,29 +998,101 @@ def demo_chain_comparison() -> None:
 
 
 # region Main Execution
-def main() -> None:
-    """run all practical demonstrations"""
-    has_openai, _ = check_api_keys()
-    if not has_openai:
-        print("\n⚠️  cannot run practical examples without OPENAI_API_KEY")
-        print("   set it with: export OPENAI_API_KEY='your-key-here'")
-        return
-
+def show_menu(has_openai: bool) -> None:
+    """display interactive demo menu"""
     print("\n" + "=" * 70)
     print("  RAG (Retrieval-Augmented Generation) - Practical Examples")
     print("=" * 70)
+    print("\n📚 Available Demos:\n")
 
-    demo_basic_rag()
-    demo_text_chunking()
-    demo_similarity_search()
-    demo_metadata_filtering()
-    demo_document_loading()
-    demo_custom_retriever()
-    demo_multi_query()
-    demo_chain_comparison()
+    demos = [
+        ("1", "Basic RAG Pipeline", "complete RAG flow with ChromaDB and LCEL", True),
+        ("2", "Text Chunking Strategies", "compare different chunking approaches", False),
+        ("3", "Similarity Search Methods", "basic search, scores, and MMR", True),
+        ("4", "Metadata Filtering", "filter documents by metadata during search", True),
+        ("5", "Document Loading from Files", "load and process text files", False),
+        ("6", "Custom Retriever Configuration", "configure retriever parameters", True),
+        ("7", "Multi-Query RAG", "generate query variations for better recall", True),
+        ("8", "RAG Chain Comparison", "compare different chain approaches", True),
+    ]
+
+    for num, name, desc, needs_api in demos:
+        api_marker = "🔑" if needs_api else "  "
+        status = "" if (has_openai or not needs_api) else " ⚠️ (needs API key)"
+        print(f"  {api_marker} [{num}] {name}")
+        print(f"      {desc}{status}")
+        print()
+
+    print("  [a] Run all demos")
+    print("  [q] Quit")
+    print("\n" + "=" * 70)
+    if not has_openai:
+        print("  ⚠️  Some demos require OPENAI_API_KEY (marked with 🔑)")
+        print("=" * 70)
+
+
+def run_selected_demos(selections: str, has_openai: bool) -> bool:
+    """
+    run selected demos based on user input
+
+    Args:
+        selections: user input string (numbers, 'a', or 'q')
+        has_openai: whether OpenAI API key is available
+
+    Returns:
+        True to continue, False to quit
+    """
+    selections = selections.strip().lower()
+
+    if selections == 'q':
+        return False
+
+    # map demo numbers to functions
+    demo_map = {
+        '1': ('Basic RAG Pipeline', demo_basic_rag, True),
+        '2': ('Text Chunking Strategies', demo_text_chunking, False),
+        '3': ('Similarity Search Methods', demo_similarity_search, True),
+        '4': ('Metadata Filtering', demo_metadata_filtering, True),
+        '5': ('Document Loading from Files', demo_document_loading, False),
+        '6': ('Custom Retriever Configuration', demo_custom_retriever, True),
+        '7': ('Multi-Query RAG', demo_multi_query, True),
+        '8': ('RAG Chain Comparison', demo_chain_comparison, True),
+    }
+
+    # determine which demos to run
+    if selections == 'a':
+        demos_to_run = list(demo_map.keys())
+    else:
+        # parse comma-separated or space-separated numbers
+        demos_to_run = [s.strip() for s in selections.replace(',', ' ').split() if s.strip() in demo_map]
+
+    if not demos_to_run:
+        print("\n⚠️  invalid selection. please enter demo numbers (1-8), 'a' for all, or 'q' to quit")
+        return True
+
+    # run selected demos
+    print("\n" + "=" * 70)
+    print(f"  Running {len(demos_to_run)} demo(s)")
+    print("=" * 70)
+
+    for demo_num in demos_to_run:
+        name, func, needs_api = demo_map[demo_num]
+
+        if needs_api and not has_openai:
+            print(f"\n⚠️  skipping demo {demo_num}: {name} (requires OPENAI_API_KEY)")
+            continue
+
+        try:
+            func()
+        except KeyboardInterrupt:
+            print("\n\n⚠️  demo interrupted by user")
+            return False
+        except Exception as e:
+            print(f"\n❌ error in demo {demo_num}: {e}")
+            continue
 
     print("\n" + "=" * 70)
-    print("  ✅ all practical demos complete!")
+    print("  ✅ selected demos complete!")
     print("=" * 70)
     print("\n💡 key takeaways:")
     print("  1. ChromaDB provides easy local vector storage")
@@ -1034,6 +1106,39 @@ def main() -> None:
     print("  • persistent ChromaDB storage")
     print("  • other vector stores (FAISS, Pinecone)")
     print("  • advanced retrieval (parent document, self-query)")
+
+    return True
+
+
+def main() -> None:
+    """run practical demonstrations with interactive menu"""
+    has_openai, _ = check_api_keys()
+
+    if not has_openai:
+        print("\n⚠️  OPENAI_API_KEY not found")
+        print("   some demos will be skipped (marked with 🔑)")
+        print("   set it with: export OPENAI_API_KEY='your-key-here'")
+
+    # interactive menu loop
+    while True:
+        show_menu(has_openai)
+
+        try:
+            selection = input("\n🎯 select demo(s) (e.g., '1', '1,3,5', or 'a' for all): ").strip()
+        except (EOFError, KeyboardInterrupt):
+            print("\n\n👋 exiting...")
+            break
+
+        if not run_selected_demos(selection, has_openai):
+            print("\n👋 exiting...")
+            break
+
+        # pause before showing menu again
+        try:
+            input("\n⏸️  Press Enter to continue...")
+        except (EOFError, KeyboardInterrupt):
+            print("\n\n👋 exiting...")
+            break
 
 
 if __name__ == "__main__":
