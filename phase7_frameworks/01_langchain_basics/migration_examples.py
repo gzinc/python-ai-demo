@@ -481,6 +481,69 @@ def example_takeaways() -> None:
 
 
 # region Main
+
+
+def show_menu() -> None:
+    """display interactive demo menu"""
+    print("\n" + "=" * 70)
+    print("  LangChain Migration Examples - Interactive Demos")
+    print("=" * 70)
+    print("\n📚 Available Examples:\n")
+
+    examples = [
+        ("1", "Prompts Migration", "Phase 2 prompts → LangChain templates"),
+        ("2", "LLM Integration", "raw API → LangChain LLM wrapper"),
+        ("3", "Chains Migration", "manual pipeline → LCEL chains"),
+        ("4", "Memory Migration", "chat_memory.py → LangChain memory"),
+        ("5", "RAG Migration", "Phase 3 RAG → LangChain RAG"),
+        ("6", "Agents Migration", "Phase 4 agents → LangChain agents"),
+        ("7", "Key Takeaways", "when to use framework vs raw API"),
+    ]
+
+    for num, name, desc in examples:
+        print(f"    [{num}] {name}")
+        print(f"        {desc}")
+        print()
+
+    print("  [a] Run all examples")
+    print("  [q] Quit")
+    print("\n" + "=" * 70)
+
+
+def run_selected_examples(selections: str) -> bool:
+    """run selected examples based on user input"""
+    selections = selections.lower().strip()
+
+    if selections == 'q':
+        return False
+
+    example_map = {
+        '1': ("Prompts Migration", example_prompts),
+        '2': ("LLM Integration", example_llm_integration),
+        '3': ("Chains Migration", example_chains),
+        '4': ("Memory Migration", example_memory),
+        '5': ("RAG Migration", example_rag),
+        '6': ("Agents Migration", example_agents),
+        '7': ("Key Takeaways", example_takeaways),
+    }
+
+    if selections == 'a':
+        # run all examples
+        for name, example_func in example_map.values():
+            example_func()
+    else:
+        # parse comma-separated selections
+        selected = [s.strip() for s in selections.split(',')]
+        for sel in selected:
+            if sel in example_map:
+                name, example_func = example_map[sel]
+                example_func()
+            else:
+                print(f"⚠️  Invalid selection: {sel}")
+
+    return True
+
+
 def main() -> None:
     """run all migration examples"""
     print("\n" + "=" * 80)
@@ -488,35 +551,47 @@ def main() -> None:
     print("  Comparing Your Phase 3/4 Code vs LangChain")
     print("=" * 80)
 
-    example_prompts()
-    example_llm_integration()
-    example_chains()
-    example_memory()
-    example_rag()
-    example_agents()
-    example_takeaways()
+    while True:
+        show_menu()
+        selection = input("\nSelect examples to run (comma-separated) or 'a' for all: ").strip()
 
-    print("\n" + "=" * 80)
-    print("  NEXT STEPS")
-    print("=" * 80)
-    print(cleandoc('''
-        1. Review these comparisons - understand abstraction costs/benefits
-        2. Build small LangChain RAG chatbot to get hands-on experience
-        3. Explore individual modules:
-           - prompts_templates.py
-           - llm_integration.py
-           - chains.py
-           - memory.py
-           - rag.py
-           - agents_tools.py
-        4. Move to Module 2 (LangGraph) for multi-agent workflows
-        5. Decide which patterns to adopt in your projects
-    '''))
+        if not selection:
+            continue
 
-    print("\n💡 Remember: Frameworks are TOOLS, not REQUIREMENTS")
-    print("   You have fundamentals to build without them!")
+        if not run_selected_examples(selection):
+            break
+
+        print("\n" + "=" * 70)
+        print("  ✅ Examples complete!")
+        print("=" * 70)
+        print("\n📊 NEXT STEPS:")
+        print("  1. Review comparisons - understand abstraction costs/benefits")
+        print("  2. Build small LangChain RAG chatbot for hands-on experience")
+        print("  3. Explore individual modules:")
+        print("     • 01_prompts/ 02_llm_integration/ 03_chains/")
+        print("     • 04_memory/ 05_rag/ 06_agents_tools/")
+        print("  4. Move to Module 2 (LangGraph) for multi-agent workflows")
+        print("  5. Decide which patterns to adopt in your projects")
+        print("\n💡 Remember: Frameworks are TOOLS, not REQUIREMENTS")
+        print("   You have fundamentals to build without them!")
+
+        # pause before showing menu again
+        try:
+            input("\n⏸️  Press Enter to continue...")
+        except (EOFError, KeyboardInterrupt):
+            print("\n\n👋 Goodbye!")
+            break
+
+    print("\n" + "=" * 70)
+    print("  Thanks for exploring LangChain Migration Examples!")
+    print("=" * 70 + "\n")
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except KeyboardInterrupt:
+        print("\n\n👋 Goodbye!")
+
+
 # endregion

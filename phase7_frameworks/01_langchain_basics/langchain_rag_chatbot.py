@@ -386,6 +386,65 @@ def demo_comparison_summary() -> None:
 
 
 # region Main
+
+
+def show_menu() -> None:
+    """display interactive demo menu"""
+    print("\n" + "=" * 70)
+    print("  LangChain RAG Chatbot - Interactive Demos")
+    print("=" * 70)
+    print("\n📚 Available Demos:\n")
+
+    demos = [
+        ("1", "RAG System Setup", "LangChain RAG components overview"),
+        ("2", "RAG Query Examples", "how to query the RAG system"),
+        ("3", "RAG + Memory Setup", "conversation memory integration"),
+        ("4", "Interactive Chat Demo", "conversational RAG example"),
+        ("5", "Comparison Summary", "LangChain vs Phase 3 analysis"),
+    ]
+
+    for num, name, desc in demos:
+        print(f"    [{num}] {name}")
+        print(f"        {desc}")
+        print()
+
+    print("  [a] Run all demos")
+    print("  [q] Quit")
+    print("\n" + "=" * 70)
+
+
+def run_selected_demos(selections: str) -> bool:
+    """run selected demos based on user input"""
+    selections = selections.lower().strip()
+
+    if selections == 'q':
+        return False
+
+    demo_map = {
+        '1': ("RAG System Setup", setup_rag_system),
+        '2': ("RAG Query Examples", demo_rag_queries),
+        '3': ("RAG + Memory Setup", setup_rag_with_memory),
+        '4': ("Interactive Chat Demo", demo_interactive_chat),
+        '5': ("Comparison Summary", demo_comparison_summary),
+    }
+
+    if selections == 'a':
+        # run all demos
+        for name, demo_func in demo_map.values():
+            demo_func()
+    else:
+        # parse comma-separated selections
+        selected = [s.strip() for s in selections.split(',')]
+        for sel in selected:
+            if sel in demo_map:
+                name, demo_func = demo_map[sel]
+                demo_func()
+            else:
+                print(f"⚠️  Invalid selection: {sel}")
+
+    return True
+
+
 def main() -> None:
     """run LangChain RAG chatbot conceptual demos"""
     print("\n" + "=" * 80)
@@ -397,41 +456,51 @@ def main() -> None:
     print("   For hands-on LangChain with real API calls:")
     print("   1. Run: uv add langchain langchain-openai langchain-chroma")
     print("   2. Set OPENAI_API_KEY in .env")
-    print("   3. See langchain_concepts_demo.py for full comparisons\n")
+    print("   3. See langchain_concepts_demo.py for full comparisons")
 
-    # 1. setup and explain RAG system
-    setup_rag_system()
+    while True:
+        show_menu()
+        selection = input("\nSelect demos to run (comma-separated) or 'a' for all: ").strip()
 
-    # 2. demonstrate queries
-    demo_rag_queries()
+        if not selection:
+            continue
 
-    # 3. show memory integration
-    setup_rag_with_memory()
+        if not run_selected_demos(selection):
+            break
 
-    # 4. show interactive chat
-    demo_interactive_chat()
+        print("\n" + "=" * 70)
+        print("  ✅ Demos complete!")
+        print("=" * 70)
+        print("\n📊 NEXT STEPS:")
+        print("  1. ✅ Reviewed LangChain abstractions")
+        print("  2. ✅ Understood LangChain concepts")
+        print("  3. ⬜ Optional: Install full LangChain for hands-on")
+        print("     - uv add langchain langchain-openai langchain-chroma")
+        print("     - Set OPENAI_API_KEY in .env")
+        print("  4. ⬜ Build hybrid project (Phase 3 + LangChain)")
+        print("  5. ⬜ Move to Module 2: LangGraph")
+        print("\n💡 Remember:")
+        print("   You have fundamentals from Phase 3")
+        print("   Use LangChain when it clearly saves time")
+        print("   Drop to custom code when you need control")
 
-    # 5. comparison summary
-    demo_comparison_summary()
+        # pause before showing menu again
+        try:
+            input("\n⏸️  Press Enter to continue...")
+        except (EOFError, KeyboardInterrupt):
+            print("\n\n👋 Goodbye!")
+            break
 
-    print("\n" + "=" * 80)
-    print("  NEXT STEPS")
-    print("=" * 80)
-    print("""
-    1. ✅ Reviewed LangChain abstractions in migration_examples.py
-    2. ✅ Understood LangChain concepts (conceptual demos)
-    3. ⬜ Optional: Install full LangChain for hands-on practice
-       - uv add langchain langchain-openai langchain-chroma
-       - Set OPENAI_API_KEY in .env
-    4. ⬜ Build your own project combining Phase 3 + LangChain
-    5. ⬜ Move to Module 2: LangGraph (state machines, multi-agent)
-
-    💡 Remember: You have fundamentals from Phase 3
-       Use LangChain when it clearly saves time
-       Drop to custom code when you need control
-    """)
+    print("\n" + "=" * 70)
+    print("  Thanks for exploring LangChain RAG Chatbot!")
+    print("=" * 70 + "\n")
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except KeyboardInterrupt:
+        print("\n\n👋 Goodbye!")
+
+
 # endregion

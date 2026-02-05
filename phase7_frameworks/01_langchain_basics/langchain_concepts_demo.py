@@ -427,6 +427,69 @@ def demo_recommendations() -> None:
 
 
 # region Main
+
+
+def show_menu() -> None:
+    """display interactive demo menu"""
+    print("\n" + "=" * 70)
+    print("  LangChain Concepts - Interactive Demos")
+    print("=" * 70)
+    print("\n📚 Available Demos:\n")
+
+    demos = [
+        ("1", "RAG Setup Comparison", "Phase 3 vs LangChain RAG setup"),
+        ("2", "RAG Query Pattern", "query execution comparison"),
+        ("3", "Memory Patterns", "conversation memory approaches"),
+        ("4", "Chain Patterns", "LCEL and chain composition"),
+        ("5", "Practical Examples", "real-world use cases"),
+        ("6", "Decision Framework", "when to use LangChain"),
+        ("7", "Recommendations", "project-specific advice"),
+    ]
+
+    for num, name, desc in demos:
+        print(f"    [{num}] {name}")
+        print(f"        {desc}")
+        print()
+
+    print("  [a] Run all demos")
+    print("  [q] Quit")
+    print("\n" + "=" * 70)
+
+
+def run_selected_demos(selections: str) -> bool:
+    """run selected demos based on user input"""
+    selections = selections.lower().strip()
+
+    if selections == 'q':
+        return False
+
+    demo_map = {
+        '1': ("RAG Setup Comparison", demo_rag_setup),
+        '2': ("RAG Query Pattern", demo_rag_query),
+        '3': ("Memory Patterns", demo_memory),
+        '4': ("Chain Patterns", demo_chains),
+        '5': ("Practical Examples", demo_practical_examples),
+        '6': ("Decision Framework", demo_decision_framework),
+        '7': ("Recommendations", demo_recommendations),
+    }
+
+    if selections == 'a':
+        # run all demos
+        for name, demo_func in demo_map.values():
+            demo_func()
+    else:
+        # parse comma-separated selections
+        selected = [s.strip() for s in selections.split(',')]
+        for sel in selected:
+            if sel in demo_map:
+                name, demo_func = demo_map[sel]
+                demo_func()
+            else:
+                print(f"⚠️  Invalid selection: {sel}")
+
+    return True
+
+
 def main() -> None:
     """run all LangChain concept demonstrations"""
     print("\n" + "=" * 80)
@@ -438,33 +501,49 @@ def main() -> None:
     print("   For hands-on LangChain: run `uv add langchain`")
     print("   Then see: langchain_rag_chatbot.py")
 
-    demo_rag_setup()
-    demo_rag_query()
-    demo_memory()
-    demo_chains()
-    demo_practical_examples()
-    demo_decision_framework()
-    demo_recommendations()
+    while True:
+        show_menu()
+        selection = input("\nSelect demos to run (comma-separated) or 'a' for all: ").strip()
 
-    print("\n" + "=" * 80)
-    print("  NEXT STEPS")
-    print("=" * 80)
-    print(cleandoc('''
-        1. ✅ Reviewed migration examples (side-by-side comparisons)
-        2. ✅ Understood LangChain concepts and patterns
-        3. ⬜ Optional: Install full LangChain (`uv add langchain`)
-        4. ⬜ Optional: Run hands-on langchain_rag_chatbot.py
-        5. ⬜ Build hybrid project (LangChain + Phase 3 + Phase 5)
-        6. ⬜ Move to Module 2: LangGraph (better for multi-agent)
+        if not selection:
+            continue
 
-        💡 Remember:
-        - You have fundamentals from Phase 3 (competitive advantage!)
-        - LangChain is a tool, not a requirement
-        - Hybrid approach is most common in production
-        - Make informed decisions based on project needs
-    '''))
+        if not run_selected_demos(selection):
+            break
+
+        print("\n" + "=" * 70)
+        print("  ✅ Demos complete!")
+        print("=" * 70)
+        print("\n📊 NEXT STEPS:")
+        print("  1. ✅ Reviewed migration examples")
+        print("  2. ✅ Understood LangChain concepts and patterns")
+        print("  3. ⬜ Optional: Install full LangChain (`uv add langchain`)")
+        print("  4. ⬜ Optional: Run hands-on langchain_rag_chatbot.py")
+        print("  5. ⬜ Build hybrid project (LangChain + Phase 3 + Phase 5)")
+        print("  6. ⬜ Move to Module 2: LangGraph (multi-agent systems)")
+        print("\n💡 Remember:")
+        print("  • You have fundamentals from Phase 3 (competitive advantage!)")
+        print("  • LangChain is a tool, not a requirement")
+        print("  • Hybrid approach is most common in production")
+        print("  • Make informed decisions based on project needs")
+
+        # pause before showing menu again
+        try:
+            input("\n⏸️  Press Enter to continue...")
+        except (EOFError, KeyboardInterrupt):
+            print("\n\n👋 Goodbye!")
+            break
+
+    print("\n" + "=" * 70)
+    print("  Thanks for exploring LangChain Concepts!")
+    print("=" * 70 + "\n")
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except KeyboardInterrupt:
+        print("\n\n👋 Goodbye!")
+
+
 # endregion
