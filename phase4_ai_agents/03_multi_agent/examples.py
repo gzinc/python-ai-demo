@@ -274,37 +274,95 @@ def demo_real_api():
 # =============================================================================
 
 
-def main():
-    """Run all demos."""
+def show_menu() -> None:
+    """display interactive demo menu"""
     print("\n" + "=" * 70)
-    print("  Multi-Agent System Demonstrations")
-    print("  Module 3: Hierarchical Orchestration")
+    print("  Multi-Agent System - Hierarchical Orchestration")
     print("=" * 70)
+    print("\n📚 Available Demos:\n")
 
     demos = [
-        ("Basic Delegation", demo_basic_delegation),
-        ("Research Pipeline", demo_research_pipeline),
-        ("Direct Specialists", demo_direct_specialists),
-        ("Custom Specialist", demo_custom_specialist),
-        ("Team Configuration", demo_team_config),
-        ("Real API", demo_real_api),
+        ("1", "Basic Delegation", "orchestrator delegating to specialists"),
+        ("2", "Research Pipeline", "research → analyze → write workflow"),
+        ("3", "Direct Specialists", "calling specialists without orchestrator"),
+        ("4", "Custom Specialist", "creating specialist with custom profile"),
+        ("5", "Team Configuration", "configuring orchestrator behavior"),
+        ("6", "Real API", "using real LLM for orchestration"),
     ]
 
-    print("\nAvailable demos:")
-    for i, (name, _) in enumerate(demos, 1):
-        print(f"  {i}. {name}")
+    for num, name, desc in demos:
+        print(f"   [{num}] {name}")
+        print(f"      {desc}")
+        print()
 
-    print("\nRunning all demos...\n")
-
-    for name, demo_func in demos:
-        try:
-            demo_func()
-        except Exception as e:
-            print(f"\n❌ Demo '{name}' failed: {e}")
-
+    print("  [a] Run all demos")
+    print("  [q] Quit")
     print("\n" + "=" * 70)
-    print("  All demos complete!")
-    print("=" * 70)
+
+
+def run_selected_demos(selections: str) -> bool:
+    """run selected demos based on user input"""
+    selections = selections.strip().lower()
+
+    if selections == 'q':
+        return False
+
+    demo_map = {
+        '1': ('Basic Delegation', demo_basic_delegation),
+        '2': ('Research Pipeline', demo_research_pipeline),
+        '3': ('Direct Specialists', demo_direct_specialists),
+        '4': ('Custom Specialist', demo_custom_specialist),
+        '5': ('Team Configuration', demo_team_config),
+        '6': ('Real API', demo_real_api),
+    }
+
+    if selections == 'a':
+        demos_to_run = list(demo_map.keys())
+    else:
+        demos_to_run = [s.strip() for s in selections.replace(',', ' ').split() if s.strip() in demo_map]
+
+    if not demos_to_run:
+        print("\n⚠️  invalid selection. please enter demo numbers, 'a' for all, or 'q' to quit")
+        return True
+
+    print(f"\n🚀 Running {len(demos_to_run)} demo(s)...\n")
+
+    for demo_num in demos_to_run:
+        name, func = demo_map[demo_num]
+        try:
+            func()
+        except KeyboardInterrupt:
+            print("\n\n⚠️  demo interrupted by user")
+            return False
+        except Exception as e:
+            print(f"\n❌ error in demo: {e}")
+            continue
+
+    print("\n✅ selected demos complete!")
+    return True
+
+
+def main():
+    """run demonstrations with interactive menu"""
+    while True:
+        show_menu()
+
+        try:
+            selection = input("\n🎯 select demo(s) (e.g., '1', '1,3', or 'a' for all): ").strip()
+        except (EOFError, KeyboardInterrupt):
+            print("\n\n👋 goodbye!")
+            break
+
+        if not run_selected_demos(selection):
+            print("\n👋 goodbye!")
+            break
+
+        # pause before showing menu again
+        try:
+            input("\n⏸️  Press Enter to continue...")
+        except (EOFError, KeyboardInterrupt):
+            print("\n\n👋 goodbye!")
+            break
 
 
 if __name__ == "__main__":

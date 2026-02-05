@@ -232,29 +232,97 @@ def example_schema_inspection():
 # ─────────────────────────────────────────────────────────────
 
 
+def show_menu() -> None:
+    """display interactive demo menu"""
+    print("\n" + "=" * 70)
+    print("  Function Calling Examples - LLM Tool Integration")
+    print("=" * 70)
+    print("\n📚 Available Demos:\n")
+
+    demos = [
+        ("1", "Basic Function Call", "single tool usage with weather API"),
+        ("2", "Multiple Tools", "LLM using multiple tools in one query"),
+        ("3", "Conversation with Tools", "multi-turn chat with tool access"),
+        ("4", "Tool Choice", "LLM deciding when to use tools"),
+        ("5", "Error Handling", "handling tool failures gracefully"),
+        ("6", "Agent Loop Pattern", "foundation for AI agents"),
+        ("7", "Schema Inspection", "viewing tool schemas sent to LLM"),
+    ]
+
+    for num, name, desc in demos:
+        print(f"   [{num}] {name}")
+        print(f"      {desc}")
+        print()
+
+    print("  [a] Run all demos")
+    print("  [q] Quit")
+    print("\n" + "=" * 70)
+
+
+def run_selected_demos(selections: str) -> bool:
+    """run selected demos based on user input"""
+    selections = selections.strip().lower()
+
+    if selections == 'q':
+        return False
+
+    demo_map = {
+        '1': ('Basic Function Call', example_basic_function_call),
+        '2': ('Multiple Tools', example_multi_tool),
+        '3': ('Conversation with Tools', example_conversation_with_tools),
+        '4': ('Tool Choice', example_tool_choice),
+        '5': ('Error Handling', example_error_handling),
+        '6': ('Agent Loop Pattern', example_agent_loop_pattern),
+        '7': ('Schema Inspection', example_schema_inspection),
+    }
+
+    if selections == 'a':
+        demos_to_run = list(demo_map.keys())
+    else:
+        demos_to_run = [s.strip() for s in selections.replace(',', ' ').split() if s.strip() in demo_map]
+
+    if not demos_to_run:
+        print("\n⚠️  invalid selection. please enter demo numbers, 'a' for all, or 'q' to quit")
+        return True
+
+    print(f"\n🚀 Running {len(demos_to_run)} demo(s)...\n")
+
+    for demo_num in demos_to_run:
+        name, func = demo_map[demo_num]
+        try:
+            func()
+        except KeyboardInterrupt:
+            print("\n\n⚠️  demo interrupted by user")
+            return False
+        except Exception as e:
+            print(f"\n❌ error in demo: {e}")
+            continue
+
+    print("\n✅ selected demos complete!")
+    return True
+
+
 def main():
-    """run all examples"""
-    print("\n" + "=" * 60)
-    print("  Function Calling Examples")
-    print("=" * 60)
+    """run demonstrations with interactive menu"""
+    while True:
+        show_menu()
 
-    example_basic_function_call()
-    example_multi_tool()
-    example_conversation_with_tools()
-    example_tool_choice()
-    example_error_handling()
-    example_agent_loop_pattern()
-    example_schema_inspection()
+        try:
+            selection = input("\n🎯 select demo(s) (e.g., '1', '1,3', or 'a' for all): ").strip()
+        except (EOFError, KeyboardInterrupt):
+            print("\n\n👋 goodbye!")
+            break
 
-    print("\n" + "=" * 60)
-    print("  All Examples Complete!")
-    print("=" * 60)
-    print("\n  Key Takeaways:")
-    print("  • LLM DECIDES which tool to call, YOUR CODE executes")
-    print("  • Good descriptions help LLM choose the right tool")
-    print("  • The agent loop: chat → tool calls → execute → repeat")
-    print("  • This is the foundation for AI agents (Phase 4)!")
-    print()
+        if not run_selected_demos(selection):
+            print("\n👋 goodbye!")
+            break
+
+        # pause before showing menu again
+        try:
+            input("\n⏸️  Press Enter to continue...")
+        except (EOFError, KeyboardInterrupt):
+            print("\n\n👋 goodbye!")
+            break
 
 
 if __name__ == "__main__":

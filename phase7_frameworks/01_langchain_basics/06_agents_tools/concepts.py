@@ -412,26 +412,103 @@ def demo_agent_decision_tree() -> None:
 # endregion
 
 
+def show_menu() -> None:
+    """display interactive demo menu"""
+    print("\n" + "=" * 70)
+    print("  Agents & Tools - Conceptual Examples")
+    print("=" * 70)
+    print("\n📚 Available Demos:\n")
+
+    demos = [
+        ("1", "Agent vs Chain", "when to use agents over chains"),
+        ("2", "ReAct Pattern", "reasoning and acting framework"),
+        ("3", "Tool Selection", "how agents choose tools"),
+        ("4", "Tool Description Quality", "clear descriptions matter"),
+        ("5", "Agent Memory Integration", "stateful agent conversations"),
+        ("6", "Error Handling Strategies", "graceful failure recovery"),
+        ("7", "Agent Decision Tree", "multi-step reasoning flow"),
+    ]
+
+    for num, name, desc in demos:
+        print(f"    [{num}] {name}")
+        print(f"        {desc}")
+        print()
+
+    print("  [a] Run all demos")
+    print("  [q] Quit")
+    print("\n" + "=" * 70)
+
+
+def run_selected_demos(selections: str) -> bool:
+    """run selected demos based on user input"""
+    selections = selections.lower().strip()
+
+    if selections == 'q':
+        return False
+
+    demo_map = {
+        '1': ("Agent vs Chain", demo_agent_vs_chain),
+        '2': ("ReAct Pattern", demo_react_pattern),
+        '3': ("Tool Selection", demo_tool_selection),
+        '4': ("Tool Description Quality", demo_tool_description_quality),
+        '5': ("Agent Memory Integration", demo_agent_memory_integration),
+        '6': ("Error Handling", demo_error_handling_strategies),
+        '7': ("Agent Decision Tree", demo_agent_decision_tree),
+    }
+
+    if selections == 'a':
+        # run all demos
+        for name, demo_func in demo_map.values():
+            demo_func()
+    else:
+        # parse comma-separated selections
+        selected = [s.strip() for s in selections.split(',')]
+        for sel in selected:
+            if sel in demo_map:
+                name, demo_func = demo_map[sel]
+                demo_func()
+            else:
+                print(f"⚠️  Invalid selection: {sel}")
+
+    return True
+
+
 def main() -> None:
-    """run all conceptual demonstrations"""
+    """run demonstrations with interactive menu"""
     print("\n" + "=" * 70)
-    print("  AGENTS & TOOLS - CONCEPTUAL DEMONSTRATIONS")
-    print("  (No API key required)")
+    print("  Agents & Tools - Conceptual Understanding")
+    print("  No API key required - demonstrates patterns only")
     print("=" * 70)
 
-    demo_agent_vs_chain()
-    demo_react_pattern()
-    demo_tool_selection()
-    demo_tool_description_quality()
-    demo_agent_memory_integration()
-    demo_error_handling_strategies()
-    demo_agent_decision_tree()
+    while True:
+        show_menu()
+        selection = input("\nSelect demos to run (comma-separated) or 'a' for all: ").strip()
+
+        if not selection:
+            continue
+
+        if not run_selected_demos(selection):
+            break
+
+        print("\n" + "=" * 70)
+        print("  Demos complete!")
+        print("=" * 70)
+
+        # pause before showing menu again
+        try:
+            input("\n⏸️  Press Enter to continue...")
+        except (EOFError, KeyboardInterrupt):
+            print("\n\n👋 Goodbye!")
+            break
 
     print("\n" + "=" * 70)
-    print("  ✅ Conceptual demonstrations complete!")
+    print("  Thanks for exploring agents and tools!")
     print("  Next: Run practical.py for hands-on examples with real LLMs")
-    print("=" * 70)
+    print("=" * 70 + "\n")
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except KeyboardInterrupt:
+        print("\n\n👋 Goodbye!")

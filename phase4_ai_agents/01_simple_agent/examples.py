@@ -286,8 +286,76 @@ def demo_timeout_handling():
     print(f"   Partial answer: {result.answer}")
 
 
+def show_menu() -> None:
+    """display interactive demo menu"""
+    print("\n" + "=" * 70)
+    print("  ReAct Agent Demos - Reasoning and Acting Pattern")
+    print("=" * 70)
+    print("\n📚 Available Demos:\n")
+
+    demos = [
+        ("1", "Simple Query", "single-tool weather query"),
+        ("2", "Multi-Step Reasoning", "multiple tools with reasoning"),
+        ("3", "Knowledge + Calculation", "combining search and math"),
+        ("4", "Compare Cities", "multiple API calls with comparison"),
+        ("5", "Action History", "examining agent decision trace"),
+        ("6", "Timeout Handling", "behavior when hitting max iterations"),
+    ]
+
+    for num, name, desc in demos:
+        print(f"   [{num}] {name}")
+        print(f"      {desc}")
+        print()
+
+    print("  [a] Run all demos")
+    print("  [q] Quit")
+    print("\n" + "=" * 70)
+
+
+def run_selected_demos(selections: str) -> bool:
+    """run selected demos based on user input"""
+    selections = selections.strip().lower()
+
+    if selections == 'q':
+        return False
+
+    demo_map = {
+        '1': ('Simple Query', demo_simple_query),
+        '2': ('Multi-Step Reasoning', demo_multi_step_reasoning),
+        '3': ('Knowledge + Calculation', demo_knowledge_and_calculation),
+        '4': ('Compare Cities', demo_compare_cities),
+        '5': ('Action History', demo_action_history),
+        '6': ('Timeout Handling', demo_timeout_handling),
+    }
+
+    if selections == 'a':
+        demos_to_run = list(demo_map.keys())
+    else:
+        demos_to_run = [s.strip() for s in selections.replace(',', ' ').split() if s.strip() in demo_map]
+
+    if not demos_to_run:
+        print("\n⚠️  invalid selection. please enter demo numbers, 'a' for all, or 'q' to quit")
+        return True
+
+    print(f"\n🚀 Running {len(demos_to_run)} demo(s)...\n")
+
+    for demo_num in demos_to_run:
+        name, func = demo_map[demo_num]
+        try:
+            func()
+        except KeyboardInterrupt:
+            print("\n\n⚠️  demo interrupted by user")
+            return False
+        except Exception as e:
+            print(f"\n❌ error in demo: {e}")
+            continue
+
+    print("\n✅ selected demos complete!")
+    return True
+
+
 def main():
-    """run all demos"""
+    """run demonstrations with interactive menu"""
     # check for API key
     if not os.getenv("OPENAI_API_KEY") and not os.getenv("ANTHROPIC_API_KEY"):
         print("⚠️  No API key found!")
@@ -295,45 +363,25 @@ def main():
         print("   Example: OPENAI_API_KEY=sk-...")
         return
 
-    print("\n" + "=" * 60)
-    print("       ReAct Agent Demos")
-    print("       Phase 4: AI Agents")
-    print("=" * 60)
+    while True:
+        show_menu()
 
-    demos = [
-        ("Simple Query", demo_simple_query),
-        ("Multi-Step Reasoning", demo_multi_step_reasoning),
-        ("Knowledge + Calculation", demo_knowledge_and_calculation),
-        ("Compare Cities", demo_compare_cities),
-        ("Action History", demo_action_history),
-        ("Timeout Handling", demo_timeout_handling),
-    ]
+        try:
+            selection = input("\n🎯 select demo(s) (e.g., '1', '1,3', or 'a' for all): ").strip()
+        except (EOFError, KeyboardInterrupt):
+            print("\n\n👋 goodbye!")
+            break
 
-    print("\nAvailable demos:")
-    for i, (name, _) in enumerate(demos, 1):
-        print(f"  {i}. {name}")
-    print(f"  0. Run all demos")
+        if not run_selected_demos(selection):
+            print("\n👋 goodbye!")
+            break
 
-    try:
-        choice = input("\nSelect demo (0-6): ").strip()
-        if choice == "0":
-            for name, demo_fn in demos:
-                demo_fn()
-                input("\nPress Enter for next demo...")
-        elif choice.isdigit() and 1 <= int(choice) <= len(demos):
-            demos[int(choice) - 1][1]()
-        else:
-            print("Running Demo 1 by default...")
-            demo_simple_query()
-    except KeyboardInterrupt:
-        print("\n\nDemo cancelled.")
-    except Exception as e:
-        print(f"\n❌ Error: {e}")
-        print("Make sure you have a valid API key set.")
-
-    print("\n" + "=" * 60)
-    print("  Demos complete!")
-    print("=" * 60)
+        # pause before showing menu again
+        try:
+            input("\n⏸️  Press Enter to continue...")
+        except (EOFError, KeyboardInterrupt):
+            print("\n\n👋 goodbye!")
+            break
 
 # endregion
 

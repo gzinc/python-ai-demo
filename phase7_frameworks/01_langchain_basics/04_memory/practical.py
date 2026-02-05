@@ -1087,47 +1087,146 @@ def demo_memory_persistence() -> None:
 # endregion
 
 
+def show_menu(has_openai: bool, has_anthropic: bool) -> None:
+    """display interactive demo menu"""
+    print("\n" + "=" * 70)
+    print("  Memory - Practical Examples")
+    print("=" * 70)
+    print("\n📚 Available Demos:\n")
+
+    demos = [
+        ("1", "Buffer Memory Conversation", "complete chat history management", 'openai'),
+        ("2", "Window Memory Conversation", "sliding window recent messages", 'openai'),
+        ("3", "Summary Memory Pattern", "condensed conversation summaries", 'openai'),
+        ("4", "Adaptive Memory Pattern", "dynamic context management", 'openai'),
+        ("5", "Multi-Session Memory", "per-session isolation", 'openai'),
+        ("6", "Memory with Custom Prompt", "customized memory integration", 'openai'),
+        ("7", "Multi-Provider Memory", "provider-agnostic memory", 'both'),
+        ("8", "Memory Persistence", "save and restore conversations", 'openai'),
+    ]
+
+    for num, name, desc, requires in demos:
+        needs_both = requires == 'both'
+        has_required = (has_openai and has_anthropic) if needs_both else has_openai
+
+        api_marker = "🔑"
+        status = "" if has_required else f" ⚠️ (needs {'both keys' if needs_both else 'OpenAI key'})"
+
+        print(f"  {api_marker} [{num}] {name}")
+        print(f"      {desc}{status}")
+        print()
+
+    if not has_openai:
+        print("  ⚠️  OpenAI API key required for most demos")
+        print("     Set OPENAI_API_KEY in .env file")
+        print()
+
+    print("  [a] Run all demos")
+    print("  [q] Quit")
+    print("\n" + "=" * 70)
+
+
+def run_selected_demos(selections: str, has_openai: bool, has_anthropic: bool) -> bool:
+    """run selected demos based on user input"""
+    selections = selections.lower().strip()
+
+    if selections == 'q':
+        return False
+
+    demo_map = {
+        '1': ("Buffer Memory", demo_buffer_memory_conversation, 'openai'),
+        '2': ("Window Memory", demo_window_memory_conversation, 'openai'),
+        '3': ("Summary Memory", demo_summary_memory_pattern, 'openai'),
+        '4': ("Adaptive Memory", demo_adaptive_memory_pattern, 'openai'),
+        '5': ("Multi-Session", demo_multi_session_memory, 'openai'),
+        '6': ("Custom Prompt", demo_memory_with_custom_prompt, 'openai'),
+        '7': ("Multi-Provider", demo_multi_provider_memory, 'both'),
+        '8': ("Persistence", demo_memory_persistence, 'openai'),
+    }
+
+    if selections == 'a':
+        # run all demos
+        for name, demo_func, requires in demo_map.values():
+            if requires == 'openai' and not has_openai:
+                print(f"\n⚠️  Skipping {name}: OpenAI API key required")
+                continue
+            if requires == 'both' and not (has_openai and has_anthropic):
+                print(f"\n⚠️  Skipping {name}: Both API keys required")
+                continue
+            try:
+                demo_func()
+            except Exception as e:
+                print(f"\n❌ Error in {name}: {e}")
+    else:
+        # parse comma-separated selections
+        selected = [s.strip() for s in selections.split(',')]
+        for sel in selected:
+            if sel in demo_map:
+                name, demo_func, requires = demo_map[sel]
+
+                if requires == 'openai' and not has_openai:
+                    print(f"\n⚠️  Cannot run {name}: OpenAI API key required")
+                    continue
+                if requires == 'both' and not (has_openai and has_anthropic):
+                    print(f"\n⚠️  Cannot run {name}: Both API keys required")
+                    continue
+
+                try:
+                    demo_func()
+                except Exception as e:
+                    print(f"\n❌ Error in {name}: {e}")
+            else:
+                print(f"⚠️  Invalid selection: {sel}")
+
+    return True
+
+
 def main() -> None:
-    """run all practical demos"""
-    print(
-        cleandoc(
-            """
-        Memory - Practical Demos (Modern API)
-
-        This module demonstrates memory integration using RunnableWithMessageHistory,
-        the modern LangChain 1.0+ pattern that replaces deprecated ConversationChain.
-
-        Ensure you have API keys set in .env file.
-    """
-        )
-    )
-
+    """run demonstrations with interactive menu"""
     has_openai, has_anthropic = check_api_keys()
 
+    print("\n" + "=" * 70)
+    print("  Memory - Practical Examples (Modern LangChain 1.0+ API)")
+    print("  RunnableWithMessageHistory pattern")
+    print("=" * 70)
     print("\n## API Key Status:")
     print(f"OPENAI_API_KEY: {'✓ Found' if has_openai else '✗ Missing'}")
     print(f"ANTHROPIC_API_KEY: {'✓ Found' if has_anthropic else '✗ Missing'}")
 
-    if not (has_openai or has_anthropic):
-        print("\n❌ No API keys found!")
-        print("Set at least one API key in .env to run demos:")
-        print("  OPENAI_API_KEY=your-key-here")
-        print("  ANTHROPIC_API_KEY=your-key-here")
+    if not has_openai:
+        print("\n❌ OpenAI API key required!")
+        print("Set OPENAI_API_KEY in .env to run demos")
         return
 
-    demo_buffer_memory_conversation()
-    demo_window_memory_conversation()
-    demo_summary_memory_pattern()
-    demo_adaptive_memory_pattern()
-    demo_multi_session_memory()
-    demo_memory_with_custom_prompt()
-    demo_multi_provider_memory()
-    demo_memory_persistence()
+    while True:
+        show_menu(has_openai, has_anthropic)
+        selection = input("\nSelect demos to run (comma-separated) or 'a' for all: ").strip()
+
+        if not selection:
+            continue
+
+        if not run_selected_demos(selection, has_openai, has_anthropic):
+            break
+
+        print("\n" + "=" * 70)
+        print("  Demos complete!")
+        print("=" * 70)
+
+        # pause before showing menu again
+        try:
+            input("\n⏸️  Press Enter to continue...")
+        except (EOFError, KeyboardInterrupt):
+            print("\n\n👋 Goodbye!")
+            break
 
     print("\n" + "=" * 70)
-    print("  Practical demos complete! You've mastered modern memory patterns.")
-    print("=" * 70)
+    print("  Thanks for exploring LangChain memory!")
+    print("  You've mastered modern memory patterns with RunnableWithMessageHistory")
+    print("=" * 70 + "\n")
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except KeyboardInterrupt:
+        print("\n\n👋 Goodbye!")

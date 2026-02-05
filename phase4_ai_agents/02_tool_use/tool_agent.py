@@ -210,17 +210,95 @@ def demo_tool_agent():
     print(f"Tool calls: {result.total_tool_calls}")
 
 
-def main():
-    """Run demos."""
-    print_section("Phase 4 Module 2: Tool Use")
+def show_menu() -> None:
+    """display interactive demo menu"""
+    print("\n" + "=" * 70)
+    print("  Tool Agent - Agent with Real Tool Integration")
+    print("=" * 70)
+    print("\n📚 Available Demos:\n")
 
-    demo_tool_registry()
+    demos = [
+        ("1", "Tool Registry", "registry with all available tools"),
+        ("2", "Tool Agent", "ReAct agent with real tool access"),
+    ]
 
-    if os.environ.get("OPENAI_API_KEY") or os.environ.get("ANTHROPIC_API_KEY"):
-        demo_tool_agent()
+    for num, name, desc in demos:
+        print(f"   [{num}] {name}")
+        print(f"      {desc}")
+        print()
+
+    print("  [a] Run all demos")
+    print("  [q] Quit")
+    print("\n" + "=" * 70)
+
+
+def run_selected_demos(selections: str) -> bool:
+    """run selected demos based on user input"""
+    selections = selections.strip().lower()
+
+    if selections == 'q':
+        return False
+
+    demo_map = {
+        '1': ('Tool Registry', demo_tool_registry),
+        '2': ('Tool Agent', demo_tool_agent),
+    }
+
+    if selections == 'a':
+        demos_to_run = list(demo_map.keys())
     else:
-        print("\n[Skipping agent demo - no API key found]")
-        print("Set OPENAI_API_KEY or ANTHROPIC_API_KEY to run the full demo")
+        demos_to_run = [s.strip() for s in selections.replace(',', ' ').split() if s.strip() in demo_map]
+
+    if not demos_to_run:
+        print("\n⚠️  invalid selection. please enter demo numbers, 'a' for all, or 'q' to quit")
+        return True
+
+    print(f"\n🚀 Running {len(demos_to_run)} demo(s)...\n")
+
+    for demo_num in demos_to_run:
+        name, func = demo_map[demo_num]
+
+        # check API key for demo 2
+        if demo_num == '2':
+            if not (os.environ.get("OPENAI_API_KEY") or os.environ.get("ANTHROPIC_API_KEY")):
+                print("\n⚠️  Skipping Tool Agent demo - no API key found")
+                print("   Set OPENAI_API_KEY or ANTHROPIC_API_KEY to run this demo")
+                continue
+
+        try:
+            func()
+        except KeyboardInterrupt:
+            print("\n\n⚠️  demo interrupted by user")
+            return False
+        except Exception as e:
+            print(f"\n❌ error in demo: {e}")
+            continue
+
+    print("\n✅ selected demos complete!")
+    return True
+
+
+def main():
+    """run demonstrations with interactive menu"""
+    while True:
+        show_menu()
+
+        try:
+            selection = input("\n🎯 select demo(s) (e.g., '1', '1,2', or 'a' for all): ").strip()
+        except (EOFError, KeyboardInterrupt):
+            print("\n\n👋 goodbye!")
+            break
+
+        if not run_selected_demos(selection):
+            print("\n👋 goodbye!")
+            break
+
+        # pause before showing menu again
+        try:
+            input("\n⏸️  Press Enter to continue...")
+        except (EOFError, KeyboardInterrupt):
+            print("\n\n👋 goodbye!")
+            break
 
 # endregion
 

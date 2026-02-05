@@ -473,21 +473,105 @@ def demo_token_cost_estimation() -> None:
 # endregion
 
 
+def show_menu() -> None:
+    """display interactive demo menu"""
+    print("\n" + "=" * 70)
+    print("  LLM Integration - Conceptual Examples")
+    print("=" * 70)
+    print("\n📚 Available Demos:\n")
+
+    demos = [
+        ("1", "Unified Chat Interface", "consistent API across providers"),
+        ("2", "Message Types and Structure", "SystemMessage, HumanMessage, AIMessage"),
+        ("3", "Configuration Parameters", "temperature, tokens, timeouts"),
+        ("4", "Streaming vs Non-Streaming", "pattern comparison and use cases"),
+        ("5", "Provider Comparison Matrix", "OpenAI vs Anthropic features"),
+        ("6", "Error Handling Strategies", "common errors and solutions"),
+        ("7", "Retry and Fallback Patterns", "reliability patterns"),
+        ("8", "Token Counting and Cost", "usage tracking and optimization"),
+    ]
+
+    for num, name, desc in demos:
+        print(f"    [{num}] {name}")
+        print(f"        {desc}")
+        print()
+
+    print("  [a] Run all demos")
+    print("  [q] Quit")
+    print("\n" + "=" * 70)
+
+
+def run_selected_demos(selections: str) -> bool:
+    """run selected demos based on user input"""
+    selections = selections.lower().strip()
+
+    if selections == 'q':
+        return False
+
+    demo_map = {
+        '1': ("Unified Chat Interface", demo_unified_interface),
+        '2': ("Message Types and Structure", demo_message_types),
+        '3': ("Configuration Parameters", demo_configuration_parameters),
+        '4': ("Streaming vs Non-Streaming", demo_streaming_patterns),
+        '5': ("Provider Comparison Matrix", demo_provider_comparison),
+        '6': ("Error Handling Strategies", demo_error_handling),
+        '7': ("Retry and Fallback Patterns", demo_retry_fallback),
+        '8': ("Token Counting and Cost", demo_token_cost_estimation),
+    }
+
+    if selections == 'a':
+        # run all demos
+        for name, demo_func in demo_map.values():
+            demo_func()
+    else:
+        # parse comma-separated selections
+        selected = [s.strip() for s in selections.split(',')]
+        for sel in selected:
+            if sel in demo_map:
+                name, demo_func = demo_map[sel]
+                demo_func()
+            else:
+                print(f"⚠️  Invalid selection: {sel}")
+
+    return True
+
+
 def main() -> None:
-    """run all conceptual demos"""
-    demo_unified_interface()
-    demo_message_types()
-    demo_configuration_parameters()
-    demo_streaming_patterns()
-    demo_provider_comparison()
-    demo_error_handling()
-    demo_retry_fallback()
-    demo_token_cost_estimation()
+    """run demonstrations with interactive menu"""
+    print("\n" + "=" * 70)
+    print("  LLM Integration - Conceptual Understanding")
+    print("  No API key required - demonstrates patterns only")
+    print("=" * 70)
+
+    while True:
+        show_menu()
+        selection = input("\nSelect demos to run (comma-separated) or 'a' for all: ").strip()
+
+        if not selection:
+            continue
+
+        if not run_selected_demos(selection):
+            break
+
+        print("\n" + "=" * 70)
+        print("  Demos complete!")
+        print("=" * 70)
+
+        # pause before showing menu again
+        try:
+            input("\n⏸️  Press Enter to continue...")
+        except (EOFError, KeyboardInterrupt):
+            print("\n\n👋 Goodbye!")
+            break
 
     print("\n" + "=" * 70)
-    print("  Conceptual demos complete! Next: practical.py for hands-on practice")
-    print("=" * 70)
+    print("  Thanks for exploring LLM integration concepts!")
+    print("  Next: Run practical.py for hands-on practice with real API calls")
+    print("=" * 70 + "\n")
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except KeyboardInterrupt:
+        print("\n\n👋 Goodbye!")
