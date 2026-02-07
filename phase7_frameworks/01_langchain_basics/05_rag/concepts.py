@@ -11,7 +11,9 @@ from inspect import cleandoc
 import math
 from typing import Any
 
-from phase7_frameworks.utils import print_section
+from common.util.utils import print_section
+
+from common.demo_menu import Demo, MenuRunner
 
 
 # region Mock Document Classes
@@ -493,68 +495,21 @@ def demo_rag_vs_traditional() -> None:
 # region Main Execution
 
 
-def show_menu() -> None:
-    """display interactive demo menu"""
-    print("\n" + "=" * 70)
-    print("  RAG - Conceptual Examples")
-    print("=" * 70)
-    print("\n📚 Available Demos:\n")
 
-    demos = [
-        ("1", "Document Loading", "text ingestion and processing"),
-        ("2", "Text Chunking", "splitting strategies and patterns"),
-        ("3", "Chunk Size Tradeoffs", "precision vs context balance"),
-        ("4", "Mock Embeddings", "vector representation concept"),
-        ("5", "Vector Similarity", "semantic search mathematics"),
-        ("6", "Retrieval Logic", "finding relevant documents"),
-        ("7", "RAG Pipeline", "complete workflow end-to-end"),
-        ("8", "RAG vs Traditional LLM", "comparison and benefits"),
-    ]
+# region Demo Menu Configuration
 
-    for num, name, desc in demos:
-        print(f"    [{num}] {name}")
-        print(f"        {desc}")
-        print()
+DEMOS = [
+    Demo("1", "Document Loading", "document loading", demo_document_loading),
+    Demo("2", "Text Chunking", "text chunking", demo_text_chunking),
+    Demo("3", "Chunk Size Tradeoffs", "chunk size tradeoffs", demo_chunk_size_tradeoffs),
+    Demo("4", "Mock Embeddings", "mock embeddings", demo_mock_embeddings),
+    Demo("5", "Vector Similarity", "vector similarity", demo_vector_similarity),
+    Demo("6", "Retrieval Logic", "retrieval logic", demo_retrieval_logic),
+    Demo("7", "RAG Pipeline", "rag pipeline", demo_rag_pipeline),
+    Demo("8", "RAG vs Traditional", "rag vs traditional", demo_rag_vs_traditional),
+]
 
-    print("  [a] Run all demos")
-    print("  [q] Quit")
-    print("\n" + "=" * 70)
-
-
-def run_selected_demos(selections: str) -> bool:
-    """run selected demos based on user input"""
-    selections = selections.lower().strip()
-
-    if selections == 'q':
-        return False
-
-    demo_map = {
-        '1': ("Document Loading", demo_document_loading),
-        '2': ("Text Chunking", demo_text_chunking),
-        '3': ("Chunk Size Tradeoffs", demo_chunk_size_tradeoffs),
-        '4': ("Mock Embeddings", demo_mock_embeddings),
-        '5': ("Vector Similarity", demo_vector_similarity),
-        '6': ("Retrieval Logic", demo_retrieval_logic),
-        '7': ("RAG Pipeline", demo_rag_pipeline),
-        '8': ("RAG vs Traditional", demo_rag_vs_traditional),
-    }
-
-    if selections == 'a':
-        # run all demos
-        for name, demo_func in demo_map.values():
-            demo_func()
-    else:
-        # parse comma-separated selections
-        selected = [s.strip() for s in selections.split(',')]
-        for sel in selected:
-            if sel in demo_map:
-                name, demo_func = demo_map[sel]
-                demo_func()
-            else:
-                print(f"⚠️  Invalid selection: {sel}")
-
-    return True
-
+# endregion
 
 def main() -> None:
     """run demonstrations with interactive menu"""
@@ -563,38 +518,9 @@ def main() -> None:
     print("  No API key required - demonstrates patterns only")
     print("=" * 70)
 
-    while True:
-        show_menu()
-        selection = input("\nSelect demos to run (comma-separated) or 'a' for all: ").strip()
-
-        if not selection:
-            continue
-
-        if not run_selected_demos(selection):
-            break
-
-        print("\n" + "=" * 70)
-        print("  Demos complete!")
-        print("=" * 70)
-
-        # pause before showing menu again
-        try:
-            input("\n⏸️  Press Enter to continue...")
-        except (EOFError, KeyboardInterrupt):
-            print("\n\n👋 Goodbye!")
-            break
-
-    print("\n" + "=" * 70)
-    print("  Thanks for exploring RAG concepts!")
-    print("\n💡 Key takeaways:")
-    print("  1. RAG = retrieval + generation for factual accuracy")
-    print("  2. Pipeline: load → chunk → embed → store → retrieve → generate")
-    print("  3. Chunk size affects precision vs context trade-off")
-    print("  4. Embeddings capture semantic meaning as vectors")
-    print("  5. Similarity search finds relevant documents")
-    print("  6. Different retrieval strategies for different needs")
-    print("\n📚 Next: practical.py for real LLM integration with OpenAI")
-    print("=" * 70 + "\n")
+    
+    runner = MenuRunner(DEMOS, title="TODO: Add title")
+    runner.run()
 
 
 if __name__ == "__main__":

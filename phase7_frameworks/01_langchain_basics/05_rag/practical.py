@@ -23,7 +23,8 @@ from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.runnables import RunnablePassthrough
 from langchain_openai import ChatOpenAI, OpenAIEmbeddings
 
-from phase7_frameworks.utils import check_api_keys, print_section, requires_openai
+from common.demo_menu import Demo, MenuRunner
+from common.util.utils import check_api_keys, print_section, requires_openai
 
 
 # region Helper Functions
@@ -998,147 +999,39 @@ def demo_chain_comparison() -> None:
 
 
 # region Main Execution
-def show_menu(has_openai: bool) -> None:
-    """display interactive demo menu"""
-    print("\n" + "=" * 70)
-    print("  RAG (Retrieval-Augmented Generation) - Practical Examples")
-    print("=" * 70)
-    print("\n📚 Available Demos:\n")
+# region Demo Menu Configuration
 
-    demos = [
-        ("1", "Basic RAG Pipeline", "complete RAG flow with ChromaDB and LCEL", True),
-        ("2", "Text Chunking Strategies", "compare different chunking approaches", False),
-        ("3", "Similarity Search Methods", "basic search, scores, and MMR", True),
-        ("4", "Metadata Filtering", "filter documents by metadata during search", True),
-        ("5", "Document Loading from Files", "load and process text files", False),
-        ("6", "Custom Retriever Configuration", "configure retriever parameters", True),
-        ("7", "Multi-Query RAG", "generate query variations for better recall", True),
-        ("8", "RAG Chain Comparison", "compare different chain approaches", True),
-    ]
+DEMOS = [
+    Demo("1", "Basic RAG Pipeline", "basic RAG pipeline", demo_basic_rag, needs_api=True),
+    Demo("2", "Text Chunking Strategies", "text chunking strategies", demo_text_chunking),
+    Demo("3", "Similarity Search Methods", "similarity search methods", demo_similarity_search, needs_api=True),
+    Demo("4", "Metadata Filtering", "metadata filtering", demo_metadata_filtering, needs_api=True),
+    Demo("5", "Document Loading from Files", "document loading from files", demo_document_loading),
+    Demo("6", "Custom Retriever Configuration", "custom retriever configuration", demo_custom_retriever, needs_api=True),
+    Demo("7", "Multi-Query RAG", "multi-query RAG", demo_multi_query, needs_api=True),
+    Demo("8", "RAG Chain Comparison", "RAG chain comparison", demo_chain_comparison, needs_api=True),
+]
 
-    for num, name, desc, needs_api in demos:
-        api_marker = "🔑" if needs_api else "  "
-        status = "" if (has_openai or not needs_api) else " ⚠️ (needs API key)"
-        print(f"  {api_marker} [{num}] {name}")
-        print(f"      {desc}{status}")
-        print()
-
-    print("  [a] Run all demos")
-    print("  [q] Quit")
-    print("\n" + "=" * 70)
-    if not has_openai:
-        print("  ⚠️  Some demos require OPENAI_API_KEY (marked with 🔑)")
-        print("=" * 70)
-
-
-def run_selected_demos(selections: str, has_openai: bool) -> bool:
-    """
-    run selected demos based on user input
-
-    Args:
-        selections: user input string (numbers, 'a', or 'q')
-        has_openai: whether OpenAI API key is available
-
-    Returns:
-        True to continue, False to quit
-    """
-    selections = selections.strip().lower()
-
-    if selections == 'q':
-        return False
-
-    # map demo numbers to functions
-    demo_map = {
-        '1': ('Basic RAG Pipeline', demo_basic_rag, True),
-        '2': ('Text Chunking Strategies', demo_text_chunking, False),
-        '3': ('Similarity Search Methods', demo_similarity_search, True),
-        '4': ('Metadata Filtering', demo_metadata_filtering, True),
-        '5': ('Document Loading from Files', demo_document_loading, False),
-        '6': ('Custom Retriever Configuration', demo_custom_retriever, True),
-        '7': ('Multi-Query RAG', demo_multi_query, True),
-        '8': ('RAG Chain Comparison', demo_chain_comparison, True),
-    }
-
-    # determine which demos to run
-    if selections == 'a':
-        demos_to_run = list(demo_map.keys())
-    else:
-        # parse comma-separated or space-separated numbers
-        demos_to_run = [s.strip() for s in selections.replace(',', ' ').split() if s.strip() in demo_map]
-
-    if not demos_to_run:
-        print("\n⚠️  invalid selection. please enter demo numbers (1-8), 'a' for all, or 'q' to quit")
-        return True
-
-    # run selected demos
-    print("\n" + "=" * 70)
-    print(f"  Running {len(demos_to_run)} demo(s)")
-    print("=" * 70)
-
-    for demo_num in demos_to_run:
-        name, func, needs_api = demo_map[demo_num]
-
-        if needs_api and not has_openai:
-            print(f"\n⚠️  skipping demo {demo_num}: {name} (requires OPENAI_API_KEY)")
-            continue
-
-        try:
-            func()
-        except KeyboardInterrupt:
-            print("\n\n⚠️  demo interrupted by user")
-            return False
-        except Exception as e:
-            print(f"\n❌ error in demo {demo_num}: {e}")
-            continue
-
-    print("\n" + "=" * 70)
-    print("  ✅ selected demos complete!")
-    print("=" * 70)
-    print("\n💡 key takeaways:")
-    print("  1. ChromaDB provides easy local vector storage")
-    print("  2. RecursiveCharacterTextSplitter is best for most use cases")
-    print("  3. MMR balances relevance with diversity")
-    print("  4. Metadata filtering narrows search scope efficiently")
-    print("  5. Multi-query improves recall for ambiguous questions")
-    print("  6. LCEL chains are composable and production-ready")
-    print("\n📚 explore:")
-    print("  • different embedding models (text-embedding-3-large)")
-    print("  • persistent ChromaDB storage")
-    print("  • other vector stores (FAISS, Pinecone)")
-    print("  • advanced retrieval (parent document, self-query)")
-
-    return True
+# endregion
 
 
 def main() -> None:
-    """run practical demonstrations with interactive menu"""
+    """run RAG demonstrations with interactive menu"""
     has_openai, _ = check_api_keys()
 
-    if not has_openai:
-        print("\n⚠️  OPENAI_API_KEY not found")
-        print("   some demos will be skipped (marked with 🔑)")
-        print("   set it with: export OPENAI_API_KEY='your-key-here'")
+    runner = MenuRunner(
+        DEMOS,
+        title="RAG (Retrieval-Augmented Generation) - Practical Examples",
+        subtitle="Using OpenAI API for real RAG implementations",
+        has_api=has_openai
+    )
+    runner.run()
 
-    # interactive menu loop
-    while True:
-        show_menu(has_openai)
+    print("\n" + "=" * 70)
+    print("  Thanks for exploring LangChain RAG!")
+    print("  You now understand retrieval-augmented generation patterns")
+    print("=" * 70 + "\n")
 
-        try:
-            selection = input("\n🎯 select demo(s) (e.g., '1', '1,3,5', or 'a' for all): ").strip()
-        except (EOFError, KeyboardInterrupt):
-            print("\n\n👋 exiting...")
-            break
-
-        if not run_selected_demos(selection, has_openai):
-            print("\n👋 exiting...")
-            break
-
-        # pause before showing menu again
-        try:
-            input("\n⏸️  Press Enter to continue...")
-        except (EOFError, KeyboardInterrupt):
-            print("\n\n👋 exiting...")
-            break
 
 
 if __name__ == "__main__":

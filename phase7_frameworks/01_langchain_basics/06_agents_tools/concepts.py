@@ -9,6 +9,8 @@ Run with: uv run python -m phase7_frameworks.01_langchain_basics.06_agents_tools
 
 from inspect import cleandoc
 
+from common.demo_menu import Demo, MenuRunner
+
 
 def print_section(title: str) -> None:
     """print section header"""
@@ -412,66 +414,20 @@ def demo_agent_decision_tree() -> None:
 # endregion
 
 
-def show_menu() -> None:
-    """display interactive demo menu"""
-    print("\n" + "=" * 70)
-    print("  Agents & Tools - Conceptual Examples")
-    print("=" * 70)
-    print("\n📚 Available Demos:\n")
 
-    demos = [
-        ("1", "Agent vs Chain", "when to use agents over chains"),
-        ("2", "ReAct Pattern", "reasoning and acting framework"),
-        ("3", "Tool Selection", "how agents choose tools"),
-        ("4", "Tool Description Quality", "clear descriptions matter"),
-        ("5", "Agent Memory Integration", "stateful agent conversations"),
-        ("6", "Error Handling Strategies", "graceful failure recovery"),
-        ("7", "Agent Decision Tree", "multi-step reasoning flow"),
-    ]
+# region Demo Menu Configuration
 
-    for num, name, desc in demos:
-        print(f"    [{num}] {name}")
-        print(f"        {desc}")
-        print()
+DEMOS = [
+    Demo("1", "Agent vs Chain", "agent vs chain", demo_agent_vs_chain),
+    Demo("2", "ReAct Pattern", "react pattern", demo_react_pattern),
+    Demo("3", "Tool Selection", "tool selection", demo_tool_selection),
+    Demo("4", "Tool Description Quality", "tool description quality", demo_tool_description_quality),
+    Demo("5", "Agent Memory Integration", "agent memory integration", demo_agent_memory_integration),
+    Demo("6", "Error Handling", "error handling", demo_error_handling_strategies),
+    Demo("7", "Agent Decision Tree", "agent decision tree", demo_agent_decision_tree),
+]
 
-    print("  [a] Run all demos")
-    print("  [q] Quit")
-    print("\n" + "=" * 70)
-
-
-def run_selected_demos(selections: str) -> bool:
-    """run selected demos based on user input"""
-    selections = selections.lower().strip()
-
-    if selections == 'q':
-        return False
-
-    demo_map = {
-        '1': ("Agent vs Chain", demo_agent_vs_chain),
-        '2': ("ReAct Pattern", demo_react_pattern),
-        '3': ("Tool Selection", demo_tool_selection),
-        '4': ("Tool Description Quality", demo_tool_description_quality),
-        '5': ("Agent Memory Integration", demo_agent_memory_integration),
-        '6': ("Error Handling", demo_error_handling_strategies),
-        '7': ("Agent Decision Tree", demo_agent_decision_tree),
-    }
-
-    if selections == 'a':
-        # run all demos
-        for name, demo_func in demo_map.values():
-            demo_func()
-    else:
-        # parse comma-separated selections
-        selected = [s.strip() for s in selections.split(',')]
-        for sel in selected:
-            if sel in demo_map:
-                name, demo_func = demo_map[sel]
-                demo_func()
-            else:
-                print(f"⚠️  Invalid selection: {sel}")
-
-    return True
-
+# endregion
 
 def main() -> None:
     """run demonstrations with interactive menu"""
@@ -480,31 +436,9 @@ def main() -> None:
     print("  No API key required - demonstrates patterns only")
     print("=" * 70)
 
-    while True:
-        show_menu()
-        selection = input("\nSelect demos to run (comma-separated) or 'a' for all: ").strip()
-
-        if not selection:
-            continue
-
-        if not run_selected_demos(selection):
-            break
-
-        print("\n" + "=" * 70)
-        print("  Demos complete!")
-        print("=" * 70)
-
-        # pause before showing menu again
-        try:
-            input("\n⏸️  Press Enter to continue...")
-        except (EOFError, KeyboardInterrupt):
-            print("\n\n👋 Goodbye!")
-            break
-
-    print("\n" + "=" * 70)
-    print("  Thanks for exploring agents and tools!")
-    print("  Next: Run practical.py for hands-on examples with real LLMs")
-    print("=" * 70 + "\n")
+    
+    runner = MenuRunner(DEMOS, title="TODO: Add title")
+    runner.run()
 
 
 if __name__ == "__main__":

@@ -16,7 +16,8 @@ from langchain_classic.memory import (
 )
 from langchain_core.messages import AIMessage, HumanMessage
 
-from phase7_frameworks.utils import print_section
+from common.demo_menu import Demo, MenuRunner
+from common.util.utils import print_section
 
 
 # region Demo 1: ConversationBufferMemory Basics
@@ -320,96 +321,30 @@ def demo_memory_inspection() -> None:
 # endregion
 
 
-def show_menu() -> None:
-    """display interactive demo menu"""
-    print("\n" + "=" * 70)
-    print("  Memory - Conceptual Examples")
-    print("=" * 70)
-    print("\n📚 Available Demos:\n")
+# region Demo Menu Configuration
 
-    demos = [
-        ("1", "Buffer Memory", "complete conversation history"),
-        ("2", "Window Memory", "sliding window with recent messages"),
-        ("3", "Return Messages", "message objects vs strings"),
-        ("4", "Custom Keys", "configurable memory variable names"),
-        ("5", "Token Counting", "memory size management"),
-        ("6", "Multi-User Memory", "per-user conversation isolation"),
-        ("7", "Memory Clearing", "reset and cleanup operations"),
-        ("8", "Memory Inspection", "debugging and introspection"),
-    ]
+DEMOS = [
+    Demo("1", "Buffer Memory", "complete conversation history", demo_buffer_memory),
+    Demo("2", "Window Memory", "sliding window with recent messages", demo_window_memory),
+    Demo("3", "Return Messages", "message objects vs strings", demo_return_messages),
+    Demo("4", "Custom Keys", "configurable memory variable names", demo_custom_keys),
+    Demo("5", "Token Counting", "memory size management", demo_token_counting),
+    Demo("6", "Multi-User Memory", "per-user conversation isolation", demo_multi_user_memory),
+    Demo("7", "Memory Clearing", "reset and cleanup operations", demo_memory_clearing),
+    Demo("8", "Memory Inspection", "debugging and introspection", demo_memory_inspection),
+]
 
-    for num, name, desc in demos:
-        print(f"    [{num}] {name}")
-        print(f"        {desc}")
-        print()
-
-    print("  [a] Run all demos")
-    print("  [q] Quit")
-    print("\n" + "=" * 70)
-
-
-def run_selected_demos(selections: str) -> bool:
-    """run selected demos based on user input"""
-    selections = selections.lower().strip()
-
-    if selections == 'q':
-        return False
-
-    demo_map = {
-        '1': ("Buffer Memory", demo_buffer_memory),
-        '2': ("Window Memory", demo_window_memory),
-        '3': ("Return Messages", demo_return_messages),
-        '4': ("Custom Keys", demo_custom_keys),
-        '5': ("Token Counting", demo_token_counting),
-        '6': ("Multi-User Memory", demo_multi_user_memory),
-        '7': ("Memory Clearing", demo_memory_clearing),
-        '8': ("Memory Inspection", demo_memory_inspection),
-    }
-
-    if selections == 'a':
-        # run all demos
-        for name, demo_func in demo_map.values():
-            demo_func()
-    else:
-        # parse comma-separated selections
-        selected = [s.strip() for s in selections.split(',')]
-        for sel in selected:
-            if sel in demo_map:
-                name, demo_func = demo_map[sel]
-                demo_func()
-            else:
-                print(f"⚠️  Invalid selection: {sel}")
-
-    return True
+# endregion
 
 
 def main() -> None:
     """run demonstrations with interactive menu"""
-    print("\n" + "=" * 70)
-    print("  Memory - Conceptual Understanding")
-    print("  No API key required - demonstrates patterns only")
-    print("=" * 70)
-
-    while True:
-        show_menu()
-        selection = input("\nSelect demos to run (comma-separated) or 'a' for all: ").strip()
-
-        if not selection:
-            continue
-
-        if not run_selected_demos(selection):
-            break
-
-        print("\n" + "=" * 70)
-        print("  Demos complete!")
-        print("=" * 70)
-
-        # pause before showing menu again
-        try:
-            input("\n⏸️  Press Enter to continue...")
-        except (EOFError, KeyboardInterrupt):
-            print("\n\n👋 Goodbye!")
-            break
+    runner = MenuRunner(
+        DEMOS,
+        title="Memory - Conceptual Examples",
+        subtitle="No API key required - demonstrates patterns only"
+    )
+    runner.run()
 
     print("\n" + "=" * 70)
     print("  Thanks for exploring LangChain memory!")

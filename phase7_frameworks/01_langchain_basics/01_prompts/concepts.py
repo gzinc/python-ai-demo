@@ -12,6 +12,7 @@ No API key required - demonstrates patterns through output inspection.
 from inspect import cleandoc
 from typing import Any
 
+from common.demo_menu import Demo, MenuRunner
 from langchain_core.prompts import (
     ChatPromptTemplate,
     FewShotPromptTemplate,
@@ -599,68 +600,21 @@ def demo_decision_framework() -> None:
 # region Main
 
 
-def show_menu() -> None:
-    """display interactive demo menu"""
-    print("\n" + "=" * 70)
-    print("  LangChain Prompts & Templates - Conceptual Examples")
-    print("=" * 70)
-    print("\n📚 Available Demos:\n")
 
-    demos = [
-        ("1", "Basic PromptTemplate vs F-Strings", "comparison of template approaches"),
-        ("2", "Partial Templates", "pre-filling common variables"),
-        ("3", "ChatPromptTemplate", "multi-message prompt structure"),
-        ("4", "MessagesPlaceholder", "dynamic chat history injection"),
-        ("5", "FewShotPromptTemplate", "in-context learning examples"),
-        ("6", "FewShotChatMessagePromptTemplate", "chat-based few-shot learning"),
-        ("7", "Template Composition", "combining templates together"),
-        ("8", "Decision Framework", "choosing the right template type"),
-    ]
+# region Demo Menu Configuration
 
-    for num, name, desc in demos:
-        print(f"    [{num}] {name}")
-        print(f"        {desc}")
-        print()
+DEMOS = [
+    Demo("1", "Basic PromptTemplate vs F-Strings", "basic prompttemplate vs f-strings", demo_basic_templates),
+    Demo("2", "Partial Templates", "partial templates", demo_partial_templates),
+    Demo("3", "ChatPromptTemplate", "chatprompttemplate", demo_chat_templates),
+    Demo("4", "MessagesPlaceholder", "messagesplaceholder", demo_messages_placeholder),
+    Demo("5", "FewShotPromptTemplate", "fewshotprompttemplate", demo_few_shot_templates),
+    Demo("6", "FewShotChatMessagePromptTemplate", "fewshotchatmessageprompttemplate", demo_few_shot_chat_templates),
+    Demo("7", "Template Composition", "template composition", demo_template_composition),
+    Demo("8", "Decision Framework", "decision framework", demo_decision_framework),
+]
 
-    print("  [a] Run all demos")
-    print("  [q] Quit")
-    print("\n" + "=" * 70)
-
-
-def run_selected_demos(selections: str) -> bool:
-    """run selected demos based on user input"""
-    selections = selections.lower().strip()
-
-    if selections == 'q':
-        return False
-
-    demo_map = {
-        '1': ("Basic PromptTemplate vs F-Strings", demo_basic_templates),
-        '2': ("Partial Templates", demo_partial_templates),
-        '3': ("ChatPromptTemplate", demo_chat_templates),
-        '4': ("MessagesPlaceholder", demo_messages_placeholder),
-        '5': ("FewShotPromptTemplate", demo_few_shot_templates),
-        '6': ("FewShotChatMessagePromptTemplate", demo_few_shot_chat_templates),
-        '7': ("Template Composition", demo_template_composition),
-        '8': ("Decision Framework", demo_decision_framework),
-    }
-
-    if selections == 'a':
-        # run all demos
-        for name, demo_func in demo_map.values():
-            demo_func()
-    else:
-        # parse comma-separated selections
-        selected = [s.strip() for s in selections.split(',')]
-        for sel in selected:
-            if sel in demo_map:
-                name, demo_func = demo_map[sel]
-                demo_func()
-            else:
-                print(f"⚠️  Invalid selection: {sel}")
-
-    return True
-
+# endregion
 
 def main() -> None:
     """run demonstrations with interactive menu"""
@@ -669,31 +623,9 @@ def main() -> None:
     print("  No API key required - demonstrates patterns only")
     print("=" * 70)
 
-    while True:
-        show_menu()
-        selection = input("\nSelect demos to run (comma-separated) or 'a' for all: ").strip()
-
-        if not selection:
-            continue
-
-        if not run_selected_demos(selection):
-            break
-
-        print("\n" + "=" * 70)
-        print("  Demos complete!")
-        print("=" * 70)
-
-        # pause before showing menu again
-        try:
-            input("\n⏸️  Press Enter to continue...")
-        except (EOFError, KeyboardInterrupt):
-            print("\n\n👋 Goodbye!")
-            break
-
-    print("\n" + "=" * 70)
-    print("  Thanks for exploring LangChain prompts!")
-    print("  Next: Run practical.py with OPENAI_API_KEY for real LLM integration")
-    print("=" * 70 + "\n")
+    
+    runner = MenuRunner(DEMOS, title="LangChain Prompts - Conceptual Understanding")
+    runner.run()
 
 
 if __name__ == "__main__":

@@ -16,6 +16,8 @@ import sys
 from inspect import cleandoc
 from dotenv import load_dotenv
 
+from common.demo_menu import Demo, MenuRunner
+
 # load .env file (must be called before checking keys)
 load_dotenv()
 
@@ -225,70 +227,8 @@ def interactive_chat() -> None:
             break
 
 
-def show_menu(has_openai: bool = True, has_anthropic: bool = True) -> None:
-    """display interactive menu of available demos"""
-    print("\n" + "=" * 60)
-    print("  Live API Integration Examples")
-    print("=" * 60)
-    print("\nAvailable demos:")
-    if has_openai:
-        print("  1. OpenAI examples (basic, streaming, code generation)")
-    if has_anthropic:
-        print("  2. Anthropic examples (basic, streaming, code generation)")
-    if has_openai or has_anthropic:
-        print("  3. interactive chat session")
-    print("\n  [a] Run all demos")
-    print("  [q] Quit")
-    print("=" * 60)
-
-
-def run_selected_demos(selections: str, has_openai: bool = True, has_anthropic: bool = True) -> bool:
-    """run selected demos based on user input"""
-    demo_map = {}
-    if has_openai:
-        demo_map["1"] = ("OpenAI examples", run_openai_examples)
-    if has_anthropic:
-        demo_map["2"] = ("Anthropic examples", run_anthropic_examples)
-    if has_openai or has_anthropic:
-        demo_map["3"] = ("interactive chat", interactive_chat)
-
-    if selections.lower() == "q":
-        return False
-
-    if selections.lower() == "a":
-        print("\n🚀 Running all demos...\n")
-        for name, func in demo_map.values():
-            func()
-        print("\n✅ All demos completed!")
-        print_section("Key Observations")
-        print(cleandoc("""
-            - Response times vary (network latency + model inference)
-            - Streaming feels more responsive
-            - Token counts affect cost
-            - Both providers have similar capabilities
-        """))
-        return True
-
-    # parse comma-separated selections
-    selected = [s.strip() for s in selections.split(",")]
-    valid_selections = [s for s in selected if s in demo_map]
-
-    if not valid_selections:
-        valid_range = f"1-{len(demo_map)}"
-        print(f"❌ Invalid selection. Please enter numbers ({valid_range}), 'a' for all, or 'q' to quit.")
-        return True
-
-    for selection in valid_selections:
-        name, func = demo_map[selection]
-        print(f"\n▶️  Running: {name}")
-        func()
-
-    print("\n✅ Selected demos completed!")
-    return True
-
-
 def main() -> None:
-    """interactive demo runner"""
+    """interactive demo runner with conditional API-based demos"""
     # check for keys
     has_openai = check_openai_key()
     has_anthropic = check_anthropic_key()
@@ -308,20 +248,21 @@ def main() -> None:
         print("\nRun examples.py instead for pattern demonstrations.")
         sys.exit(1)
 
-    while True:
-        show_menu(has_openai, has_anthropic)
-        choice = input("\nSelect demos (e.g., '1', '1,2', or 'a' for all): ").strip()
-        should_continue = run_selected_demos(choice, has_openai, has_anthropic)
-        if not should_continue:
-            print("\n👋 Goodbye! Next: Move to Module 3 - Embeddings!\n")
-            break
+    # build conditional demo list based on available API keys
+    demos = []
+    if has_openai:
+        demos.append(Demo("1", "OpenAI Examples", "basic, streaming, code generation", run_openai_examples, needs_api=True))
+    if has_anthropic:
+        demos.append(Demo("2", "Anthropic Examples", "basic, streaming, code generation", run_anthropic_examples, needs_api=True))
+    if has_openai or has_anthropic:
+        demos.append(Demo("3", "Interactive Chat", "chat session with history", interactive_chat, needs_api=True))
 
-        # pause before showing menu again
-        try:
-            input("\n⏸️  Press Enter to continue...")
-        except (EOFError, KeyboardInterrupt):
-            print("\n\n👋 Goodbye! Next: Move to Module 3 - Embeddings!\n")
-            break
+    runner = MenuRunner(demos, title="Live API Integration Examples", has_api=True)
+    runner.run()
+
+    print("\n👋 Goodbye! Next: Move to Module 3 - Embeddings!\n")
+
+
 
 
 if __name__ == "__main__":

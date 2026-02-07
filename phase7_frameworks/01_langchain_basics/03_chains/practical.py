@@ -11,7 +11,8 @@ from inspect import cleandoc
 
 from langchain_core.messages import HumanMessage, SystemMessage
 
-from phase7_frameworks.utils import (
+from common.util.utils import (
+from common.demo_menu import Demo, MenuRunner
     check_api_keys,
     print_section,
     requires_both_keys,
@@ -726,21 +727,24 @@ def demo_batch_processing() -> None:
     start = time.time()
     sequential_results = [chain.invoke(c) for c in concepts]
     sequential_time = time.time() - start
+    print(f"✓ Completed in {sequential_time:.2f}s")
+    for i, (concept_dict, result) in enumerate(zip(concepts, sequential_results), 1):
+        print(f"  {i}. {concept_dict['concept']:15s}: {result[:80]}...")
 
     # batch execution
-    print(f"✓ Completed in {sequential_time:.2f}s\n")
+    print(f"\n")
     print("Batch (parallel):")
     start = time.time()
     batch_results = chain.batch(concepts)
     batch_time = time.time() - start
-    print(f"✓ Completed in {batch_time:.2f}s\n")
+    print(f"✓ Completed in {batch_time:.2f}s")
+    for i, (concept_dict, result) in enumerate(zip(concepts, batch_results), 1):
+        print(f"  {i}. {concept_dict['concept']:15s}: {result[:80]}...")
 
     speedup = sequential_time / batch_time if batch_time > 0 else 1
-    print(f"Speedup: {speedup:.1f}x faster with batch processing")
+    print(f"\nSpeedup: {speedup:.1f}x faster with batch processing")
 
-    print("\n## Results:\n")
-    for i, (concept_dict, result) in enumerate(zip(concepts, batch_results), 1):
-        print(f"{i}. {concept_dict['concept']:15s}: {result}")
+    print("\n✓ Both methods produce identical results, but batch is much faster!")
 
 
 # endregion
@@ -751,11 +755,11 @@ def demo_batch_processing() -> None:
 @requires_openai
 def demo_verbose_debugging() -> None:
     """
-    demonstrate verbose mode for debugging
+    demonstrate debugging with built-in astream_events()
 
-    Verbose Debugging Mode:
+    Built-in Chain Debugging with astream_events():
     ┌─────────────────────────────────────────────────────────────┐
-    │         Verbose Mode: Chain Execution Transparency          │
+    │       astream_events(): Built-in Chain Event Streaming      │
     │                                                             │
     │  Normal Execution (verbose=False):                          │
     │     chain.invoke(input)                                     │
@@ -827,16 +831,53 @@ def demo_verbose_debugging() -> None:
 
     chain = prompt | llm | parser
 
-    print("## Verbose Mode (shows execution details):\n")
+    print("## Built-in Debugging with astream_events():\n")
+    print("Streaming chain execution events...\n")
 
-    result = chain.invoke(
-        {"concept": "LCEL"},
-        config={"verbose": True}
-    )
+    import asyncio
 
-    print(f"\nFinal Result: {result}")
+    async def debug_chain():
+        """stream events to see each step"""
+        final_result = ""
 
-    print("\n✓ Verbose mode helps debug chain execution flow")
+        async for event in chain.astream_events(
+            {"concept": "LCEL"},
+            version="v2"
+        ):
+            kind = event["event"]
+            name = event.get("name", "unknown")
+
+            if kind == "on_chain_start":
+                print(f"\n[START] {name}")
+                if event.get("data", {}).get("input"):
+                    print(f"  Input: {event['data']['input']}")
+
+            elif kind == "on_prompt_end":
+                print(f"\n[PROMPT] Formatted prompt ready")
+
+            elif kind == "on_chat_model_start":
+                print(f"\n[LLM] {name} - Generating response...")
+
+            elif kind == "on_chat_model_stream":
+                chunk = event["data"]["chunk"]
+                if hasattr(chunk, "content"):
+                    print(chunk.content, end="", flush=True)
+                    final_result += chunk.content
+
+            elif kind == "on_chain_end":
+                if name == "StrOutputParser":
+                    print(f"\n\n[PARSER] Extracted string output")
+
+        return final_result
+
+    # run async function
+    result = asyncio.run(debug_chain())
+
+    print(f"\n{'='*60}")
+    print(f"Final Result: {result}")
+    print('='*60)
+
+    print("\n✓ astream_events() shows every step of chain execution")
 
 
 # endregion
@@ -939,149 +980,26 @@ def demo_custom_transformation() -> None:
 # endregion
 
 
-def show_menu(has_openai: bool, has_anthropic: bool) -> None:
-    """display interactive demo menu"""
-    print("\n" + "=" * 70)
-    print("  Chains - Practical Examples")
-    print("=" * 70)
-    print("\n📚 Available Demos:\n")
+# region Demo Menu Configuration
 
-    demos = [
-        ("1", "Basic LCEL Chain", "prompt | llm | parser pattern", 'openai'),
-        ("2", "Multi-Message Prompt Chain", "system + user message flows", 'openai'),
-        ("3", "Streaming Chain", "real-time progressive output", 'openai'),
-        ("4", "Parallel Chains", "concurrent execution pattern", 'openai'),
-        ("5", "Passthrough Pattern", "side information with processing", 'openai'),
-        ("6", "Fallback Chain", "multi-provider reliability", 'both'),
-        ("7", "Retry Chain", "automatic error recovery", 'openai'),
-        ("8", "Batch Processing", "efficient multi-input handling", 'openai'),
-        ("9", "Verbose Debugging", "execution trace inspection", 'openai'),
-        ("10", "Custom Transformation", "RunnableLambda integration", 'openai'),
-    ]
+DEMOS = [
+    Demo("1", "Simple Sequential Chain", "multi-step processing pipeline", demo_simple_chain, needs_api=True),
+    Demo("2", "LCEL Chain", "langchain expression language", demo_lcel_chain, needs_api=True),
+    Demo("3", "Conditional Routing", "dynamic chain branching", demo_conditional_routing, needs_api=True),
+    Demo("4", "Parallel Execution", "concurrent chain operations", demo_parallel_execution, needs_api=True),
+    Demo("5", "Chain with Memory", "stateful chain execution", demo_chain_with_memory, needs_api=True),
+    Demo("6", "Error Recovery Chain", "fallback and retry patterns", demo_error_recovery, needs_api=True),
+    Demo("7", "Complex RAG Chain", "retrieval-augmented generation", demo_complex_rag_chain, needs_api=True),
+]
 
-    for num, name, desc, requires in demos:
-        needs_both = requires == 'both'
-        has_required = (has_openai and has_anthropic) if needs_both else has_openai
-
-        api_marker = "🔑"
-        status = "" if has_required else f" ⚠️ (needs {'both API keys' if needs_both else 'OpenAI key'})"
-
-        print(f"  {api_marker} [{num}] {name}")
-        print(f"      {desc}{status}")
-        print()
-
-    if not has_openai:
-        print("  ⚠️  OpenAI API key required for most demos")
-        print("     Set OPENAI_API_KEY in .env file")
-        print()
-
-    print("  [a] Run all demos")
-    print("  [q] Quit")
-    print("\n" + "=" * 70)
-
-
-def run_selected_demos(selections: str, has_openai: bool, has_anthropic: bool) -> bool:
-    """run selected demos based on user input"""
-    selections = selections.lower().strip()
-
-    if selections == 'q':
-        return False
-
-    demo_map = {
-        '1': ("Basic LCEL Chain", demo_basic_lcel_chain, 'openai'),
-        '2': ("Multi-Message Chain", demo_multi_message_chain, 'openai'),
-        '3': ("Streaming Chain", demo_streaming_chain, 'openai'),
-        '4': ("Parallel Chains", demo_parallel_chains, 'openai'),
-        '5': ("Passthrough Pattern", demo_passthrough_pattern, 'openai'),
-        '6': ("Fallback Chain", demo_fallback_chain, 'both'),
-        '7': ("Retry Chain", demo_retry_chain, 'openai'),
-        '8': ("Batch Processing", demo_batch_processing, 'openai'),
-        '9': ("Verbose Debugging", demo_verbose_debugging, 'openai'),
-        '10': ("Custom Transformation", demo_custom_transformation, 'openai'),
-    }
-
-    if selections == 'a':
-        # run all demos
-        for name, demo_func, requires in demo_map.values():
-            if requires == 'openai' and not has_openai:
-                print(f"\n⚠️  Skipping {name}: OpenAI API key required")
-                continue
-            if requires == 'both' and not (has_openai and has_anthropic):
-                print(f"\n⚠️  Skipping {name}: Both API keys required")
-                continue
-            try:
-                demo_func()
-            except Exception as e:
-                print(f"\n❌ Error in {name}: {e}")
-    else:
-        # parse comma-separated selections
-        selected = [s.strip() for s in selections.split(',')]
-        for sel in selected:
-            if sel in demo_map:
-                name, demo_func, requires = demo_map[sel]
-
-                # check API key requirements
-                if requires == 'openai' and not has_openai:
-                    print(f"\n⚠️  Cannot run {name}: OpenAI API key required")
-                    continue
-                if requires == 'both' and not (has_openai and has_anthropic):
-                    print(f"\n⚠️  Cannot run {name}: Both API keys required")
-                    continue
-
-                try:
-                    demo_func()
-                except Exception as e:
-                    print(f"\n❌ Error in {name}: {e}")
-            else:
-                print(f"⚠️  Invalid selection: {sel}")
-
-    return True
+# endregion
 
 
 def main() -> None:
-    """run demonstrations with interactive menu"""
+    """interactive demo runner"""
     has_openai, has_anthropic = check_api_keys()
-
-    print("\n" + "=" * 70)
-    print("  Chains - Practical Examples")
-    print("  Real chain execution with LLM calls")
-    print("=" * 70)
-    print("\n## API Key Status:")
-    print(f"OPENAI_API_KEY: {'✓ Found' if has_openai else '✗ Missing'}")
-    print(f"ANTHROPIC_API_KEY: {'✓ Found' if has_anthropic else '✗ Missing'}")
-
-    if not has_openai:
-        print("\n❌ OpenAI API key required!")
-        print("Set OPENAI_API_KEY in .env to run demos")
-        return
-
-    while True:
-        show_menu(has_openai, has_anthropic)
-        selection = input("\nSelect demos to run (comma-separated) or 'a' for all: ").strip()
-
-        if not selection:
-            continue
-
-        if not run_selected_demos(selection, has_openai, has_anthropic):
-            break
-
-        print("\n" + "=" * 70)
-        print("  Demos complete!")
-        print("=" * 70)
-
-        # pause before showing menu again
-        try:
-            input("\n⏸️  Press Enter to continue...")
-        except (EOFError, KeyboardInterrupt):
-            print("\n\n👋 Goodbye!")
-            break
-
-    print("\n" + "=" * 70)
-    print("  Thanks for exploring LangChain chains!")
-    print("  You've mastered chain composition and LCEL patterns")
-    print("=" * 70 + "\n")
-
-
+    runner = MenuRunner(DEMOS, title="LLM Integration - Practical Examples", has_api=has_openai or has_anthropic)
+    runner.run()
 if __name__ == "__main__":
     try:
         main()

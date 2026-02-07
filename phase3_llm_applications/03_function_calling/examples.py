@@ -18,6 +18,8 @@ from dotenv import load_dotenv
 from schemas import Tool, ToolParameter
 from engine import FunctionCallingEngine
 from common_tools import (
+
+from common.demo_menu import Demo, MenuRunner
     create_weather_tool,
     create_calculator_tool,
     create_search_tool,
@@ -232,98 +234,22 @@ def example_schema_inspection():
 # ─────────────────────────────────────────────────────────────
 
 
-def show_menu() -> None:
-    """display interactive demo menu"""
-    print("\n" + "=" * 70)
-    print("  Function Calling Examples - LLM Tool Integration")
-    print("=" * 70)
-    print("\n📚 Available Demos:\n")
+# region Demo Menu Configuration
 
-    demos = [
-        ("1", "Basic Function Call", "single tool usage with weather API"),
-        ("2", "Multiple Tools", "LLM using multiple tools in one query"),
-        ("3", "Conversation with Tools", "multi-turn chat with tool access"),
-        ("4", "Tool Choice", "LLM deciding when to use tools"),
-        ("5", "Error Handling", "handling tool failures gracefully"),
-        ("6", "Agent Loop Pattern", "foundation for AI agents"),
-        ("7", "Schema Inspection", "viewing tool schemas sent to LLM"),
-    ]
+DEMOS = [
+    Demo("1", "Basic Function Calling", "simple tool use", example_basic_function_calling),
+    Demo("2", "Multiple Functions", "agent with multiple tools", example_multiple_functions),
+    Demo("3", "Parallel Function Calls", "concurrent tool execution", example_parallel_calls),
+    Demo("4", "Function with Context", "stateful tool use", example_function_with_context),
+    Demo("5", "Error Handling", "graceful function failures", example_error_handling),
+]
 
-    for num, name, desc in demos:
-        print(f"   [{num}] {name}")
-        print(f"      {desc}")
-        print()
-
-    print("  [a] Run all demos")
-    print("  [q] Quit")
-    print("\n" + "=" * 70)
+# endregion
 
 
-def run_selected_demos(selections: str) -> bool:
-    """run selected demos based on user input"""
-    selections = selections.strip().lower()
-
-    if selections == 'q':
-        return False
-
-    demo_map = {
-        '1': ('Basic Function Call', example_basic_function_call),
-        '2': ('Multiple Tools', example_multi_tool),
-        '3': ('Conversation with Tools', example_conversation_with_tools),
-        '4': ('Tool Choice', example_tool_choice),
-        '5': ('Error Handling', example_error_handling),
-        '6': ('Agent Loop Pattern', example_agent_loop_pattern),
-        '7': ('Schema Inspection', example_schema_inspection),
-    }
-
-    if selections == 'a':
-        demos_to_run = list(demo_map.keys())
-    else:
-        demos_to_run = [s.strip() for s in selections.replace(',', ' ').split() if s.strip() in demo_map]
-
-    if not demos_to_run:
-        print("\n⚠️  invalid selection. please enter demo numbers, 'a' for all, or 'q' to quit")
-        return True
-
-    print(f"\n🚀 Running {len(demos_to_run)} demo(s)...\n")
-
-    for demo_num in demos_to_run:
-        name, func = demo_map[demo_num]
-        try:
-            func()
-        except KeyboardInterrupt:
-            print("\n\n⚠️  demo interrupted by user")
-            return False
-        except Exception as e:
-            print(f"\n❌ error in demo: {e}")
-            continue
-
-    print("\n✅ selected demos complete!")
-    return True
-
-
-def main():
-    """run demonstrations with interactive menu"""
-    while True:
-        show_menu()
-
-        try:
-            selection = input("\n🎯 select demo(s) (e.g., '1', '1,3', or 'a' for all): ").strip()
-        except (EOFError, KeyboardInterrupt):
-            print("\n\n👋 goodbye!")
-            break
-
-        if not run_selected_demos(selection):
-            print("\n👋 goodbye!")
-            break
-
-        # pause before showing menu again
-        try:
-            input("\n⏸️  Press Enter to continue...")
-        except (EOFError, KeyboardInterrupt):
-            print("\n\n👋 goodbye!")
-            break
-
-
+def main() -> None:
+    """interactive demo runner"""
+    runner = MenuRunner(DEMOS, title="Examples")
+    runner.run()
 if __name__ == "__main__":
     main()

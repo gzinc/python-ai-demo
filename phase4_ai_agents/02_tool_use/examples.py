@@ -15,6 +15,8 @@ import os
 import sys
 import tempfile
 
+from common.demo_menu import Demo, MenuRunner
+
 # allow running as script
 if __name__ == "__main__":
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -378,96 +380,21 @@ def example_custom_tool():
 #   Main
 # ==============================================================================
 
-def show_menu() -> None:
-    """display interactive demo menu"""
-    print("\n" + "=" * 70)
-    print("  Tool Use Examples - Real Tool Implementations")
-    print("=" * 70)
-    print("\n📚 Available Demos:\n")
+# region Demo Menu Configuration
 
-    demos = [
-        ("1", "Tool Schemas", "building blocks of tool definitions"),
-        ("2", "File Tools", "read, write, list directory operations"),
-        ("3", "Web Search", "web search with mock results"),
-        ("4", "HTTP Tool", "HTTP GET requests with mock mode"),
-        ("5", "Tool Registry", "service container pattern for tools"),
-        ("6", "Custom Tool", "creating your own tool by extending BaseTool"),
-    ]
+DEMOS = [
+    Demo("1", "Calculator Tool", "basic math operations", example_calculator_tool),
+    Demo("2", "Web Search Tool", "information retrieval", example_web_search_tool),
+    Demo("3", "Custom Tool Creation", "build your own tools", example_custom_tool),
+    Demo("4", "Tool Composition", "combine multiple tools", example_tool_composition),
+]
 
-    for num, name, desc in demos:
-        print(f"   [{num}] {name}")
-        print(f"      {desc}")
-        print()
-
-    print("  [a] Run all demos")
-    print("  [q] Quit")
-    print("\n" + "=" * 70)
+# endregion
 
 
-def run_selected_demos(selections: str) -> bool:
-    """run selected demos based on user input"""
-    selections = selections.strip().lower()
-
-    if selections == 'q':
-        return False
-
-    demo_map = {
-        '1': ('Tool Schemas', example_tool_schemas),
-        '2': ('File Tools', example_file_tools),
-        '3': ('Web Search', example_web_search),
-        '4': ('HTTP Tool', example_http_tool),
-        '5': ('Tool Registry', example_tool_registry),
-        '6': ('Custom Tool', example_custom_tool),
-    }
-
-    if selections == 'a':
-        demos_to_run = list(demo_map.keys())
-    else:
-        demos_to_run = [s.strip() for s in selections.replace(',', ' ').split() if s.strip() in demo_map]
-
-    if not demos_to_run:
-        print("\n⚠️  invalid selection. please enter demo numbers, 'a' for all, or 'q' to quit")
-        return True
-
-    print(f"\n🚀 Running {len(demos_to_run)} demo(s)...\n")
-
-    for demo_num in demos_to_run:
-        name, func = demo_map[demo_num]
-        try:
-            func()
-        except KeyboardInterrupt:
-            print("\n\n⚠️  demo interrupted by user")
-            return False
-        except Exception as e:
-            print(f"\n❌ error in demo: {e}")
-            continue
-
-    print("\n✅ selected demos complete!")
-    return True
-
-
-def main():
-    """run demonstrations with interactive menu"""
-    while True:
-        show_menu()
-
-        try:
-            selection = input("\n🎯 select demo(s) (e.g., '1', '1,3', or 'a' for all): ").strip()
-        except (EOFError, KeyboardInterrupt):
-            print("\n\n👋 goodbye!")
-            break
-
-        if not run_selected_demos(selection):
-            print("\n👋 goodbye!")
-            break
-
-        # pause before showing menu again
-        try:
-            input("\n⏸️  Press Enter to continue...")
-        except (EOFError, KeyboardInterrupt):
-            print("\n\n👋 goodbye!")
-            break
-
-
+def main() -> None:
+    """interactive demo runner"""
+    runner = MenuRunner(DEMOS, title="Examples")
+    runner.run()
 if __name__ == "__main__":
     main()

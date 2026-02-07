@@ -16,6 +16,8 @@ from dotenv import load_dotenv
 from agent import ReActAgent
 from schemas import AgentConfig
 
+from common.demo_menu import Demo, MenuRunner
+
 load_dotenv()
 
 
@@ -286,105 +288,21 @@ def demo_timeout_handling():
     print(f"   Partial answer: {result.answer}")
 
 
-def show_menu() -> None:
-    """display interactive demo menu"""
-    print("\n" + "=" * 70)
-    print("  ReAct Agent Demos - Reasoning and Acting Pattern")
-    print("=" * 70)
-    print("\n📚 Available Demos:\n")
+# region Demo Menu Configuration
 
-    demos = [
-        ("1", "Simple Query", "single-tool weather query"),
-        ("2", "Multi-Step Reasoning", "multiple tools with reasoning"),
-        ("3", "Knowledge + Calculation", "combining search and math"),
-        ("4", "Compare Cities", "multiple API calls with comparison"),
-        ("5", "Action History", "examining agent decision trace"),
-        ("6", "Timeout Handling", "behavior when hitting max iterations"),
-    ]
-
-    for num, name, desc in demos:
-        print(f"   [{num}] {name}")
-        print(f"      {desc}")
-        print()
-
-    print("  [a] Run all demos")
-    print("  [q] Quit")
-    print("\n" + "=" * 70)
-
-
-def run_selected_demos(selections: str) -> bool:
-    """run selected demos based on user input"""
-    selections = selections.strip().lower()
-
-    if selections == 'q':
-        return False
-
-    demo_map = {
-        '1': ('Simple Query', demo_simple_query),
-        '2': ('Multi-Step Reasoning', demo_multi_step_reasoning),
-        '3': ('Knowledge + Calculation', demo_knowledge_and_calculation),
-        '4': ('Compare Cities', demo_compare_cities),
-        '5': ('Action History', demo_action_history),
-        '6': ('Timeout Handling', demo_timeout_handling),
-    }
-
-    if selections == 'a':
-        demos_to_run = list(demo_map.keys())
-    else:
-        demos_to_run = [s.strip() for s in selections.replace(',', ' ').split() if s.strip() in demo_map]
-
-    if not demos_to_run:
-        print("\n⚠️  invalid selection. please enter demo numbers, 'a' for all, or 'q' to quit")
-        return True
-
-    print(f"\n🚀 Running {len(demos_to_run)} demo(s)...\n")
-
-    for demo_num in demos_to_run:
-        name, func = demo_map[demo_num]
-        try:
-            func()
-        except KeyboardInterrupt:
-            print("\n\n⚠️  demo interrupted by user")
-            return False
-        except Exception as e:
-            print(f"\n❌ error in demo: {e}")
-            continue
-
-    print("\n✅ selected demos complete!")
-    return True
-
-
-def main():
-    """run demonstrations with interactive menu"""
-    # check for API key
-    if not os.getenv("OPENAI_API_KEY") and not os.getenv("ANTHROPIC_API_KEY"):
-        print("⚠️  No API key found!")
-        print("   Set OPENAI_API_KEY or ANTHROPIC_API_KEY in .env file")
-        print("   Example: OPENAI_API_KEY=sk-...")
-        return
-
-    while True:
-        show_menu()
-
-        try:
-            selection = input("\n🎯 select demo(s) (e.g., '1', '1,3', or 'a' for all): ").strip()
-        except (EOFError, KeyboardInterrupt):
-            print("\n\n👋 goodbye!")
-            break
-
-        if not run_selected_demos(selection):
-            print("\n👋 goodbye!")
-            break
-
-        # pause before showing menu again
-        try:
-            input("\n⏸️  Press Enter to continue...")
-        except (EOFError, KeyboardInterrupt):
-            print("\n\n👋 goodbye!")
-            break
+DEMOS = [
+    Demo("1", "Basic Agent", "simple agent with tools", example_basic_agent),
+    Demo("2", "ReAct Agent", "reasoning and action loop", example_react_agent),
+    Demo("3", "Agent with Memory", "stateful agent execution", example_agent_with_memory),
+    Demo("4", "Multi-Step Planning", "complex task breakdown", example_multi_step_planning),
+]
 
 # endregion
 
 
+def main() -> None:
+    """interactive demo runner"""
+    runner = MenuRunner(DEMOS, title="Examples")
+    runner.run()
 if __name__ == "__main__":
     main()

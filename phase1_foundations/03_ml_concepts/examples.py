@@ -12,6 +12,8 @@ import numpy as np
 from typing import Tuple, List
 import random
 
+from common.demo_menu import Demo, MenuRunner
+
 
 def print_section(title: str) -> None:
     """print section header"""
@@ -333,87 +335,26 @@ def embeddings_as_features_demo() -> None:
 # MAIN
 # =============================================================================
 
-def show_menu() -> None:
-    """display interactive menu of available demos"""
-    print("\n" + "=" * 60)
-    print("  ML Concepts - Essential Knowledge for AI Developers")
-    print("=" * 60)
-    print("\n⚡ Note: You don't implement these daily, but understanding")
-    print("   them makes you a better AI developer.")
-    print("\nAvailable demos:")
-    print("  1. features and labels explained")
-    print("  2. train/test split rationale")
-    print("  3. overfitting vs generalization")
-    print("  4. evaluation metrics breakdown")
-    print("  5. learning rate intuition")
-    print("  6. decision framework: prompting vs RAG vs fine-tuning")
-    print("  7. embeddings as automatic feature engineering")
-    print("\n  [a] Run all demos")
-    print("  [q] Quit")
-    print("=" * 60)
 
+# region Demo Menu Configuration
 
-def run_selected_demos(selections: str) -> bool:
-    """run selected demos based on user input"""
-    demo_map = {
-        "1": ("features and labels", features_and_labels_demo),
-        "2": ("train/test split", train_test_split_demo),
-        "3": ("overfitting", overfitting_demo),
-        "4": ("evaluation metrics", evaluation_metrics_demo),
-        "5": ("learning rate", learning_rate_demo),
-        "6": ("decision framework", decision_framework_demo),
-        "7": ("embeddings as features", embeddings_as_features_demo),
-    }
+DEMOS = [
+    Demo("1", "features and labels", "features and labels", features_and_labels_demo),
+    Demo("2", "train/test split", "train/test split", train_test_split_demo),
+    Demo("3", "overfitting", "overfitting", overfitting_demo),
+    Demo("4", "evaluation metrics", "evaluation metrics", evaluation_metrics_demo),
+    Demo("5", "learning rate", "learning rate", learning_rate_demo),
+    Demo("6", "decision framework", "decision framework", decision_framework_demo),
+    Demo("7", "embeddings as features", "embeddings as features", embeddings_as_features_demo),
+]
 
-    if selections.lower() == "q":
-        return False
-
-    if selections.lower() == "a":
-        print("\n🚀 Running all demos...\n")
-        for name, func in demo_map.values():
-            func()
-        print("\n✅ All concepts covered!")
-        print("\n📚 Key Takeaways:")
-        print("  1. Features = model inputs (prompts!), Labels = expected outputs")
-        print("  2. Always split data: train on some, test on others")
-        print("  3. Watch for overfitting: training acc >> test acc is bad")
-        print("  4. Start with prompting, add RAG, fine-tune last")
-        print("  5. Embeddings = automatic feature engineering")
-        return True
-
-    # parse comma-separated selections
-    selected = [s.strip() for s in selections.split(",")]
-    valid_selections = [s for s in selected if s in demo_map]
-
-    if not valid_selections:
-        print("❌ Invalid selection. Please enter numbers (1-7), 'a' for all, or 'q' to quit.")
-        return True
-
-    for selection in valid_selections:
-        name, func = demo_map[selection]
-        print(f"\n▶️  Running: {name}")
-        func()
-
-    print("\n✅ Selected demos completed!")
-    return True
-
+# endregion
 
 def main() -> None:
     """interactive demo runner"""
-    while True:
-        show_menu()
-        choice = input("\nSelect demos (e.g., '1', '1,3,5', or 'a' for all): ").strip()
-        should_continue = run_selected_demos(choice)
-        if not should_continue:
-            print("\n👋 Goodbye! Next: Move to Phase 2!\n")
-            break
-
-        # pause before showing menu again
-        try:
-            input("\n⏸️  Press Enter to continue...")
-        except (EOFError, KeyboardInterrupt):
-            print("\n\n👋 Goodbye! Next: Move to Phase 2!\n")
-            break
+    
+    runner = MenuRunner(DEMOS, title="ML Concepts - Examples")
+    runner.run()
 
 
 if __name__ == "__main__":

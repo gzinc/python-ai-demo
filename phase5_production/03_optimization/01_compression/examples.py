@@ -10,6 +10,8 @@ from .compressors import NaiveCompressor, LLMLingua2Compressor
 from .truncation import ContextTruncator
 from .response_limits import ResponseLimiter
 
+from common.demo_menu import Demo, MenuRunner
+
 
 def demo_naive_compression() -> None:
     """demo naive compression (no model download)"""
@@ -97,66 +99,17 @@ def demo_response_limits() -> None:
         print(f"  {task:20s} → max_tokens={limiter.get_limit(task)}")
 
 
-def show_menu() -> None:
-    """display interactive demo menu"""
-    print("\n" + "=" * 60)
-    print("  Token Optimization - Interactive Demos")
-    print("=" * 60)
-    print("\n📚 Available Demos:\n")
 
-    demos = [
-        ("1", "Naive Compression", "simple token reduction (demo only)"),
-        ("2", "LLMLingua-2", "production compression (~400MB download)"),
-        ("3", "Context Truncation", "score-based chunk selection"),
-        ("4", "Response Limits", "task-specific token limits"),
-    ]
+# region Demo Menu Configuration
 
-    for num, name, desc in demos:
-        print(f"    [{num}] {name}")
-        print(f"        {desc}")
-        print()
+DEMOS = [
+    Demo("1", "Naive Compression", "naive compression", demo_naive_compression),
+    Demo("2", "LLMLingua-2", "llmlingua-2", demo_llmlingua2),
+    Demo("3", "Context Truncation", "context truncation", demo_context_truncation),
+    Demo("4", "Response Limits", "response limits", demo_response_limits),
+]
 
-    print("  [a] Run all demos")
-    print("  [q] Quit")
-    print("\n" + "=" * 60)
-
-
-def run_selected_demos(selections: str) -> bool:
-    """run selected demos based on user input"""
-    selections = selections.lower().strip()
-
-    if selections == 'q':
-        return False
-
-    demo_map = {
-        '1': ("Naive Compression", demo_naive_compression),
-        '2': ("LLMLingua-2", demo_llmlingua2),
-        '3': ("Context Truncation", demo_context_truncation),
-        '4': ("Response Limits", demo_response_limits),
-    }
-
-    if selections == 'a':
-        # run all demos
-        for name, demo_func in demo_map.values():
-            if name == "LLMLingua-2":
-                print("\n⚠️  Skipping LLMLingua-2 (requires ~400MB model download)")
-                print("   Select demo '2' individually to run it")
-                continue
-            demo_func()
-            print("\n" + "-" * 60)
-    else:
-        # parse comma-separated selections
-        selected = [s.strip() for s in selections.split(',')]
-        for sel in selected:
-            if sel in demo_map:
-                name, demo_func = demo_map[sel]
-                demo_func()
-                print("\n" + "-" * 60)
-            else:
-                print(f"⚠️  Invalid selection: {sel}")
-
-    return True
-
+# endregion
 
 def main() -> None:
     """run all demos"""
@@ -165,36 +118,9 @@ def main() -> None:
     print("  Multiple strategies for token reduction")
     print("=" * 60)
 
-    while True:
-        show_menu()
-        selection = input("\nSelect demos to run (comma-separated) or 'a' for all: ").strip()
-
-        if not selection:
-            continue
-
-        if not run_selected_demos(selection):
-            break
-
-        print("\n" + "=" * 60)
-        print("  ✅ Demos complete!")
-        print("=" * 60)
-        print("\n💡 Key Insight:")
-        print("  Multiple strategies for token reduction:")
-        print("  • Naive: Simple pattern matching (demo only)")
-        print("  • LLMLingua-2: Smart semantic compression")
-        print("  • Truncation: Score-based selection")
-        print("  • Limits: Task-specific token budgets")
-
-        # pause before showing menu again
-        try:
-            input("\n⏸️  Press Enter to continue...")
-        except (EOFError, KeyboardInterrupt):
-            print("\n\n👋 Goodbye!")
-            break
-
-    print("\n" + "=" * 60)
-    print("  Thanks for exploring Token Optimization!")
-    print("=" * 60 + "\n")
+    
+    runner = MenuRunner(DEMOS, title="Response Compression - Examples")
+    runner.run()
 
 
 if __name__ == "__main__":

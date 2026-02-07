@@ -16,6 +16,8 @@ import pandas as pd
 import numpy as np
 from typing import List, Dict
 
+from common.demo_menu import Demo, MenuRunner
+
 
 def print_section(title: str) -> None:
     """print section header"""
@@ -496,90 +498,28 @@ def ai_application_example() -> None:
 # Main
 # =============================================================================
 
-def show_menu() -> None:
-    """display interactive menu of available demos"""
-    print("\n" + "=" * 70)
-    print("  PANDAS BASICS FOR AI DEVELOPMENT")
-    print("  Essential data manipulation for LLM applications")
-    print("=" * 70)
-    print("\nAvailable demos:")
-    print("  1. DataFrame creation methods")
-    print("  2. DataFrame exploration and analysis")
-    print("  3. selection and filtering data")
-    print("  4. text processing for AI")
-    print("  5. document chunking for RAG")
-    print("  6. data transformation techniques")
-    print("  7. batch processing pattern")
-    print("  8. loading and saving data")
-    print("  9. complete AI application example")
-    print("\n  [a] Run all demos")
-    print("  [q] Quit")
-    print("=" * 70)
 
+# region Demo Menu Configuration
 
-def run_selected_demos(selections: str) -> bool:
-    """run selected demos based on user input"""
-    demo_map = {
-        "1": ("DataFrame creation", dataframe_creation),
-        "2": ("DataFrame exploration", dataframe_exploration),
-        "3": ("selection and filtering", selection_and_filtering),
-        "4": ("text processing", text_processing),
-        "5": ("document chunking", document_chunking),
-        "6": ("data transformation", data_transformation),
-        "7": ("batch processing", batch_processing_pattern),
-        "8": ("loading and saving", loading_and_saving),
-        "9": ("AI application example", ai_application_example),
-    }
+DEMOS = [
+    Demo("1", "DataFrame creation", "dataframe creation", dataframe_creation),
+    Demo("2", "DataFrame exploration", "dataframe exploration", dataframe_exploration),
+    Demo("3", "selection and filtering", "selection and filtering", selection_and_filtering),
+    Demo("4", "text processing", "text processing", text_processing),
+    Demo("5", "document chunking", "document chunking", document_chunking),
+    Demo("6", "data transformation", "data transformation", data_transformation),
+    Demo("7", "batch processing", "batch processing", batch_processing_pattern),
+    Demo("8", "loading and saving", "loading and saving", loading_and_saving),
+    Demo("9", "AI application example", "ai application example", ai_application_example),
+]
 
-    if selections.lower() == "q":
-        return False
-
-    if selections.lower() == "a":
-        print("\n🚀 Running all demos...\n")
-        for name, func in demo_map.values():
-            func()
-        print("\n✅ All demos completed!")
-        print("\n📚 Key Takeaways:")
-        print("   1. DataFrames are tables - perfect for document datasets")
-        print("   2. Text cleaning is essential before embedding")
-        print("   3. Chunking large docs improves RAG retrieval")
-        print("   4. Batch processing handles large datasets efficiently")
-        print("   5. Pandas + NumPy = foundation for AI data pipelines")
-        return True
-
-    # parse comma-separated selections
-    selected = [s.strip() for s in selections.split(",")]
-    valid_selections = [s for s in selected if s in demo_map]
-
-    if not valid_selections:
-        print("❌ Invalid selection. Please enter numbers (1-9), 'a' for all, or 'q' to quit.")
-        return True
-
-    for selection in valid_selections:
-        name, func = demo_map[selection]
-        print(f"\n▶️  Running: {name}")
-        func()
-
-    print("\n✅ Selected demos completed!")
-    return True
-
+# endregion
 
 def main() -> None:
     """interactive demo runner"""
-    while True:
-        show_menu()
-        choice = input("\nSelect demos (e.g., '1', '1,3,5', or 'a' for all): ").strip()
-        should_continue = run_selected_demos(choice)
-        if not should_continue:
-            print("\n👋 Goodbye! Next: Try exercises or move to Phase 2!\n")
-            break
-
-        # pause before showing menu again
-        try:
-            input("\n⏸️  Press Enter to continue...")
-        except (EOFError, KeyboardInterrupt):
-            print("\n\n👋 Goodbye! Explore more in Phase 2!\n")
-            break
+    
+    runner = MenuRunner(DEMOS, title="Pandas Basics - Examples")
+    runner.run()
 
 
 if __name__ == "__main__":

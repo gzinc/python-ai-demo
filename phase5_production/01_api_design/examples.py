@@ -11,39 +11,35 @@ Run with: uv run python -m phase5_production.01_api_design.examples
 
 import asyncio
 
+from common.demo_menu import Demo, MenuRunner
+
 from .semantic_cache import demo_semantic_cache
-from .llm_streaming import main as streaming_demo
+from .llm_streaming import main as streaming_demo_async
 from .cost_tracker import demo_cost_tracking
 
 
-def print_section(title: str) -> None:
-    """print section header"""
-    print("\n")
-    print("#" * 70)
-    print(f"#  {title}")
-    print("#" * 70)
+def demo_streaming() -> None:
+    """wrapper to run async streaming demo"""
+    asyncio.run(streaming_demo_async())
 
 
-async def main() -> None:
-    """run all demos"""
-    print("=" * 70)
-    print("  Module 1: LLM-Specific API Patterns")
-    print("=" * 70)
+# region Demo Menu Configuration
 
-    # 1. semantic caching
-    print_section("1. SEMANTIC CACHING")
-    demo_semantic_cache()
+DEMOS = [
+    Demo("1", "Semantic Caching", "cache similar prompts, not just identical", demo_semantic_cache),
+    Demo("2", "SSE Streaming", "token-by-token output for better UX", demo_streaming),
+    Demo("3", "Cost Tracking", "per-request token/cost monitoring", demo_cost_tracking),
+]
 
-    # 2. streaming
-    print_section("2. SSE STREAMING")
-    await streaming_demo()
+# endregion
 
-    # 3. cost tracking
-    print_section("3. COST TRACKING")
-    demo_cost_tracking()
 
-    print("\n")
-    print("=" * 70)
+def main() -> None:
+    """interactive demo runner"""
+    runner = MenuRunner(DEMOS, title="Module 1: LLM-Specific API Patterns")
+    runner.run()
+
+    print("\n" + "=" * 70)
     print("  Summary: LLM APIs need these patterns beyond standard REST")
     print("=" * 70)
     print("""
@@ -62,4 +58,4 @@ async def main() -> None:
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    main()

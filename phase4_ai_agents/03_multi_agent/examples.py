@@ -27,6 +27,7 @@ from agents import (
     WriterAgent,
 )
 from orchestrator import MultiAgentOrchestrator
+from common.demo_menu import Demo, MenuRunner
 
 
 def print_section(title: str) -> None:
@@ -274,96 +275,21 @@ def demo_real_api():
 # =============================================================================
 
 
-def show_menu() -> None:
-    """display interactive demo menu"""
-    print("\n" + "=" * 70)
-    print("  Multi-Agent System - Hierarchical Orchestration")
-    print("=" * 70)
-    print("\n📚 Available Demos:\n")
+# region Demo Menu Configuration
 
-    demos = [
-        ("1", "Basic Delegation", "orchestrator delegating to specialists"),
-        ("2", "Research Pipeline", "research → analyze → write workflow"),
-        ("3", "Direct Specialists", "calling specialists without orchestrator"),
-        ("4", "Custom Specialist", "creating specialist with custom profile"),
-        ("5", "Team Configuration", "configuring orchestrator behavior"),
-        ("6", "Real API", "using real LLM for orchestration"),
-    ]
+DEMOS = [
+    Demo("1", "Two Agent System", "collaborative agents", example_two_agent_system),
+    Demo("2", "Agent Orchestration", "coordinator pattern", example_agent_orchestration),
+    Demo("3", "Hierarchical Agents", "manager-worker pattern", example_hierarchical_agents),
+    Demo("4", "Agent Communication", "message passing between agents", example_agent_communication),
+]
 
-    for num, name, desc in demos:
-        print(f"   [{num}] {name}")
-        print(f"      {desc}")
-        print()
-
-    print("  [a] Run all demos")
-    print("  [q] Quit")
-    print("\n" + "=" * 70)
+# endregion
 
 
-def run_selected_demos(selections: str) -> bool:
-    """run selected demos based on user input"""
-    selections = selections.strip().lower()
-
-    if selections == 'q':
-        return False
-
-    demo_map = {
-        '1': ('Basic Delegation', demo_basic_delegation),
-        '2': ('Research Pipeline', demo_research_pipeline),
-        '3': ('Direct Specialists', demo_direct_specialists),
-        '4': ('Custom Specialist', demo_custom_specialist),
-        '5': ('Team Configuration', demo_team_config),
-        '6': ('Real API', demo_real_api),
-    }
-
-    if selections == 'a':
-        demos_to_run = list(demo_map.keys())
-    else:
-        demos_to_run = [s.strip() for s in selections.replace(',', ' ').split() if s.strip() in demo_map]
-
-    if not demos_to_run:
-        print("\n⚠️  invalid selection. please enter demo numbers, 'a' for all, or 'q' to quit")
-        return True
-
-    print(f"\n🚀 Running {len(demos_to_run)} demo(s)...\n")
-
-    for demo_num in demos_to_run:
-        name, func = demo_map[demo_num]
-        try:
-            func()
-        except KeyboardInterrupt:
-            print("\n\n⚠️  demo interrupted by user")
-            return False
-        except Exception as e:
-            print(f"\n❌ error in demo: {e}")
-            continue
-
-    print("\n✅ selected demos complete!")
-    return True
-
-
-def main():
-    """run demonstrations with interactive menu"""
-    while True:
-        show_menu()
-
-        try:
-            selection = input("\n🎯 select demo(s) (e.g., '1', '1,3', or 'a' for all): ").strip()
-        except (EOFError, KeyboardInterrupt):
-            print("\n\n👋 goodbye!")
-            break
-
-        if not run_selected_demos(selection):
-            print("\n👋 goodbye!")
-            break
-
-        # pause before showing menu again
-        try:
-            input("\n⏸️  Press Enter to continue...")
-        except (EOFError, KeyboardInterrupt):
-            print("\n\n👋 goodbye!")
-            break
-
-
+def main() -> None:
+    """interactive demo runner"""
+    runner = MenuRunner(DEMOS, title="Examples")
+    runner.run()
 if __name__ == "__main__":
     main()

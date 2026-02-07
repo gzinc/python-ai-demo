@@ -21,6 +21,8 @@ from langchain_core.messages import HumanMessage
 from langchain_openai import ChatOpenAI
 from pydantic import Field
 
+from common.demo_menu import Demo, MenuRunner
+
 # load environment variables
 load_dotenv()
 
@@ -687,77 +689,20 @@ def demo_phase4_comparison() -> None:
 # endregion
 
 
-def show_menu() -> None:
-    """display interactive demo menu"""
-    print("\n" + "=" * 70)
-    print("  Agents & Tools - Practical Examples")
-    print("=" * 70)
-    print("\n📚 Available Demos:\n")
 
-    demos = [
-        ("1", "Basic Tool Creation", "simple @tool decorator pattern"),
-        ("2", "Create Agent", "LangGraph agent with single tool"),
-        ("3", "Multi-Tool Agent", "agent with multiple capabilities"),
-        ("4", "Custom Tool Class", "advanced tool with BaseTool"),
-        ("5", "Error Handling", "graceful tool failure recovery"),
-        ("6", "Web Search Agent", "real-world search integration"),
-        ("7", "Phase 4 Comparison", "custom vs LangChain agents"),
-    ]
+# region Demo Menu Configuration
 
-    for num, name, desc in demos:
-        api_marker = "🔑"
-        print(f"  {api_marker} [{num}] {name}")
-        print(f"      {desc}")
-        print()
+DEMOS = [
+    Demo("1", "Basic Tool Creation", "basic tool creation", demo_basic_tool_creation),
+    Demo("2", "Create Agent", "create agent", demo_create_agent),
+    Demo("3", "Multi-Tool Agent", "multi-tool agent", demo_multi_tool_agent),
+    Demo("4", "Custom Tool Class", "custom tool class", demo_custom_tool_class),
+    Demo("5", "Error Handling", "error handling", demo_error_handling),
+    Demo("6", "Web Search Agent", "web search agent", demo_web_search_agent),
+    Demo("7", "Phase 4 Comparison", "phase 4 comparison", demo_phase4_comparison),
+]
 
-    print("  [a] Run all demos")
-    print("  [q] Quit")
-    print("\n" + "=" * 70)
-
-
-def run_selected_demos(selections: str) -> bool:
-    """run selected demos based on user input"""
-    selections = selections.lower().strip()
-
-    if selections == 'q':
-        return False
-
-    demo_map = {
-        '1': ("Basic Tool Creation", demo_basic_tool_creation),
-        '2': ("Create Agent", demo_create_agent),
-        '3': ("Multi-Tool Agent", demo_multi_tool_agent),
-        '4': ("Custom Tool Class", demo_custom_tool_class),
-        '5': ("Error Handling", demo_error_handling),
-        '6': ("Web Search Agent", demo_web_search_agent),
-        '7': ("Phase 4 Comparison", demo_phase4_comparison),
-    }
-
-    if selections == 'a':
-        # run all demos
-        for name, demo_func in demo_map.values():
-            try:
-                demo_func()
-            except Exception as e:
-                print(f"\n❌ Error in {name}: {e}")
-                import traceback
-                traceback.print_exc()
-    else:
-        # parse comma-separated selections
-        selected = [s.strip() for s in selections.split(',')]
-        for sel in selected:
-            if sel in demo_map:
-                name, demo_func = demo_map[sel]
-                try:
-                    demo_func()
-                except Exception as e:
-                    print(f"\n❌ Error in {name}: {e}")
-                    import traceback
-                    traceback.print_exc()
-            else:
-                print(f"⚠️  Invalid selection: {sel}")
-
-    return True
-
+# endregion
 
 def main() -> None:
     """run demonstrations with interactive menu"""
@@ -774,42 +719,9 @@ def main() -> None:
     print("=" * 70)
 
     try:
-        while True:
-            show_menu()
-            selection = input("\nSelect demos to run (comma-separated) or 'a' for all: ").strip()
-
-            if not selection:
-                continue
-
-            if not run_selected_demos(selection):
-                break
-
-            print("\n" + "=" * 70)
-            print("  Demos complete!")
-            print("=" * 70)
-
-            # pause before showing menu again
-            try:
-                input("\n⏸️  Press Enter to continue...")
-            except (EOFError, KeyboardInterrupt):
-                print("\n\n👋 Goodbye!")
-                break
-
-        print("\n" + "=" * 70)
-        print("  Thanks for exploring agents and tools!")
-        print("\nNext steps:")
-        print("  • Try modifying the examples")
-        print("  • Create your own tools")
-        print("  • Build a multi-agent system")
-        print("  • Explore exercises in README.md")
-        print("=" * 70 + "\n")
-
-    except KeyboardInterrupt:
-        print("\n\n👋 Goodbye!")
-    except Exception as e:
-        print(f"\n\n❌ Error: {e}")
-        import traceback
-        traceback.print_exc()
+        
+    runner = MenuRunner(DEMOS, title="TODO: Add title")
+    runner.run()
 
 
 if __name__ == "__main__":

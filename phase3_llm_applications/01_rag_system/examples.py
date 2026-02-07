@@ -14,6 +14,8 @@ from rag_pipeline import RAGPipeline
 from schemas import Document
 from chunking import chunk_document
 
+from common.demo_menu import Demo, MenuRunner
+
 
 def print_section(title: str) -> None:
     """print section header"""
@@ -250,73 +252,23 @@ def example_interactive():
 # ─────────────────────────────────────────────────────────────
 
 
-def show_menu() -> None:
-    """display interactive menu of available demos"""
-    print("\n" + "=" * 60)
-    print("  RAG Pipeline Examples")
-    print("=" * 60)
-    print("\nAvailable demos:")
-    print("  1. basic RAG usage - create, add, query")
-    print("  2. chunking strategies comparison")
-    print("  3. retrieval tuning (top_k adjustment)")
-    print("  4. interactive Q&A session")
-    print("\n  [a] Run all demos")
-    print("  [q] Quit")
-    print("=" * 60)
 
+# region Demo Menu Configuration
 
-def run_selected_demos(selections: str) -> bool:
-    """run selected demos based on user input"""
-    demo_map = {
-        "1": ("basic RAG", example_basic_rag),
-        "2": ("chunking strategies", example_chunking_strategies),
-        "3": ("retrieval tuning", example_retrieval_tuning),
-        "4": ("interactive demo", example_interactive),
-    }
+DEMOS = [
+    Demo("1", "basic RAG", "basic RAG usage - create, add, query", example_basic_rag),
+    Demo("2", "chunking strategies", "chunking strategies", example_chunking_strategies),
+    Demo("3", "retrieval tuning", "retrieval tuning", example_retrieval_tuning),
+    Demo("4", "interactive demo", "interactive demo", example_interactive),
+]
 
-    if selections.lower() == "q":
-        return False
-
-    if selections.lower() == "a":
-        print("\n🚀 Running all demos...\n")
-        for name, func in demo_map.values():
-            func()
-        print("\n✅ All demos completed!")
-        return True
-
-    # parse comma-separated selections
-    selected = [s.strip() for s in selections.split(",")]
-    valid_selections = [s for s in selected if s in demo_map]
-
-    if not valid_selections:
-        print("❌ Invalid selection. Please enter numbers (1-4), 'a' for all, or 'q' to quit.")
-        return True
-
-    for selection in valid_selections:
-        name, func = demo_map[selection]
-        print(f"\n▶️  Running: {name}")
-        func()
-
-    print("\n✅ Selected demos completed!")
-    return True
-
+# endregion
 
 def main():
     """interactive demo runner"""
-    while True:
-        show_menu()
-        choice = input("\nSelect demos (e.g., '1', '1,3', or 'a' for all): ").strip()
-        should_continue = run_selected_demos(choice)
-        if not should_continue:
-            print("\n👋 Goodbye!\n")
-            break
-
-        # pause before showing menu again
-        try:
-            input("\n⏸️  Press Enter to continue...")
-        except (EOFError, KeyboardInterrupt):
-            print("\n\n👋 Goodbye!\n")
-            break
+    
+    runner = MenuRunner(DEMOS, title="RAG System - Examples")
+    runner.run()
 
 
 if __name__ == "__main__":

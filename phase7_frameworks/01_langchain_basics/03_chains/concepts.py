@@ -9,6 +9,8 @@ Run: uv run python -m phase7_frameworks.01_langchain_basics.03_chains.concepts
 
 from inspect import cleandoc
 
+from common.demo_menu import Demo, MenuRunner
+
 
 def print_section(title: str) -> None:
     """print section header"""
@@ -764,68 +766,21 @@ def demo_debugging() -> None:
 # endregion
 
 
-def show_menu() -> None:
-    """display interactive demo menu"""
-    print("\n" + "=" * 70)
-    print("  Chains - Conceptual Examples")
-    print("=" * 70)
-    print("\n📚 Available Demos:\n")
 
-    demos = [
-        ("1", "Chain Concept Overview", "what chains are and why they matter"),
-        ("2", "LLMChain Pattern (Legacy)", "traditional chain approach"),
-        ("3", "SequentialChain Pattern", "multi-step linear workflows"),
-        ("4", "LCEL Syntax (Modern)", "pipe operator composition"),
-        ("5", "LCEL Components", "runnable types and interfaces"),
-        ("6", "LCEL Patterns", "common composition patterns"),
-        ("7", "Error Handling", "strategies for chain failures"),
-        ("8", "Debugging Chains", "techniques for troubleshooting"),
-    ]
+# region Demo Menu Configuration
 
-    for num, name, desc in demos:
-        print(f"    [{num}] {name}")
-        print(f"        {desc}")
-        print()
+DEMOS = [
+    Demo("1", "Chain Concept Overview", "chain concept overview", demo_chain_concept),
+    Demo("2", "LLMChain Pattern", "llmchain pattern", demo_llmchain_pattern),
+    Demo("3", "SequentialChain Pattern", "sequentialchain pattern", demo_sequential_chain),
+    Demo("4", "LCEL Syntax", "lcel syntax", demo_lcel_syntax),
+    Demo("5", "LCEL Components", "lcel components", demo_lcel_components),
+    Demo("6", "LCEL Patterns", "lcel patterns", demo_lcel_patterns),
+    Demo("7", "Error Handling", "error handling", demo_error_handling),
+    Demo("8", "Debugging Chains", "debugging chains", demo_debugging),
+]
 
-    print("  [a] Run all demos")
-    print("  [q] Quit")
-    print("\n" + "=" * 70)
-
-
-def run_selected_demos(selections: str) -> bool:
-    """run selected demos based on user input"""
-    selections = selections.lower().strip()
-
-    if selections == 'q':
-        return False
-
-    demo_map = {
-        '1': ("Chain Concept Overview", demo_chain_concept),
-        '2': ("LLMChain Pattern", demo_llmchain_pattern),
-        '3': ("SequentialChain Pattern", demo_sequential_chain),
-        '4': ("LCEL Syntax", demo_lcel_syntax),
-        '5': ("LCEL Components", demo_lcel_components),
-        '6': ("LCEL Patterns", demo_lcel_patterns),
-        '7': ("Error Handling", demo_error_handling),
-        '8': ("Debugging Chains", demo_debugging),
-    }
-
-    if selections == 'a':
-        # run all demos
-        for name, demo_func in demo_map.values():
-            demo_func()
-    else:
-        # parse comma-separated selections
-        selected = [s.strip() for s in selections.split(',')]
-        for sel in selected:
-            if sel in demo_map:
-                name, demo_func = demo_map[sel]
-                demo_func()
-            else:
-                print(f"⚠️  Invalid selection: {sel}")
-
-    return True
-
+# endregion
 
 def main() -> None:
     """run demonstrations with interactive menu"""
@@ -834,31 +789,9 @@ def main() -> None:
     print("  No API key required - demonstrates patterns only")
     print("=" * 70)
 
-    while True:
-        show_menu()
-        selection = input("\nSelect demos to run (comma-separated) or 'a' for all: ").strip()
-
-        if not selection:
-            continue
-
-        if not run_selected_demos(selection):
-            break
-
-        print("\n" + "=" * 70)
-        print("  Demos complete!")
-        print("=" * 70)
-
-        # pause before showing menu again
-        try:
-            input("\n⏸️  Press Enter to continue...")
-        except (EOFError, KeyboardInterrupt):
-            print("\n\n👋 Goodbye!")
-            break
-
-    print("\n" + "=" * 70)
-    print("  Thanks for exploring LangChain chains!")
-    print("  Next: Run practical.py for hands-on practice with real LLM calls")
-    print("=" * 70 + "\n")
+    
+    runner = MenuRunner(DEMOS, title="TODO: Add title")
+    runner.run()
 
 
 if __name__ == "__main__":

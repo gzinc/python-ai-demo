@@ -11,7 +11,8 @@ from inspect import cleandoc
 
 from langchain_core.messages import HumanMessage, SystemMessage
 
-from phase7_frameworks.utils import (
+from common.util.utils import (
+from common.demo_menu import Demo, MenuRunner
     check_api_keys,
     print_section,
     requires_anthropic,
@@ -735,167 +736,26 @@ def demo_lcel_integration() -> None:
 # endregion
 
 
-def show_menu(has_openai: bool, has_anthropic: bool) -> None:
-    """display interactive demo menu"""
-    print("\n" + "=" * 70)
-    print("  LLM Integration - Practical Examples")
-    print("=" * 70)
-    print("\n📚 Available Demos:\n")
+# region Demo Menu Configuration
 
-    demos = [
-        ("1", "ChatOpenAI Basic Usage", "simple OpenAI integration", 'openai'),
-        ("2", "ChatAnthropic Basic Usage", "simple Anthropic integration", 'anthropic'),
-        ("3", "Temperature and Creativity Control", "output randomness tuning", 'openai'),
-        ("4", "Streaming Responses", "real-time token delivery", 'openai'),
-        ("5", "Provider Switching", "seamless provider swapping", 'both'),
-        ("6", "Fallback Chains", "multi-provider reliability", 'both'),
-        ("7", "Token Usage Tracking", "cost monitoring and optimization", 'openai'),
-        ("8", "LCEL Integration", "chain composition with LLMs", 'openai'),
-    ]
+DEMOS = [
+    Demo("1", "OpenAI Integration", "openai LLM wrapper and streaming", demo_openai_integration, needs_api=True),
+    Demo("2", "Anthropic Integration", "claude LLM wrapper", demo_anthropic_integration, needs_api=True),
+    Demo("3", "Multi-Provider Switch", "switch between providers dynamically", demo_multi_provider, needs_api=True),
+    Demo("4", "Streaming Responses", "real-time streaming output", demo_streaming, needs_api=True),
+    Demo("5", "Token Usage Tracking", "monitor API costs", demo_token_usage, needs_api=True),
+    Demo("6", "Custom LLM Parameters", "temperature and other settings", demo_custom_parameters, needs_api=True),
+    Demo("7", "Error Handling", "graceful API error handling", demo_error_handling, needs_api=True),
+]
 
-    for num, name, desc, requires in demos:
-        needs_api = requires in ('openai', 'both')
-        needs_anthropic = requires in ('anthropic', 'both')
-
-        has_required = (
-            (not needs_api or has_openai) and
-            (not needs_anthropic or has_anthropic)
-        )
-
-        api_marker = "🔑" if (needs_api or needs_anthropic) else "  "
-
-        if not has_required:
-            if requires == 'both':
-                status = " ⚠️ (needs both API keys)"
-            elif requires == 'openai':
-                status = " ⚠️ (needs OpenAI key)"
-            else:
-                status = " ⚠️ (needs Anthropic key)"
-        else:
-            status = ""
-
-        print(f"  {api_marker} [{num}] {name}")
-        print(f"      {desc}{status}")
-        print()
-
-    if not (has_openai or has_anthropic):
-        print("  ⚠️  At least one API key required")
-        print("     Set OPENAI_API_KEY and/or ANTHROPIC_API_KEY in .env")
-        print()
-
-    print("  [a] Run all demos")
-    print("  [q] Quit")
-    print("\n" + "=" * 70)
-
-
-def run_selected_demos(selections: str, has_openai: bool, has_anthropic: bool) -> bool:
-    """run selected demos based on user input"""
-    selections = selections.lower().strip()
-
-    if selections == 'q':
-        return False
-
-    demo_map = {
-        '1': ("ChatOpenAI Basic", demo_chatopenai_basic, 'openai'),
-        '2': ("ChatAnthropic Basic", demo_chatanthropic_basic, 'anthropic'),
-        '3': ("Temperature Control", demo_temperature_control, 'openai'),
-        '4': ("Streaming", demo_streaming, 'openai'),
-        '5': ("Provider Switching", demo_provider_switching, 'both'),
-        '6': ("Fallback Chain", demo_fallback_chain, 'both'),
-        '7': ("Token Tracking", demo_token_tracking, 'openai'),
-        '8': ("LCEL Integration", demo_lcel_integration, 'openai'),
-    }
-
-    if selections == 'a':
-        # run all demos
-        for name, demo_func, requires in demo_map.values():
-            if requires == 'openai' and not has_openai:
-                print(f"\n⚠️  Skipping {name}: OpenAI API key required")
-                continue
-            if requires == 'anthropic' and not has_anthropic:
-                print(f"\n⚠️  Skipping {name}: Anthropic API key required")
-                continue
-            if requires == 'both' and not (has_openai and has_anthropic):
-                print(f"\n⚠️  Skipping {name}: Both API keys required")
-                continue
-            try:
-                demo_func()
-            except Exception as e:
-                print(f"\n❌ Error in {name}: {e}")
-    else:
-        # parse comma-separated selections
-        selected = [s.strip() for s in selections.split(',')]
-        for sel in selected:
-            if sel in demo_map:
-                name, demo_func, requires = demo_map[sel]
-
-                # check API key requirements
-                if requires == 'openai' and not has_openai:
-                    print(f"\n⚠️  Cannot run {name}: OpenAI API key required")
-                    continue
-                if requires == 'anthropic' and not has_anthropic:
-                    print(f"\n⚠️  Cannot run {name}: Anthropic API key required")
-                    continue
-                if requires == 'both' and not (has_openai and has_anthropic):
-                    print(f"\n⚠️  Cannot run {name}: Both API keys required")
-                    continue
-
-                try:
-                    demo_func()
-                except Exception as e:
-                    print(f"\n❌ Error in {name}: {e}")
-            else:
-                print(f"⚠️  Invalid selection: {sel}")
-
-    return True
+# endregion
 
 
 def main() -> None:
-    """run demonstrations with interactive menu"""
+    """interactive demo runner"""
     has_openai, has_anthropic = check_api_keys()
-
-    print("\n" + "=" * 70)
-    print("  LLM Integration - Practical Examples")
-    print("  Real API calls to OpenAI and Anthropic")
-    print("=" * 70)
-    print("\n## API Key Status:")
-    print(f"OPENAI_API_KEY: {'✓ Found' if has_openai else '✗ Missing'}")
-    print(f"ANTHROPIC_API_KEY: {'✓ Found' if has_anthropic else '✗ Missing'}")
-
-    if not (has_openai or has_anthropic):
-        print("\n❌ No API keys found!")
-        print("Set at least one API key in .env to run demos:")
-        print("  OPENAI_API_KEY=your-key-here")
-        print("  ANTHROPIC_API_KEY=your-key-here")
-        return
-
-    while True:
-        show_menu(has_openai, has_anthropic)
-        selection = input("\nSelect demos to run (comma-separated) or 'a' for all: ").strip()
-
-        if not selection:
-            continue
-
-        if not run_selected_demos(selection, has_openai, has_anthropic):
-            break
-
-        print("\n" + "=" * 70)
-        print("  Demos complete!")
-        print("=" * 70)
-
-        # pause before showing menu again
-        try:
-            input("\n⏸️  Press Enter to continue...")
-        except (EOFError, KeyboardInterrupt):
-            print("\n\n👋 Goodbye!")
-            break
-
-    print("\n" + "=" * 70)
-    print("  Thanks for exploring LLM integration!")
-    print("  You've mastered real-world LLM API usage")
-    print("=" * 70 + "\n")
-
-
+    runner = MenuRunner(DEMOS, title="LLM Integration - Practical Examples", has_api=has_openai or has_anthropic)
+    runner.run()
 if __name__ == "__main__":
     try:
         main()

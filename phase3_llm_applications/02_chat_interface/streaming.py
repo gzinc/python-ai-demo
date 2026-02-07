@@ -26,6 +26,7 @@ from typing import Generator, Optional, Callable
 from dataclasses import dataclass
 
 from dotenv import load_dotenv
+from common.demo_menu import Demo, MenuRunner
 
 load_dotenv()
 
@@ -374,98 +375,22 @@ def demo_anthropic_streaming():
     ))
 
 
-def show_menu() -> None:
-    """display interactive demo menu"""
-    print("\n" + "=" * 70)
-    print("  Streaming Module - Real-time Response Streaming")
-    print("=" * 70)
-    print("\n📚 Available Demos:\n")
+# region Demo Menu Configuration
 
-    demos = [
-        ("1", "Simulated Streaming", "word-by-word streaming simulation"),
-        ("2", "Typing Effect", "character-by-character typing animation"),
-        ("3", "Stream Collection", "collecting stream into single string"),
-        ("4", "Stream Printer", "streaming with callbacks"),
-        ("5", "OpenAI Streaming", "live OpenAI API streaming"),
-        ("6", "Anthropic Streaming", "live Anthropic API streaming"),
-    ]
-
-    for num, name, desc in demos:
-        print(f"   [{num}] {name}")
-        print(f"      {desc}")
-        print()
-
-    print("  [a] Run all demos")
-    print("  [q] Quit")
-    print("\n" + "=" * 70)
-
-
-def run_selected_demos(selections: str) -> bool:
-    """run selected demos based on user input"""
-    selections = selections.strip().lower()
-
-    if selections == 'q':
-        return False
-
-    demo_map = {
-        '1': ('Simulated Streaming', demo_simulated_streaming),
-        '2': ('Typing Effect', demo_typing_effect),
-        '3': ('Stream Collection', demo_stream_collection),
-        '4': ('Stream Printer', demo_stream_printer),
-        '5': ('OpenAI Streaming', demo_openai_streaming),
-        '6': ('Anthropic Streaming', demo_anthropic_streaming),
-    }
-
-    if selections == 'a':
-        demos_to_run = list(demo_map.keys())
-    else:
-        demos_to_run = [s.strip() for s in selections.replace(',', ' ').split() if s.strip() in demo_map]
-
-    if not demos_to_run:
-        print("\n⚠️  invalid selection. please enter demo numbers, 'a' for all, or 'q' to quit")
-        return True
-
-    print(f"\n🚀 Running {len(demos_to_run)} demo(s)...\n")
-
-    for demo_num in demos_to_run:
-        name, func = demo_map[demo_num]
-        try:
-            func()
-        except KeyboardInterrupt:
-            print("\n\n⚠️  demo interrupted by user")
-            return False
-        except Exception as e:
-            print(f"\n❌ error in demo: {e}")
-            continue
-
-    print("\n✅ selected demos complete!")
-    return True
-
-
-def main():
-    """run demonstrations with interactive menu"""
-    while True:
-        show_menu()
-
-        try:
-            selection = input("\n🎯 select demo(s) (e.g., '1', '1,3', or 'a' for all): ").strip()
-        except (EOFError, KeyboardInterrupt):
-            print("\n\n👋 goodbye!")
-            break
-
-        if not run_selected_demos(selection):
-            print("\n👋 goodbye!")
-            break
-
-        # pause before showing menu again
-        try:
-            input("\n⏸️  Press Enter to continue...")
-        except (EOFError, KeyboardInterrupt):
-            print("\n\n👋 goodbye!")
-            break
+DEMOS = [
+    Demo("1", "Simulated Streaming", "simulate streaming with delays", demo_simulated_streaming),
+    Demo("2", "Typing Effect", "character-by-character typing effect", demo_typing_effect),
+    Demo("3", "Stream Collection", "collect streamed chunks into full response", demo_stream_collection),
+    Demo("4", "Stream Printer", "print stream with formatting", demo_stream_printer),
+    Demo("5", "OpenAI Streaming", "real OpenAI streaming", demo_openai_streaming),
+    Demo("6", "Anthropic Streaming", "real Anthropic streaming", demo_anthropic_streaming),
+]
 
 # endregion
 
-
+def main() -> None:
+    """interactive demo runner"""
+    runner = MenuRunner(DEMOS, title="run demonstrations with interactive menu")
+    runner.run()
 if __name__ == "__main__":
     main()

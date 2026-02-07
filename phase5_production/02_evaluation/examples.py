@@ -8,6 +8,8 @@ Demonstrates:
 Run with: uv run python -m phase5_production.02_evaluation.examples
 """
 
+from common.demo_menu import Demo, MenuRunner
+
 try:
     # when run as module: python -m phase5_production.02_evaluation.examples
     from .rag_metrics import demo_rag_evaluation
@@ -18,30 +20,22 @@ except ImportError:
     from llm_tracing import demo_llm_tracing
 
 
-def print_section(title: str) -> None:
-    """print section header"""
-    print("\n")
-    print("#" * 70)
-    print(f"#  {title}")
-    print("#" * 70)
+# region Demo Menu Configuration
+
+DEMOS = [
+    Demo("1", "RAG Evaluation Metrics", "context relevance, groundedness, faithfulness", demo_rag_evaluation),
+    Demo("2", "LLM Tracing", "structured spans with timing and metadata", demo_llm_tracing),
+]
+
+# endregion
 
 
 def main() -> None:
-    """run all demos"""
-    print("=" * 70)
-    print("  Module 2: Evaluation & Observability")
-    print("=" * 70)
+    """interactive demo runner"""
+    runner = MenuRunner(DEMOS, title="Module 2: Evaluation & Observability")
+    runner.run()
 
-    # 1. RAG metrics
-    print_section("1. RAG EVALUATION METRICS")
-    demo_rag_evaluation()
-
-    # 2. LLM tracing
-    print_section("2. LLM TRACING")
-    demo_llm_tracing()
-
-    print("\n")
-    print("=" * 70)
+    print("\n" + "=" * 70)
     print("  Summary")
     print("=" * 70)
     print("""
