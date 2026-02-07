@@ -11,8 +11,8 @@ from inspect import cleandoc
 
 from langchain_core.messages import HumanMessage, SystemMessage
 
-from common.util.utils import (
 from common.demo_menu import Demo, MenuRunner
+from common.util.utils import (
     check_api_keys,
     print_section,
     requires_anthropic,

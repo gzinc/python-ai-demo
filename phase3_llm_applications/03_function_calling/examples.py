@@ -18,8 +18,6 @@ from dotenv import load_dotenv
 from schemas import Tool, ToolParameter
 from engine import FunctionCallingEngine
 from common_tools import (
-
-from common.demo_menu import Demo, MenuRunner
     create_weather_tool,
     create_calculator_tool,
     create_search_tool,
@@ -27,6 +25,8 @@ from common.demo_menu import Demo, MenuRunner
     calculate,
     validate_calculate_args,
 )
+
+from common.demo_menu import Demo, MenuRunner
 
 load_dotenv()
 
