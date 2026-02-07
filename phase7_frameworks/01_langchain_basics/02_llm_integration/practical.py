@@ -756,8 +756,6 @@ def main() -> None:
     has_openai, has_anthropic = check_api_keys()
     runner = MenuRunner(DEMOS, title="LLM Integration - Practical Examples", has_api=has_openai or has_anthropic)
     runner.run()
+
 if __name__ == "__main__":
-    try:
-        main()
-    except KeyboardInterrupt:
-        print("\n\n👋 Goodbye!")
+    main()

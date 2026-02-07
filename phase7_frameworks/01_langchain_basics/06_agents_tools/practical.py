@@ -9,7 +9,6 @@ Requires OPENAI_API_KEY in .env file.
 Run with: uv run python -m phase7_frameworks.01_langchain_basics.06_agents_tools.practical
 """
 
-import os
 from datetime import datetime
 from inspect import cleandoc
 
@@ -22,6 +21,7 @@ from langchain_openai import ChatOpenAI
 from pydantic import Field
 
 from common.demo_menu import Demo, MenuRunner
+from common.util.utils import check_api_keys
 
 # load environment variables
 load_dotenv()
@@ -32,22 +32,6 @@ def print_section(title: str) -> None:
     print(f"\n{'=' * 70}")
     print(f"  {title}")
     print('=' * 70)
-
-
-def check_api_key() -> tuple[bool, str]:
-    """check if OpenAI API key is configured"""
-    api_key = os.getenv("OPENAI_API_KEY")
-    if not api_key:
-        return False, cleandoc("""
-            ❌ OPENAI_API_KEY not found in environment variables
-
-            To run these examples, set your API key:
-              export OPENAI_API_KEY='your-key-here'
-
-            Or create a .env file:
-              OPENAI_API_KEY=your-key-here
-        """)
-    return True, f"✓ OpenAI API key configured ({api_key[:8]}...)"
 
 
 # region Demo Functions
@@ -693,34 +677,26 @@ def demo_phase4_comparison() -> None:
 # region Demo Menu Configuration
 
 DEMOS = [
-    Demo("1", "Basic Tool Creation", "basic tool creation", demo_basic_tool_creation),
-    Demo("2", "Create Agent", "create agent", demo_create_agent),
-    Demo("3", "Multi-Tool Agent", "multi-tool agent", demo_multi_tool_agent),
-    Demo("4", "Custom Tool Class", "custom tool class", demo_custom_tool_class),
-    Demo("5", "Error Handling", "error handling", demo_error_handling),
-    Demo("6", "Web Search Agent", "web search agent", demo_web_search_agent),
-    Demo("7", "Phase 4 Comparison", "phase 4 comparison", demo_phase4_comparison),
+    Demo("1", "Basic Tool Creation", "basic tool creation", demo_basic_tool_creation, needs_api=True),
+    Demo("2", "Create Agent", "create agent", demo_create_agent, needs_api=True),
+    Demo("3", "Multi-Tool Agent", "multi-tool agent", demo_multi_tool_agent, needs_api=True),
+    Demo("4", "Custom Tool Class", "custom tool class", demo_custom_tool_class, needs_api=True),
+    Demo("5", "Error Handling", "error handling", demo_error_handling, needs_api=True),
+    Demo("6", "Web Search Agent", "web search agent", demo_web_search_agent, needs_api=True),
+    Demo("7", "Phase 4 Comparison", "phase 4 comparison", demo_phase4_comparison, needs_api=True),
 ]
 
 # endregion
 
 def main() -> None:
     """run demonstrations with interactive menu"""
-    # check api key
-    api_key_ok, message = check_api_key()
-    if not api_key_ok:
-        print(message)
-        return
-
-    print(message)
-    print("\n" + "=" * 70)
-    print("  Agents & Tools - Practical Examples")
-    print("  Using LangChain 1.0+ / LangGraph API")
-    print("=" * 70)
-
-    try:
-        
-    runner = MenuRunner(DEMOS, title="TODO: Add title")
+    has_openai, _ = check_api_keys()
+    runner = MenuRunner(
+        DEMOS,
+        title="Agents & Tools - Practical Examples",
+        subtitle="Using LangChain 1.0+ / LangGraph API",
+        has_api=has_openai
+    )
     runner.run()
 
 

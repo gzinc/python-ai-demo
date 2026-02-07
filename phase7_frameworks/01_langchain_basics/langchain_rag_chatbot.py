@@ -273,17 +273,22 @@ def setup_rag_with_memory() -> tuple[None, None]:
     print("\n2️⃣ Create conversation memory")
     print(cleandoc('''
         # Phase 3 equivalent: chat_memory.py ChatMemory class
-        memory = ConversationBufferWindowMemory(
-            k=5,  # keep last 5 message pairs
-            memory_key="chat_history",
-            return_messages=True,
-            output_key="answer"
-        )
+        from langchain_core.chat_history import InMemoryChatMessageHistory
+
+        # modern approach: store chat histories per session
+        store = {}
+        def get_session_history(session_id: str):
+            if session_id not in store:
+                store[session_id] = InMemoryChatMessageHistory()
+            return store[session_id]
     '''))
-    print("✅ Would create conversation memory (sliding window, k=5)")
+    print("✅ Would create conversation memory (modern pattern with session management)")
 
     print("\n3️⃣ Create conversational RAG chain")
     print(cleandoc('''
+        from langchain_core.runnables.history import RunnableWithMessageHistory
+        from langchain_openai import ChatOpenAI
+
         llm = ChatOpenAI(model="gpt-4o-mini", temperature=0.7)
 
         # custom prompt that includes chat history
@@ -293,18 +298,20 @@ def setup_rag_with_memory() -> tuple[None, None]:
             ("human", "Context: {context}\\n\\nQuestion: {question}")
         ])
 
-        # full conversational RAG with memory
-        qa_chain = RetrievalQA.from_chain_type(
-            llm=llm,
-            retriever=vectorstore.as_retriever(search_kwargs={"k": 3}),
-            return_source_documents=True
+        # create chain with memory using modern pattern
+        chain = prompt | llm
+        chain_with_history = RunnableWithMessageHistory(
+            chain,
+            get_session_history,
+            input_messages_key="question",
+            history_messages_key="chat_history",
         )
     '''))
 
-    print("\n💡 Note: Full conversational RAG with memory is more complex")
-    print("   - Requires ConversationalRetrievalChain")
-    print("   - Handles follow-up questions and references")
-    print("   - Your Phase 3 ChatEngine does this already!")
+    print("\n💡 Note: Modern LangChain uses RunnableWithMessageHistory")
+    print("   - Session-based memory management")
+    print("   - Handles follow-up questions and context")
+    print("   - Your Phase 3 ChatEngine does similar functionality!")
 
     return None, None
 # endregion
@@ -392,11 +399,10 @@ def demo_comparison_summary() -> None:
 # region Demo Menu Configuration
 
 DEMOS = [
-    Demo("1", "Basic RAG Setup", "document loading and vectorization", demo_basic_rag_setup),
-    Demo("2", "RAG Query", "query with retrieval", demo_rag_query),
-    Demo("3", "RAG Chat Session", "multi-turn conversation with RAG", demo_rag_chat),
-    Demo("4", "Comparison: RAG vs Phase 3", "framework vs custom implementation", demo_comparison),
-    Demo("5", "Interactive RAG Chat", "full interactive session", demo_interactive_rag_chat),
+    Demo("1", "Basic RAG Setup", "document loading and vectorization", setup_rag_system),
+    Demo("2", "RAG Queries", "query with retrieval", demo_rag_queries),
+    Demo("3", "Interactive RAG Chat", "full interactive session", demo_interactive_chat),
+    Demo("4", "Comparison Summary", "framework vs custom implementation", demo_comparison_summary),
 ]
 
 # endregion
@@ -406,10 +412,7 @@ def main() -> None:
     runner = MenuRunner(DEMOS, title="LangChain Concepts Demo")
     runner.run()
 if __name__ == "__main__":
-    try:
-        main()
-    except KeyboardInterrupt:
-        print("\n\n👋 Goodbye!")
+    main()
 
 
 # endregion

@@ -11,8 +11,8 @@ from inspect import cleandoc
 
 from langchain_core.messages import HumanMessage, SystemMessage
 
-from common.util.utils import (
 from common.demo_menu import Demo, MenuRunner
+from common.util.utils import (
     check_api_keys,
     print_section,
     requires_both_keys,
@@ -983,13 +983,16 @@ def demo_custom_transformation() -> None:
 # region Demo Menu Configuration
 
 DEMOS = [
-    Demo("1", "Simple Sequential Chain", "multi-step processing pipeline", demo_simple_chain, needs_api=True),
-    Demo("2", "LCEL Chain", "langchain expression language", demo_lcel_chain, needs_api=True),
-    Demo("3", "Conditional Routing", "dynamic chain branching", demo_conditional_routing, needs_api=True),
-    Demo("4", "Parallel Execution", "concurrent chain operations", demo_parallel_execution, needs_api=True),
-    Demo("5", "Chain with Memory", "stateful chain execution", demo_chain_with_memory, needs_api=True),
-    Demo("6", "Error Recovery Chain", "fallback and retry patterns", demo_error_recovery, needs_api=True),
-    Demo("7", "Complex RAG Chain", "retrieval-augmented generation", demo_complex_rag_chain, needs_api=True),
+    Demo("1", "Basic LCEL Chain", "langchain expression language basics", demo_basic_lcel_chain, needs_api=True),
+    Demo("2", "Multi-Message Chain", "handling chat conversations", demo_multi_message_chain, needs_api=True),
+    Demo("3", "Streaming Chain", "real-time token streaming", demo_streaming_chain, needs_api=True),
+    Demo("4", "Parallel Chains", "concurrent chain execution", demo_parallel_chains, needs_api=True),
+    Demo("5", "Passthrough Pattern", "data flow management", demo_passthrough_pattern, needs_api=True),
+    Demo("6", "Fallback Chain", "error handling with fallbacks", demo_fallback_chain, needs_api=True),
+    Demo("7", "Retry Chain", "automatic retry on failure", demo_retry_chain, needs_api=True),
+    Demo("8", "Batch Processing", "processing multiple inputs", demo_batch_processing, needs_api=True),
+    Demo("9", "Verbose Debugging", "chain execution tracing", demo_verbose_debugging, needs_api=True),
+    Demo("10", "Custom Transformation", "custom chain components", demo_custom_transformation, needs_api=True),
 ]
 
 # endregion
@@ -1000,8 +1003,6 @@ def main() -> None:
     has_openai, has_anthropic = check_api_keys()
     runner = MenuRunner(DEMOS, title="LLM Integration - Practical Examples", has_api=has_openai or has_anthropic)
     runner.run()
+
 if __name__ == "__main__":
-    try:
-        main()
-    except KeyboardInterrupt:
-        print("\n\n👋 Goodbye!")
+    main()

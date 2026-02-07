@@ -9,25 +9,22 @@ Run: uv run python -m phase7_frameworks.01_langchain_basics.04_memory.concepts
 
 from inspect import cleandoc
 
-from langchain_classic.memory import (
-    ConversationBufferMemory,
-    ConversationBufferWindowMemory,
-    ConversationSummaryBufferMemory,
-)
+from langchain_core.chat_history import InMemoryChatMessageHistory
 from langchain_core.messages import AIMessage, HumanMessage
 
 from common.demo_menu import Demo, MenuRunner
 from common.util.utils import print_section
 
 
-# region Demo 1: ConversationBufferMemory Basics
+# region Demo 1: InMemoryChatMessageHistory Basics
 
 
 def demo_buffer_memory() -> None:
     """demonstrate basic buffer memory storing full conversation"""
-    print_section("Demo 1: ConversationBufferMemory - Full History")
+    print_section("Demo 1: InMemoryChatMessageHistory - Full History")
 
-    memory = ConversationBufferMemory()
+    # modern approach: use InMemoryChatMessageHistory
+    history = InMemoryChatMessageHistory()
 
     print("## Simulating conversation:\n")
 
@@ -39,30 +36,33 @@ def demo_buffer_memory() -> None:
     ]
 
     for user_msg, bot_msg in exchanges:
-        memory.save_context({"input": user_msg}, {"output": bot_msg})
+        history.add_user_message(user_msg)
+        history.add_ai_message(bot_msg)
         print(f"User: {user_msg}")
         print(f"Bot:  {bot_msg}\n")
 
-    # load memory
+    # load memory - format messages as string
     print("## Memory Contents:")
-    memory_vars = memory.load_memory_variables({})
-    print(memory_vars["history"])
+    for msg in history.messages:
+        role = "Human" if isinstance(msg, HumanMessage) else "AI"
+        print(f"{role}: {msg.content}")
 
-    print("\n✓ Buffer memory stores complete conversation history")
+    print("\n✓ Chat history stores complete conversation history")
 
 
 # endregion
 
-# region Demo 2: ConversationBufferWindowMemory
+# region Demo 2: Chat History with Sliding Window
 
 
 def demo_window_memory() -> None:
     """demonstrate sliding window memory"""
-    print_section("Demo 2: ConversationBufferWindowMemory - Sliding Window")
+    print_section("Demo 2: Chat History with Sliding Window")
 
-    memory = ConversationBufferWindowMemory(k=2)  # keep last 2 exchanges
+    history = InMemoryChatMessageHistory()
+    window_size = 4  # keep last 4 messages (2 exchanges)
 
-    print("## Window size: k=2 (last 2 exchanges)\n")
+    print(f"## Window size: {window_size} messages (2 exchanges)\n")
 
     exchanges = [
         ("Message 1", "Response 1"),
@@ -72,21 +72,23 @@ def demo_window_memory() -> None:
     ]
 
     for i, (user_msg, bot_msg) in enumerate(exchanges, 1):
-        memory.save_context({"input": user_msg}, {"output": bot_msg})
+        history.add_user_message(user_msg)
+        history.add_ai_message(bot_msg)
         print(f"Added exchange {i}:")
         print(f"  User: {user_msg}")
         print(f"  Bot:  {bot_msg}")
 
-        # show current memory
-        memory_vars = memory.load_memory_variables({})
-        history = memory_vars["history"]
-        num_lines = len([line for line in history.split("\n") if line.strip()])
-        print(f"  Memory size: {num_lines} messages\n")
+        # show current window (last k messages)
+        windowed_messages = history.messages[-window_size:]
+        print(f"  Window size: {len(windowed_messages)} messages\n")
 
     print("## Final Memory (last 2 exchanges only):")
-    print(memory.load_memory_variables({})["history"])
+    windowed_messages = history.messages[-window_size:]
+    for msg in windowed_messages:
+        role = "Human" if isinstance(msg, HumanMessage) else "AI"
+        print(f"{role}: {msg.content}")
 
-    print("\n✓ Window memory discards old messages, keeping only recent context")
+    print("\n✓ Window pattern keeps only recent messages, discarding old context")
 
 
 # endregion
@@ -95,30 +97,30 @@ def demo_window_memory() -> None:
 
 
 def demo_return_messages() -> None:
-    """demonstrate returning messages as objects vs strings"""
-    print_section("Demo 3: Memory Return Formats")
+    """demonstrate message objects vs string formatting"""
+    print_section("Demo 3: Message Formats")
 
-    # string format (default)
-    print("## String Format (default):\n")
-    memory_str = ConversationBufferMemory()
-    memory_str.save_context({"input": "Hi"}, {"output": "Hello"})
-    memory_str.save_context({"input": "Bye"}, {"output": "Goodbye"})
+    history = InMemoryChatMessageHistory()
+    history.add_user_message("Hi")
+    history.add_ai_message("Hello")
+    history.add_user_message("Bye")
+    history.add_ai_message("Goodbye")
 
-    result = memory_str.load_memory_variables({})
-    print(f"Type: {type(result['history'])}")
-    print(f"Content:\n{result['history']}\n")
+    # message objects (always available)
+    print("## Message Objects (native format):\n")
+    print(f"Type: {type(history.messages)}")
+    print(f"Content: {history.messages}\n")
 
-    # message objects format
-    print("## Message Objects Format:\n")
-    memory_msgs = ConversationBufferMemory(return_messages=True)
-    memory_msgs.save_context({"input": "Hi"}, {"output": "Hello"})
-    memory_msgs.save_context({"input": "Bye"}, {"output": "Goodbye"})
+    # string format (manual formatting)
+    print("## String Format (formatted):\n")
+    formatted = "\n".join([
+        f"{'Human' if isinstance(msg, HumanMessage) else 'AI'}: {msg.content}"
+        for msg in history.messages
+    ])
+    print(f"Type: {type(formatted)}")
+    print(f"Content:\n{formatted}")
 
-    result = memory_msgs.load_memory_variables({})
-    print(f"Type: {type(result['history'])}")
-    print(f"Content: {result['history']}")
-
-    print("\n✓ Memory can return string format or message objects")
+    print("\n✓ Chat history stores message objects, format as needed")
 
 
 # endregion
@@ -127,32 +129,32 @@ def demo_return_messages() -> None:
 
 
 def demo_custom_keys() -> None:
-    """demonstrate custom input/output/memory keys"""
-    print_section("Demo 4: Custom Memory Keys")
+    """demonstrate message metadata for custom attributes"""
+    print_section("Demo 4: Message Metadata")
 
-    memory = ConversationBufferMemory(
-        input_key="user_input",  # custom key for user messages
-        output_key="bot_response",  # custom key for bot messages
-        memory_key="chat_history",  # custom key for stored history
+    history = InMemoryChatMessageHistory()
+
+    print("## Adding messages with metadata:\n")
+
+    # add messages with custom metadata
+    history.add_message(
+        HumanMessage(content="What is Python?", additional_kwargs={"user_id": "alice"})
+    )
+    history.add_message(
+        AIMessage(
+            content="Python is a programming language",
+            additional_kwargs={"confidence": 0.95},
+        )
     )
 
-    print("## Custom keys configured:")
-    print("  input_key: 'user_input'")
-    print("  output_key: 'bot_response'")
-    print("  memory_key: 'chat_history'\n")
+    print("Messages with metadata:")
+    for msg in history.messages:
+        role = "Human" if isinstance(msg, HumanMessage) else "AI"
+        metadata = msg.additional_kwargs
+        print(f"  {role}: {msg.content}")
+        print(f"    Metadata: {metadata}\n")
 
-    # use custom keys
-    memory.save_context(
-        {"user_input": "What is Python?"},
-        {"bot_response": "Python is a programming language"},
-    )
-
-    # retrieve with custom key
-    result = memory.load_memory_variables({})
-    print(f"Memory key: {list(result.keys())}")
-    print(f"Content:\n{result['chat_history']}")
-
-    print("\n✓ Custom keys allow flexible integration with different chain formats")
+    print("✓ Messages can include custom metadata for tracking and filtering")
 
 
 # endregion
@@ -161,7 +163,7 @@ def demo_custom_keys() -> None:
 
 
 def demo_token_counting() -> None:
-    """demonstrate token usage across memory types"""
+    """demonstrate token usage with full vs windowed history"""
     print_section("Demo 5: Token Usage Comparison")
 
     # simulate conversation
@@ -175,34 +177,34 @@ def demo_token_counting() -> None:
 
     print("## Simulated conversation (5 exchanges):\n")
 
-    # buffer memory (all messages)
-    buffer_memory = ConversationBufferMemory()
+    # full history
+    full_history = InMemoryChatMessageHistory()
     for user_msg, bot_msg in exchanges:
-        buffer_memory.save_context({"input": user_msg}, {"output": bot_msg})
+        full_history.add_user_message(user_msg)
+        full_history.add_ai_message(bot_msg)
 
-    buffer_history = buffer_memory.load_memory_variables({})["history"]
-    buffer_chars = len(buffer_history)
+    # calculate size
+    full_content = "\n".join([msg.content for msg in full_history.messages])
+    full_chars = len(full_content)
 
-    print(f"Buffer Memory:")
-    print(f"  Messages: 10 (5 exchanges)")
-    print(f"  Characters: {buffer_chars}")
-    print(f"  Approximate tokens: ~{buffer_chars // 4}\n")
+    print(f"Full History:")
+    print(f"  Messages: {len(full_history.messages)} (5 exchanges)")
+    print(f"  Characters: {full_chars}")
+    print(f"  Approximate tokens: ~{full_chars // 4}\n")
 
-    # window memory (last 2 exchanges)
-    window_memory = ConversationBufferWindowMemory(k=2)
-    for user_msg, bot_msg in exchanges:
-        window_memory.save_context({"input": user_msg}, {"output": bot_msg})
+    # windowed history (last 2 exchanges = 4 messages)
+    window_size = 4
+    windowed_messages = full_history.messages[-window_size:]
+    windowed_content = "\n".join([msg.content for msg in windowed_messages])
+    windowed_chars = len(windowed_content)
 
-    window_history = window_memory.load_memory_variables({})["history"]
-    window_chars = len(window_history)
+    print(f"Windowed History (last {window_size} messages):")
+    print(f"  Messages: {len(windowed_messages)} (2 exchanges)")
+    print(f"  Characters: {windowed_chars}")
+    print(f"  Approximate tokens: ~{windowed_chars // 4}")
+    print(f"  Savings: {100 - (windowed_chars / full_chars * 100):.1f}%\n")
 
-    print(f"Window Memory (k=2):")
-    print(f"  Messages: 4 (2 exchanges)")
-    print(f"  Characters: {window_chars}")
-    print(f"  Approximate tokens: ~{window_chars // 4}")
-    print(f"  Savings: {100 - (window_chars / buffer_chars * 100):.1f}%\n")
-
-    print("✓ Window memory significantly reduces token usage")
+    print("✓ Windowing significantly reduces token usage for long conversations")
 
 
 # endregion
@@ -214,40 +216,48 @@ def demo_multi_user_memory() -> None:
     """demonstrate separate memory per user"""
     print_section("Demo 6: Multi-User Memory Pattern")
 
-    # storage for user memories
-    user_memories: dict[str, ConversationBufferMemory] = {}
+    # storage for user chat histories
+    user_histories: dict[str, InMemoryChatMessageHistory] = {}
 
-    def get_memory(user_id: str) -> ConversationBufferMemory:
-        """get or create memory for user"""
-        if user_id not in user_memories:
-            user_memories[user_id] = ConversationBufferMemory()
-        return user_memories[user_id]
+    def get_history(user_id: str) -> InMemoryChatMessageHistory:
+        """get or create chat history for user"""
+        if user_id not in user_histories:
+            user_histories[user_id] = InMemoryChatMessageHistory()
+        return user_histories[user_id]
 
     print("## Simulating multi-user conversations:\n")
 
     # user 1 conversation
-    alice_memory = get_memory("alice")
-    alice_memory.save_context({"input": "My name is Alice"}, {"output": "Hello Alice!"})
-    alice_memory.save_context(
-        {"input": "I like Python"}, {"output": "Python is great!"}
-    )
+    alice_history = get_history("alice")
+    alice_history.add_user_message("My name is Alice")
+    alice_history.add_ai_message("Hello Alice!")
+    alice_history.add_user_message("I like Python")
+    alice_history.add_ai_message("Python is great!")
 
-    print("Alice's memory:")
-    print(f"  {alice_memory.load_memory_variables({})['history']}\n")
+    print("Alice's history:")
+    for msg in alice_history.messages:
+        role = "Human" if isinstance(msg, HumanMessage) else "AI"
+        print(f"  {role}: {msg.content}")
+    print()
 
     # user 2 conversation
-    bob_memory = get_memory("bob")
-    bob_memory.save_context({"input": "My name is Bob"}, {"output": "Hello Bob!"})
-    bob_memory.save_context({"input": "I like Java"}, {"output": "Java is powerful!"})
+    bob_history = get_history("bob")
+    bob_history.add_user_message("My name is Bob")
+    bob_history.add_ai_message("Hello Bob!")
+    bob_history.add_user_message("I like Java")
+    bob_history.add_ai_message("Java is powerful!")
 
-    print("Bob's memory:")
-    print(f"  {bob_memory.load_memory_variables({})['history']}\n")
+    print("Bob's history:")
+    for msg in bob_history.messages:
+        role = "Human" if isinstance(msg, HumanMessage) else "AI"
+        print(f"  {role}: {msg.content}")
+    print()
 
     # verify separation
     print("## Memory separation verified:")
-    print(f"  Total users: {len(user_memories)}")
-    print(f"  Alice messages: {len(alice_memory.chat_memory.messages)}")
-    print(f"  Bob messages: {len(bob_memory.chat_memory.messages)}")
+    print(f"  Total users: {len(user_histories)}")
+    print(f"  Alice messages: {len(alice_history.messages)}")
+    print(f"  Bob messages: {len(bob_history.messages)}")
 
     print("\n✓ Each user maintains separate conversation context")
 
@@ -258,27 +268,29 @@ def demo_multi_user_memory() -> None:
 
 
 def demo_memory_clearing() -> None:
-    """demonstrate memory clearing strategies"""
-    print_section("Demo 7: Memory Clearing Strategies")
+    """demonstrate clearing chat history"""
+    print_section("Demo 7: Clearing Chat History")
 
-    memory = ConversationBufferMemory()
+    history = InMemoryChatMessageHistory()
 
     # add some messages
-    memory.save_context({"input": "First message"}, {"output": "First response"})
-    memory.save_context({"input": "Second message"}, {"output": "Second response"})
+    history.add_user_message("First message")
+    history.add_ai_message("First response")
+    history.add_user_message("Second message")
+    history.add_ai_message("Second response")
 
     print("## Before clearing:")
-    print(f"  Messages: {len(memory.chat_memory.messages)}")
-    print(f"  Content: {memory.load_memory_variables({})['history'][:50]}...\n")
+    print(f"  Messages: {len(history.messages)}")
+    print(f"  First message: {history.messages[0].content}\n")
 
-    # clear memory
-    memory.clear()
+    # clear history
+    history.clear()
 
-    print("## After memory.clear():")
-    print(f"  Messages: {len(memory.chat_memory.messages)}")
-    print(f"  Content: '{memory.load_memory_variables({})['history']}'\n")
+    print("## After history.clear():")
+    print(f"  Messages: {len(history.messages)}")
+    print(f"  Content: {history.messages}\n")
 
-    print("✓ Memory can be cleared to start fresh conversations")
+    print("✓ Chat history can be cleared to start fresh conversations")
 
 
 # endregion
@@ -287,10 +299,10 @@ def demo_memory_clearing() -> None:
 
 
 def demo_memory_inspection() -> None:
-    """demonstrate memory debugging and inspection"""
-    print_section("Demo 8: Memory Inspection and Debugging")
+    """demonstrate chat history debugging and inspection"""
+    print_section("Demo 8: Chat History Inspection and Debugging")
 
-    memory = ConversationBufferMemory(return_messages=True)
+    history = InMemoryChatMessageHistory()
 
     # add messages
     exchanges = [
@@ -299,23 +311,25 @@ def demo_memory_inspection() -> None:
     ]
 
     for user_msg, bot_msg in exchanges:
-        memory.save_context({"input": user_msg}, {"output": bot_msg})
+        history.add_user_message(user_msg)
+        history.add_ai_message(bot_msg)
 
     print("## Inspection Methods:\n")
 
-    # method 1: load_memory_variables
-    print("1. load_memory_variables():")
-    memory_vars = memory.load_memory_variables({})
-    print(f"   Keys: {list(memory_vars.keys())}")
-    print(f"   Messages count: {len(memory_vars['history'])}\n")
+    # method 1: messages property
+    print("1. history.messages:")
+    print(f"   Type: {type(history.messages)}")
+    print(f"   Count: {len(history.messages)}\n")
 
-    # method 2: direct chat_memory access
-    print("2. chat_memory.messages:")
-    for i, msg in enumerate(memory.chat_memory.messages):
+    # method 2: iterate and inspect
+    print("2. Iterate and inspect messages:")
+    for i, msg in enumerate(history.messages):
         msg_type = "Human" if isinstance(msg, HumanMessage) else "AI"
         print(f"   [{i}] {msg_type}: {msg.content[:40]}...")
+        print(f"       Type: {type(msg).__name__}")
+        print(f"       Has metadata: {bool(msg.additional_kwargs)}")
 
-    print("\n✓ Multiple ways to inspect memory state for debugging")
+    print("\n✓ Direct access to message objects for debugging and inspection")
 
 
 # endregion
@@ -327,7 +341,7 @@ DEMOS = [
     Demo("1", "Buffer Memory", "complete conversation history", demo_buffer_memory),
     Demo("2", "Window Memory", "sliding window with recent messages", demo_window_memory),
     Demo("3", "Return Messages", "message objects vs strings", demo_return_messages),
-    Demo("4", "Custom Keys", "configurable memory variable names", demo_custom_keys),
+    Demo("4", "Message Metadata", "custom attributes and tracking", demo_custom_keys),
     Demo("5", "Token Counting", "memory size management", demo_token_counting),
     Demo("6", "Multi-User Memory", "per-user conversation isolation", demo_multi_user_memory),
     Demo("7", "Memory Clearing", "reset and cleanup operations", demo_memory_clearing),
@@ -353,7 +367,4 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    try:
-        main()
-    except KeyboardInterrupt:
-        print("\n\n👋 Goodbye!")
+    main()

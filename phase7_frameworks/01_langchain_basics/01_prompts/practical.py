@@ -730,7 +730,7 @@ def demo_output_parsers() -> None:
     print_subsection("Structured Output with JSON")
 
     from langchain_core.output_parsers import JsonOutputParser
-    from langchain_core.pydantic_v1 import BaseModel, Field
+    from pydantic import BaseModel, Field
 
     # Define structure
     class TechStack(BaseModel):
@@ -917,10 +917,7 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    try:
-        main()
-    except KeyboardInterrupt:
-        print("\n\n👋 Goodbye!")
+    main()
 
 
 # endregion
