@@ -179,13 +179,13 @@ Track your journey through AI development. Update after each session.
 
 ## Phase 7: Production Frameworks
 
-### LangChain Basics (Module 1) - 🔄 In Progress (60% Complete)
+### LangChain Basics (Module 1) - 🔄 In Progress (67% Complete)
 - [x] Migration examples (side-by-side comparisons of Phase 3/4 vs LangChain)
 - [x] Conceptual demos (patterns, RAG walkthrough without dependencies)
 - [x] LangChain installation (langchain==1.0.5 + integrations)
 - [x] Prompts & templates (01_prompts/ subfolder: concepts.py + practical.py)
 - [x] LLM integration (02_llm_integration/ subfolder: concepts.py + practical.py)
-- [x] Chains (03_chains/ subfolder: concepts.py + practical.py - **Demo 6 of 10 completed**)
+- [x] Chains (03_chains/ subfolder: concepts.py + practical.py) ✅ **COMPLETE**
 - [x] Shared utilities refactoring (phase7_frameworks/utils.py for all modules)
 - [ ] Memory (04_memory/ subfolder: modern RunnableWithMessageHistory API)
 - [ ] RAG (05_rag/ subfolder: modern LCEL patterns)
@@ -217,7 +217,7 @@ Track your journey through AI development. Update after each session.
 - [ ] Migration strategies (raw → framework, framework → raw, hybrid)
 - [ ] Real-world scenarios (10+ use cases analyzed)
 
-**Phase 7 Completion**: 33% (Module 1: prompts + LLM integration complete)
+**Phase 7 Completion**: 42% (Module 1: prompts + LLM integration + chains complete)
 
 **Note**: Phase 7 created 2026-01-09. Philosophy: Learn frameworks AFTER building from scratch (Phases 2-6) to understand what they do under the hood, when to use them, and when to skip them entirely.
 
@@ -575,3 +575,19 @@ Track your journey through AI development. Update after each session.
 - Key insight: Token tracking with callbacks enables cost monitoring
 - Session focus: Understanding LangChain's provider abstraction and configuration patterns
 - Next: 03_chains/ (LLMChain, SequentialChain, LCEL composition)
+
+### 2026-02-07: Demo Menu Migration - Code Quality & DRY Improvement
+- ✅ Created unified menu system: `common/util/demo_menu.py` (Demo dataclass + MenuRunner class)
+- ✅ Eliminated duplication: Demo metadata defined once (was 2 places: display + execution)
+- ✅ Built comprehensive test suite: `tests/test_demo_menu.py` (8 tests, 98% coverage)
+- ✅ Migrated 25 of 36 files (69% complete): Phases 1-2-3-5-7
+- ✅ Code reduction: ~2,000-3,300 lines eliminated (85-90% per file)
+- ✅ Pattern: `DEMOS = [Demo(...)]` + `MenuRunner(DEMOS).run()` (~10 lines vs ~90-155)
+- ✅ Created migration documentation: `MIGRATION_SUMMARY.md`
+- Key insight: Single source of truth prevents maintenance burden
+- Key insight: Type-safe dataclass validation prevents errors
+- Key insight: Centralized menu logic enables easy feature additions
+- Key insight: Bulk migration script saved significant time (22 files automated)
+- Remaining: 11 files with special patterns (conditional demo_map, 3-tuple with API provider)
+- Session focus: Eliminating systematic code duplication across all interactive demos
+- Impact: Consistent UX, easier maintenance, DRY principle applied

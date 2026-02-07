@@ -605,7 +605,7 @@ def demo_token_tracking() -> None:
     print_section("Demo 7: Token Usage Tracking")
 
 
-    from langchain.callbacks import get_openai_callback
+    from langchain_community.callbacks import get_openai_callback
     from langchain_openai import ChatOpenAI
 
     llm = ChatOpenAI(model="gpt-3.5-turbo", temperature=0.7)
@@ -739,13 +739,14 @@ def demo_lcel_integration() -> None:
 # region Demo Menu Configuration
 
 DEMOS = [
-    Demo("1", "OpenAI Integration", "openai LLM wrapper and streaming", demo_openai_integration, needs_api=True),
-    Demo("2", "Anthropic Integration", "claude LLM wrapper", demo_anthropic_integration, needs_api=True),
-    Demo("3", "Multi-Provider Switch", "switch between providers dynamically", demo_multi_provider, needs_api=True),
-    Demo("4", "Streaming Responses", "real-time streaming output", demo_streaming, needs_api=True),
-    Demo("5", "Token Usage Tracking", "monitor API costs", demo_token_usage, needs_api=True),
-    Demo("6", "Custom LLM Parameters", "temperature and other settings", demo_custom_parameters, needs_api=True),
-    Demo("7", "Error Handling", "graceful API error handling", demo_error_handling, needs_api=True),
+    Demo("1", "ChatOpenAI Basic", "OpenAI LLM wrapper and usage", demo_chatopenai_basic, needs_api=True),
+    Demo("2", "ChatAnthropic Basic", "Claude LLM wrapper and usage", demo_chatanthropic_basic, needs_api=True),
+    Demo("3", "Temperature Control", "adjust model creativity", demo_temperature_control, needs_api=True),
+    Demo("4", "Streaming Responses", "real-time token streaming", demo_streaming, needs_api=True),
+    Demo("5", "Provider Switching", "switch between OpenAI and Anthropic", demo_provider_switching, needs_api=True),
+    Demo("6", "Fallback Chain", "graceful error handling with fallbacks", demo_fallback_chain, needs_api=True),
+    Demo("7", "Token Tracking", "monitor API usage and costs", demo_token_tracking, needs_api=True),
+    Demo("8", "LCEL Integration", "chain multiple LLM calls", demo_lcel_integration, needs_api=True),
 ]
 
 # endregion
