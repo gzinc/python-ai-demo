@@ -1,23 +1,21 @@
 # Chains Module
 
-**Purpose**: Learn LangChain's chain composition patterns for building multi-step LLM workflows
+**Purpose**: Learn LangChain's LCEL (LangChain Expression Language) for building multi-step LLM workflows
 
 ---
 
 ## Learning Objectives
 
 By the end of this module, you will:
-1. **LLMChain**: Understand prompt + LLM basic composition
-2. **SequentialChain**: Chain multiple operations in sequence
-3. **LCEL Syntax**: Master the pipe operator (|) for modern chain composition
-4. **Error Handling**: Handle failures gracefully in multi-step chains
-5. **Chain Debugging**: Trace execution and inspect intermediate results
+1. **LCEL Syntax**: Master the pipe operator (|) for chain composition
+2. **Runnables**: Understand the Runnable interface (.invoke(), .stream(), .batch())
+3. **Composition Patterns**: Parallel chains, passthrough, fallbacks
+4. **Error Handling**: Retries, fallbacks, and graceful failure handling
+5. **Debugging**: Trace execution and inspect intermediate results
 
 ---
 
-## Key Concepts
-
-### What is a Chain?
+## What is a Chain?
 
 A **chain** connects multiple components (prompts, LLMs, parsers, tools) into a unified workflow:
 
@@ -33,77 +31,7 @@ Input → [Component 1] → [Component 2] → [Component 3] → Output
 
 ---
 
-## Chain Types
-
-### 1. LLMChain (Legacy Pattern) ⚠️ DEPRECATED
-
-> **⚠️ Deprecation Notice**: `LLMChain` and `.run()` method are deprecated as of LangChain 1.0.
-> Use LCEL (section 3) for new projects. This pattern is shown for reference only.
-
-**Classic approach** (pre-LCEL):
-
-```python
-from langchain.chains import LLMChain
-from langchain_core.prompts import PromptTemplate
-from langchain_openai import ChatOpenAI
-
-prompt = PromptTemplate.from_template("Explain {concept} in one sentence")
-llm = ChatOpenAI(model="gpt-3.5-turbo")
-
-chain = LLMChain(llm=llm, prompt=prompt)
-result = chain.run(concept="embeddings")  # .run() is deprecated
-```
-
-**Modern Alternative**: Use LCEL (see section 3 below)
-
-**Why deprecated?**:
-- Verbose syntax
-- Limited composability
-- No built-in streaming
-- `.run()` method replaced by `.invoke()`
-
----
-
-### 2. SequentialChain (Multi-Step Operations) ⚠️ DEPRECATED
-
-> **⚠️ Deprecation Notice**: `SequentialChain` is deprecated as of LangChain 1.0.
-> Use LCEL pipe operators (section 3) for new projects. This pattern is shown for reference only.
-
-**Chaining multiple LLMChains**:
-
-```python
-from langchain.chains import SequentialChain
-
-# Chain 1: Summarize
-summarize_chain = LLMChain(llm=llm, prompt=summarize_prompt, output_key="summary")
-
-# Chain 2: Analyze sentiment
-sentiment_chain = LLMChain(llm=llm, prompt=sentiment_prompt, output_key="sentiment")
-
-# Compose
-chain = SequentialChain(
-    chains=[summarize_chain, sentiment_chain],
-    input_variables=["text"],
-    output_variables=["summary", "sentiment"]
-)
-
-result = chain({"text": "Long article text..."})
-# {"summary": "...", "sentiment": "positive"}
-```
-
-**Modern Alternative**: Use LCEL pipe operators (see section 3 below)
-
-**Why deprecated?**:
-- Rigid linear flow
-- Limited error recovery
-- All-or-nothing execution
-- Verbose compared to LCEL
-
----
-
-### 3. LCEL (LangChain Expression Language) - Modern Approach ✅
-
-> **✅ Recommended**: This is the modern, standard way to build chains in LangChain 1.0+
+## LCEL: Modern Chain Composition
 
 **The pipe operator (`|`)** for composing components:
 
@@ -125,24 +53,14 @@ result = chain.invoke({"concept": "embeddings"})
 
 **Why LCEL?**
 
-| Feature | Legacy (LLMChain) | LCEL ✅ |
-|---------|-------------------|------|
-| **Syntax** | Verbose | Concise (Unix pipe style) |
-| **Streaming** | Manual setup | Built-in |
-| **Async** | Limited support | Native async |
-| **Composition** | Complex | Simple (`\|` operator) |
-| **Error Handling** | Basic | Advanced (retries, fallbacks) |
-| **Method** | `.run()` (deprecated) | `.invoke()` |
-
 **LCEL Benefits:**
 - ✅ Concise pipe syntax (like Unix pipes)
 - ✅ Built-in streaming support
 - ✅ Native async execution
 - ✅ Type-safe composition
-- ✅ Better error handling
-- ✅ Future-proof (LangChain's direction)
-
-**Use LCEL for all new chains** - it's the modern standard.
+- ✅ Advanced error handling (retries, fallbacks)
+- ✅ Parallel and conditional execution
+- ✅ Production-ready patterns
 
 ---
 
@@ -315,32 +233,6 @@ os.environ["LANGCHAIN_API_KEY"] = "your-key"
 
 ---
 
-## Migration: Legacy → LCEL
-
-### Before (LLMChain)
-
-```python
-from langchain.chains import LLMChain
-
-chain = LLMChain(llm=llm, prompt=prompt)
-result = chain.run(input="...")
-```
-
-### After (LCEL)
-
-```python
-chain = prompt | llm | StrOutputParser()
-result = chain.invoke({"input": "..."})
-```
-
-**Benefits**:
-- 40% less code
-- Built-in streaming
-- Better error handling
-- Native async support
-
----
-
 ## Performance Optimization
 
 ### 1. Batch Processing
@@ -386,18 +278,7 @@ uv run python -m phase7_frameworks.01_langchain_basics.03_chains.practical
 
 ## Common Pitfalls
 
-### 1. Mixing Legacy and LCEL
-
-```python
-# ❌ Bad: Mixing LLMChain with LCEL
-legacy_chain = LLMChain(llm=llm, prompt=prompt)
-modern_chain = legacy_chain | parser  # Won't work cleanly
-
-# ✅ Good: Pure LCEL
-chain = prompt | llm | parser
-```
-
-### 2. Forgetting Output Parsers
+### 1. Forgetting Output Parsers
 
 ```python
 # ❌ Bad: Returns AIMessage object
@@ -411,7 +292,7 @@ result = chain.invoke({"concept": "embeddings"})
 # result → Direct string
 ```
 
-### 3. Ignoring Streaming
+### 2. Ignoring Streaming
 
 ```python
 # ❌ Bad: Wait for full response

@@ -179,23 +179,22 @@ Track your journey through AI development. Update after each session.
 
 ## Phase 7: Production Frameworks
 
-### LangChain Basics (Module 1) - ✅ Documentation Complete
+### LangChain Basics (Module 1) - 🔄 In Progress (60% Complete)
 - [x] Migration examples (side-by-side comparisons of Phase 3/4 vs LangChain)
 - [x] Conceptual demos (patterns, RAG walkthrough without dependencies)
 - [x] LangChain installation (langchain==1.0.5 + integrations)
 - [x] Prompts & templates (01_prompts/ subfolder: concepts.py + practical.py)
 - [x] LLM integration (02_llm_integration/ subfolder: concepts.py + practical.py)
-- [x] Chains (03_chains/ subfolder: concepts.py + practical.py)
+- [x] Chains (03_chains/ subfolder: concepts.py + practical.py - **Demo 6 of 10 completed**)
 - [x] Shared utilities refactoring (phase7_frameworks/utils.py for all modules)
-- [x] Memory (04_memory/ subfolder: modern RunnableWithMessageHistory API)
-- [x] RAG (05_rag/ subfolder: modern LCEL patterns, comprehensive legacy section)
-- [x] Agents & tools (06_agents_tools/ subfolder: modern create_agent API)
-- [x] **API Modernization**: All 6 READMEs updated for LangChain 1.0+ APIs
-  - Modern patterns shown first with ✅ badges
-  - Legacy patterns in "⚠️ DEPRECATED" sections
-  - Migration guides with step-by-step instructions
-  - Standardized "Run Examples" sections across all modules
-  - Visual learning notes added to all modules
+- [ ] Memory (04_memory/ subfolder: modern RunnableWithMessageHistory API)
+- [ ] RAG (05_rag/ subfolder: modern LCEL patterns)
+- [ ] Agents & tools (06_agents_tools/ subfolder: modern create_agent API)
+- [x] **Documentation Cleanup (2026-02-06)**: Removed all deprecated/legacy patterns
+  - Cleaned 4 READMEs: chains, memory, RAG, agents (~200 lines removed)
+  - Pure LangChain 1.0+ patterns only (no ⚠️ DEPRECATED sections)
+  - Focus on LCEL, RunnableWithMessageHistory, create_agent
+  - Cleaner learning experience without legacy cruft
 
 ### LangGraph (Module 2)
 - [ ] State basics (StateGraph, nodes, edges)

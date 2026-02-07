@@ -98,14 +98,22 @@ result = app.invoke(None, config={"configurable": {"thread_id": "1"}})
 
 ```
 02_langgraph/
-├── README.md                # This file
-├── state_basics.py          # StateGraph, nodes, edges
-├── conditional_routing.py   # Conditional edges, routing logic
-├── multi_agent.py           # Specialist agents collaborating
-├── human_in_loop.py         # Checkpoints, interrupts, approvals
-├── graph_visualization.py   # Render graphs with mermaid/graphviz
-└── migration_from_phase4.py # Your multi-agent → LangGraph
+├── README.md                     # This file
+├── 01_state_basics.py            # StateGraph, nodes, edges (foundation)
+├── 02_conditional_routing.py     # Conditional edges, routing logic
+├── 03_multi_agent.py             # Specialist agents collaborating
+├── 04_human_in_loop.py           # Checkpoints, interrupts, approvals
+├── 05_graph_visualization.py     # Render graphs with mermaid/graphviz
+└── 06_migration_from_phase4.py   # Your multi-agent → LangGraph
 ```
+
+**Learning Order**: Files are numbered to show progressive complexity
+- **01**: Foundation (state management)
+- **02**: Patterns (routing, branching)
+- **03**: Applications (multi-agent)
+- **04**: Production (human approval)
+- **05**: Tools (visualization, debugging)
+- **06**: Context (comparison to Phase 4)
 
 ---
 

@@ -255,35 +255,6 @@ response = chain_with_memory.invoke(
 - ✅ Async execution
 - ✅ Type-safe configuration
 
-### Legacy Memory Integration ⚠️ DEPRECATED
-
-> **⚠️ Deprecation Notice**: `ConversationChain` and direct memory usage are deprecated as of LangChain 1.0.
-> Use `RunnableWithMessageHistory` pattern above for new projects.
-
-**Old Pattern** (LangChain < 1.0):
-```python
-from langchain.chains import ConversationChain
-from langchain.memory import ConversationBufferMemory
-from langchain_openai import ChatOpenAI
-
-llm = ChatOpenAI(model="gpt-3.5-turbo")
-memory = ConversationBufferMemory()
-
-chain = ConversationChain(llm=llm, memory=memory)
-
-# first interaction
-response = chain.run("Hi, I'm Alice")
-
-# second interaction
-response = chain.run("What's my name?")
-```
-
-**Why deprecated?**
-- No session management (single global memory)
-- Doesn't work well with LCEL
-- No streaming support
-- Less flexible configuration
-
 ---
 
 ## Memory Comparison

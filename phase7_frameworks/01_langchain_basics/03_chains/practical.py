@@ -60,7 +60,7 @@ def demo_basic_lcel_chain() -> None:
     │                │      └──────── Generate response           │
     │                └───────────── Format template               │
     │                                                             │
-    │  Same chain processes: embeddings → RAG → LCEL             │
+    │  Same chain processes: embeddings → RAG → LCEL              │
     │                                                             │
     │  ✅ Benefit: Pipe operator (|) chains components            │
     │  ✅ Benefit: Reusable pipeline for multiple inputs          │
@@ -234,10 +234,10 @@ def demo_streaming_chain() -> None:
     chain = prompt | llm | parser
 
     print("## Streaming Response:\n")
-    print("Concept: RAG")
+    print("Concept: RAG in AI")
     print("Response: ", end="", flush=True)
 
-    for chunk in chain.stream({"concept": "RAG"}):
+    for chunk in chain.stream({"concept": "RAG in AI"}):
         print(chunk, end="", flush=True)
 
     print("\n\n✓ Streaming provides progressive output for better UX")
@@ -262,13 +262,13 @@ def demo_parallel_chains() -> None:
     │      ┌──────┴──────┐                                        │
     │      │             │                                        │
     │      ▼             ▼                                        │
-    │  ┌─────────┐   ┌─────────┐                                 │
+    │  ┌─────────┐   ┌─────────┐                                  │
     │  │Summary  │   │Keywords │  (Run simultaneously)            │
-    │  │Chain    │   │Chain    │                                 │
-    │  └────┬────┘   └────┬────┘                                 │
+    │  │Chain    │   │Chain    │                                  │
+    │  └────┬────┘   └────┬────┘                                  │
     │       │             │                                       │
-    │       │ "AI transforms software"                           │
-    │       │             │ "AI, software, transform"            │
+    │       │ "AI transforms software"                            │
+    │       │             │ "AI, software, transform"             │
     │       │             │                                       │
     │       └──────┬──────┘                                       │
     │              │                                              │
@@ -280,7 +280,7 @@ def demo_parallel_chains() -> None:
     │                                                             │
     │  Parallel Execution vs Sequential:                          │
     │                                                             │
-    │  Sequential:  Summary → Wait → Keywords → Wait             │
+    │  Sequential:  Summary → Wait → Keywords → Wait              │
     │  Total time:  500ms + 500ms = 1000ms                        │
     │                                                             │
     │  Parallel:    Summary ┐                                     │
@@ -355,12 +355,12 @@ def demo_passthrough_pattern() -> None:
     │  Question: "What are embeddings?"                           │
     │      │                                                      │
     │      ▼                                                      │
-    │  ┌────────────────────────────────────┐                     │
-    │  │ {                                  │                     │
-    │  │   "context": Passthrough → Retriever                     │
-    │  │   "question": Passthrough (unchanged)                    │
-    │  │ }                                  │                     │
-    │  └──────────┬─────────────────────────┘                     │
+    │  ┌──────────────────────────────────────┐                   │
+    │  │ {                                    │                   │
+    │  │   "context": Passthrough → Retriever │                   │
+    │  │   "question": Passthrough (unchanged)│                   │
+    │  │ }                                    │                   │
+    │  └──────────┬───────────────────────────┘                   │
     │             │                                               │
     │      ┌──────┴──────┐                                        │
     │      │             │                                        │
@@ -368,7 +368,7 @@ def demo_passthrough_pattern() -> None:
     │  context:      question:                                    │
     │  "Retrieved:   "What are embeddings?"                       │
     │   Embeddings   (original preserved)                         │
-    │   are vector                                               │
+    │   are vector                                                │
     │   representations"                                          │
     │      │             │                                        │
     │      └──────┬──────┘                                        │
