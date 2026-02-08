@@ -17,16 +17,11 @@ from inspect import cleandoc
 from dotenv import load_dotenv
 
 from common.demo_menu import Demo, MenuRunner
+from common.util.utils import print_section
 
 # load .env file (must be called before checking keys)
 load_dotenv()
 
-
-def print_section(title: str) -> None:
-    """print section header"""
-    print(f"\n{'=' * 60}")
-    print(f"  {title}")
-    print("=" * 60)
 
 
 def check_openai_key() -> bool:

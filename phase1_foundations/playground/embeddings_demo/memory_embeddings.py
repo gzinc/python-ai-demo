@@ -19,13 +19,8 @@ from sklearn.metrics.pairwise import cosine_similarity
 from typing import Dict, List, Tuple
 import chromadb
 from chromadb.config import Settings
+from common.util.utils import print_section
 
-
-def print_section(title: str) -> None:
-    """print section header"""
-    print(f"\n{'=' * 80}")
-    print(f"  {title}")
-    print('=' * 80)
 
 
 def load_memory_files() -> Dict[str, str]:

@@ -17,13 +17,8 @@ from sentence_transformers import SentenceTransformer
 from typing import Dict
 
 from vector_db import VectorDB, demonstrate_search
+from common.util.utils import print_section
 
-
-def print_section(title: str) -> None:
-    """print section header"""
-    print(f"\n{'=' * 80}")
-    print(f"  {title}")
-    print('=' * 80)
 
 
 def load_memory_files() -> Dict[str, str]:

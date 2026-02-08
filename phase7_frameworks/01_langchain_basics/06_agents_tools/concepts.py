@@ -10,13 +10,8 @@ Run with: uv run python -m phase7_frameworks.01_langchain_basics.06_agents_tools
 from inspect import cleandoc
 
 from common.demo_menu import Demo, MenuRunner
+from common.util.utils import print_section
 
-
-def print_section(title: str) -> None:
-    """print section header"""
-    print(f"\n{'=' * 70}")
-    print(f"  {title}")
-    print('=' * 70)
 
 
 # region Agent Architecture Concepts

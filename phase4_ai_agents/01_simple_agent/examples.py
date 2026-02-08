@@ -17,15 +17,10 @@ from agent import ReActAgent
 from schemas import AgentConfig
 
 from common.demo_menu import Demo, MenuRunner
+from common.util.utils import print_section
 
 load_dotenv()
 
-
-def print_section(title: str) -> None:
-    """print section header"""
-    print(f"\n{'=' * 60}")
-    print(f"  {title}")
-    print("=" * 60)
 
 
 # ─────────────────────────────────────────────────────────────
@@ -291,10 +286,12 @@ def demo_timeout_handling():
 # region Demo Menu Configuration
 
 DEMOS = [
-    Demo("1", "Basic Agent", "simple agent with tools", example_basic_agent),
-    Demo("2", "ReAct Agent", "reasoning and action loop", example_react_agent),
-    Demo("3", "Agent with Memory", "stateful agent execution", example_agent_with_memory),
-    Demo("4", "Multi-Step Planning", "complex task breakdown", example_multi_step_planning),
+    Demo("1", "Simple Query", "basic agent query", demo_simple_query),
+    Demo("2", "Multi-Step Reasoning", "complex reasoning chain", demo_multi_step_reasoning),
+    Demo("3", "Knowledge and Calculation", "combining tools", demo_knowledge_and_calculation),
+    Demo("4", "Compare Cities", "parallel information gathering", demo_compare_cities),
+    Demo("5", "Action History", "tracking agent steps", demo_action_history),
+    Demo("6", "Timeout Handling", "managing long-running tasks", demo_timeout_handling),
 ]
 
 # endregion

@@ -27,6 +27,7 @@ from dataclasses import dataclass
 
 from dotenv import load_dotenv
 from common.demo_menu import Demo, MenuRunner
+from common.util.utils import print_section
 
 load_dotenv()
 
@@ -275,12 +276,6 @@ class StreamPrinter:
 # DEMO
 # ─────────────────────────────────────────────────────────────
 
-
-def print_section(title: str) -> None:
-    """print section header"""
-    print(f"\n{'=' * 60}")
-    print(f"  {title}")
-    print("=" * 60)
 
 
 # region Demo Functions

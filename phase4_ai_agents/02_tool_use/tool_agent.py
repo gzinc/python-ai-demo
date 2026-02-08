@@ -24,6 +24,7 @@ from tools.web_search import WebSearchTool
 from tools.http_tool import HttpGetTool
 from agent import ReActAgent, AgentConfig
 from common.demo_menu import Demo, MenuRunner
+from common.util.utils import print_section
 
 
 def create_tool_registry(
@@ -156,12 +157,6 @@ class ToolAgent:
 # ==============================================================================
 #   DEMO
 # ==============================================================================
-
-def print_section(title: str) -> None:
-    """Print section header."""
-    print(f"\n{'=' * 60}")
-    print(f"  {title}")
-    print('=' * 60)
 
 
 # region Demo Functions

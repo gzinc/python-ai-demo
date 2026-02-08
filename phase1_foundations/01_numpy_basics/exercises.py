@@ -21,13 +21,8 @@ from solutions.exercise_solutions import (
     exercise_3_pairwise_similarity,
     exercise_4_reshape_for_attention,
 )
+from common.util.utils import print_section
 
-
-def print_section(title: str) -> None:
-    """print section header"""
-    print(f"\n{'=' * 60}")
-    print(f"  {title}")
-    print('=' * 60)
 
 
 def run_tests() -> None:

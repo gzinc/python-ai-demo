@@ -17,13 +17,8 @@ import numpy as np
 from typing import List, Dict
 
 from common.demo_menu import Demo, MenuRunner
+from common.util.utils import print_section
 
-
-def print_section(title: str) -> None:
-    """print section header"""
-    print(f"\n{'=' * 70}")
-    print(f"  {title}")
-    print('=' * 70)
 
 
 # =============================================================================

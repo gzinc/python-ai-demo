@@ -20,16 +20,11 @@ from langchain_core.prompts import (
     PromptTemplate,
 )
 from langchain_core.prompts.few_shot import FewShotChatMessagePromptTemplate
+from common.util.utils import print_section
 
 
 # region Helper Functions
 
-
-def print_section(title: str) -> None:
-    """print section header"""
-    print(f"\n{'=' * 70}")
-    print(f"  {title}")
-    print('=' * 70)
 
 
 def print_subsection(title: str) -> None:

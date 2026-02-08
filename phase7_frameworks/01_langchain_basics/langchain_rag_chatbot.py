@@ -18,6 +18,7 @@ from inspect import cleandoc
 
 from dotenv import load_dotenv
 from common.demo_menu import Demo, MenuRunner
+from common.util.utils import print_section
 
 # load environment variables
 load_dotenv()
@@ -27,13 +28,6 @@ os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
 
 # region Helper Functions
-def print_section(title: str) -> None:
-    """print section header"""
-    print(f"\n{'=' * 80}")
-    print(f"  {title}")
-    print('=' * 80)
-
-
 def check_langchain_installed() -> tuple[bool, str]:
     """check if full LangChain is installed"""
     try:

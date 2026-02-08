@@ -26,13 +26,8 @@ from tools.base import BaseTool, ToolRegistry
 from tools.file_tools import ReadFileTool, WriteFileTool, ListDirectoryTool
 from tools.web_search import WebSearchTool
 from tools.http_tool import HttpGetTool
+from common.util.utils import print_section
 
-
-def print_section(title: str) -> None:
-    """print section header"""
-    print(f"\n{'=' * 60}")
-    print(f"  {title}")
-    print('=' * 60)
 
 
 # ==============================================================================

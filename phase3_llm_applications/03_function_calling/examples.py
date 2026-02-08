@@ -27,15 +27,9 @@ from common_tools import (
 )
 
 from common.demo_menu import Demo, MenuRunner
+from common.util.utils import print_section
 
 load_dotenv()
-
-
-def print_section(title: str) -> None:
-    """print section header"""
-    print(f"\n{'=' * 60}")
-    print(f"  {title}")
-    print("=" * 60)
 
 
 # ─────────────────────────────────────────────────────────────
@@ -237,11 +231,13 @@ def example_schema_inspection():
 # region Demo Menu Configuration
 
 DEMOS = [
-    Demo("1", "Basic Function Calling", "simple tool use", example_basic_function_calling),
-    Demo("2", "Multiple Functions", "agent with multiple tools", example_multiple_functions),
-    Demo("3", "Parallel Function Calls", "concurrent tool execution", example_parallel_calls),
-    Demo("4", "Function with Context", "stateful tool use", example_function_with_context),
+    Demo("1", "Basic Function Calling", "simple tool use", example_basic_function_call),
+    Demo("2", "Multiple Tools", "agent with multiple tools", example_multi_tool),
+    Demo("3", "Conversation with Tools", "multi-turn conversation", example_conversation_with_tools),
+    Demo("4", "Tool Choice", "LLM decides when to use tools", example_tool_choice),
     Demo("5", "Error Handling", "graceful function failures", example_error_handling),
+    Demo("6", "Agent Loop Pattern", "foundation for AI agents", example_agent_loop_pattern),
+    Demo("7", "Schema Inspection", "tool schema details", example_schema_inspection),
 ]
 
 # endregion

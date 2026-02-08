@@ -12,19 +12,13 @@ Run with: uv run python -m phase7_frameworks.01_langchain_basics.langchain_conce
 import os
 from inspect import cleandoc
 from common.demo_menu import Demo, MenuRunner
+from common.util.utils import print_section
 
 # suppress warnings
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
 
 # region Helper Functions
-def print_section(title: str) -> None:
-    """print section header"""
-    print(f"\n{'=' * 80}")
-    print(f"  {title}")
-    print('=' * 80)
-
-
 def print_code(label: str, code: str) -> None:
     """print code block with label"""
     print(f"\n┌─ {label} {'─' * (70 - len(label))}┐")

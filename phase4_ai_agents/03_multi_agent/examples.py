@@ -28,13 +28,8 @@ from agents import (
 )
 from orchestrator import MultiAgentOrchestrator
 from common.demo_menu import Demo, MenuRunner
+from common.util.utils import print_section
 
-
-def print_section(title: str) -> None:
-    """print a section header"""
-    print(f"\n{'='*70}")
-    print(f"  {title}")
-    print("=" * 70)
 
 
 def print_result(result: TeamResult) -> None:

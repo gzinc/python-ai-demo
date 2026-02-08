@@ -28,6 +28,7 @@ from typing import Literal, Optional
 
 from schemas import Role, Message
 from common.demo_menu import Demo, MenuRunner
+from common.util.utils import print_section
 
 
 @dataclass
@@ -227,12 +228,6 @@ class SummarizingMemory(ChatMemory):
 # DEMO
 # ─────────────────────────────────────────────────────────────
 
-
-def print_section(title: str) -> None:
-    """print section header"""
-    print(f"\n{'=' * 60}")
-    print(f"  {title}")
-    print("=" * 60)
 
 
 # region Demo Functions

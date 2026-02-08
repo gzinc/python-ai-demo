@@ -23,15 +23,10 @@ from streaming import stream_to_console, _simulate_stream
 from engine import ChatEngine
 
 from common.demo_menu import Demo, MenuRunner
+from common.util.utils import print_section
 
 load_dotenv()
 
-
-def print_section(title: str) -> None:
-    """print section header"""
-    print(f"\n{'=' * 60}")
-    print(f"  {title}")
-    print("=" * 60)
 
 
 # ─────────────────────────────────────────────────────────────

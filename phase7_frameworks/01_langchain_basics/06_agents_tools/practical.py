@@ -21,17 +21,11 @@ from langchain_openai import ChatOpenAI
 from pydantic import Field
 
 from common.demo_menu import Demo, MenuRunner
-from common.util.utils import check_api_keys
+from common.util.utils import print_section, check_api_keys
 
 # load environment variables
 load_dotenv()
 
-
-def print_section(title: str) -> None:
-    """print section header"""
-    print(f"\n{'=' * 70}")
-    print(f"  {title}")
-    print('=' * 70)
 
 
 # region Demo Functions

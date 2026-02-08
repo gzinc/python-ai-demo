@@ -11,19 +11,13 @@ import os
 from inspect import cleandoc
 
 from common.demo_menu import Demo, MenuRunner
+from common.util.utils import print_section
 
 # suppress warnings
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
 
 # region Helper Functions
-def print_section(title: str) -> None:
-    """print section header"""
-    print(f"\n{'=' * 80}")
-    print(f"  {title}")
-    print('=' * 80)
-
-
 def print_comparison(your_way: str, langchain_way: str) -> None:
     """print side-by-side comparison"""
     print("\n┌─ YOUR WAY (Phases 3/4) ─────────────────────────────────────────────┐")

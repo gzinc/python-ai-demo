@@ -23,13 +23,8 @@ from solutions.exercise_solutions import (
     exercise_4_prepare_for_embedding,
     exercise_4_chunk_dataframe,
 )
+from common.util.utils import print_section
 
-
-def print_section(title: str) -> None:
-    """print section header"""
-    print(f"\n{'=' * 60}")
-    print(f"  {title}")
-    print('=' * 60)
 
 
 # =============================================================================
