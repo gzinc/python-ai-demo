@@ -13,6 +13,7 @@ from datetime import datetime
 from inspect import cleandoc
 
 from dotenv import load_dotenv
+from simpleeval import simple_eval
 from langchain.agents import create_agent
 from langchain.tools import BaseTool, tool
 from langchain_community.tools import DuckDuckGoSearchRun
@@ -28,7 +29,7 @@ load_dotenv()
 
 
 
-# region Demo Functions
+# region Demo 1: Basic Tool Creation
 
 
 def demo_basic_tool_creation() -> None:
@@ -71,7 +72,7 @@ def demo_basic_tool_creation() -> None:
     │                                                             │
     │  ✅ Benefit: Zero boilerplate (decorator handles metadata)  │
     │  ✅ Benefit: Type hints → automatic schema validation       │
-    │  ⚠️  Caution: eval() is dangerous for untrusted input       │
+    │  ✅ Security: simple_eval() for safe math (no code exec)    │
     └─────────────────────────────────────────────────────────────┘
     """
     print_section("Demo 1: Basic Tool Creation with @tool")
@@ -80,8 +81,10 @@ def demo_basic_tool_creation() -> None:
     @tool
     def calculator(expression: str) -> str:
         """evaluate mathematical expressions like '2+2' or '25*48+100'"""
+        print(f"  🔧 tool used: calculator(expression='{expression}')")
         try:
-            result = eval(expression)
+            # safe evaluation: only allows math operations, no code execution
+            result = simple_eval(expression)
             return str(float(result))
         except Exception as e:
             return f"Error: {str(e)}"
@@ -100,6 +103,12 @@ def demo_basic_tool_creation() -> None:
     print("   • Function name → tool name")
     print("   • Docstring → tool description")
     print("   • Type hints → argument schema")
+
+
+# endregion
+
+
+# region Demo 2: Creating Agent with Tools
 
 
 def demo_create_agent() -> None:
@@ -151,6 +160,7 @@ def demo_create_agent() -> None:
     @tool
     def get_current_time() -> str:
         """get the current time in HH:MM format"""
+        print("  🔧 tool used: get_current_time()")
         return datetime.now().strftime("%H:%M")
 
     print("1. Tool metadata (automatically extracted):")
@@ -185,6 +195,12 @@ def demo_create_agent() -> None:
     print("   • Direct invoke() on agent")
     print("   • Messages-based interface")
     print("   • Built-in tool calling")
+
+
+# endregion
+
+
+# region Demo 3: Multi-Tool Agent
 
 
 def demo_multi_tool_agent() -> None:
@@ -229,19 +245,23 @@ def demo_multi_tool_agent() -> None:
     @tool
     def calculator(expression: str) -> str:
         """evaluate mathematical expressions"""
+        print(f"  🔧 tool used: calculator(expression='{expression}')")
         try:
-            return str(float(eval(expression)))
+            # safe evaluation: only allows math operations, no code execution
+            return str(float(simple_eval(expression)))
         except Exception as e:
             return f"Error: {str(e)}"
 
     @tool
     def string_reverse(text: str) -> str:
         """reverse a string"""
+        print(f"  🔧 tool used: string_reverse(text='{text}')")
         return text[::-1]
 
     @tool
     def string_upper(text: str) -> str:
         """convert string to uppercase"""
+        print(f"  🔧 tool used: string_upper(text='{text}')")
         return text.upper()
 
     llm = ChatOpenAI(model="gpt-4o-mini", temperature=0)
@@ -270,6 +290,12 @@ def demo_multi_tool_agent() -> None:
     print("   • Agent analyzes query semantics")
     print("   • Matches query to tool description")
     print("   • Executes most relevant tool")
+
+
+# endregion
+
+
+# region Demo 4: Custom Tool Class
 
 
 def demo_custom_tool_class() -> None:
@@ -317,6 +343,7 @@ def demo_custom_tool_class() -> None:
 
         def _run(self, city: str) -> str:
             """synchronous execution"""
+            print(f"  🔧 tool used: WeatherTool._run(city='{city}')")
             # simulate weather API call
             weather_data = {
                 "tokyo": "25°C, sunny",
@@ -355,6 +382,12 @@ def demo_custom_tool_class() -> None:
     print("   • Sync and async support")
     print("   • Complex initialization")
     print("   • Error handling hooks")
+
+
+# endregion
+
+
+# region Demo 5: Error Handling in Tools
 
 
 def demo_error_handling() -> None:
@@ -403,6 +436,7 @@ def demo_error_handling() -> None:
     @tool
     def safe_divide(numerator: float, denominator: float) -> str:
         """divide two numbers with error handling"""
+        print(f"  🔧 tool used: safe_divide(numerator={numerator}, denominator={denominator})")
         if denominator == 0:
             return "Error: Cannot divide by zero"
         try:
@@ -435,9 +469,9 @@ def demo_error_handling() -> None:
     ]
 
     for query in queries:
+        print(f"\n   Query: {query}")
         result = agent.invoke({"messages": [HumanMessage(content=query)]})
         final_answer = result["messages"][-1].content
-        print(f"\n   Query: {query}")
         print(f"   Answer: {final_answer}")
 
     print("\n4. Error handling best practices:")
@@ -445,6 +479,12 @@ def demo_error_handling() -> None:
     print("   • Return descriptive error messages")
     print("   • Don't crash the agent")
     print("   • Log errors for debugging")
+
+
+# endregion
+
+
+# region Demo 6: Web Search Agent
 
 
 def demo_web_search_agent() -> None:
@@ -516,6 +556,12 @@ def demo_web_search_agent() -> None:
     print("   • Complements LLM's training data")
     print("   • Useful for current events")
     print("   • Rate limits may apply")
+
+
+# endregion
+
+
+# region Demo 7: Phase 4 Comparison
 
 
 def demo_phase4_comparison() -> None:
@@ -625,7 +671,7 @@ def demo_phase4_comparison() -> None:
 
         @tool
         def calculator(expr: str) -> str:
-            return str(eval(expr))
+            return str(simple_eval(expr))  # safe: no code execution
 
         agent = create_agent(
             model=ChatOpenAI(model="gpt-4o-mini"),

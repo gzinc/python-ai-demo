@@ -14,7 +14,7 @@ from common.util.utils import print_section
 
 
 
-# region Agent Architecture Concepts
+# region Demo 1: Agent vs Chain
 
 
 def demo_agent_vs_chain() -> None:
@@ -68,6 +68,12 @@ def demo_agent_vs_chain() -> None:
     """))
 
 
+# endregion
+
+
+# region Demo 2: ReAct Pattern
+
+
 def demo_react_pattern() -> None:
     """demonstrate ReAct (Reasoning + Acting) pattern"""
     print_section("ReAct Pattern: How Agents Think")
@@ -113,6 +119,12 @@ def demo_react_pattern() -> None:
         - Acting: LLM uses tools to get information
         - Combines symbolic reasoning with external actions
     """))
+
+
+# endregion
+
+
+# region Demo 3: Tool Selection
 
 
 def demo_tool_selection() -> None:
@@ -171,6 +183,12 @@ def demo_tool_selection() -> None:
     """))
 
 
+# endregion
+
+
+# region Demo 4: Tool Description Quality
+
+
 def demo_tool_description_quality() -> None:
     """demonstrate impact of tool description quality"""
     print_section("Tool Description Quality Impact")
@@ -223,6 +241,12 @@ def demo_tool_description_quality() -> None:
         4. Indicate OUTPUT format if relevant
         5. Keep description under 100 words
     """))
+
+
+# endregion
+
+
+# region Demo 5: Agent Memory Integration
 
 
 def demo_agent_memory_integration() -> None:
@@ -280,6 +304,12 @@ def demo_agent_memory_integration() -> None:
         - Agent remembers tool results
         - User can reference previous actions
     """))
+
+
+# endregion
+
+
+# region Demo 6: Error Handling Strategies
 
 
 def demo_error_handling_strategies() -> None:
@@ -348,6 +378,12 @@ def demo_error_handling_strategies() -> None:
     """))
 
 
+# endregion
+
+
+# region Demo 7: Agent Decision Tree
+
+
 def demo_agent_decision_tree() -> None:
     """demonstrate agent decision-making as a tree"""
     print_section("Agent Decision Tree")
@@ -408,6 +444,10 @@ def demo_agent_decision_tree() -> None:
 
 # endregion
 
+
+
+
+# endregion
 
 
 # region Demo Menu Configuration

@@ -179,7 +179,7 @@ Track your journey through AI development. Update after each session.
 
 ## Phase 7: Production Frameworks
 
-### LangChain Basics (Module 1) - 🔄 In Progress (67% Complete)
+### LangChain Basics (Module 1) - 🔄 In Progress (75% Complete)
 - [x] Migration examples (side-by-side comparisons of Phase 3/4 vs LangChain)
 - [x] Conceptual demos (patterns, RAG walkthrough without dependencies)
 - [x] LangChain installation (langchain==1.0.5 + integrations)
@@ -189,12 +189,25 @@ Track your journey through AI development. Update after each session.
 - [x] Shared utilities refactoring (phase7_frameworks/utils.py for all modules)
 - [ ] Memory (04_memory/ subfolder: modern RunnableWithMessageHistory API)
 - [ ] RAG (05_rag/ subfolder: modern LCEL patterns)
-- [ ] Agents & tools (06_agents_tools/ subfolder: modern create_agent API)
+- [x] Agents & tools (06_agents_tools/ subfolder: **Demo 1-5 complete**, Demo 6-7 pending)
+  - [x] Demo 1: Basic Tool Creation (@tool decorator)
+  - [x] Demo 2: Simple Agent with LLM (time tool + agent)
+  - [x] Demo 3: Multi-Tool Agent (calculator, string_reverse, string_upper)
+  - [x] Demo 4: Custom Tool Class (WeatherTool with BaseTool)
+  - [x] Demo 5: Async and Streaming (TODO: verify completion)
+  - [ ] Demo 6: Error Handling Strategies
+  - [ ] Demo 7: Agent Decision Tree / Schema Inspection
 - [x] **Documentation Cleanup (2026-02-06)**: Removed all deprecated/legacy patterns
   - Cleaned 4 READMEs: chains, memory, RAG, agents (~200 lines removed)
   - Pure LangChain 1.0+ patterns only (no ⚠️ DEPRECATED sections)
   - Focus on LCEL, RunnableWithMessageHistory, create_agent
   - Cleaner learning experience without legacy cruft
+- [x] **Code Quality Improvement (2026-02-07)**: Menu migration
+  - Eliminated duplicate print_section functions (34 files)
+  - Centralized in common/util/utils.py
+- [x] **Code Quality Improvement (2026-02-08)**: Tool usage visibility
+  - Added print statements to all tools for debugging/learning
+  - Pattern: `🔧 Tool used: <name>(<params>)` in 6 tools
 
 ### LangGraph (Module 2)
 - [ ] State basics (StateGraph, nodes, edges)
@@ -217,7 +230,7 @@ Track your journey through AI development. Update after each session.
 - [ ] Migration strategies (raw → framework, framework → raw, hybrid)
 - [ ] Real-world scenarios (10+ use cases analyzed)
 
-**Phase 7 Completion**: 42% (Module 1: prompts + LLM integration + chains complete)
+**Phase 7 Completion**: 50% (Module 1: prompts + LLM integration + chains + 5/7 agents demos complete)
 
 **Note**: Phase 7 created 2026-01-09. Philosophy: Learn frameworks AFTER building from scratch (Phases 2-6) to understand what they do under the hood, when to use them, and when to skip them entirely.
 
@@ -225,7 +238,7 @@ Track your journey through AI development. Update after each session.
 
 ## Overall Progress
 
-**Total Completion**: ~85% (Phase 2 + Phase 3 + Phase 4 + Phase 5 complete!)
+**Total Completion**: ~87% (Phase 2 + Phase 3 + Phase 4 + Phase 5 complete!)
 
 **Milestones Achieved**:
 - [x] Understanding Embeddings (Critical conceptual breakthrough!)
@@ -279,6 +292,7 @@ Track your journey through AI development. Update after each session.
 - Rate limiting algorithms (TokenBucket, SlidingWindow, Adaptive)
 - Pre-flight budget checks to prevent cost overruns
 - Framework landscape (LangChain, LangGraph, LlamaIndex decision framework)
+- **NEW (2026-02-08)**: LLM tool selection cost trade-offs (when worth it, when wasteful, hybrid approach)
 
 ---
 
@@ -300,6 +314,7 @@ Track your journey through AI development. Update after each session.
 - NumPy is critical because embeddings ARE NumPy arrays
 - Vector databases exist specifically for high-dimensional vectors
 - 95% of RAG cost is LLM generation, not retrieval!
+- **NEW**: LLM tool selection costs ~$0.000065 but saves weeks of routing logic development
 
 **Questions to Explore**:
 - How exactly are embeddings generated internally?
@@ -591,3 +606,17 @@ Track your journey through AI development. Update after each session.
 - Remaining: 11 files with special patterns (conditional demo_map, 3-tuple with API provider)
 - Session focus: Eliminating systematic code duplication across all interactive demos
 - Impact: Consistent UX, easier maintenance, DRY principle applied
+
+### 2026-02-08: Agents & Tools Progress + Tool Visibility
+- ✅ Added tool usage print statements (6 tools across practical.py)
+- ✅ Standardized format: `🔧 Tool used: <name>(<params>)`
+- ✅ Explored LLM tool selection cost trade-offs
+- ✅ Learned when LLM selection worth it vs wasteful
+- ✅ Understood hybrid approach (pattern matching + LLM fallback)
+- ✅ Completed Demos 1-5 in 06_agents_tools module
+- Key insight: LLM tool selection ~$0.000065 but saves weeks of routing logic
+- Key insight: Production uses hybrid: cheap pattern matching → LLM only if ambiguous
+- Key insight: User-facing: LLM selection ✅; Internal APIs: direct calls ✅
+- Session focus: Tool execution visibility + cost/value analysis
+- Remaining: Demo 6 (error handling), Demo 7 (schema inspection)
+- Next: Complete 06_agents_tools, then 04_memory, then 05_rag
