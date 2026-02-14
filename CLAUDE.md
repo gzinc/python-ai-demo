@@ -7,17 +7,19 @@ This file provides guidance to Claude Code when working with this AI development
 **Purpose**: Comprehensive AI development roadmap focused on LLM applications and AI agents
 **Learner**: Experienced Java developer transitioning to Python, with intermediate Python skills
 **Learning Style**: Theory + hands-on projects, documented progress
-**Structure**: 5 progressive phases from foundations to production
+**Structure**: 7 phases from foundations to production (Phases 2-5 complete, Phase 7 in progress)
 
 ## Project Structure
 
 | Directory | Purpose |
 |-----------|---------|
-| [phase1_foundations/](phase1_foundations/) | NumPy, Pandas, ML basics |
-| [phase2_llm_fundamentals/](phase2_llm_fundamentals/) | Prompting, APIs, embeddings |
-| [phase3_llm_applications/](phase3_llm_applications/) | RAG, chat, function calling |
-| [phase4_ai_agents/](phase4_ai_agents/) | Agent systems and orchestration |
-| [phase5_production/](phase5_production/) | Deployment and monitoring |
+| [phase1_foundations/](phase1_foundations/) | NumPy, Pandas, ML basics (OPTIONAL) |
+| [phase2_llm_fundamentals/](phase2_llm_fundamentals/) | Prompting, APIs, embeddings ✅ |
+| [phase3_llm_applications/](phase3_llm_applications/) | RAG, chat, function calling ✅ |
+| [phase4_ai_agents/](phase4_ai_agents/) | Agent systems and orchestration ✅ |
+| [phase5_production/](phase5_production/) | Deployment and monitoring ✅ |
+| [phase6_model_customization/](phase6_model_customization/) | Fine-tuning, LoRA/QLoRA (EXPLORATORY) |
+| [phase7_frameworks/](phase7_frameworks/) | LangChain, LangGraph, LlamaIndex 🔄 |
 | [docs/](docs/) | Learning resources |
 | [.serena/memories/](.serena/memories/) | Progress tracking |
 | [tests/](tests/) | Test suites |
@@ -44,11 +46,13 @@ cat .serena/memories/learning_progress.md
 ## Learning Philosophy
 
 ### Progressive Complexity
-- Phase 1: Foundations (data manipulation)
-- Phase 2: LLM basics (APIs, prompting)
-- Phase 3: Applications (RAG, chat)
-- Phase 4: Agents (autonomous systems)
-- Phase 5: Production (deployment, monitoring)
+- Phase 1: Foundations (data manipulation) - OPTIONAL ⏸️
+- Phase 2: LLM basics (APIs, prompting) ✅
+- Phase 3: Applications (RAG, chat) ✅
+- Phase 4: Agents (autonomous systems) ✅
+- Phase 5: Production (deployment, monitoring) ✅
+- Phase 6: Model Customization (fine-tuning, LoRA) - EXPLORATORY ⬜
+- Phase 7: Frameworks (LangChain, LangGraph, LlamaIndex) 🔄
 
 ### Hands-On Focus
 - Every concept has practical examples
@@ -120,6 +124,30 @@ content at column 0
 '''
 ```
 
+**Multi-line Print Statements**: Use single `print("\n" + cleandoc(...))` instead of multiple print calls:
+```python
+from inspect import cleandoc
+
+def example():
+    # ✅ correct - single print with cleandoc and newline prefix
+    print("\n" + cleandoc("""
+        1. State Schema Defined:
+           class SimpleState(TypedDict):
+               counter: int
+               message: str
+    """))
+
+    # ❌ wrong - multiple print calls
+    print("\n1. State Schema Defined:")
+    print("   class SimpleState(TypedDict):")
+    print("       counter: int")
+    print("       message: str")
+```
+**Key points:**
+- Use `"\n" + cleandoc(...)` to preserve leading newline
+- No empty line after opening `"""`
+- Benefits: More readable code, easier to maintain, follows DRY principle
+
 **AI-Specific**:
 - Comment why techniques matter for AI
 - Show performance comparisons
@@ -151,6 +179,19 @@ content at column 0
 - **Focus**: Deployment, monitoring, optimization
 - **Connection**: Real-world AI systems
 - **Key**: FastAPI, caching, observability
+
+### Phase 6: Model Customization (EXPLORATORY)
+- **Focus**: Fine-tuning, LoRA/QLoRA, transfer learning
+- **Connection**: Advanced model adaptation
+- **Key**: When to fine-tune vs RAG, dataset preparation, PEFT
+- **Status**: Scaffolded, ready to explore based on interest
+
+### Phase 7: Production Frameworks (IN PROGRESS 🔄)
+- **Focus**: LangChain, LangGraph, LlamaIndex
+- **Connection**: Framework patterns for production AI
+- **Key**: Learn AFTER building from scratch (Phases 2-6)
+- **Status**: LangChain basics complete, LangGraph in progress (state basics Demo 4/6), LlamaIndex files created but not processed
+- **Philosophy**: Understand what frameworks do under the hood, when to use them, and when to skip them
 
 ## Common Tasks
 

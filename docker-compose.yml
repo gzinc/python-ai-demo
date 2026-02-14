@@ -1,0 +1,56 @@
+# Docker Compose configuration for Python AI Demo project
+# Provides PostgreSQL database and pgAdmin for database management
+
+name: python-demo
+services:
+  # PostgreSQL 17 database
+  postgres:
+    image: postgres:17-alpine
+    container_name: python-demo-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: python-ai-demo
+      # performance tuning for development
+      POSTGRES_INITDB_ARGS: "-E UTF8 --locale=C"
+    ports:
+      - "5432:5432"
+    volumes:
+      # persistent data storage on WSL drive (backed up)
+      - /home/gzuss/.volumes/postgres_data:/var/lib/postgresql/data
+      # optional: custom initialization scripts
+      # - ./docker/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - python-demo-network
+
+  # pgAdmin 4 - web-based database management UI
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: python-demo-pgadmin
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_CONFIG_SERVER_MODE: "False"
+      PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED: "False"
+    ports:
+      - "5051:80"  # use 5051 to avoid conflict with python-demo
+    volumes:
+      # persistent data on WSL drive (backed up)
+      - /home/gzuss/.volumes/pgadmin_data:/var/lib/pgadmin
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - python-demo-network
+
+networks:
+  python-demo-network:
+    driver: bridge

@@ -209,12 +209,19 @@ Track your journey through AI development. Update after each session.
   - Added print statements to all tools for debugging/learning
   - Pattern: `🔧 Tool used: <name>(<params>)` in 6 tools
 
-### LangGraph (Module 2)
-- [ ] State basics (StateGraph, nodes, edges)
-- [ ] Conditional routing (conditional edges based on state)
-- [ ] Multi-agent collaboration (specialist agents, hierarchical orchestration)
-- [ ] Human-in-the-loop (checkpoints, interrupts, approvals)
-- [ ] Graph visualization (mermaid/graphviz rendering)
+### LangGraph (Module 2) - 🔄 In Progress
+- [x] State basics (01_state_basics.py) - 🔄 **In Progress: Demo 4/6**
+  - [x] Demo 1: Simple State and Graph (StateGraph, nodes, edges)
+  - [x] Demo 2: State Updates and Immutability (partial updates, shallow merge)
+  - [x] Demo 3: Message State Pattern (add_messages, accumulation)
+  - [ ] Demo 4: Sequential Multi-Node Graph (linear processing) **← CURRENT**
+  - [ ] Demo 5: Stateful Counter (multi-invocation state persistence)
+  - [ ] Demo 6: Simple Agent Loop (foundation for ReAct)
+- [ ] Conditional routing (02_conditional_routing.py: conditional edges, loops, termination)
+- [ ] Multi-agent collaboration (03_multi_agent.py: router pattern, supervisor pattern, sequential handoff)
+- [ ] Human-in-the-loop (04_human_in_loop.py: checkpoints, interrupts, resume)
+- [ ] Graph visualization (05_graph_visualization.py: mermaid rendering)
+- [ ] Migration from Phase 4 (06_migration_from_phase4.py: while loop → graph comparison)
 
 ### LlamaIndex (Module 3)
 - [ ] Data loading (SimpleDirectoryReader, various loaders)
@@ -620,3 +627,18 @@ Track your journey through AI development. Update after each session.
 - Session focus: Tool execution visibility + cost/value analysis
 - Remaining: Demo 6 (error handling), Demo 7 (schema inspection)
 - Next: Complete 06_agents_tools, then 04_memory, then 05_rag
+
+### 2026-02-13: LangGraph State Basics + Code Style Improvements
+- ✅ Created CLAUDE.md rule: Multi-line prints → `print("\n" + cleandoc(...))`
+- ✅ Applied rule to all 6 LangGraph files (65 patterns consolidated)
+- ✅ Started LangGraph Module 2: State basics (01_state_basics.py)
+- ✅ Completed Demo 1: Simple State and Graph (StateGraph fundamentals)
+- ✅ Completed Demo 2: State Updates (immutability, partial updates, shallow merge)
+- ✅ Completed Demo 3: Message State Pattern (add_messages for accumulation)
+- ✅ Working on Demo 4: Sequential Multi-Node Graph **← CURRENT**
+- Key insight: StateGraph nodes return updates (dicts), graph merges automatically
+- Key insight: `Annotated[list, add_messages]` accumulates instead of replacing
+- Key insight: State flows through graph, updated at each node immutably
+- Key pattern: `print("\n" + cleandoc("""...`))` preserves newlines, improves readability
+- Session focus: LangGraph state management patterns and code quality
+- Next: Complete remaining demos (5-6), then conditional routing

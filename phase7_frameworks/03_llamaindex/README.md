@@ -1,287 +1,237 @@
-# Module 3: LlamaIndex
+# LlamaIndex - Data Framework for LLM Applications
 
-**Purpose**: Learn document-centric RAG framework optimized for knowledge retrieval
+**Status**: ✅ Reference Implementation
 
----
+## Overview
 
-## Learning Objectives
+LlamaIndex (formerly GPT Index) is a data framework designed specifically for LLM applications. While LangChain focuses on chains and agents, LlamaIndex specializes in **data ingestion, indexing, and retrieval** - making it the go-to choice for RAG systems.
 
-- Understand LlamaIndex's data-first philosophy
-- Compare to your Phase 3 RAG implementation
-- Learn advanced retrieval strategies
-- Build production RAG applications
-- Know when LlamaIndex fits better than LangChain
+## Key Differentiators
 
----
+**LlamaIndex vs LangChain:**
+- 🎯 **Focus**: Data-centric RAG vs general LLM orchestration
+- 📚 **Strength**: Best-in-class indexing vs broad ecosystem
+- 🔍 **Retrieval**: Advanced strategies vs basic retrieval
+- 📊 **Use Case**: Document Q&A, knowledge bases vs chatbots, agents
 
-## What is LlamaIndex?
-
-**LlamaIndex** = RAG framework optimized for document ingestion, indexing, and querying
-
-```
-Your RAG (Phase 3):
-  Documents → Chunking → Embeddings → ChromaDB → Retrieval → Generation
-
-LlamaIndex:
-  Documents → VectorStoreIndex → QueryEngine → Response
-              ↑                      ↑
-         (handles all)       (optimized retrieval)
-```
-
----
-
-## Core Philosophy
-
-### LangChain: Tool Orchestration
-"I'm building agents that use various tools, one of which is RAG"
-
-### LlamaIndex: Data Connectors
-"I'm building apps around my documents/data"
-
----
-
-## Key Concepts
-
-### 1. Data Connectors
-**What it is**: 100+ integrations for loading documents
-
-```python
-from llama_index import SimpleDirectoryReader, PDFReader
-
-# Load from directory
-documents = SimpleDirectoryReader("./docs").load_data()
-
-# Load specific formats
-from llama_index.readers.notion import NotionPageReader
-documents = NotionPageReader(notion_api_key).load_data()
-```
-
-### 2. Indexes
-**What it is**: Data structures optimized for retrieval
-
-```python
-from llama_index import VectorStoreIndex, DocumentSummaryIndex
-
-# Vector index (like your ChromaDB approach)
-vector_index = VectorStoreIndex.from_documents(documents)
-
-# Summary index (abstractive summaries for each doc)
-summary_index = DocumentSummaryIndex.from_documents(documents)
-
-# Tree index (hierarchical summaries)
-tree_index = TreeIndex.from_documents(documents)
-```
-
-### 3. Query Engines
-**What it is**: Retrieval + generation pipeline
-
-```python
-# Basic query
-query_engine = index.as_query_engine()
-response = query_engine.query("What is X?")
-
-# With filters
-from llama_index.vector_stores.types import MetadataFilters, ExactMatchFilter
-
-filters = MetadataFilters(filters=[
-    ExactMatchFilter(key="category", value="technical")
-])
-query_engine = index.as_query_engine(filters=filters)
-
-# Streaming
-query_engine = index.as_query_engine(streaming=True)
-response = query_engine.query("Explain this")
-for text in response.response_gen:
-    print(text, end="")
-```
-
-### 4. Chat Engines
-**What it is**: Query engine + conversation memory
-
-```python
-from llama_index.memory import ChatMemoryBuffer
-
-memory = ChatMemoryBuffer.from_defaults(token_limit=3000)
-chat_engine = index.as_chat_engine(
-    chat_mode="condense_plus_context",
-    memory=memory
-)
-
-response = chat_engine.chat("What is X?")
-response = chat_engine.chat("Tell me more")  # maintains context
-```
-
----
+**Why LlamaIndex:**
+- ✅ Sophisticated indexing strategies (tree, graph, list)
+- ✅ Advanced retrieval (reranking, hybrid search, query transformation)
+- ✅ 100+ data connectors
+- ✅ Production RAG optimizations
+- ✅ Works with **both cloud and local models**
 
 ## Module Structure
 
+### 01_basic_indexing.py
+Core LlamaIndex concepts and patterns:
+- ✅ In-memory document indexing
+- ✅ Loading from directories
+- ✅ Custom node parsing (chunk sizes)
+- ✅ Metadata filtering
+- ✅ Response synthesis modes
+- ✅ Streaming responses
+
+**Run**: `uv run python phase7_frameworks/03_llamaindex/01_basic_indexing.py`
+
+### 02_local_setup.py
+**100% Privacy-Friendly Local RAG:**
+- ✅ Local LLM via Ollama (llama3.1)
+- ✅ Local embeddings (HuggingFace BGE)
+- ✅ Local vector store (ChromaDB)
+- ✅ Persistent storage
+- ✅ Local chat engine
+- ✅ Local vs Cloud comparison
+
+**No API keys required!**
+
+**Prerequisites:**
+```bash
+# Install Ollama
+curl -fsSL https://ollama.com/install.sh | sh
+
+# Pull model
+ollama pull llama3.1
+
+# Install dependencies
+pip install llama-index-llms-ollama
+pip install llama-index-embeddings-huggingface
+pip install chromadb
 ```
-03_llamaindex/
-├── README.md                   # This file
-├── data_loading.py             # SimpleDirectoryReader, various loaders
-├── indexing.py                 # VectorStoreIndex, TreeIndex, SummaryIndex
-├── query_engines.py            # Basic, filtered, streaming queries
-├── chat_engines.py             # Conversational RAG
-├── advanced_retrieval.py       # Hybrid search, auto-merging retrieval
-├── metadata_filtering.py       # Filter by date, category, etc.
-└── migration_from_phase3.py    # Your RAG → LlamaIndex
-```
 
----
+**Run**: `uv run python phase7_frameworks/03_llamaindex/02_local_setup.py`
 
-## Comparison to Your Phase 3 RAG
+### 03_advanced_rag.py
+Production RAG patterns and optimization:
+- ✅ Custom retrieval parameters (top-k)
+- ✅ Query transformation strategies
+- ✅ Response synthesis modes
+- ✅ Retrieval quality evaluation
+- ✅ Context window management
+- ✅ Production best practices checklist
 
-### Your Implementation (Phase 3)
+**Run**: `uv run python phase7_frameworks/03_llamaindex/03_advanced_rag.py`
+
+## Quick Start
+
+### Cloud Setup (OpenAI)
 ```python
-# 1. Load documents
-documents = load_docs("./docs")
+from llama_index.core import VectorStoreIndex, SimpleDirectoryReader
 
-# 2. Chunk
-chunks = chunker.chunk_documents(documents)
+# Load documents
+documents = SimpleDirectoryReader('data').load_data()
 
-# 3. Embed
-embeddings = embedder.embed_all(chunks)
-
-# 4. Store
-db = ChromaDB()
-db.add(chunks, embeddings)
-
-# 5. Query
-query_embedding = embedder.embed(query)
-results = db.search(query_embedding, k=5)
-context = assemble_context(results)
-
-# 6. Generate
-response = llm.generate(prompt_template.format(context=context, query=query))
-```
-
-### LlamaIndex Equivalent
-```python
-from llama_index import SimpleDirectoryReader, VectorStoreIndex
-
-# 1-4: Load, chunk, embed, store (one line!)
-documents = SimpleDirectoryReader("./docs").load_data()
+# Create index (uses OpenAI by default)
 index = VectorStoreIndex.from_documents(documents)
 
-# 5-6: Query and generate (one line!)
+# Query
 query_engine = index.as_query_engine()
-response = query_engine.query(query)
+response = query_engine.query("What is the main topic?")
+print(response)
 ```
 
-**Key Difference**: LlamaIndex abstracts chunking, embedding, storage behind `VectorStoreIndex`.
-
----
-
-## Advanced Retrieval Strategies
-
-### 1. Hybrid Search (Vector + Keyword)
+### Local Setup (Ollama - No API Key!)
 ```python
-from llama_index.retrievers import VectorIndexRetriever, BM25Retriever
-from llama_index.retrievers import QueryFusionRetriever
+from llama_index.core import VectorStoreIndex, Document, Settings
+from llama_index.llms.ollama import Ollama
+from llama_index.embeddings.huggingface import HuggingFaceEmbedding
 
-vector_retriever = VectorIndexRetriever(index)
-bm25_retriever = BM25Retriever.from_defaults(index)
+# Configure local models
+Settings.llm = Ollama(model="llama3.1")
+Settings.embed_model = HuggingFaceEmbedding(model_name="BAAI/bge-small-en-v1.5")
 
-retriever = QueryFusionRetriever(
-    retrievers=[vector_retriever, bm25_retriever],
-    similarity_top_k=5
-)
+# Create index
+documents = [Document(text="Your content here")]
+index = VectorStoreIndex.from_documents(documents)
+
+# Query locally!
+response = index.as_query_engine().query("Your question")
 ```
 
-### 2. Auto-Merging Retrieval
-**What it is**: Retrieve small chunks, expand to parent context
+## Key Concepts
 
+### Index Types
+- **VectorStoreIndex**: Semantic search (most common)
+- **ListIndex**: Linear scan (small datasets)
+- **TreeIndex**: Hierarchical summarization
+- **KeywordTableIndex**: Keyword-based retrieval
+
+### Retrieval Strategies
+- **Vector Search**: Embedding similarity
+- **Keyword Search**: Traditional text matching
+- **Hybrid Search**: Combine vector + keyword
+- **Metadata Filtering**: Filter by doc properties
+
+### Query Engines
+- **Standard**: Basic retrieval + synthesis
+- **Chat**: Conversational with memory
+- **Streaming**: Real-time output
+- **Custom**: Full control over pipeline
+
+## Dependencies
+
+**Core:**
+```bash
+pip install llama-index
+```
+
+**Cloud (OpenAI):**
+```bash
+pip install llama-index-llms-openai
+pip install llama-index-embeddings-openai
+```
+
+**Local (Ollama):**
+```bash
+pip install llama-index-llms-ollama
+pip install llama-index-embeddings-huggingface
+pip install sentence-transformers
+pip install chromadb
+```
+
+## Cost Comparison
+
+### Cloud (OpenAI + Pinecone)
+- 💰 LLM: ~$0.01-0.06 per 1K tokens
+- 💰 Embeddings: ~$0.0001 per 1K tokens
+- 💰 Vector DB: ~$70/month
+- **Total: $100-500+/month**
+
+### Local (Ollama + HuggingFace + ChromaDB)
+- ✅ LLM: **FREE**
+- ✅ Embeddings: **FREE**
+- ✅ Vector DB: **FREE**
+- **Total: $0/month** (only electricity)
+
+**Trade-off**: Local requires good hardware (16GB+ RAM, GPU recommended)
+
+## Production Checklist
+
+- [ ] Chunk size: 200-512 tokens
+- [ ] Chunk overlap: 10-20%
+- [ ] Top-K: 3-5 chunks
+- [ ] Reranking: Enable for better quality
+- [ ] Caching: Cache embeddings and queries
+- [ ] Monitoring: Track latency and accuracy
+- [ ] Fallback: Handle no-results gracefully
+- [ ] Citations: Include source references
+
+## Integration Examples
+
+### With LangChain
 ```python
-from llama_index.node_parser import HierarchicalNodeParser
+from llama_index.core import VectorStoreIndex
+from langchain.chains import RetrievalQA
 
-node_parser = HierarchicalNodeParser.from_defaults(
-    chunk_sizes=[2048, 512, 128]  # parent → child hierarchy
-)
-index = VectorStoreIndex(nodes, node_parser=node_parser)
+# Use LlamaIndex for retrieval
+index = VectorStoreIndex.from_documents(documents)
+retriever = index.as_retriever()
 
-# Retrieves small chunks, expands to parent for context
-query_engine = index.as_query_engine(
-    retrieval_mode="auto_merging"
-)
+# Use LangChain for orchestration
+qa_chain = RetrievalQA.from_chain_type(llm=llm, retriever=retriever)
 ```
 
-### 3. Sentence Window Retrieval
-**What it is**: Retrieve sentences, expand to surrounding window
-
+### With LangGraph
 ```python
-from llama_index.node_parser import SentenceWindowNodeParser
+# Use LlamaIndex as a tool in LangGraph agent
+def search_knowledge_base(query: str) -> str:
+    """search using LlamaIndex"""
+    return index.as_query_engine().query(query).response
 
-node_parser = SentenceWindowNodeParser.from_defaults(
-    window_size=3  # 3 sentences before/after
-)
+# Add as tool to LangGraph
+tools = [search_knowledge_base]
 ```
-
----
 
 ## When to Use LlamaIndex
 
-### ✅ Use LlamaIndex
-- Primary use case is RAG
-- Working with complex documents (PDFs, tables, images)
-- Need advanced retrieval (hybrid, auto-merging, etc.)
-- Document-heavy applications
-- Want RAG-specific optimizations
+**✅ Use LlamaIndex when:**
+- Building RAG systems
+- Querying large document sets
+- Need advanced retrieval strategies
+- Want production RAG optimizations
+- Privacy is critical (local setup)
 
-### ❌ Skip LlamaIndex
-- Building agents with tools (use LangChain/LangGraph)
-- Simple Q&A without docs (direct LLM call)
-- Need maximum control over chunking/retrieval (your Phase 3 code)
-- RAG is minor part of app
+**❌ Consider alternatives when:**
+- Need agent orchestration (use LangGraph)
+- Simple chatbot (use LangChain)
+- No retrieval needed (use LLM directly)
 
----
+## Learning Path
 
-## LlamaIndex vs LangChain for RAG
+1. **Start**: 01_basic_indexing.py (core concepts)
+2. **Privacy**: 02_local_setup.py (local models)
+3. **Advanced**: 03_advanced_rag.py (production patterns)
+4. **Combine**: Use with LangChain/LangGraph
 
-| Feature | LlamaIndex | LangChain |
-|---------|------------|-----------|
-| **Focus** | Document-centric RAG | General LLM orchestration |
-| **Retrieval** | Advanced strategies | Basic vector search |
-| **Data Connectors** | 100+ built-in | Fewer, community-driven |
-| **Query Engines** | Highly optimized | Generic chains |
-| **Agents** | Limited support | Strong support |
-| **Multi-Agent** | Not primary use case | LangGraph specializes |
+## Next Steps
 
-**Rule of thumb**:
-- **Pure RAG app** → LlamaIndex
-- **RAG + agents + tools** → LangChain
-- **Complex multi-agent** → LangGraph
-
----
-
-## Exercises
-
-### Exercise 1: Migrate Phase 3 RAG
-Convert your RAG pipeline to LlamaIndex.
-
-### Exercise 2: Advanced Retrieval
-Implement hybrid search (vector + BM25).
-
-### Exercise 3: Metadata Filtering
-Add date/category filters to retrieval.
-
-### Exercise 4: Chat Engine
-Build conversational RAG with memory.
-
----
+- Combine LlamaIndex (RAG) + LangGraph (agents)
+- Try local setup for privacy-sensitive projects
+- Benchmark local vs cloud for your use case
+- Implement production RAG checklist
 
 ## Resources
 
 - [LlamaIndex Docs](https://docs.llamaindex.ai/)
-- [Data Connectors](https://llamahub.ai/)
-- [Advanced Retrieval Guide](https://docs.llamaindex.ai/en/stable/examples/retrievers/advanced_retrieval.html)
-- [Query Engines](https://docs.llamaindex.ai/en/stable/module_guides/deploying/query_engine/index.html)
-
----
-
-## Next Steps
-
-After this module:
-1. Build RAG app with LlamaIndex
-2. Compare performance to your Phase 3 implementation
-3. Experiment with advanced retrieval strategies
-4. Move to Module 4 for framework decision framework
+- [Ollama Models](https://ollama.com/library)
+- [HuggingFace Embeddings](https://huggingface.co/spaces/mteb/leaderboard)
