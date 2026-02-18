@@ -113,7 +113,7 @@ def example_memory_strategies():
 
     print(f"\n   Sliding Window (max 4):")
     print(f"      Messages: {len(window_memory)}")
-    print(f"      Kept: {[m.content[:20]+'...' for m in window_memory.messages]}")
+    print(f"      Kept: {[msg.content[:20]+'...' for msg in window_memory.messages]}")
 
     print(f"\n   Token Budget (max 200):")
     print(f"      Messages: {len(budget_memory)}")

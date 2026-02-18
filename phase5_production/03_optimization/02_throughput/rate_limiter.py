@@ -152,7 +152,7 @@ class SlidingWindow:
     def _clean_old_requests(self) -> None:
         """remove requests outside current window"""
         cutoff = time.monotonic() - self.window_seconds
-        self._requests = [t for t in self._requests if t > cutoff]
+        self._requests = [timestamp for timestamp in self._requests if timestamp > cutoff]
 
     def acquire(self) -> RateLimitStatus:
         """try to acquire a request slot"""

@@ -48,13 +48,13 @@ class SemanticCache:
         self.max_entries = max_entries
         self._entries: list[CacheEntry] = []
 
-    def _cosine_similarity(self, a: np.ndarray, b: np.ndarray) -> float:
+    def _cosine_similarity(self, vec_a: np.ndarray, vec_b: np.ndarray) -> float:
         """compute cosine similarity between two vectors"""
-        norm_a = np.linalg.norm(a)
-        norm_b = np.linalg.norm(b)
+        norm_a = np.linalg.norm(vec_a)
+        norm_b = np.linalg.norm(vec_b)
         if norm_a == 0 or norm_b == 0:
             return 0.0
-        return float(np.dot(a, b) / (norm_a * norm_b))
+        return float(np.dot(vec_a, vec_b) / (norm_a * norm_b))
 
     def get(self, query_embedding: np.ndarray) -> CacheEntry | None:
         """

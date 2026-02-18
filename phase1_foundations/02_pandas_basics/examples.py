@@ -251,7 +251,7 @@ def document_chunking() -> None:
     chunks_df = pd.DataFrame({
         "chunk_id": [f"chunk_{i}" for i in range(len(chunks))],
         "content": chunks,
-        "char_count": [len(c) for c in chunks],
+        "char_count": [len(chunk) for chunk in chunks],
         "source_doc": "ai_guide.md"
     })
 
@@ -290,7 +290,7 @@ def data_transformation() -> None:
 
     # add new columns
     docs["content_length"] = docs["content"].str.len()
-    docs["popularity"] = docs["views"].apply(lambda x: "high" if x > 150 else "low")
+    docs["popularity"] = docs["views"].apply(lambda view_count: "high" if view_count > 150 else "low")
 
     print("\nwith new columns:")
     print(docs)

@@ -229,7 +229,7 @@ class VectorDB:
             list of collection names
         """
         collections = self.client.list_collections()
-        return [c.name for c in collections]
+        return [collection.name for collection in collections]
 
 
 def demonstrate_search(

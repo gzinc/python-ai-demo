@@ -93,13 +93,13 @@ class Retriever:
         Returns:
             list of RetrievalResult objects
         """
-        k = top_k or self.top_k
+        effective_top_k = top_k or self.top_k
         threshold = min_similarity if min_similarity is not None else self.min_similarity
 
         # build query kwargs
         query_kwargs = {
             "query_texts": [query],
-            "n_results": k,
+            "n_results": effective_top_k,
             "include": ["documents", "metadatas", "distances"],
         }
 
@@ -147,7 +147,7 @@ class Retriever:
             )
 
         # sort by similarity (highest first)
-        retrieval_results.sort(key=lambda x: x.similarity, reverse=True)
+        retrieval_results.sort(key=lambda result: result.similarity, reverse=True)
 
         return retrieval_results
 
@@ -163,7 +163,7 @@ class Retriever:
             list of (result, raw_distance) tuples
         """
         results = self.retrieve(query, top_k)
-        return [(r, 1 - r.similarity) for r in results]
+        return [(result, 1 - result.similarity) for result in results]
 
 
 # ─────────────────────────────────────────────────────────────

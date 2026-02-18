@@ -137,7 +137,7 @@ class ChatMemory:
 
     def get_turn_count(self) -> int:
         """get number of conversation turns (user-assistant pairs)"""
-        return len([m for m in self.messages if m.role == Role.USER])
+        return len([msg for msg in self.messages if msg.role == Role.USER])
 
     def get_last_message(self) -> Optional[Message]:
         """get the most recent message"""

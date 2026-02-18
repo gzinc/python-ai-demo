@@ -629,7 +629,7 @@ def demo_aggregation_pattern() -> None:
         print("\n   📊 Aggregator: Combining agent responses...")
 
         # count votes
-        yes_votes = sum(1 for r in state["agent_responses"] if "Yes" in r)
+        yes_votes = sum(1 for agent_response in state["agent_responses"] if "Yes" in agent_response)
         no_votes = len(state["agent_responses"]) - yes_votes
 
         # calculate average confidence

@@ -44,13 +44,13 @@ def demo_custom_retrieval():
 
     print(f"💬 Query: {query}\n")
 
-    for k in top_k_values:
-        retriever = VectorIndexRetriever(index=index, similarity_top_k=k)
+    for top_k in top_k_values:
+        retriever = VectorIndexRetriever(index=index, similarity_top_k=top_k)
         query_engine = RetrieverQueryEngine(retriever=retriever)
 
         response = query_engine.query(query)
 
-        print(f"🔍 Top-K = {k}")
+        print(f"🔍 Top-K = {top_k}")
         print(f"   Retrieved {len(response.source_nodes)} chunks")
         print(f"   Response: {response.response[:100]}...")
         print()
@@ -218,7 +218,7 @@ def demo_retrieval_evaluation():
         print(f"     Text: {node.text[:80]}...")
 
     # calculate simple metrics
-    high_relevance = sum(1 for n in nodes if n.metadata.get("relevance") == "high")
+    high_relevance = sum(1 for node in nodes if node.metadata.get("relevance") == "high")
     precision = high_relevance / len(nodes) if nodes else 0
 
     print(

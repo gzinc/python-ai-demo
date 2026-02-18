@@ -109,7 +109,7 @@ class ChatEngine:
         elif self.provider == "anthropic" and os.environ.get("ANTHROPIC_API_KEY"):
             from anthropic import Anthropic
             client = Anthropic()
-            api_messages = [m for m in messages if m["role"] != "system"]
+            api_messages = [msg for msg in messages if msg["role"] != "system"]
             response = client.messages.create(
                 model=self.model,
                 system=self.memory.system_prompt,

@@ -58,8 +58,8 @@ class ContextTruncator:
 
         # sort by relevance if scores provided
         if scores:
-            indexed = sorted(zip(chunks, scores), key=lambda x: x[1], reverse=True)
-            sorted_chunks = [c for c, _ in indexed]
+            indexed = sorted(zip(chunks, scores), key=lambda pair: pair[1], reverse=True)
+            sorted_chunks = [chunk for chunk, _ in indexed]
         else:
             sorted_chunks = chunks
 

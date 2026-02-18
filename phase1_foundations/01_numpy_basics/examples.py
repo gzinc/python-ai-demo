@@ -169,9 +169,9 @@ def ai_application_examples() -> None:
     text2_emb = np.array([0.3, 0.6, 0.7])
     text3_emb = np.array([-0.1, -0.2, -0.3])
 
-    def cosine_similarity(a: np.ndarray, b: np.ndarray) -> float:
+    def cosine_similarity(vec_a: np.ndarray, vec_b: np.ndarray) -> float:
         """compute cosine similarity between two vectors"""
-        return np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b))
+        return np.dot(vec_a, vec_b) / (np.linalg.norm(vec_a) * np.linalg.norm(vec_b))
 
     sim_12 = cosine_similarity(text1_emb, text2_emb)
     sim_13 = cosine_similarity(text1_emb, text3_emb)

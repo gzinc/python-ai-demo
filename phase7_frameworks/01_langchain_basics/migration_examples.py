@@ -281,7 +281,7 @@ def example_rag() -> None:
         results = db.search(query_embedding, k=3)
 
         # 5. build context
-        context = "\\n\\n".join([r.content for r in results])
+        context = "\\n\\n".join([result.content for result in results])
 
         # 6. generate answer
         prompt = f"Context: {context}\\n\\nQuestion: {query}"

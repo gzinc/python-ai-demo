@@ -73,11 +73,11 @@ class EmbeddingScorer(Scorer):
             self._cache[text] = response.data[0].embedding
         return self._cache[text]
 
-    def _cosine_similarity(self, a: list[float], b: list[float]) -> float:
+    def _cosine_similarity(self, vec_a: list[float], vec_b: list[float]) -> float:
         """compute cosine similarity between two vectors"""
-        dot_product = sum(x * y for x, y in zip(a, b))
-        norm_a = sum(x * x for x in a) ** 0.5
-        norm_b = sum(x * x for x in b) ** 0.5
+        dot_product = sum(val_a * val_b for val_a, val_b in zip(vec_a, vec_b))
+        norm_a = sum(val * val for val in vec_a) ** 0.5
+        norm_b = sum(val * val for val in vec_b) ** 0.5
         if norm_a == 0 or norm_b == 0:
             return 0.0
         return dot_product / (norm_a * norm_b)

@@ -270,8 +270,8 @@ def demo_multi_tool_agent() -> None:
     agent = create_agent(model=llm, tools=tools)
 
     print("\n1. Agent has 3 tools:")
-    for t in tools:
-        print(f"   • {t.name}: {t.description}")
+    for tool in tools:
+        print(f"   • {tool.name}: {tool.description}")
 
     # test different queries
     test_queries = [

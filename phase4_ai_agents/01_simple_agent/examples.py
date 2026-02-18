@@ -55,7 +55,7 @@ def calculate(expression: str) -> str:
     """
     try:
         allowed = set("0123456789+-*/.() ")
-        if not all(c in allowed for c in expression):
+        if not all(char in allowed for char in expression):
             return json.dumps({"error": "Invalid characters in expression"})
         result = eval(expression)
         return json.dumps({"result": result})

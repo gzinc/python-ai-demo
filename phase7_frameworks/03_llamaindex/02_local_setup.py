@@ -36,7 +36,7 @@ def check_ollama_available() -> bool:
         response = httpx.get("http://localhost:11434/api/tags", timeout=2.0)
         if response.status_code == 200:
             models = response.json().get("models", [])
-            model_names = [m["name"] for m in models]
+            model_names = [model["name"] for model in models]
             has_llama = any("llama3" in name or "llama2" in name for name in model_names)
             return has_llama
         return False

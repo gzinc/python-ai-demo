@@ -458,8 +458,8 @@ def demo_lcel_patterns() -> None:
         from langchain_core.runnables import RunnableBranch
 
         chain = RunnableBranch(
-            (lambda x: len(x["text"]) < 100, short_chain),
-            (lambda x: len(x["text"]) < 1000, medium_chain),
+            (lambda doc: len(doc["text"]) < 100, short_chain),
+            (lambda doc: len(doc["text"]) < 1000, medium_chain),
             long_chain  # default
         )
         ```

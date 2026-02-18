@@ -264,8 +264,8 @@ def validate_calculate_args(args: dict) -> Optional[str]:
 
     # block dangerous operations
     dangerous = ["import", "exec", "eval", "open", "file", "__"]
-    for d in dangerous:
-        if d in expression.lower():
-            return f"expression contains forbidden term: {d}"
+    for dangerous_keyword in dangerous:
+        if dangerous_keyword in expression.lower():
+            return f"expression contains forbidden term: {dangerous_keyword}"
 
     return None  # no error

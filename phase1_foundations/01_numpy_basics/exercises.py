@@ -48,9 +48,9 @@ def run_tests() -> None:
 
     print_section("Exercise 2a: Euclidean Distance")
     try:
-        a = np.array([0.0, 0.0])
-        b = np.array([3.0, 4.0])
-        result = exercise_2_euclidean_distance(a, b)
+        vec_a = np.array([0.0, 0.0])
+        vec_b = np.array([3.0, 4.0])
+        result = exercise_2_euclidean_distance(vec_a, vec_b)
         if result is None:
             print("❌ Not implemented yet")
         elif np.isclose(result, 5.0):
@@ -62,9 +62,9 @@ def run_tests() -> None:
 
     print_section("Exercise 2b: Cosine Similarity")
     try:
-        a = np.array([1.0, 0.0])
-        b = np.array([1.0, 0.0])
-        result = exercise_2_cosine_similarity(a, b)
+        vec_a = np.array([1.0, 0.0])
+        vec_b = np.array([1.0, 0.0])
+        result = exercise_2_cosine_similarity(vec_a, vec_b)
         if result is None:
             print("❌ Not implemented yet")
         elif np.isclose(result, 1.0):
@@ -123,8 +123,8 @@ def run_tests() -> None:
 
     print_section("Exercise 4: Reshape for Attention")
     try:
-        q = np.arange(64).reshape(2, 4, 8)  # batch=2, seq=4, hidden=8
-        result = exercise_4_reshape_for_attention(q, num_heads=2)
+        query = np.arange(64).reshape(2, 4, 8)  # batch=2, seq=4, hidden=8
+        result = exercise_4_reshape_for_attention(query, num_heads=2)
         if result is None:
             print("❌ Not implemented yet")
         elif result.shape == (2, 2, 4, 4):

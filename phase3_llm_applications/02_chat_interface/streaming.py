@@ -152,7 +152,7 @@ def stream_anthropic(
         client = Anthropic()
 
         # filter out system messages (Anthropic handles separately)
-        api_messages = [m for m in messages if m["role"] != "system"]
+        api_messages = [msg for msg in messages if msg["role"] != "system"]
 
         with client.messages.stream(
             model=model,

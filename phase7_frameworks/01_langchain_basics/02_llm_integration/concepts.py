@@ -264,12 +264,12 @@ def demo_provider_comparison() -> None:
     }
 
     # Print header
-    print(f"{'Feature':<25s} | {' | '.join(f'{p:20s}' for p in providers)}")
+    print(f"{'Feature':<25s} | {' | '.join(f'{provider:20s}' for provider in providers)}")
     print("-" * 95)
 
     # Print features
     for feature, values in features.items():
-        values_str = " | ".join(f"{v:20s}" for v in values)
+        values_str = " | ".join(f"{value:20s}" for value in values)
         print(f"{feature:<25s} | {values_str}")
 
     print("\n## Choosing the Right Provider:")

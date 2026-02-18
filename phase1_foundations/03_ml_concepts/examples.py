@@ -41,8 +41,8 @@ def features_and_labels_demo() -> None:
         print(f"  '{email['text'][:30]}...' → {label}")
 
     # convert to numeric features
-    X = np.array([[e["has_exclamation"], e["word_count"]] for e in emails])
-    y = np.array([1 if l == "spam" else 0 for l in labels])
+    X = np.array([[email["has_exclamation"], email["word_count"]] for email in emails])
+    y = np.array([1 if label == "spam" else 0 for label in labels])
 
     print(f"\nAs numeric arrays:")
     print(f"  Features (X) shape: {X.shape}")
@@ -268,8 +268,8 @@ def decision_framework_demo() -> None:
 
     print(f"{'Need':<40} {'Solution':<20} {'Why'}")
     print("-" * 90)
-    for s in scenarios:
-        print(f"{s['need']:<40} {s['solution']:<20} {s['why']}")
+    for scenario in scenarios:
+        print(f"{scenario['need']:<40} {scenario['solution']:<20} {scenario['why']}")
 
     print("\n📊 Cost Comparison:")
     print("  Prompting:    ~$0 (just API calls)")

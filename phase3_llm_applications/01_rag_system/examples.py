@@ -120,8 +120,8 @@ def example_basic_rag():
     # test retrieval
     print("\n2. Testing retrieval...")
     results = rag.retrieve("How do I define a function?")
-    for r in results:
-        print(f"   - [{r.source}] similarity: {r.similarity:.3f}")
+    for result in results:
+        print(f"   - [{result.source}] similarity: {result.similarity:.3f}")
 
     # full RAG query
     print("\n3. Full RAG query...")
@@ -190,11 +190,11 @@ def example_retrieval_tuning():
     print(f"\n   Query: '{query}'")
 
     # compare different top_k values
-    for k in [1, 3, 5]:
-        print(f"\n   top_k={k}:")
-        results = rag.retrieve(query, top_k=k)
-        for r in results:
-            print(f"   - {r.source}: {r.similarity:.3f}")
+    for top_k in [1, 3, 5]:
+        print(f"\n   top_k={top_k}:")
+        results = rag.retrieve(query, top_k=top_k)
+        for result in results:
+            print(f"   - {result.source}: {result.similarity:.3f}")
 
     rag.clear()
 
@@ -232,9 +232,9 @@ def example_interactive():
         "What is *args used for?",
     ]
 
-    for q in sample_questions:
-        print(f"\n   Q: {q}")
-        answer = rag.query(q)
+    for question in sample_questions:
+        print(f"\n   Q: {question}")
+        answer = rag.query(question)
         # truncate for display
         short_answer = answer[:150] + "..." if len(answer) > 150 else answer
         print(f"   A: {short_answer}")

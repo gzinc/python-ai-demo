@@ -361,8 +361,8 @@ def main():
 
     print("\n2. Query: 'What is Python?'")
     results = rag.retrieve("What is Python?")
-    for r in results:
-        print(f"   - {r.source}: {r.similarity:.3f}")
+    for result in results:
+        print(f"   - {result.source}: {result.similarity:.3f}")
 
     rag.clear()
     print("\n" + "=" * 60)

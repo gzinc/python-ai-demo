@@ -1,24 +1,25 @@
-# Docker Compose configuration for Python AI Demo project
+# Docker Compose configuration for Python Demo project
 # Provides PostgreSQL database and pgAdmin for database management
 
-name: python-demo
+name: glz
 services:
-  # PostgreSQL 17 database
+  # PostgreSQL 18 database with pgvector extension
   postgres:
-    image: postgres:17-alpine
-    container_name: python-demo-postgres
+    image: pgvector/pgvector:pg18
+    container_name: glz-postgres
     restart: unless-stopped
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: python-ai-demo
+      POSTGRES_DB: python-demo
       # performance tuning for development
       POSTGRES_INITDB_ARGS: "-E UTF8 --locale=C"
     ports:
       - "5432:5432"
     volumes:
-      # persistent data storage on WSL drive (backed up)
-      - /home/gzuss/.volumes/postgres_data:/var/lib/postgresql/data
+      # persistent data using named volume (Docker-managed, automatic permissions)
+      # PostgreSQL 18+ uses /var/lib/postgresql (creates version-specific subdirs)
+      - postgres_data:/var/lib/postgresql
       # optional: custom initialization scripts
       # - ./docker/init.sql:/docker-entrypoint-initdb.d/init.sql
     healthcheck:
@@ -28,12 +29,12 @@ services:
       retries: 5
       start_period: 10s
     networks:
-      - python-demo-network
+      - glz-network
 
   # pgAdmin 4 - web-based database management UI
   pgadmin:
     image: dpage/pgadmin4:latest
-    container_name: python-demo-pgadmin
+    container_name: glz-pgadmin
     restart: unless-stopped
     environment:
       PGADMIN_DEFAULT_EMAIL: admin@example.com
@@ -41,16 +42,46 @@ services:
       PGADMIN_CONFIG_SERVER_MODE: "False"
       PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED: "False"
     ports:
-      - "5051:80"  # use 5051 to avoid conflict with python-demo
+      - "5050:80"
     volumes:
-      # persistent data on WSL drive (backed up)
-      - /home/gzuss/.volumes/pgadmin_data:/var/lib/pgadmin
+      # persistent data using named volume (Docker-managed, automatic permissions)
+      - pgadmin_data:/var/lib/pgadmin
     depends_on:
       postgres:
         condition: service_healthy
     networks:
-      - python-demo-network
+      - glz-network
+
+  # Redis - in-memory data store
+  redis:
+    image: redis:8-alpine
+    container_name: glz-redis
+    restart: unless-stopped
+    command: redis-server --appendonly yes --requirepass redis
+    ports:
+      - "6379:6379"
+    volumes:
+      # persistent data using named volume (Docker-managed, automatic permissions)
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - glz-network
 
 networks:
-  python-demo-network:
+  glz-network:
     driver: bridge
+
+# named volumes for persistent data storage
+# docker manages permissions and lifecycle automatically
+volumes:
+  postgres_data:
+    external: true
+  pgadmin_data:
+    external: true
+  redis_data:
+    external: true

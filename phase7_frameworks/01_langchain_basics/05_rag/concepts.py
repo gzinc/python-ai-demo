@@ -236,9 +236,9 @@ def demo_vector_similarity() -> None:
 
     def cosine_similarity(vec1: list[float], vec2: list[float]) -> float:
         """calculate cosine similarity between two vectors"""
-        dot_product = sum(a * b for a, b in zip(vec1, vec2))
-        magnitude1 = math.sqrt(sum(a * a for a in vec1))
-        magnitude2 = math.sqrt(sum(b * b for b in vec2))
+        dot_product = sum(val_a * val_b for val_a, val_b in zip(vec1, vec2))
+        magnitude1 = math.sqrt(sum(val * val for val in vec1))
+        magnitude2 = math.sqrt(sum(val * val for val in vec2))
         return dot_product / (magnitude1 * magnitude2)
 
     # mock document embeddings
@@ -263,7 +263,7 @@ def demo_vector_similarity() -> None:
         print(f"  {similarity:.3f} - '{text}'")
 
     # sort by similarity (highest first)
-    similarities.sort(key=lambda x: x[1], reverse=True)
+    similarities.sort(key=lambda pair: pair[1], reverse=True)
 
     print(f"\n🎯 top 2 most relevant documents:")
     for i, (text, score) in enumerate(similarities[:2], 1):
@@ -308,12 +308,12 @@ def demo_retrieval_logic() -> None:
     print("🔍 strategy 1: similarity search (k=2)")
 
     def cosine_sim(v1: list[float], v2: list[float]) -> float:
-        return sum(a * b for a, b in zip(v1, v2)) / (
-                math.sqrt(sum(a * a for a in v1)) * math.sqrt(sum(b * b for b in v2))
+        return sum(val_a * val_b for val_a, val_b in zip(v1, v2)) / (
+                math.sqrt(sum(val * val for val in v1)) * math.sqrt(sum(val * val for val in v2))
         )
 
     results = [(doc, cosine_sim(query_vector, doc["vector"])) for doc in docs]
-    results.sort(key=lambda x: x[1], reverse=True)
+    results.sort(key=lambda pair: pair[1], reverse=True)
 
     for i, (doc, score) in enumerate(results[:2], 1):
         print(f"  {i}. ({score:.3f}) {doc['text']}")
@@ -332,7 +332,7 @@ def demo_retrieval_logic() -> None:
 
     # pick highest mmr score
     remaining = [(doc, score) for doc, score in results[1:]]
-    remaining.sort(key=lambda x: x[0].get("mmr_score", 0), reverse=True)
+    remaining.sort(key=lambda pair: pair[0].get("mmr_score", 0), reverse=True)
 
     selected.append(remaining[0])
 
@@ -346,7 +346,7 @@ def demo_retrieval_logic() -> None:
         for doc in docs
         if doc["date"] >= "2024-01-15"
     ]
-    filtered.sort(key=lambda x: x[1], reverse=True)
+    filtered.sort(key=lambda pair: pair[1], reverse=True)
 
     for i, (doc, score) in enumerate(filtered, 1):
         print(f"  {i}. ({score:.3f}) {doc['text']} (date: {doc['date']})")
@@ -406,12 +406,12 @@ def demo_rag_pipeline() -> None:
 
     # calculate similarities
     def cosine_sim(v1: list[float], v2: list[float]) -> float:
-        return sum(a * b for a, b in zip(v1, v2)) / (
-                math.sqrt(sum(a * a for a in v1)) * math.sqrt(sum(b * b for b in v2))
+        return sum(val_a * val_b for val_a, val_b in zip(v1, v2)) / (
+                math.sqrt(sum(val * val for val in v1)) * math.sqrt(sum(val * val for val in v2))
         )
 
     similarities = [(chunk, cosine_sim(query_vector, emb)) for chunk, emb in vector_store]
-    similarities.sort(key=lambda x: x[1], reverse=True)
+    similarities.sort(key=lambda pair: pair[1], reverse=True)
 
     print(f"\n  top 2 retrieved chunks:")
     context_chunks = similarities[:2]

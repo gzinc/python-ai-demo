@@ -53,7 +53,7 @@ def demo_rag_setup() -> None:
         results = retriever.search(query_embedding)
 
         # rag_pipeline.py - generate answer
-        context = "\\n\\n".join([r.content for r in results])
+        context = "\\n\\n".join([result.content for result in results])
         prompt = f"Context: {context}\\n\\nQuestion: {query}"
         answer = openai_client.chat.completions.create(...)
     ''')
@@ -333,7 +333,7 @@ def demo_practical_examples() -> None:
             results = retriever.invoke(query)
 
             # apply custom filters
-            filtered = [r for r in results if meets_criteria(r)]
+            filtered = [result for result in results if meets_criteria(result)]
 
             # re-rank with cross-encoder
             reranked = rerank_with_model(query, filtered)

@@ -107,7 +107,7 @@ def calculate_similarity_matrix(
         similarity matrix and list of filenames
     """
     filenames = list(embeddings.keys())
-    embedding_matrix = np.array([embeddings[f] for f in filenames])
+    embedding_matrix = np.array([embeddings[filename] for filename in filenames])
 
     # calculate cosine similarity matrix
     similarity_matrix = cosine_similarity(embedding_matrix)

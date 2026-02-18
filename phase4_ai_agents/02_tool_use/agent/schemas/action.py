@@ -58,9 +58,9 @@ class AgentResult:
     @property
     def total_thoughts(self) -> int:
         """Count reasoning steps."""
-        return len([a for a in self.actions if a.thought])
+        return len([action for action in self.actions if action.thought])
 
     @property
     def total_tool_calls(self) -> int:
         """Count tool executions (excluding finish)."""
-        return len([a for a in self.actions if a.tool_name and not a.is_final])
+        return len([action for action in self.actions if action.tool_name and not action.is_final])
