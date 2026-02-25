@@ -12,7 +12,6 @@ import json
 import time
 from collections.abc import Generator
 from dataclasses import dataclass
-from inspect import cleandoc
 
 from common.demo_menu import Demo, MenuRunner
 from common.util.utils import print_section
@@ -128,7 +127,7 @@ def example_real_openai_code() -> None:
     """show actual OpenAI code (for reference)"""
     print_section("2. Real OpenAI Code (Reference)")
 
-    code = cleandoc('''
+    code = '''
         # actual OpenAI code (requires: pip install openai)
         from openai import OpenAI
 
@@ -147,7 +146,7 @@ def example_real_openai_code() -> None:
         # access the response
         print(response.choices[0].message.content)
         print(f"Tokens used: {response.usage.total_tokens}")
-    ''')
+    '''
     print(code)
 
 
@@ -155,7 +154,7 @@ def example_real_anthropic_code() -> None:
     """show actual Anthropic code (for reference)"""
     print_section("3. Real Anthropic Code (Reference)")
 
-    code = cleandoc('''
+    code = '''
         # actual Anthropic code (requires: pip install anthropic)
         from anthropic import Anthropic
 
@@ -173,7 +172,7 @@ def example_real_anthropic_code() -> None:
         # access the response (slightly different structure)
         print(response.content[0].text)
         print(f"Tokens: {response.usage.input_tokens} in, {response.usage.output_tokens} out")
-    ''')
+    '''
     print(code)
 
     print("\nKey difference: Anthropic separates 'system' from 'messages'")
@@ -249,7 +248,7 @@ def example_error_handling() -> None:
     """demonstrate error handling patterns"""
     print_section("6. Error Handling Patterns")
 
-    code = cleandoc('''
+    code = '''
         import time
         from openai import OpenAI, RateLimitError, APIError
 
@@ -280,7 +279,7 @@ def example_error_handling() -> None:
                         raise
 
             raise Exception("Max retries exceeded")
-    ''')
+    '''
     print(code)
 
     print("\nCommon errors to handle:")
@@ -305,7 +304,7 @@ def example_streaming() -> None:
     print("Streaming shows tokens as they're generated (better UX):")
     print()
 
-    code = cleandoc('''
+    code = '''
         # real streaming code
         stream = client.chat.completions.create(
             model="gpt-4o",
@@ -317,7 +316,7 @@ def example_streaming() -> None:
             content = chunk.choices[0].delta.content
             if content:
                 print(content, end="", flush=True)
-    ''')
+    '''
     print(code)
     print()
 
@@ -367,7 +366,7 @@ def example_conversation_history() -> None:
     print("  - Long conversations = more tokens = more cost")
     print("  - May need to summarize or truncate old messages")
 
-    code = cleandoc('''
+    code = '''
         # practical pattern
         MAX_HISTORY = 10  # keep last N messages
 
@@ -386,7 +385,7 @@ def example_conversation_history() -> None:
             history.append({"role": "assistant", "content": assistant_message})
 
             return assistant_message
-    ''')
+    '''
     print()
     print("Truncation pattern:")
     print(code)
@@ -398,7 +397,7 @@ def example_provider_comparison() -> None:
 
     print("OpenAI (GPT-4o):")
     print("-" * 40)
-    openai_code = cleandoc('''
+    openai_code = '''
         from openai import OpenAI
         client = OpenAI()
 
@@ -410,12 +409,12 @@ def example_provider_comparison() -> None:
             ],
         )
         text = response.choices[0].message.content
-    ''')
+    '''
     print(openai_code)
 
     print("Anthropic (Claude):")
     print("-" * 40)
-    anthropic_code = cleandoc('''
+    anthropic_code = '''
         from anthropic import Anthropic
         client = Anthropic()
 
@@ -428,7 +427,7 @@ def example_provider_comparison() -> None:
             ],
         )
         text = response.content[0].text
-    ''')
+    '''
     print(anthropic_code)
 
     print("Key differences:")
@@ -442,7 +441,7 @@ def example_complete_pattern() -> None:
     """show a complete, production-ready pattern"""
     print_section("10. Complete Production Pattern")
 
-    code = cleandoc('''
+    code = '''
         import os
         from openai import OpenAI, RateLimitError
         import time
@@ -497,7 +496,7 @@ def example_complete_pattern() -> None:
         response = client.chat([{"role": "user", "content": "Hello!"}])
         print(response)
         print(client.get_stats())
-    ''')
+    '''
     print(code)
 
 

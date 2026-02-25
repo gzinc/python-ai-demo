@@ -13,7 +13,6 @@ No API key required - focuses on graph structure visualization.
 Run with: uv run python -m phase7_frameworks.02_langgraph.graph_visualization
 """
 
-from inspect import cleandoc
 from typing import Literal, TypedDict
 
 from langgraph.graph import END, START, StateGraph
@@ -98,12 +97,12 @@ def demo_simple_linear() -> None:
     # get Mermaid diagram
     try:
         mermaid = app.get_graph().draw_mermaid()
-        print(cleandoc(            """
+        print("""
 
                 Mermaid Diagram:
                 mermaid
                 💡 Copy the Mermaid code above to https://mermaid.live to view it!
-            """))
+            """)
     except Exception as e:
         print(f"\nMermaid visualization error: {e}")
 
@@ -173,12 +172,12 @@ def demo_conditional_graph() -> None:
 
     app = graph.compile()
 
-    print("\n" + cleandoc("""
+    print("""
             Graph Structure: Conditional Routing
                           ┌─→ high (value > 10)
               START → router
                           └─→ low (value <= 10)
-        """))
+        """)
 
     # ASCII visualization
     try:
@@ -191,12 +190,12 @@ def demo_conditional_graph() -> None:
     # Mermaid diagram
     try:
         mermaid = app.get_graph().draw_mermaid()
-        print(cleandoc(            """
+        print("""
 
                 Mermaid Diagram:
                 mermaid
                 💡 Notice the conditional edges in the diagram!
-            """))
+            """)
     except Exception as e:
         print(f"\nMermaid visualization error: {e}")
 
@@ -264,12 +263,12 @@ def demo_loop_graph() -> None:
 
     app = graph.compile()
 
-    print("\n" + cleandoc("""
+    print("""
             Graph Structure: Loop with Exit
               START → process → should_continue?
                            ↑         │         │
                            └─continue┘         └─finish→ END
-        """))
+        """)
 
     # ASCII visualization
     try:
@@ -282,12 +281,12 @@ def demo_loop_graph() -> None:
     # Mermaid diagram
     try:
         mermaid = app.get_graph().draw_mermaid()
-        print(cleandoc(            """
+        print("""
 
                 Mermaid Diagram:
                 mermaid
                 💡 Notice the loop (back edge) in the diagram!
-            """))
+            """)
     except Exception as e:
         print(f"\nMermaid visualization error: {e}")
 
@@ -376,14 +375,14 @@ def demo_multi_agent_graph() -> None:
 
     app = graph.compile()
 
-    print("\n" + cleandoc("""
+    print("""
             Graph Structure: Router + Specialists
                              ┌─→ research_agent
                              │
               START → router ─→ code_agent
                              │
                              └─→ analysis_agent → END
-        """))
+        """)
 
     # ASCII visualization
     try:
@@ -396,12 +395,12 @@ def demo_multi_agent_graph() -> None:
     # Mermaid diagram
     try:
         mermaid = app.get_graph().draw_mermaid()
-        print(cleandoc(            """
+        print("""
 
                 Mermaid Diagram:
                 mermaid
                 💡 This diagram shows the complete agent routing logic!
-            """))
+            """)
     except Exception as e:
         print(f"\nMermaid visualization error: {e}")
 
@@ -452,7 +451,7 @@ def demo_visualization_tips() -> None:
     """
     print_section("Demo 5: Visualization Best Practices")
 
-    print("\n" + cleandoc("""
+    print("""
         Best Practices for LangGraph Visualization:
 
         1. DESCRIPTIVE NODE NAMES
@@ -511,7 +510,7 @@ def demo_visualization_tips() -> None:
         5. Test execution and fix issues
         6. Include diagram in documentation
         7. Update diagram when graph changes
-    """))
+    """)
 
     print("\n✅ Key Takeaway: Good visualization = better understanding = fewer bugs")
     print("💡 Always visualize graphs before deploying to production!")
@@ -538,7 +537,7 @@ DEMOS = [
 
 def main() -> None:
     """run all visualization demonstrations"""
-    print(cleandoc("""
+    print("""
         ╔════════════════════════════════════════════════════════════════════╗
         ║                                                                    ║
         ║               LANGGRAPH GRAPH VISUALIZATION                        ║
@@ -557,7 +556,7 @@ def main() -> None:
         ║  • Verify correctness before execution                             ║
         ║                                                                    ║
         ╚════════════════════════════════════════════════════════════════════╝
-    """))
+    """)
 
 
     runner = MenuRunner(DEMOS, title="LangGraph Visualization")

@@ -72,7 +72,19 @@
       "Bash(wsl.exe:*)",
       "Bash(lsof:*)",
       "Bash(netstat:*)",
-      "mcp__graphiti-memory__add_memory"
+      "mcp__graphiti-memory__add_memory",
+      "mcp__graphiti-memory__search_nodes",
+      "mcp__graphiti-memory__search_memory_facts",
+      "mcp__graphiti-memory__get_status",
+      "mcp__graphiti-memory__get_episodes",
+      "Bash(docker-compose stop:*)",
+      "mcp__glz-research-assistant__search_memory",
+      "mcp__glz-research-assistant__start_session",
+      "mcp__glz-codebase-assistant__start_session",
+      "Bash(uv tool:*)",
+      "mcp__glz-codebase-assistant__save_rich_memory",
+      "Bash(git mv:*)",
+      "Bash(uv run:*)"
     ],
     "deny": [],
     "ask": []

@@ -17,7 +17,8 @@
 | **01_langchain_basics** | 🔄 In Progress | Chains, prompts, memory, agents | LangChain foundation |
 | **02_langgraph** | ⬜ Planned | State machines, multi-agent workflows | Graph-based orchestration |
 | **03_llamaindex** | ⬜ Planned | RAG-focused alternative | Document-centric apps |
-| **04_framework_comparison** | ⬜ Planned | Decision framework | When to use what |
+| **04_pydantic_ai** | ⬜ Planned | Type-safe agents, structured output | output_type, deps injection, TestModel |
+| **05_framework_comparison** | ⬜ Planned | Decision framework | When to use what |
 
 ### Module 1 Progress
 ✅ **Conceptual Foundation Complete**:
@@ -49,12 +50,14 @@
 
 ### Phase 4: AI Agents
 
-| Your Implementation | LangChain | LangGraph |
-|---------------------|-----------|-----------|
-| ReAct agent | `create_react_agent()` | `create_react_agent()` |
-| Tool registry | `@tool` decorator | `ToolNode` |
-| Multi-agent | Manual orchestration | `StateGraph` + conditional edges |
-| Agent loop | While loop | Graph execution |
+| Your Implementation | LangChain | LangGraph | Pydantic AI |
+|---------------------|-----------|-----------|-------------|
+| ReAct agent | `create_react_agent()` | `create_react_agent()` | `Agent` |
+| Tool registry | `@tool` decorator | `ToolNode` | `@agent.tool_plain` |
+| Multi-agent | Manual orchestration | `StateGraph` + conditional edges | multiple agents |
+| Agent loop | While loop | Graph execution | automatic |
+| Structured output | string parsing | string parsing | `output_type=MyModel` |
+| Testability | difficult | difficult | `TestModel` |
 
 ### Phase 5: Production
 
@@ -147,7 +150,8 @@
 1. **01_langchain_basics** - Learn the framework that abstracts your Phase 3/4 work
 2. **02_langgraph** - See how graphs improve your Phase 4 multi-agent system
 3. **03_llamaindex** - Compare RAG-focused approach to your Phase 3 pipeline
-4. **04_framework_comparison** - Decide when to use which (or none!)
+4. **04_pydantic_ai** - Type-safe agents: structured outputs, DI, TestModel
+5. **05_framework_comparison** - Decide when to use which (or none!)
 
 ---
 

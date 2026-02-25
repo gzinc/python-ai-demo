@@ -19,7 +19,6 @@ import re
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from enum import Enum
-from inspect import cleandoc
 
 
 class MetricType(Enum):
@@ -216,14 +215,14 @@ class RAGEvaluation:
 
     def __str__(self) -> str:
         status = "⚠️ HALLUCINATION RISK" if self.has_hallucination else "✓ OK"
-        return cleandoc(f'''
+        return f'''
             RAG Evaluation [{status}]
             ├── Context Relevance: {self.context_relevance:.2f}
             ├── Groundedness:      {self.groundedness:.2f}
             ├── Faithfulness:      {self.faithfulness:.2f}
             ├── Answer Relevance:  {self.answer_relevance:.2f}
             └── Overall Score:     {self.overall_score:.2f}
-        ''')
+        '''
 
 
 class RAGEvaluator:
@@ -275,7 +274,7 @@ class RAGEvaluator:
         Method: LLM-as-judge (required)
         Why: Needs to reason about whether claims can be inferred
         """
-        prompt = cleandoc(f'''
+        prompt = f'''
             Evaluate how well the answer is grounded in the context.
 
             Context: {context}
@@ -290,7 +289,7 @@ class RAGEvaluator:
             - 1.0 = all claims can be traced to context
 
             Return ONLY a number between 0 and 1.
-        ''')
+        '''
 
         if isinstance(self.llm_scorer, HeuristicScorer):
             return self._heuristic_groundedness(context, answer)
@@ -304,7 +303,7 @@ class RAGEvaluator:
         Method: LLM-as-judge (required)
         Why: Needs to identify fabricated facts, numbers, names
         """
-        prompt = cleandoc(f'''
+        prompt = f'''
             Check if the answer is faithful to the context (no hallucinations).
 
             Context: {context}
@@ -323,7 +322,7 @@ class RAGEvaluator:
             - 1.0 = completely faithful to context
 
             Return ONLY a number between 0 and 1.
-        ''')
+        '''
 
         if isinstance(self.llm_scorer, HeuristicScorer):
             return self._heuristic_faithfulness(context, answer)
@@ -451,7 +450,7 @@ def demo_rag_evaluation() -> None:
     print("  Production Usage Examples")
     print("=" * 60)
 
-    example_embedding = cleandoc('''
+    example_embedding = '''
         # Option 1: Embedding + LLM (recommended)
         from openai import OpenAI
 
@@ -460,9 +459,9 @@ def demo_rag_evaluation() -> None:
             embedding_scorer=EmbeddingScorer(client),      # fast for relevance
             llm_scorer=LLMJudgeScorer(client),             # accurate for hallucination
         )
-    ''')
+    '''
 
-    example_cross = cleandoc('''
+    example_cross = '''
         # Option 2: Cross-encoder + LLM (best accuracy, no embedding cost)
         from openai import OpenAI
 
@@ -471,9 +470,9 @@ def demo_rag_evaluation() -> None:
             cross_encoder_scorer=CrossEncoderScorer(),     # local model, very accurate
             llm_scorer=LLMJudgeScorer(client),             # still need LLM for reasoning
         )
-    ''')
+    '''
 
-    example_all_llm = cleandoc('''
+    example_all_llm = '''
         # Option 3: All LLM (most accurate, most expensive)
         from openai import OpenAI
 
@@ -483,7 +482,7 @@ def demo_rag_evaluation() -> None:
             embedding_scorer=llm,    # use LLM for everything
             llm_scorer=llm,
         )
-    ''')
+    '''
 
     print(f"\n{example_embedding}\n")
     print("-" * 40)
@@ -494,7 +493,7 @@ def demo_rag_evaluation() -> None:
     print("=" * 60)
     print("  Method Selection Guide")
     print("=" * 60)
-    print(cleandoc('''
+    print('''
         | Metric            | Recommended    | Why                           |
         |-------------------|----------------|-------------------------------|
         | context_relevance | Embedding      | semantic overlap, fast        |
@@ -509,7 +508,7 @@ def demo_rag_evaluation() -> None:
         - LLM-as-judge:  ~$0.15 (gpt-4o-mini) to $3 (gpt-4o)
 
         Tools: Ragas, TruLens, Phoenix (Arize), DeepEval
-    '''))
+    ''')
     print("=" * 60)
 
 # endregion

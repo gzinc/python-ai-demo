@@ -12,7 +12,6 @@ All implementation classes are in their own files:
 Run with: uv run python phase3_llm_applications/03_function_calling/examples.py
 """
 
-from inspect import cleandoc
 
 from common_tools import (
     calculate,
@@ -164,7 +163,7 @@ def example_agent_loop_pattern():
     """
     print_section("Example 6: Agent Loop Pattern (Preview)")
 
-    print(cleandoc("""
+    print("""
         The Agent Loop:
         ┌─────────────────────────────────────────────────────────────┐
         │                                                             │
@@ -189,7 +188,7 @@ def example_agent_loop_pattern():
 
         This pattern is implemented in FunctionCallingEngine.chat()
         and will be expanded in Phase 4: AI Agents!
-    """))
+    """)
 
     # demonstrate with actual engine
     engine = FunctionCallingEngine()

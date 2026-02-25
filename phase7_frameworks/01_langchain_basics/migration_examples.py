@@ -8,7 +8,6 @@ Run with: uv run python -m phase7_frameworks.01_langchain_basics.migration_examp
 """
 
 import os
-from inspect import cleandoc
 
 from common.demo_menu import Demo, MenuRunner
 from common.util.utils import print_section
@@ -36,7 +35,7 @@ def example_prompts() -> None:
     """compare prompt template approaches"""
     print_section("1. Prompts & Templates")
 
-    your_way = cleandoc('''
+    your_way = '''
         # phase2: string formatting with f-strings
         role = "helpful assistant"
         task = "explain embeddings"
@@ -47,9 +46,9 @@ def example_prompts() -> None:
             {"role": "system", "content": f"You are a {role}"},
             {"role": "user", "content": task}
         ]
-    ''')
+    '''
 
-    langchain_way = cleandoc('''
+    langchain_way = '''
         # LangChain: ChatPromptTemplate
         from langchain.prompts import ChatPromptTemplate
 
@@ -66,7 +65,7 @@ def example_prompts() -> None:
 
         # benefits: validation, reusability, few-shot examples
         # cost: extra abstraction layer
-    ''')
+    '''
 
     print_comparison(your_way, langchain_way)
 
@@ -84,7 +83,7 @@ def example_llm_integration() -> None:
     """compare LLM API integration approaches"""
     print_section("2. LLM Integration")
 
-    your_way = cleandoc('''
+    your_way = '''
         # phase2: raw API calls with full control
         from openai import OpenAI
 
@@ -99,9 +98,9 @@ def example_llm_integration() -> None:
 
         # explicit, predictable, full control
         # you know exactly what API call is made
-    ''')
+    '''
 
-    langchain_way = cleandoc('''
+    langchain_way = '''
         # LangChain: unified interface across providers
         from langchain_openai import ChatOpenAI
 
@@ -120,7 +119,7 @@ def example_llm_integration() -> None:
         # cost:
         # - abstraction hides details
         # - harder to debug API issues
-    ''')
+    '''
 
     print_comparison(your_way, langchain_way)
 
@@ -138,7 +137,7 @@ def example_chains() -> None:
     """compare chain/pipeline approaches"""
     print_section("3. Chains & Pipelines")
 
-    your_way = cleandoc('''
+    your_way = '''
         # phase3/phase4: manual function composition
         def summarize_then_analyze(text: str) -> dict[str, Any]:
             # step 1: summarize
@@ -153,9 +152,9 @@ def example_chains() -> None:
 
         # explicit control flow, easy to debug
         # clear what happens at each step
-    ''')
+    '''
 
-    langchain_way = cleandoc('''
+    langchain_way = '''
         # LangChain: LCEL (LangChain Expression Language)
         from langchain_openai import ChatOpenAI
         from langchain.prompts import ChatPromptTemplate
@@ -182,7 +181,7 @@ def example_chains() -> None:
 
         # benefits: streaming, async, error handling built-in
         # cost: harder to debug, less explicit control
-    ''')
+    '''
 
     print_comparison(your_way, langchain_way)
 
@@ -200,7 +199,7 @@ def example_memory() -> None:
     """compare conversation memory approaches"""
     print_section("4. Conversation Memory")
 
-    your_way = cleandoc('''
+    your_way = '''
         # phase3: custom ChatMemory class
         class ChatMemory:
             def __init__(self, strategy: str, max_messages: int = 10):
@@ -218,9 +217,9 @@ def example_memory() -> None:
 
         # explicit, customizable, easy to extend
         memory = ChatMemory(strategy="sliding_window", max_messages=10)
-    ''')
+    '''
 
-    langchain_way = cleandoc('''
+    langchain_way = '''
         # LangChain: ConversationBufferWindowMemory
         from langchain.memory import ConversationBufferWindowMemory
 
@@ -239,7 +238,7 @@ def example_memory() -> None:
 
         # benefits: pre-built strategies, tested patterns
         # cost: less control over custom logic
-    ''')
+    '''
 
     print_comparison(your_way, langchain_way)
 
@@ -257,7 +256,7 @@ def example_rag() -> None:
     """compare RAG pipeline approaches"""
     print_section("5. RAG System")
 
-    your_way = cleandoc('''
+    your_way = '''
         # phase3: full RAG pipeline with explicit steps
         from dataclasses import dataclass
 
@@ -289,9 +288,9 @@ def example_rag() -> None:
 
         # explicit control at every step
         # easy to customize chunking, retrieval, generation
-    ''')
+    '''
 
-    langchain_way = cleandoc('''
+    langchain_way = '''
         # LangChain: RetrievalQA chain
         from langchain.chains import RetrievalQA
         from langchain_community.vectorstores import Chroma
@@ -325,7 +324,7 @@ def example_rag() -> None:
 
         # benefits: batteries included, standard patterns
         # cost: less control over intermediate steps
-    ''')
+    '''
 
     print_comparison(your_way, langchain_way)
 
@@ -344,7 +343,7 @@ def example_agents() -> None:
     """compare agent implementation approaches"""
     print_section("6. Agents & Tools")
 
-    your_way = cleandoc('''
+    your_way = '''
         # phase4: custom ReActAgent with tool registry
         from enum import Enum
 
@@ -379,9 +378,9 @@ def example_agents() -> None:
                 return self.final_answer
 
         # explicit loop, easy to debug, full control
-    ''')
+    '''
 
-    langchain_way = cleandoc('''
+    langchain_way = '''
         # LangChain: create_react_agent
         from langchain.agents import create_react_agent, AgentExecutor, Tool
         from langchain_community.tools import DuckDuckGoSearchRun
@@ -412,7 +411,7 @@ def example_agents() -> None:
 
         # benefits: pre-built patterns, tool ecosystem
         # cost: less visibility into agent loop
-    ''')
+    '''
 
     print_comparison(your_way, langchain_way)
 
@@ -451,7 +450,7 @@ def example_takeaways() -> None:
     print("   - Example: LangChain RAG + your Phase 5 optimization patterns")
 
     print("\n📊 COMPLEXITY THRESHOLD:")
-    print(cleandoc('''
+    print('''
         Complexity
            ↑
            │                  ┌─ LangChain wins
@@ -465,7 +464,7 @@ def example_takeaways() -> None:
            │  ┌─┘
            │┌─┘ ← Raw API wins
            └─────────────────────→ Time to Build
-    '''))
+    ''')
 
     print("\n\n🎯 RECOMMENDATION:")
     print("   1. Start with raw API (you've done this in Phases 2-4)")

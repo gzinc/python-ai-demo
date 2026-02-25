@@ -12,7 +12,6 @@ Run with: uv run python -m phase5_production.03_optimization.cost_budget
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from enum import Enum
-from inspect import cleandoc
 
 
 class BudgetResult(Enum):
@@ -326,7 +325,7 @@ def demo_cost_budget() -> None:
 
     print("Simulating LLM workflow with cost protection:\n")
 
-    code = cleandoc('''
+    code = '''
         # check before request
         status = guard.check_request(
             user_id="user_456",
@@ -350,7 +349,7 @@ def demo_cost_budget() -> None:
             input_tokens=response.usage.prompt_tokens,
             output_tokens=response.usage.completion_tokens,
         )
-    ''')
+    '''
     print(code)
 
     print("\n" + "=" * 60)

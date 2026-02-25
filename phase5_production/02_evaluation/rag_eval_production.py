@@ -12,7 +12,6 @@ Requires: OPENAI_API_KEY in .env file or environment
 """
 
 import os
-from inspect import cleandoc
 
 from dotenv import load_dotenv
 
@@ -98,13 +97,13 @@ def option1_embedding_plus_llm() -> None:
 
     run_evaluation(evaluator, "Embedding + LLM Judge")
 
-    print(cleandoc('''
+    print('''
 
         Cost breakdown per evaluation:
         - 2 embedding calls (~$0.00002)
         - 2 LLM calls (~$0.0003)
         - Total: ~$0.0003/eval or $0.30/1000 evals
-    '''))
+    ''')
 
 
 def option2_cross_encoder_plus_llm() -> None:
@@ -132,7 +131,7 @@ def option2_cross_encoder_plus_llm() -> None:
 
     run_evaluation(evaluator, "Cross-encoder + LLM Judge")
 
-    print(cleandoc('''
+    print('''
 
         Cost breakdown per evaluation:
         - 2 cross-encoder calls (FREE, ~50ms each)
@@ -140,7 +139,7 @@ def option2_cross_encoder_plus_llm() -> None:
         - Total: ~$0.0003/eval or $0.30/1000 evals
 
         Note: First run downloads ms-marco-MiniLM model (~80MB)
-    '''))
+    ''')
 
 
 def option3_all_llm() -> None:
@@ -170,7 +169,7 @@ def option3_all_llm() -> None:
 
     run_evaluation(evaluator, "All LLM Judge")
 
-    print(cleandoc('''
+    print('''
 
         Cost breakdown per evaluation:
         - 4 LLM calls (~$0.0006)
@@ -178,7 +177,7 @@ def option3_all_llm() -> None:
 
         For maximum accuracy, use gpt-4o instead of gpt-4o-mini:
         - ~$0.012/eval or $12/1000 evals
-    '''))
+    ''')
 
 
 def main() -> None:
@@ -208,7 +207,7 @@ def main() -> None:
     print("\n" + "=" * 60)
     print("  Summary")
     print("=" * 60)
-    print(cleandoc('''
+    print('''
         | Option | Relevance      | Hallucination  | Cost/1K  | Accuracy |
         |--------|----------------|----------------|----------|----------|
         | 1      | Embedding      | LLM            | $0.30    | Good     |
@@ -219,7 +218,7 @@ def main() -> None:
         - Start with Option 1 (Embedding + LLM)
         - Use Option 2 if you need better relevance scoring
         - Use Option 3 for critical evaluations only
-    '''))
+    ''')
 
 
 if __name__ == "__main__":

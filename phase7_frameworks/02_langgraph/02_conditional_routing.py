@@ -13,7 +13,6 @@ No API key required - uses mock logic for demonstrations.
 Run with: uv run python -m phase7_frameworks.02_langgraph.conditional_routing
 """
 
-from inspect import cleandoc
 from typing import Annotated, Literal, TypedDict
 
 from langgraph.graph import END, START, StateGraph
@@ -110,12 +109,12 @@ def demo_simple_conditional() -> None:
 
     app = graph.compile()
 
-    print("\n" + cleandoc("""
+    print("""
         Graph Structure:
                    ┌─→ high (value > 10)
           START → Router
                    └─→ low (value <= 10)
-    """))
+    """)
 
     # test with different values
     print("\nTest 1: value=15")
@@ -223,14 +222,14 @@ def demo_multi_way_routing() -> None:
 
     app = graph.compile()
 
-    print("\n" + cleandoc("""
+    print("""
         Graph Structure:
                       ┌─→ research (research tasks)
                       │
           START → Classifier ─→ analysis (analysis tasks)
                       │
                       └─→ writing (other tasks)
-    """))
+    """)
 
     # test different task types
     for task in ["do research on AI", "analyze sales data", "write report"]:
@@ -322,12 +321,12 @@ def demo_loop_with_termination() -> None:
 
     app = graph.compile()
 
-    print("\n" + cleandoc("""
+    print("""
         Graph Structure (Loop):
           START → process → should_continue?
                        ↑         │         │
                        └─continue┘         └─finish→ END
-    """))
+    """)
 
     print("\nExecution (max_iterations=3):")
     result = app.invoke({
@@ -337,17 +336,17 @@ def demo_loop_with_termination() -> None:
         "history": []
     })
 
-    print("\n" + cleandoc(f"""
+    print(f"""
         Final State:
           value: {result['value']}
           iterations: {result['iterations']}
           history: {result['history']}
-    """))
+    """)
 
-    print("\n" + cleandoc("""
+    print("""
         ✅ Key Takeaway: Conditional edge can loop back to same node
         ⚠️  Safety: Always have max_iterations to prevent infinite loops!
-    """))
+    """)
 
 
 # endregion
@@ -449,12 +448,12 @@ def demo_agent_react_loop() -> None:
 
     app = graph.compile()
 
-    print("\n" + cleandoc("""
+    print("""
         Agent Graph Structure (ReAct Loop):
           START → think → act → should_continue?
                     ↑            │          │
                     └─ continue ─┘          └─ finish → END
-    """))
+    """)
 
     print("\nAgent Execution:")
     result = app.invoke({
@@ -464,21 +463,21 @@ def demo_agent_react_loop() -> None:
         "task_complete": False
     })
 
-    print("\n" + cleandoc(f"""
+    print(f"""
         Final State:
           iterations: {result['iterations']}
           task_complete: {result['task_complete']}
           total messages: {len(result['messages'])}
-    """))
+    """)
 
     print("\nAll messages:")
     for msg in result["messages"]:
         print(f"  • {msg}")
 
-    print("\n" + cleandoc("""
+    print("""
         ✅ Key Takeaway: This is your Phase 4 ReAct agent in LangGraph!
         📝 Advantage: Declarative graph structure vs imperative while loop
-    """))
+    """)
 
 
 # endregion
@@ -574,12 +573,12 @@ def demo_error_retry_pattern() -> None:
 
     app = graph.compile()
 
-    print("\n" + cleandoc("""
+    print("""
         Graph Structure (Retry Pattern):
           START → attempt → check_result?
                        ↑         │     │
                        └─ retry ─┘     └─ success/failed → END
-    """))
+    """)
 
     print("\nExecution:")
     result = app.invoke({
@@ -589,12 +588,12 @@ def demo_error_retry_pattern() -> None:
         "result": ""
     })
 
-    print("\n" + cleandoc(f"""
+    print(f"""
         Final State:
           attempt: {result['attempt']}
           success: {result['success']}
           result: {result['result']}
-    """))
+    """)
 
     print("\n✅ Key Takeaway: Conditional routing enables retry/fallback patterns")
 
@@ -620,7 +619,7 @@ DEMOS = [
 
 def main() -> None:
     """run all conditional routing demonstrations"""
-    print(cleandoc("""
+    print("""
         ╔════════════════════════════════════════════════════════════════════╗
         ║                                                                    ║
         ║                 LANGGRAPH CONDITIONAL ROUTING                      ║
@@ -633,7 +632,7 @@ def main() -> None:
         ║  • Foundation for agent loops and retry logic                      ║
         ║                                                                    ║
         ╚════════════════════════════════════════════════════════════════════╝
-    """))
+    """)
 
 
     runner = MenuRunner(DEMOS, title="LangGraph Conditional Routing")

@@ -4,7 +4,6 @@ Token optimization examples and demos.
 Run with: uv run python -m phase5_production.03_optimization.01_compression.examples
 """
 
-from inspect import cleandoc
 
 from common.demo_menu import Demo, MenuRunner
 
@@ -17,7 +16,7 @@ def demo_naive_compression() -> None:
     """demo naive compression (no model download)"""
     print("\n1. NAIVE COMPRESSION (for comparison)\n")
 
-    verbose_prompt = cleandoc('''
+    verbose_prompt = '''
         Please kindly analyze the following text and make sure to identify
         the main themes. It is important to note that you should basically
         focus on the key points. In order to provide a good response, please
@@ -25,7 +24,7 @@ def demo_naive_compression() -> None:
 
         Due to the fact that this is a complex topic, please take your time
         and provide a detailed analysis as well as a summary.
-    ''')
+    '''
 
     print(f"Original:\n{verbose_prompt}\n")
 
@@ -41,7 +40,7 @@ def demo_llmlingua2() -> None:
     """demo LLMLingua-2 (downloads model on first run)"""
     print("\n2. LLMLINGUA-2 COMPRESSION (production)\n")
 
-    prompt = cleandoc('''
+    prompt = '''
         The user is asking about the weather forecast for tomorrow.
         Based on the available meteorological data from the national
         weather service and various satellite imagery analysis systems,
@@ -50,7 +49,7 @@ def demo_llmlingua2() -> None:
         hours, particularly in the northern regions of the metropolitan
         area where temperatures are expected to reach approximately 72
         degrees Fahrenheit with humidity levels around 65 percent.
-    ''')
+    '''
 
     print(f"Original ({len(prompt)} chars):\n{prompt}\n")
 

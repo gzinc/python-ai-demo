@@ -237,13 +237,25 @@ Track your journey through AI development. Update after each session.
 - [ ] Advanced retrieval (hybrid search, auto-merging)
 - [ ] Metadata filtering (date, category filters)
 
-### Framework Comparison (Module 4)
+### Pydantic AI (Module 4) — Added 2026-02-26
+- [x] Philosophy (Pydantic AI vs LangChain vs LlamaIndex)
+- [x] Core API (Agent, run_sync, result.output, usage)
+- [x] Structured outputs (output_type=Pydantic model, typed results)
+- [x] Tool use (@agent.tool_plain, @agent.tool, auto schema from type hints)
+- [x] Dependency injection (deps_type, RunContext, swapping prod/test deps)
+- [x] Testing (TestModel, agent.override(), pytest patterns)
+- [x] Framework comparison (Pydantic AI vs LangChain vs raw API)
+- [x] examples.py (7 demos, Demos 2/4/6 runnable with TestModel, no API key)
+- [x] README.md (decision tree, side-by-side table, connection to other modules)
+- [x] Key insight: TestModel actually calls tools and returns results (not just a stub)
+
+### Framework Comparison (Module 5 — renumbered)
 - [ ] Decision framework (when to use which framework)
 - [ ] Performance comparison (framework vs raw API benchmarks)
 - [ ] Migration strategies (raw → framework, framework → raw, hybrid)
 - [ ] Real-world scenarios (10+ use cases analyzed)
 
-**Phase 7 Completion**: 50% (Module 1: prompts + LLM integration + chains + 5/7 agents demos complete)
+**Phase 7 Completion**: 55% (Module 1: prompts + LLM integration + chains + 5/7 agents demos complete; Module 4: Pydantic AI scaffolded + examples complete)
 
 **Note**: Phase 7 created 2026-01-09. Philosophy: Learn frameworks AFTER building from scratch (Phases 2-6) to understand what they do under the hood, when to use them, and when to skip them entirely.
 

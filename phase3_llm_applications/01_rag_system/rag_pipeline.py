@@ -21,7 +21,6 @@ Run with: uv run python phase3_llm_applications/01_rag_system/rag_pipeline.py
 """
 
 import os
-from inspect import cleandoc
 from pathlib import Path
 
 from chunking import chunk_by_paragraph
@@ -214,7 +213,7 @@ class RAGPipeline:
         """
         context = assemble_context(context_chunks)
 
-        prompt = cleandoc(f"""
+        prompt = f"""
             You are a helpful assistant that answers questions based on the provided context.
             Use ONLY the information from the context below. If the answer is not in the context, say "I don't have enough information to answer that."
 
@@ -230,7 +229,7 @@ class RAGPipeline:
             - If unsure, say so
 
             Answer:
-        """)
+        """
 
         return prompt
 

@@ -1,4 +1,4 @@
-# Module 4: Framework Comparison & Decision Framework
+# Module 5: Framework Comparison & Decision Framework
 
 **Purpose**: Learn when to use which framework (or none) based on real-world scenarios
 
@@ -23,11 +23,15 @@ START: New LLM Project
 │  ├─ Yes → Consider LlamaIndex
 │  └─ No → Continue
 │
-├─ Need multi-agent collaboration?
+├─ Need multi-agent collaboration or complex graphs?
 │  ├─ Yes → Consider LangGraph
 │  └─ No → Continue
 │
-├─ Need agents with tools?
+├─ Need typed structured outputs + testability?
+│  ├─ Yes → Consider Pydantic AI
+│  └─ No → Continue
+│
+├─ Need agents with tools + LangSmith monitoring?
 │  ├─ Yes → Consider LangChain
 │  └─ No → Continue
 │
@@ -47,21 +51,23 @@ START: New LLM Project
 
 | Framework | Best For | Avoid For |
 |-----------|----------|-----------|
-| **LangChain** | Agents, tools, orchestration | Simple tasks, pure RAG |
+| **LangChain** | Agents, tools, orchestration, LangSmith | Simple tasks, pure RAG |
 | **LangGraph** | Multi-agent, workflows, human-in-loop | Linear chains, simple agents |
 | **LlamaIndex** | RAG, documents, knowledge retrieval | Agent-heavy apps, tool use |
+| **Pydantic AI** | Typed outputs, testable agents, FastAPI apps | Complex graphs, large ecosystems |
 | **None (Raw)** | Simple calls, max control, performance | Complex orchestration |
 
 ### Technical Comparison
 
-| Feature | LangChain | LangGraph | LlamaIndex | Raw API |
-|---------|-----------|-----------|------------|---------|
-| **Learning Curve** | Medium | High | Medium | Low |
-| **Performance** | Medium | Medium | Medium | High |
-| **Flexibility** | High | High | Medium | Maximum |
-| **Debugging** | Medium | Hard | Medium | Easy |
-| **Abstraction** | High | Medium | High | None |
-| **Ecosystem** | Largest | Growing | RAG-focused | N/A |
+| Feature | LangChain | LangGraph | LlamaIndex | Pydantic AI | Raw API |
+|---------|-----------|-----------|------------|-------------|---------|
+| **Learning Curve** | Medium | High | Medium | Low | Low |
+| **Performance** | Medium | Medium | Medium | Medium | High |
+| **Flexibility** | High | High | Medium | High | Maximum |
+| **Type Safety** | Weak | Weak | Weak | Strong | None |
+| **Testability** | Hard | Hard | Medium | Easy | Medium |
+| **Debugging** | Medium | Hard | Medium | Easy | Easy |
+| **Ecosystem** | Largest | Growing | RAG-focused | Growing | N/A |
 
 ---
 
@@ -210,6 +216,88 @@ formatted = format_output(translation)
 
 ---
 
+### Scenario 6: FastAPI Backend with AI Endpoints
+**Requirements**:
+- REST API that returns AI-generated structured responses
+- Type-safe responses (FastAPI validates with Pydantic)
+- Unit-testable without real LLM calls in CI
+- Swap LLM provider without rewriting business logic
+
+**Recommendation**: **Pydantic AI**
+
+**Why**:
+- `output_type=MyModel` matches FastAPI's Pydantic response models exactly
+- Dependency injection (`deps_type`) mirrors FastAPI's `Depends()` pattern
+- `TestModel` lets you unit-test agents without API keys or network in CI
+- Switch `'openai:gpt-4o-mini'` → `'anthropic:claude-3-5-haiku-latest'` in one line
+
+**Implementation**:
+```python
+from pydantic import BaseModel
+from pydantic_ai import Agent
+from fastapi import FastAPI, Depends
+
+class CodeReview(BaseModel):
+    severity: str
+    issue: str
+    fix: str
+    confidence: float
+
+agent = Agent(
+    "anthropic:claude-3-5-haiku-latest",
+    output_type=CodeReview,
+    instructions="You are a code reviewer."
+)
+
+app = FastAPI()
+
+@app.post("/review", response_model=CodeReview)
+async def review_code(code: str) -> CodeReview:
+    result = await agent.run(f"Review: {code}")
+    return result.output  # already a CodeReview — no parsing needed
+```
+
+---
+
+### Scenario 7: Structured Data Extraction Pipeline
+**Requirements**:
+- Extract fields from unstructured text (invoices, emails, articles)
+- Validate extracted data (types, ranges, required fields)
+- Process in batch, reliable schema
+
+**Recommendation**: **Pydantic AI**
+
+**Why**:
+- `output_type` enforces schema — no manual JSON parsing, no `result["key"]` guessing
+- Pydantic validation rejects malformed LLM output with a clear error
+- Nested models handle complex extraction schemas naturally
+
+**Implementation**:
+```python
+from pydantic import BaseModel, Field
+from pydantic_ai import Agent
+
+class InvoiceData(BaseModel):
+    vendor: str
+    total: float = Field(ge=0)
+    currency: str
+    line_items: list[str]
+    due_date: str | None
+
+agent = Agent(
+    "openai:gpt-4o-mini",
+    output_type=InvoiceData,
+    instructions="Extract invoice data from the text."
+)
+
+for invoice_text in batch:
+    result = agent.run_sync(invoice_text)
+    invoice = result.output  # type: InvoiceData — validated, typed
+    db.insert(invoice)
+```
+
+---
+
 ## Migration Strategies
 
 ### From Raw → Framework
@@ -277,15 +365,24 @@ def custom_workflow():
 ┌─────────────────────────────────────────┐
 │  Primary use case?                      │
 │  ├─ RAG/Documents → LlamaIndex          │
-│  ├─ Multi-agent → LangGraph             │
-│  ├─ Agents + Tools → LangChain          │
-│  └─ Simple chains → LangChain or raw    │
+│  ├─ Multi-agent graph → LangGraph       │
+│  ├─ Agents + Tools + LangSmith          │
+│  │    → LangChain                       │
+│  └─ Continue                            │
 └─────────────────────────────────────────┘
                │
 ┌─────────────────────────────────────────┐
-│  Need monitoring/observability?         │
-│  ├─ Yes → Framework (LangSmith, etc.)   │
-│  └─ No → Raw API is fine               │
+│  Need typed structured output?          │
+│  ├─ Yes → Pydantic AI                  │
+│  │    (FastAPI app, data extraction,    │
+│  │     typed agent, testable CI)        │
+│  └─ No → Continue                       │
+└─────────────────────────────────────────┘
+               │
+┌─────────────────────────────────────────┐
+│  Simple chain or one-shot LLM call?     │
+│  ├─ Yes → Raw API (no overhead)         │
+│  └─ No → LangChain (orchestration)      │
 └─────────────────────────────────────────┘
 ```
 
@@ -327,7 +424,7 @@ def custom_workflow():
 ## Module Structure
 
 ```
-04_framework_comparison/
+05_framework_comparison/
 ├── README.md                    # This file
 ├── decision_tree.py             # Interactive decision helper
 ├── scenario_examples.py         # 10 real-world scenarios analyzed

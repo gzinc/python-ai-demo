@@ -10,7 +10,6 @@ Example tasks:
     - "Evaluate the pros and cons of microservices"
 """
 
-from inspect import cleandoc
 
 from schemas import AgentProfile
 
@@ -27,7 +26,7 @@ ANALYSIS_PROFILE = AgentProfile(
         "insight generation",
         "evaluation",
     ],
-    system_prompt=cleandoc("""
+    system_prompt="""
         You are an analysis specialist. Your job is to:
         1. Examine data and information critically
         2. Identify patterns, trends, and relationships
@@ -35,7 +34,7 @@ ANALYSIS_PROFILE = AgentProfile(
         4. Provide balanced, objective analysis
 
         Be thorough but concise. Support conclusions with evidence.
-    """).strip(),
+    """.strip(),
 )
 
 
@@ -72,7 +71,7 @@ class AnalysisAgent(BaseSpecialist):
         task_lower = task.lower()
 
         if "compare" in task_lower or "vs" in task_lower:
-            return cleandoc("""
+            return """
                 Comparative Analysis:
 
                 **Comparison Framework**:
@@ -90,10 +89,10 @@ class AnalysisAgent(BaseSpecialist):
                 4. Option B better for rapid development
 
                 **Recommendation**: Consider hybrid approach or evaluate based on team expertise.
-            """).strip()
+            """.strip()
 
         elif "trend" in task_lower or "pattern" in task_lower:
-            return cleandoc("""
+            return """
                 Trend Analysis:
 
                 **Identified Patterns**:
@@ -112,10 +111,10 @@ class AnalysisAgent(BaseSpecialist):
                 - Monitor competitor responses
 
                 **Confidence Level**: Medium-High (based on available data)
-            """).strip()
+            """.strip()
 
         elif "pro" in task_lower and "con" in task_lower:
-            return cleandoc("""
+            return """
                 Pros and Cons Analysis:
 
                 **Advantages** ✅:
@@ -136,10 +135,10 @@ class AnalysisAgent(BaseSpecialist):
                 - High risk: Market timing
 
                 **Net Assessment**: Benefits outweigh costs for most use cases.
-            """).strip()
+            """.strip()
 
         elif "evaluat" in task_lower or "assess" in task_lower:
-            return cleandoc("""
+            return """
                 Evaluation Analysis:
 
                 **Assessment Criteria**:
@@ -160,11 +159,11 @@ class AnalysisAgent(BaseSpecialist):
                 1. Adequate resource allocation
                 2. Stakeholder alignment
                 3. Clear success metrics
-            """).strip()
+            """.strip()
 
         else:
             # generic analysis response
-            return cleandoc(f"""
+            return f"""
                 Analysis of "{task}":
 
                 **Analytical Framework Applied**: SWOT + Quantitative Assessment
@@ -185,4 +184,4 @@ class AnalysisAgent(BaseSpecialist):
                 3. Run scenario analysis
 
                 **Confidence Level**: Medium (preliminary analysis)
-            """).strip()
+            """.strip()

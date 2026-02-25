@@ -8,7 +8,6 @@ Run with: uv run python -m phase7_frameworks.01_langchain_basics.05_rag.concepts
 """
 
 import math
-from inspect import cleandoc
 from typing import Any
 
 from common.demo_menu import Demo, MenuRunner
@@ -68,13 +67,11 @@ def demo_document_loading() -> None:
 
     # simulated text file loading
     text_doc = MockDocument(
-        page_content=cleandoc(
-            """
+        page_content="""
         RAG (Retrieval-Augmented Generation) combines retrieval with generation.
         It retrieves relevant documents and uses them as context for LLM generation.
         This improves factual accuracy and reduces hallucinations.
-        """
-        ),
+        """,
         metadata={"source": "rag_notes.txt"},
     )
 
@@ -101,15 +98,13 @@ def demo_text_chunking() -> None:
     """demonstrate different text chunking strategies"""
     print_section("Text Chunking Strategies")
 
-    sample_text = cleandoc(
-        """
+    sample_text = """
     Artificial Intelligence (AI) is transforming technology. Machine learning enables
     computers to learn from data. Deep learning uses neural networks with multiple layers.
     Natural Language Processing (NLP) helps computers understand human language.
     Large Language Models (LLMs) can generate human-like text. Retrieval-Augmented
     Generation (RAG) combines retrieval with generation for better accuracy.
     """
-    )
 
     print("📖 original text:")
     print(f"{sample_text}\n")

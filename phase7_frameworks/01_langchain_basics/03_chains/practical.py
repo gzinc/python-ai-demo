@@ -7,7 +7,6 @@ and debugging techniques with actual LLM calls.
 Run: uv run python -m phase7_frameworks.01_langchain_basics.03_chains.practical
 """
 
-from inspect import cleandoc
 
 from common.demo_menu import Demo, MenuRunner
 from common.util.utils import (
@@ -407,14 +406,14 @@ def demo_passthrough_pattern() -> None:
         return "Retrieved context: Embeddings are vector representations used in AI"
 
     # RAG prompt expecting context + question
-    prompt = ChatPromptTemplate.from_template(cleandoc('''
+    prompt = ChatPromptTemplate.from_template('''
         Answer the question using the context below.
 
         Context: {context}
         Question: {question}
 
         Answer:
-    '''))
+    ''')
 
     llm = ChatOpenAI(model="gpt-3.5-turbo", temperature=0.7, max_tokens=100)
     parser = StrOutputParser()

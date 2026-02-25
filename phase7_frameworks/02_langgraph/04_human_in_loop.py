@@ -18,7 +18,6 @@ No API key required - uses mock logic for demonstrations.
 Run with: uv run python -m phase7_frameworks.02_langgraph.human_in_loop
 """
 
-from inspect import cleandoc
 from typing import Literal, TypedDict
 
 from langgraph.checkpoint.memory import MemorySaver
@@ -87,11 +86,11 @@ def demo_basic_checkpoint() -> None:
 
     app = graph.compile(checkpointer=checkpointer)
 
-    print("\n" + cleandoc("""
+    print("""
             Graph with Checkpoints:
               START → increment → END
                        (checkpoint saved after each step)
-        """))
+        """)
 
     # session configuration
     config = {"configurable": {"thread_id": "counter_session"}}
@@ -194,20 +193,20 @@ def demo_interrupt_before() -> None:
         interrupt_before=["execute"]  # pause here for approval
     )
 
-    print("\n" + cleandoc("""
+    print("""
             Graph with Interrupt:
               START → prepare → [INTERRUPT] → execute → END
                                   ↑
                              (pause for approval)
-        """))
+        """)
 
     config = {"configurable": {"thread_id": "approval_session"}}
 
-    print("\n" + cleandoc("""
+    print("""
             " + "=" * 7
             Step 1: Initial invocation (will pause at interrupt)
             "=" * 70
-        """))
+        """)
 
     # first invocation - will pause at interrupt
     result1 = app.invoke(
@@ -215,34 +214,34 @@ def demo_interrupt_before() -> None:
         config
     )
 
-    print("\n" + cleandoc(f"""
+    print(f"""
             \n   Paused State:
                  action: '{result1['action']}'
                  result: '{result1['result']}'
-        """))
+        """)
 
-    print("\n" + cleandoc("""
+    print("""
                🤔 Human Review:
                   → Action prepared but NOT executed yet
                   → State saved at checkpoint
                   → Waiting for approval...
-        """))
+        """)
 
-    print("\n" + cleandoc("""
+    print("""
             " + "=" * 7
             Step 2: Resume execution (after approval)
             "=" * 70
-        """))
+        """)
 
     # resume with None (uses checkpoint state)
     print("\n   👍 Human: Approved! Resuming execution...")
     result2 = app.invoke(None, config)
 
-    print("\n" + cleandoc(f"""
+    print(f"""
             \n   Final State:
                  action: '{result2['action']}'
                  result: '{result2['result']}'
-        """))
+        """)
 
     print("\n✅ Key Takeaway: Interrupt before allows human approval before actions")
     print("⚠️  Critical: Use for sensitive operations (DB writes, payments, etc.)")
@@ -315,55 +314,55 @@ def demo_interrupt_after() -> None:
         interrupt_after=["generate"]  # pause here for review
     )
 
-    print("\n" + cleandoc("""
+    print("""
             Graph with Interrupt:
               START → generate → [INTERRUPT] → publish → END
                                      ↑
                                 (pause for review)
-        """))
+        """)
 
     config = {"configurable": {"thread_id": "review_session"}}
 
-    print("\n" + cleandoc("""
+    print("""
             " + "=" * 7
             Step 1: Generate content (will pause after generation)
             "=" * 70
-        """))
+        """)
 
     result1 = app.invoke(
         {"topic": "AI Agents", "draft": "", "published": False},
         config
     )
 
-    print("\n" + cleandoc(f"""
+    print(f"""
             \n   Paused State (after generation):
                  topic: '{result1['topic']}'
                  draft: '{result1['draft']}'
                  published: {result1['published']}
-        """))
+        """)
 
-    print("\n" + cleandoc("""
+    print("""
                🤔 Human Review:
                   → Content generated successfully
                   → Draft ready for review
                   → NOT published yet
-        """))
+        """)
 
-    print("\n" + cleandoc("""
+    print("""
             " + "=" * 7
             Step 2: Continue to publish (after review)
             "=" * 70
-        """))
+        """)
 
     print("\n   👍 Human: Content looks good! Publishing...")
     result2 = app.invoke(None, config)
 
-    print("\n" + cleandoc(f"""
+    print(f"""
             \n   Final State:
                  topic: '{result2['topic']}'
                  draft: '{result2['draft'][:50]}...'
                  published: {result2['published']}
-        """))
+        """)
 
     print("\n✅ Key Takeaway: Interrupt after allows review before proceeding")
     print("💡 Use Cases: LLM output review, quality control, validation")
@@ -465,19 +464,19 @@ def demo_conditional_interrupt() -> None:
         interrupt_before=["approve"]  # only pause if going to approve
     )
 
-    print("\n" + cleandoc("""
+    print("""
             Graph with Conditional Interrupt:
                              ┌─→ approve (needs approval) → [INTERRUPT]
               START → check ─┤
                              └─→ execute (auto-approve) → END
-        """))
+        """)
 
     # test 1: small transaction (no approval needed)
-    print("\n" + cleandoc("""
+    print("""
             " + "=" * 7
             Test 1: Small Transaction ($50, threshold=$100)
             "=" * 70
-        """))
+        """)
 
     config1 = {"configurable": {"thread_id": "tx_small"}}
     result1 = app.invoke(
@@ -495,11 +494,11 @@ def demo_conditional_interrupt() -> None:
     print("   ✅ No interrupt (auto-approved)")
 
     # test 2: large transaction (needs approval)
-    print("\n" + cleandoc("""
+    print("""
             " + "=" * 7
             Test 2: Large Transaction ($150, threshold=$100)
             "=" * 70
-        """))
+        """)
 
     config2 = {"configurable": {"thread_id": "tx_large"}}
     result2 = app.invoke(
@@ -513,12 +512,12 @@ def demo_conditional_interrupt() -> None:
         config2
     )
 
-    print("\n" + cleandoc(f"""
+    print(f"""
             \n   Paused State:
                  amount: ${result2['amount']}
                  needs_approval: {result2['needs_approval']}
                  result: '{result2['result']}'
-        """))
+        """)
 
     print("\n   🤔 Human: Review needed for large transaction...")
     print("   👍 Human: Approved! Resuming...")
@@ -577,13 +576,13 @@ def demo_update_during_interrupt() -> None:
 
     def send(state: EmailState) -> dict:
         """send email"""
-        print(cleandoc(            f"""
+        print(f"""
 
                 \n   📧 Sending email:
                       To: {state['recipient']}
                       Subject: {state['subject']}
                       Body: {state['body'][:50]}...
-            """))
+            """)
         return {"sent": True}
 
     # build graph
@@ -602,45 +601,45 @@ def demo_update_during_interrupt() -> None:
         interrupt_after=["draft"]
     )
 
-    print("\n" + cleandoc("""
+    print("""
             Graph with Interrupt:
               START → draft → [INTERRUPT] → send → END
                                   ↑
                              (edit before sending)
-        """))
+        """)
 
     config = {"configurable": {"thread_id": "email_session"}}
 
-    print("\n" + cleandoc("""
+    print("""
             " + "=" * 7
             Step 1: Draft email (will pause for editing)
             "=" * 70
-        """))
+        """)
 
     result1 = app.invoke(
         {"recipient": "Alice", "subject": "", "body": "", "sent": False},
         config
     )
 
-    print("\n" + cleandoc(f"""
+    print(f"""
             \n   Paused State (draft ready):
                  recipient: {result1['recipient']}
                  subject: {result1['subject']}
                  body: {result1['body']}
-        """))
+        """)
 
-    print("\n" + cleandoc("""
+    print("""
                🤔 Human Review:
                   → Subject could be more specific
                   → Body needs personalization
                   → Editing before sending...
-        """))
+        """)
 
-    print("\n" + cleandoc("""
+    print("""
             " + "=" * 7
             Step 2: Resume with edited state
             "=" * 70
-        """))
+        """)
 
     # resume with MODIFIED state
     edited_state = {
@@ -650,11 +649,11 @@ def demo_update_during_interrupt() -> None:
         "sent": False
     }
 
-    print("\n" + cleandoc(f"""
+    print(f"""
                ✏️  Human edited:
                   subject: '{edited_state['subject']}'
                   body: '{edited_state['body'][:50]}...'
-        """))
+        """)
 
     result2 = app.invoke(edited_state, config)
 
@@ -686,7 +685,7 @@ DEMOS = [
 
 def main() -> None:
     """run all human-in-the-loop demonstrations"""
-    print(cleandoc("""
+    print("""
         ╔════════════════════════════════════════════════════════════════════╗
         ║                                                                    ║
         ║             LANGGRAPH HUMAN-IN-THE-LOOP PATTERNS                   ║
@@ -705,7 +704,7 @@ def main() -> None:
         ║  • Content publishing → edit during interrupt                      ║
         ║                                                                    ║
         ╚════════════════════════════════════════════════════════════════════╝
-    """))
+    """)
 
 
     runner = MenuRunner(DEMOS, title="LangGraph Human-in-the-Loop")

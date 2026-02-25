@@ -141,14 +141,13 @@ class NaiveCompressor(PromptCompressor):
 
 
 if __name__ == "__main__":
-    from inspect import cleandoc
 
-    text = cleandoc('''
+    text = '''
         Please kindly analyze the following text and make sure to identify
         the main themes. It is important to note that you should basically
         focus on the key points. In order to provide a good response, please
         be sure to consider all aspects of the text very carefully.
-    ''')
+    '''
 
     print("=" * 60)
     print("  Prompt Compressors Demo")

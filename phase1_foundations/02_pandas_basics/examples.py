@@ -10,7 +10,6 @@ This module covers essential Pandas operations for AI/LLM applications:
 Run with: uv run python phase1_foundations/02_pandas_basics/examples.py
 """
 
-from inspect import cleandoc
 
 import numpy as np
 import pandas as pd
@@ -193,7 +192,7 @@ def document_chunking() -> None:
     print_section("5. Document Chunking for RAG")
 
     # simulate a long document
-    long_doc = cleandoc("""
+    long_doc = """
         Chapter 1: Introduction to AI
 
         Artificial Intelligence (AI) is transforming how we build software.
@@ -216,7 +215,7 @@ def document_chunking() -> None:
 
         Deploying AI systems requires careful attention to cost, latency,
         and reliability. Caching, monitoring, and optimization are essential.
-    """)
+    """
 
     print(f"original document: {len(long_doc)} characters")
 

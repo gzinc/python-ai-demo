@@ -13,7 +13,6 @@ No API key required - uses mock logic for demonstrations.
 Run with: uv run python -m phase7_frameworks.02_langgraph.multi_agent
 """
 
-from inspect import cleandoc
 from typing import Annotated, Literal, TypedDict
 
 from langgraph.graph import END, START, StateGraph
@@ -129,14 +128,14 @@ def demo_router_pattern() -> None:
 
     app = graph.compile()
 
-    print("\n" + cleandoc("""
+    print("""
         Graph Structure:
                         ┌─→ research_agent
                         │
           START → router ─→ math_agent
                         │
                         └─→ code_agent → END
-    """))
+    """)
 
     # test different query types
     test_queries = [
@@ -267,14 +266,14 @@ def demo_supervisor_pattern() -> None:
 
     app = graph.compile()
 
-    print("\n" + cleandoc("""
+    print("""
         Graph Structure:
                              ┌─→ worker_a ─┐
           START → supervisor ─→ worker_b ─→ supervisor → END
                       ↑                          │
                       └──────────────────────────┘
                            (loop until done)
-    """))
+    """)
 
     print("\nExecution:")
     result = app.invoke({
@@ -379,10 +378,10 @@ def demo_sequential_handoff() -> None:
 
     app = graph.compile()
 
-    print("\n" + cleandoc("""
+    print("""
         Graph Structure (Sequential):
           START → outliner → drafter → editor → END
-    """))
+    """)
 
     print("\nExecution:")
     result = app.invoke({
@@ -393,13 +392,13 @@ def demo_sequential_handoff() -> None:
         "final": ""
     })
 
-    print("\n" + cleandoc(f"""
+    print(f"""
         ✅ Final State:
            Topic: {result['topic']}
            Outline: {result['outline'][:50]}...
            Draft: {result['draft']}
            Final: {result['final']}
-    """))
+    """)
 
     print("\n   Message History:")
     for msg in result["messages"]:
@@ -444,7 +443,7 @@ def demo_parallel_specialists() -> None:
     """
     print_section("Demo 4: Parallel Specialists (Concept)")
 
-    print(cleandoc("""
+    print("""
         Parallel Specialist Pattern:
 
                      ┌─→ specialist_a (security check) ─┐
@@ -478,7 +477,7 @@ def demo_parallel_specialists() -> None:
 
         This teaches the concept without requiring Send API (advanced).
         In production, use Send() for true parallel execution.
-    """))
+    """)
 
     class AnalysisState(TypedDict):
         """state for parallel analysis"""
@@ -512,13 +511,13 @@ def demo_parallel_specialists() -> None:
             state["quality_score"]
         ) / 3
 
-        report = cleandoc(f"""
+        report = f"""
             Code Analysis Report:
             • Security: {state['security_score']}/100
             • Performance: {state['performance_score']}/100
             • Quality: {state['quality_score']}/100
             • Overall: {avg_score:.1f}/100
-        """)
+        """
 
         return {"final_report": report}
 
@@ -637,13 +636,13 @@ def demo_aggregation_pattern() -> None:
         # determine consensus
         consensus = "Yes" if yes_votes > no_votes else "No"
 
-        final = cleandoc(f"""
+        final = f"""
             Consensus Decision: {consensus}
             Votes: Yes={yes_votes}, No={no_votes}
             Average Confidence: {avg_confidence:.1f}%
 
             Individual Responses:
-        """)
+        """
 
         for i, (resp, conf) in enumerate(zip(state["agent_responses"], state["confidence_scores"]), 1):
             final += f"\n            {i}. {resp} (confidence: {conf}%)"
@@ -705,7 +704,7 @@ DEMOS = [
 
 def main() -> None:
     """run all multi-agent demonstrations"""
-    print(cleandoc("""
+    print("""
         ╔════════════════════════════════════════════════════════════════════╗
         ║                                                                    ║
         ║               LANGGRAPH MULTI-AGENT COLLABORATION                  ║
@@ -723,7 +722,7 @@ def main() -> None:
         ║  • Patterns = Your Phase 4 agents in declarative graphs!           ║
         ║                                                                    ║
         ╚════════════════════════════════════════════════════════════════════╝
-    """))
+    """)
 
 
     runner = MenuRunner(DEMOS, title="LangGraph Multi-Agent")

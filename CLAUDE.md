@@ -107,35 +107,35 @@ cat .serena/memories/learning_progress.md
 - lowercase comments (per global CLAUDE.md)
 - Descriptive variable names
 
-**Multi-line Strings**: Always use `inspect.cleandoc()` for multi-line strings inside functions:
+**Multi-line Strings**: Use plain triple-quoted strings — do NOT use `inspect.cleandoc()`. Content indented one extra level, closing `"""` at the variable's level:
 ```python
-from inspect import cleandoc
-
 def example():
-    # ✅ correct - cleandoc handles dedent + strip in one call
-    text = cleandoc('''
+    # ✅ correct - plain triple-quoted string
+    text = """
         content here
         indented with code
-    ''')
+    """
 
-    # ❌ wrong - flush-left inside function
-    text = '''
-content at column 0
-'''
+    # ❌ wrong - cleandoc wrapper
+    text = cleandoc("""
+        content here
+    """)
+    
+    # ❌ wrong - multi line wrapped
+    text = "content"
+    "here"
 ```
 
-**Multi-line Print Statements**: Use single `print("\n" + cleandoc(...))` instead of multiple print calls:
+**Multi-line Print Statements**: Use single `print()` with a triple-quoted string instead of multiple print calls:
 ```python
-from inspect import cleandoc
-
 def example():
-    # ✅ correct - single print with cleandoc and newline prefix
-    print("\n" + cleandoc("""
+    # ✅ correct - single print with triple-quoted string
+    print("""
         1. State Schema Defined:
            class SimpleState(TypedDict):
                counter: int
                message: str
-    """))
+    """)
 
     # ❌ wrong - multiple print calls
     print("\n1. State Schema Defined:")
@@ -143,10 +143,6 @@ def example():
     print("       counter: int")
     print("       message: str")
 ```
-**Key points:**
-- Use `"\n" + cleandoc(...)` to preserve leading newline
-- No empty line after opening `"""`
-- Benefits: More readable code, easier to maintain, follows DRY principle
 
 **AI-Specific**:
 - Comment why techniques matter for AI

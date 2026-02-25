@@ -11,7 +11,6 @@ This module demonstrates advanced RAG techniques:
 Run with: uv run python phase7_frameworks/03_llamaindex/03_advanced_rag.py
 """
 
-from inspect import cleandoc
 
 from llama_index.core import Document, VectorStoreIndex
 from llama_index.core.query_engine import RetrieverQueryEngine
@@ -55,13 +54,13 @@ def demo_custom_retrieval():
         print()
 
     print(
-        cleandoc("""
+        """
         💡 Top-K Trade-offs:
         • Lower K (1-2): Faster, focused but may miss context
         • Medium K (3-5): Balanced approach (most common)
         • Higher K (10+): More context but slower, more noise
         • Optimal K depends on chunk size and query complexity
-    """)
+    """
     )
 
 
@@ -77,20 +76,20 @@ def demo_query_transformation():
 
     documents = [
         Document(
-            text=cleandoc("""
+            text="""
                 Query transformation improves retrieval by reformulating user questions.
                 Techniques include: decomposition, multi-query, and HyDE (Hypothetical Document Embeddings).
                 Decomposition breaks complex queries into simpler sub-queries.
                 Multi-query generates variations to capture different aspects.
-            """)
+            """
         ),
         Document(
-            text=cleandoc("""
+            text="""
                 HyDE (Hypothetical Document Embeddings) generates a hypothetical answer first.
                 The hypothetical answer is embedded and used for retrieval.
                 This often finds better matches than searching with the question directly.
                 Works well when questions and answers have different vocabulary.
-            """)
+            """
         ),
     ]
 
@@ -108,7 +107,7 @@ def demo_query_transformation():
     # with query understanding (built into LlamaIndex)
     print("💡 Query Transformation Concepts:")
     print(
-        cleandoc("""
+        """
         • Decomposition: "What is X and how does Y work?"
           → Query 1: "What is X?"
           → Query 2: "How does Y work?"
@@ -121,7 +120,7 @@ def demo_query_transformation():
         • HyDE: "How do I improve retrieval?"
           → Generate: "To improve retrieval, use query transformation..."
           → Search with generated answer (better semantic match)
-    """)
+    """
     )
 
 
@@ -228,7 +227,7 @@ def demo_retrieval_evaluation():
     )
 
     print(
-        cleandoc("""
+        """
         💡 Retrieval Metrics:
         • Precision: % of retrieved docs that are relevant
         • Recall: % of relevant docs that were retrieved
@@ -239,7 +238,7 @@ def demo_retrieval_evaluation():
         • Use test sets with known relevant docs
         • Track metrics over time
         • A/B test different retrieval configs
-    """)
+    """
     )
 
 
@@ -292,7 +291,7 @@ def demo_context_window():
         print()
 
     print(
-        cleandoc("""
+        """
         💡 Context Window Strategies:
         • Start conservative, increase if needed
         • Monitor token usage (prompt + completion)
@@ -305,7 +304,7 @@ def demo_context_window():
         • GPT-4 Turbo: 128K tokens (100K for context)
         • Claude 3: 200K tokens (180K for context)
         • Llama 3.1: 128K tokens (100K for context)
-    """)
+    """
     )
 
 
@@ -320,7 +319,7 @@ def demo_production_patterns():
     print_section("Demo 6: Production RAG Patterns")
 
     print(
-        cleandoc("""
+        """
         🏭 Production RAG Checklist:
 
         1️⃣  **Chunking Strategy**
@@ -403,7 +402,7 @@ def demo_production_patterns():
         • Cache frequent queries
         • Batch embed during off-peak
         • Monitor and set budget alerts
-    """)
+    """
     )
 
 

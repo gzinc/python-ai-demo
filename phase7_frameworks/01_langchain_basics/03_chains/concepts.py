@@ -7,7 +7,6 @@ without making actual LLM calls.
 Run: uv run python -m phase7_frameworks.01_langchain_basics.03_chains.concepts
 """
 
-from inspect import cleandoc
 
 from common.demo_menu import Demo, MenuRunner
 from common.util.utils import print_section
@@ -19,7 +18,7 @@ def demo_chain_concept() -> None:
     """explain what chains are and why they matter"""
     print_section("Demo 1: Chain Concept Overview")
 
-    print(cleandoc('''
+    print('''
         ## What is a Chain?
 
         A chain connects multiple components into a unified workflow:
@@ -69,7 +68,7 @@ def demo_chain_concept() -> None:
         **Gen 1**: LLMChain (legacy, verbose)
         **Gen 2**: SequentialChain (multi-step, rigid)
         **Gen 3**: LCEL (modern, flexible, recommended)
-    '''))
+    ''')
 
 
 # endregion
@@ -81,7 +80,7 @@ def demo_llmchain_pattern() -> None:
     """show legacy LLMChain pattern"""
     print_section("Demo 2: LLMChain Pattern (Legacy)")
 
-    print(cleandoc('''
+    print('''
         ## LLMChain Pattern (Pre-LCEL)
 
         Classic approach for simple prompt → LLM workflows:
@@ -123,19 +122,19 @@ def demo_llmchain_pattern() -> None:
         - Simple single-step operations
 
         **Recommendation**: Use LCEL for all new code
-    '''))
+    ''')
 
     print("\n## Code Comparison:\n")
 
     comparison = {
-        "Legacy (LLMChain)": cleandoc('''
+        "Legacy (LLMChain)": '''
             chain = LLMChain(llm=llm, prompt=prompt)
             result = chain.run(concept="embeddings")
-        '''),
-        "Modern (LCEL)": cleandoc('''
+        ''',
+        "Modern (LCEL)": '''
             chain = prompt | llm | StrOutputParser()
             result = chain.invoke({"concept": "embeddings"})
-        ''')
+        '''
     }
 
     for approach, code in comparison.items():
@@ -153,7 +152,7 @@ def demo_sequential_chain() -> None:
     """show sequential chain for multi-step operations"""
     print_section("Demo 3: SequentialChain Pattern")
 
-    print(cleandoc('''
+    print('''
         ## SequentialChain Pattern
 
         Chains multiple LLMChains in sequence:
@@ -213,7 +212,7 @@ def demo_sequential_chain() -> None:
         - Document processing workflows
         - Data transformation sequences
         - ETL-like operations with LLMs
-    '''))
+    ''')
 
     print("\n## Example Flow:\n")
 
@@ -238,7 +237,7 @@ def demo_lcel_syntax() -> None:
     """demonstrate modern LCEL pipe operator syntax"""
     print_section("Demo 4: LCEL Syntax (Modern Standard)")
 
-    print(cleandoc('''
+    print('''
         ## LCEL (LangChain Expression Language)
 
         Modern chain composition using the pipe operator (|):
@@ -299,7 +298,7 @@ def demo_lcel_syntax() -> None:
         async for chunk in runnable.astream(input):
             print(chunk)
         ```
-    '''))
+    ''')
 
     print("\n## LCEL vs Legacy Comparison:\n")
 
@@ -327,7 +326,7 @@ def demo_lcel_components() -> None:
     """show common LCEL runnable components"""
     print_section("Demo 5: Common LCEL Components")
 
-    print(cleandoc('''
+    print('''
         ## Core Runnable Types
 
         All LCEL components implement the Runnable interface with invoke/stream/batch methods.
@@ -389,7 +388,7 @@ def demo_lcel_components() -> None:
         })
         # Usage: Execute multiple chains in parallel
         ```
-    '''))
+    ''')
 
     print("\n## Component Chaining Examples:\n")
 
@@ -413,7 +412,7 @@ def demo_lcel_patterns() -> None:
     """show common LCEL composition patterns"""
     print_section("Demo 6: Common LCEL Patterns")
 
-    print(cleandoc('''
+    print('''
         ## Pattern 1: Basic Linear Chain
 
         Simplest pattern - sequential components:
@@ -498,7 +497,7 @@ def demo_lcel_patterns() -> None:
         ```
 
         Flow: Try Primary → If Fail → Try Fallback → If Fail → Raise Error
-    '''))
+    ''')
 
     print("\n## Pattern Comparison:\n")
 
@@ -525,7 +524,7 @@ def demo_error_handling() -> None:
     """show error handling strategies in chains"""
     print_section("Demo 7: Error Handling in Chains")
 
-    print(cleandoc('''
+    print('''
         ## Strategy 1: Try/Except (Manual)
 
         Basic error handling:
@@ -608,11 +607,11 @@ def demo_error_handling() -> None:
         3. If all fail → Raise exception
 
         Total attempts: Up to 4 (2 per model)
-    '''))
+    ''')
 
     print("\n## Error Handling Decision Tree:\n")
 
-    decision_tree = cleandoc('''
+    decision_tree = '''
         Error Type                     → Strategy
         ─────────────────────────────────────────────────────────
         Transient (timeout, rate)      → Retry with backoff
@@ -621,7 +620,7 @@ def demo_error_handling() -> None:
         Invalid input                  → Try/except with validation
         Cost optimization              → Fallback to cheaper model
         Maximum reliability            → Retry + Fallback combined
-    ''')
+    '''
 
     print(decision_tree)
 
@@ -635,7 +634,7 @@ def demo_debugging() -> None:
     """show techniques for debugging chain execution"""
     print_section("Demo 8: Debugging Chain Execution")
 
-    print(cleandoc('''
+    print('''
         ## Technique 1: Verbose Mode
 
         Enable detailed execution logging:
@@ -740,7 +739,7 @@ def demo_debugging() -> None:
         - on_llm_end
         - on_chain_end
         - on_chain_error
-    '''))
+    ''')
 
     print("\n## Debugging Workflow:\n")
 

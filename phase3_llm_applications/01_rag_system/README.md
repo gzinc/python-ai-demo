@@ -70,14 +70,14 @@ By the end of this module, you will:
 ```
 Original Document:
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│ Introduction to Python. Python is a high-level programming language.       │
-│ It was created by Guido van Rossum. Python emphasizes code readability.    │
+│ Introduction to Python. Python is a high-level programming language.        │
+│ It was created by Guido van Rossum. Python emphasizes code readability.     │
 │                                                                             │
-│ Variables in Python. Variables store data values. You don't need to        │
-│ declare variable types. Python infers the type automatically.              │
+│ Variables in Python. Variables store data values. You don't need to         │
+│ declare variable types. Python infers the type automatically.               │
 │                                                                             │
-│ Functions in Python. Functions are defined using the def keyword.          │
-│ They help organize code into reusable blocks.                              │
+│ Functions in Python. Functions are defined using the def keyword.           │
+│ They help organize code into reusable blocks.                               │
 └─────────────────────────────────────────────────────────────────────────────┘
 
 Strategy 1: FIXED SIZE (500 chars)
@@ -126,23 +126,23 @@ User Query: "How do I define a function in Python?"
 │                         VECTOR SIMILARITY SEARCH                            │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                             │
-│  Query Vector:  [0.2, 0.8, 0.1, -0.3, ...]                                 │
+│  Query Vector:  [0.2, 0.8, 0.1, -0.3, ...]                                  │
 │                          │                                                  │
 │                          ▼                                                  │
-│  ┌─────────────────────────────────────────────────────────────────────┐   │
-│  │ Chunk Vectors in ChromaDB                                           │   │
-│  │                                                                     │   │
-│  │  "Functions in Python..."  [0.3, 0.7, 0.2, -0.2, ...]  ──► 0.95 ✓  │   │
-│  │  "Variables store data..." [0.1, 0.2, 0.8, -0.1, ...]  ──► 0.42    │   │
-│  │  "def keyword creates..."  [0.2, 0.8, 0.1, -0.4, ...]  ──► 0.91 ✓  │   │
-│  │  "Python is high-level..." [0.4, 0.3, 0.5, 0.1, ...]   ──► 0.38    │   │
-│  │  "Return statements..."    [0.3, 0.6, 0.2, -0.3, ...]  ──► 0.87 ✓  │   │
-│  └─────────────────────────────────────────────────────────────────────┘   │
+│  ┌─────────────────────────────────────────────────────────────────────┐    │
+│  │ Chunk Vectors in ChromaDB                                           │    │
+│  │                                                                     │    │
+│  │  "Functions in Python..."  [0.3, 0.7, 0.2, -0.2, ...]  ──► 0.95 ✓   │    │
+│  │  "Variables store data..." [0.1, 0.2, 0.8, -0.1, ...]  ──► 0.42     │    │
+│  │  "def keyword creates..."  [0.2, 0.8, 0.1, -0.4, ...]  ──► 0.91 ✓   │    │
+│  │  "Python is high-level..." [0.4, 0.3, 0.5, 0.1, ...]   ──► 0.38     │    │
+│  │  "Return statements..."    [0.3, 0.6, 0.2, -0.3, ...]  ──► 0.87 ✓   │    │
+│  └─────────────────────────────────────────────────────────────────────┘    │
 │                                                                             │
 │  Top-3 Results (highest similarity):                                        │
-│    1. "Functions in Python..."  (0.95)                                     │
-│    2. "def keyword creates..."  (0.91)                                     │
-│    3. "Return statements..."    (0.87)                                     │
+│    1. "Functions in Python..."  (0.95)                                      │
+│    2. "def keyword creates..."  (0.91)                                      │
+│    3. "Return statements..."    (0.87)                                      │
 │                                                                             │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
@@ -155,44 +155,44 @@ User Query: "How do I define a function in Python?"
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                             │
 │  ┌─────────────────┐                                                        │
-│  │ System Prompt   │  ~200 tokens                                          │
+│  │ System Prompt   │  ~200 tokens                                           │
 │  │ "You are a..."  │                                                        │
 │  └─────────────────┘                                                        │
 │           │                                                                 │
 │           ▼                                                                 │
-│  ┌─────────────────────────────────────────────────────────┐               │
-│  │ Retrieved Context                                       │               │
-│  │ "Chunk 1: Functions in Python are defined using..."    │  ~2000 tokens │
-│  │ "Chunk 2: The def keyword creates a function..."       │               │
-│  │ "Chunk 3: Return statements send values back..."       │               │
-│  └─────────────────────────────────────────────────────────┘               │
+│  ┌─────────────────────────────────────────────────────────┐                │
+│  │ Retrieved Context                                       │                │
+│  │ "Chunk 1: Functions in Python are defined using..."     │  ~2000 tokens  │
+│  │ "Chunk 2: The def keyword creates a function..."        │                │
+│  │ "Chunk 3: Return statements send values back..."        │                │
+│  └─────────────────────────────────────────────────────────┘                │
 │           │                                                                 │
 │           ▼                                                                 │
 │  ┌─────────────────┐                                                        │
-│  │ User Question   │  ~50 tokens                                           │
+│  │ User Question   │  ~50 tokens                                            │
 │  │ "How do I..."   │                                                        │
 │  └─────────────────┘                                                        │
 │           │                                                                 │
 │           ▼                                                                 │
-│  ┌─────────────────────────────────────────────────────────┐               │
-│  │ ═══════════════ RESERVED FOR RESPONSE ═══════════════  │  ~4000 tokens │
-│  │                                                         │               │
-│  │ (LLM generates answer here)                            │               │
-│  │                                                         │               │
-│  └─────────────────────────────────────────────────────────┘               │
+│  ┌─────────────────────────────────────────────────────────┐                │
+│  │ ═══════════════ RESERVED FOR RESPONSE ═══════════════   │  ~4000 tokens  │
+│  │                                                         │                │
+│  │ (LLM generates answer here)                             │                │
+│  │                                                         │                │
+│  └─────────────────────────────────────────────────────────┘                │
 │                                                                             │
-│  TOTAL: 200 + 2000 + 50 + 4000 = 6250 tokens (within 8K limit) ✓          │
+│  TOTAL: 200 + 2000 + 50 + 4000 = 6250 tokens (within 8K limit) ✓            │
 │                                                                             │
 └─────────────────────────────────────────────────────────────────────────────┘
 
 ⚠️ WARNING: If context too large:
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│  System: 200 │ Context: 7000 │ Question: 50 │ Response: ??? │              │
-│              │               │              │               │              │
-│  ════════════════════════════════════════════════════════════              │
+│  System: 200 │ Context: 7000 │ Question: 50 │ Response: ??? │               │
+│              │               │              │               │               │
+│  ════════════════════════════════════════════════════════════               │
 │                         8K LIMIT EXCEEDED!                                  │
-│              │               │              │               │              │
-│              └───────────────┴──────────────┴───────────────┘              │
+│              │               │              │               │               │
+│              └───────────────┴──────────────┴───────────────┘               │
 │                        TRUNCATED OR ERROR!                                  │
 └─────────────────────────────────────────────────────────────────────────────┘
 
@@ -216,36 +216,36 @@ Solution: Limit chunks or use summarization
 │                           RAG Module Structure                              │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                             │
-│  ┌─────────────────────────────────────────────────────────────────────┐   │
-│  │                      rag_pipeline.py                                 │   │
-│  │                     (Main Orchestrator)                              │   │
-│  │                                                                      │   │
-│  │  RAGPipeline class:                                                  │   │
-│  │  - add_documents() → chunk → embed → store                          │   │
-│  │  - query() → retrieve → build_prompt → generate                     │   │
-│  │  - clear(), get_stats()                                             │   │
-│  └──────────────────────────┬──────────────────────────────────────────┘   │
+│  ┌─────────────────────────────────────────────────────────────────────┐    │
+│  │                      rag_pipeline.py                                │    │
+│  │                     (Main Orchestrator)                             │    │
+│  │                                                                     │    │
+│  │  RAGPipeline class:                                                 │    │
+│  │  - add_documents() → chunk → embed → store                          │    │
+│  │  - query() → retrieve → build_prompt → generate                     │    │
+│  │  - clear(), get_stats()                                             │    │
+│  └──────────────────────────┬──────────────────────────────────────────┘    │
 │                             │                                               │
-│              ┌──────────────┴──────────────┐                               │
+│              ┌──────────────┴──────────────┐                                │
 │              │                             │                                │
 │              ▼                             ▼                                │
-│  ┌─────────────────────────┐   ┌─────────────────────────┐                 │
-│  │     chunking.py         │   │     retrieval.py        │                 │
-│  │                         │   │                         │                 │
-│  │  • chunk_by_paragraph() │   │  • Retriever class      │                 │
-│  │  • chunk_by_sentence()  │   │  • assemble_context()   │                 │
-│  │  • chunk_fixed_size()   │   │  • format_results()     │                 │
-│  └───────────┬─────────────┘   └────────────┬────────────┘                 │
+│  ┌─────────────────────────┐   ┌─────────────────────────┐                  │
+│  │     chunking.py         │   │     retrieval.py        │                  │
+│  │                         │   │                         │                  │
+│  │  • chunk_by_paragraph() │   │  • Retriever class      │                  │
+│  │  • chunk_by_sentence()  │   │  • assemble_context()   │                  │
+│  │  • chunk_fixed_size()   │   │  • format_results()     │                  │
+│  └───────────┬─────────────┘   └────────────┬────────────┘                  │
 │              │                              │                               │
 │              └──────────────┬───────────────┘                               │
 │                             ▼                                               │
-│  ┌─────────────────────────────────────────────────────────────────────┐   │
-│  │                         schemas/                                      │   │
-│  │                    (Data Classes)                                    │   │
-│  │  • Document - source document with metadata                         │   │
-│  │  • Chunk - piece of document after chunking                         │   │
-│  │  • RetrievalResult - search result with similarity score            │   │
-│  └─────────────────────────────────────────────────────────────────────┘   │
+│  ┌─────────────────────────────────────────────────────────────────────┐    │
+│  │                         schemas/                                    │    │
+│  │                    (Data Classes)                                   │    │
+│  │  • Document - source document with metadata                         │    │
+│  │  • Chunk - piece of document after chunking                         │    │
+│  │  • RetrievalResult - search result with similarity score            │    │
+│  └─────────────────────────────────────────────────────────────────────┘    │
 │                                                                             │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```

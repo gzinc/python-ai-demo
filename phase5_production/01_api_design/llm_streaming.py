@@ -105,9 +105,8 @@ async def demo_sse_format(prompt: str) -> None:
 
 def demo_fastapi_streaming() -> None:
     """show FastAPI streaming endpoint pattern"""
-    from inspect import cleandoc
 
-    code = cleandoc('''
+    code = '''
         # FastAPI streaming endpoint pattern
 
         from fastapi import FastAPI
@@ -147,7 +146,7 @@ def demo_fastapi_streaming() -> None:
                 appendToUI(data.content);
             }
         };
-    ''')
+    '''
     print(code)
 
 

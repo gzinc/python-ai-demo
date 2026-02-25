@@ -14,7 +14,6 @@ Note: This is a simplified demo showing LangChain concepts.
 """
 
 import os
-from inspect import cleandoc
 
 from dotenv import load_dotenv
 
@@ -130,18 +129,18 @@ def setup_rag_system(use_mock: bool = False) -> None:
     # 2. split documents (chunking)
     # Phase 3 equivalent: chunking.py with paragraph/sentence/fixed strategies
     print("\n📝 Conceptual: LangChain would use RecursiveCharacterTextSplitter:")
-    print(cleandoc('''
+    print('''
         text_splitter = RecursiveCharacterTextSplitter(
             chunk_size=500,
             chunk_overlap=50,
             length_function=len,
         )
         splits = text_splitter.split_documents(documents)
-    '''))
+    ''')
     print(f"✅ Would split into ~{len(documents) * 3} chunks")
 
     print("\n📝 Conceptual: LangChain would create embeddings and vector store:")
-    print(cleandoc('''
+    print('''
         # Phase 3 equivalent: embedder.py + rag_pipeline.py db.add()
         # LangChain does both in one call!
         embeddings = OpenAIEmbeddings(model="text-embedding-3-small")
@@ -150,32 +149,32 @@ def setup_rag_system(use_mock: bool = False) -> None:
             embedding=embeddings,
             persist_directory="./.chroma_langchain_demo"
         )
-    '''))
+    ''')
     print("✅ Would create embeddings and store in ChromaDB")
 
     print("\n📝 Conceptual: LangChain would create retriever:")
-    print(cleandoc('''
+    print('''
         # Phase 3 equivalent: retrieval.py Retriever class
         retriever = vectorstore.as_retriever(
             search_type="similarity",
             search_kwargs={"k": 3}
         )
-    '''))
+    ''')
     print("✅ Would create retriever (k=3)")
 
     print("\n📝 Conceptual: LangChain would create LLM:")
-    print(cleandoc('''
+    print('''
         # Phase 3 equivalent: raw OpenAI API calls
         llm = ChatOpenAI(
             model="gpt-4o-mini",
             temperature=0.7,
             max_tokens=500
         )
-    '''))
+    ''')
     print("✅ Would create LLM (gpt-4o-mini)")
 
     print("\n📝 Conceptual: LangChain would create RAG chain:")
-    print(cleandoc('''
+    print('''
         # Phase 3 equivalent: entire rag_pipeline.py RAGPipeline.query() method!
         # LangChain combines retrieval + generation in one chain
         qa_chain = RetrievalQA.from_chain_type(
@@ -185,7 +184,7 @@ def setup_rag_system(use_mock: bool = False) -> None:
             return_source_documents=True,
             verbose=False
         )
-    '''))
+    ''')
     print("✅ Would create RetrievalQA chain")
 
     print("\n💡 Compare with Phase 3:")
@@ -222,13 +221,13 @@ def demo_rag_queries(qa_chain: None = None) -> None:
         print('─' * 80)
 
         print("\n📝 With LangChain, you would invoke the RAG chain:")
-        print(cleandoc('''
+        print('''
             # Phase 3 equivalent: rag_pipeline.query(query)
             result = qa_chain.invoke({"query": query})
 
             print(f"Answer: {result['result']}")
             print(f"Sources: {len(result['source_documents'])} docs")
-        '''))
+        ''')
 
         print("\n💡 Behind the scenes:")
         print("   1. Query embedded → vector")
@@ -252,7 +251,7 @@ def setup_rag_with_memory() -> tuple[None, None]:
     print("   This shows how LangChain combines RAG with conversation history")
 
     print("\n1️⃣ Setup vector store (same as before)")
-    print(cleandoc('''
+    print('''
         documents = get_sample_documents()
         text_splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=50)
         splits = text_splitter.split_documents(documents)
@@ -263,10 +262,10 @@ def setup_rag_with_memory() -> tuple[None, None]:
             embedding=embeddings,
             persist_directory="./.chroma_langchain_demo"
         )
-    '''))
+    ''')
 
     print("\n2️⃣ Create conversation memory")
-    print(cleandoc('''
+    print('''
         # Phase 3 equivalent: chat_memory.py ChatMemory class
         from langchain_core.chat_history import InMemoryChatMessageHistory
 
@@ -276,11 +275,11 @@ def setup_rag_with_memory() -> tuple[None, None]:
             if session_id not in store:
                 store[session_id] = InMemoryChatMessageHistory()
             return store[session_id]
-    '''))
+    ''')
     print("✅ Would create conversation memory (modern pattern with session management)")
 
     print("\n3️⃣ Create conversational RAG chain")
-    print(cleandoc('''
+    print('''
         from langchain_core.runnables.history import RunnableWithMessageHistory
         from langchain_openai import ChatOpenAI
 
@@ -301,7 +300,7 @@ def setup_rag_with_memory() -> tuple[None, None]:
             input_messages_key="question",
             history_messages_key="chat_history",
         )
-    '''))
+    ''')
 
     print("\n💡 Note: Modern LangChain uses RunnableWithMessageHistory")
     print("   - Session-based memory management")
@@ -325,7 +324,7 @@ def demo_interactive_chat() -> None:
     print("   AI: [understands 'they' refers to embeddings from memory]")
 
     print("\n📝 With real LangChain, the chat loop would be:")
-    print(cleandoc('''
+    print('''
         # setup RAG system with memory
         qa_chain, memory = setup_rag_with_memory()
 
@@ -341,7 +340,7 @@ def demo_interactive_chat() -> None:
 
             print(f"AI: {result['result']}")
             print(f"(Based on {len(result['source_documents'])} sources)")
-    '''))
+    ''')
 
     print("\n💡 Key features of conversational RAG:")
     print("   - Memory: Remembers previous exchanges")

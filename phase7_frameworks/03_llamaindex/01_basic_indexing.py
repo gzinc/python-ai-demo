@@ -10,7 +10,6 @@ This module demonstrates fundamental LlamaIndex concepts:
 Run with: uv run python phase7_frameworks/03_llamaindex/01_basic_indexing.py
 """
 
-from inspect import cleandoc
 from pathlib import Path
 
 from llama_index.core import (
@@ -93,26 +92,26 @@ def demo_directory_index():
 
     # create sample files
     files = {
-        "rag_basics.txt": cleandoc("""
+        "rag_basics.txt": """
             Retrieval Augmented Generation (RAG) combines retrieval and generation.
             First, relevant documents are retrieved from a knowledge base.
             Then, an LLM uses those documents to generate accurate responses.
             This reduces hallucinations and grounds responses in your data.
-        """),
-        "embeddings.txt": cleandoc("""
+        """,
+        "embeddings.txt": """
             Embeddings are vector representations of text.
             Similar text has similar embeddings (cosine similarity).
             LlamaIndex uses embeddings for semantic search.
             Common models: OpenAI ada-002, HuggingFace BGE, Sentence Transformers.
-        """),
-        "chunking.txt": cleandoc("""
+        """,
+        "chunking.txt": """
             Document chunking splits long texts into smaller pieces.
             Chunk size affects retrieval quality and context window usage.
             LlamaIndex supports various chunking strategies:
             - Simple fixed-size chunks
             - Sentence-aware chunking
             - Semantic chunking
-        """),
+        """,
     }
 
     for filename, content in files.items():
@@ -159,7 +158,7 @@ def demo_node_parsing():
     print_section("Demo 3: Custom Node Parsing")
 
     long_document = Document(
-        text=cleandoc("""
+        text="""
             LlamaIndex is a comprehensive data framework for LLM applications.
             It provides tools for data ingestion from various sources.
             The framework excels at structuring unstructured data.
@@ -172,7 +171,7 @@ def demo_node_parsing():
             Production deployments benefit from caching strategies.
             The community actively contributes integrations.
             Documentation is comprehensive and well-maintained.
-        """)
+        """
     )
 
     print("📄 Document length:", len(long_document.text), "characters")
@@ -198,14 +197,14 @@ def demo_node_parsing():
             print(f"   Chunk {i}: {len(node.text)} chars - \"{node.text[:50]}...\"")
 
     print(
-        cleandoc("""
+        """
 
         💡 Key Insights:
         • Smaller chunks = more granular retrieval, more chunks to search
         • Larger chunks = more context per chunk, fewer chunks
         • Overlap = prevents splitting related content
         • Optimal size depends on your use case (typically 200-512)
-    """)
+    """
     )
 
 
@@ -346,13 +345,13 @@ def demo_streaming():
 
     documents = [
         Document(
-            text=cleandoc("""
+            text="""
                 Streaming responses in LlamaIndex allow you to display results as they're generated.
                 This improves user experience by showing progress in real-time.
                 Instead of waiting for the complete response, users see text appear gradually.
                 Streaming is especially useful for long-form content generation.
                 It reduces perceived latency and provides immediate feedback.
-            """)
+            """
         )
     ]
 

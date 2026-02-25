@@ -49,6 +49,7 @@ dependencies = [
     "duckduckgo-search>=8.1.1",
     "ddgs>=9.10.0",
     "simpleeval>=1.0.3",
+    "pydantic-ai>=1.23.0",
 ]
 
 [project.optional-dependencies]

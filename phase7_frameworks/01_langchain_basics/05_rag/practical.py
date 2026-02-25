@@ -11,7 +11,6 @@ Run with: uv run python -m phase7_frameworks.01_langchain_basics.05_rag.practica
 """
 
 import tempfile
-from inspect import cleandoc
 from pathlib import Path
 
 from langchain_chroma import Chroma
@@ -32,63 +31,53 @@ def create_sample_documents() -> list[Document]:
     """create sample documents for RAG demonstrations"""
     docs = [
         Document(
-            page_content=cleandoc(
-                """
+            page_content="""
             Python is a high-level, interpreted programming language known for its
             simplicity and readability. It was created by Guido van Rossum and first
             released in 1991. Python emphasizes code readability with significant
             whitespace and supports multiple programming paradigms including procedural,
             object-oriented, and functional programming.
-            """
-            ),
+            """,
             metadata={"source": "python_intro.txt", "topic": "programming"},
         ),
         Document(
-            page_content=cleandoc(
-                """
+            page_content="""
             Machine learning is a subset of artificial intelligence that enables
             computers to learn from data without being explicitly programmed. It uses
             algorithms that iteratively learn from data, allowing computers to find
             hidden insights. Machine learning models improve their performance over time
             as they are exposed to more data.
-            """
-            ),
+            """,
             metadata={"source": "ml_basics.txt", "topic": "ai"},
         ),
         Document(
-            page_content=cleandoc(
-                """
+            page_content="""
             Natural Language Processing (NLP) is a branch of AI that helps computers
             understand, interpret, and manipulate human language. NLP draws from many
             disciplines including computer science and linguistics. Modern NLP uses
             machine learning, especially deep learning models like transformers, to
             achieve human-like language understanding.
-            """
-            ),
+            """,
             metadata={"source": "nlp_guide.txt", "topic": "ai"},
         ),
         Document(
-            page_content=cleandoc(
-                """
+            page_content="""
             Vector databases are specialized databases designed to store and query
             high-dimensional vectors efficiently. They are essential for AI applications
             that use embeddings, such as semantic search and recommendation systems.
             Vector databases use specialized indexing techniques like HNSW (Hierarchical
             Navigable Small World) to enable fast similarity search.
-            """
-            ),
+            """,
             metadata={"source": "vector_db.txt", "topic": "database"},
         ),
         Document(
-            page_content=cleandoc(
-                """
+            page_content="""
             Retrieval-Augmented Generation (RAG) is a technique that combines information
             retrieval with text generation. RAG first retrieves relevant documents from a
             knowledge base, then uses those documents as context for an LLM to generate
             accurate, grounded responses. This approach reduces hallucinations and enables
             LLMs to access current, domain-specific information.
-            """
-            ),
+            """,
             metadata={"source": "rag_explained.txt", "topic": "ai"},
         ),
     ]
@@ -218,8 +207,7 @@ def demo_basic_rag() -> None:
     retriever = vectorstore.as_retriever(search_kwargs={"k": 2})
 
     # create RAG prompt
-    template = cleandoc(
-        """
+    template = """
         answer the question based only on the following context:
 
         {context}
@@ -228,7 +216,6 @@ def demo_basic_rag() -> None:
 
         answer:
         """
-    )
     prompt = ChatPromptTemplate.from_template(template)
 
     # create RAG chain using LCEL
@@ -296,8 +283,7 @@ def demo_text_chunking() -> None:
     """
     print_section("Text Chunking Strategies")
 
-    sample_text = cleandoc(
-        """
+    sample_text = """
         Artificial intelligence (AI) is revolutionizing technology across industries.
         Machine learning, a subset of AI, enables computers to learn from data without
         explicit programming.
@@ -313,7 +299,6 @@ def demo_text_chunking() -> None:
         The field continues to evolve rapidly, with new breakthroughs in reasoning,
         multimodal understanding, and efficient model training techniques.
         """
-    )
 
     print(f"📖 original text length: {len(sample_text)} characters")
 
@@ -568,8 +553,7 @@ def demo_document_loading() -> None:
         # create sample text files
         file1 = temp_path / "ai_overview.txt"
         file1.write_text(
-            cleandoc(
-                """
+            """
             Artificial Intelligence (AI) Overview
 
             AI is the simulation of human intelligence by machines. It encompasses various
@@ -577,20 +561,17 @@ def demo_document_loading() -> None:
             vision, and robotics. Modern AI systems can perform complex tasks like image
             recognition, language translation, and decision-making.
             """
-            )
         )
 
         file2 = temp_path / "ml_intro.txt"
         file2.write_text(
-            cleandoc(
-                """
+            """
             Machine Learning Introduction
 
             Machine learning is a method of data analysis that automates analytical model
             building. It uses algorithms that iteratively learn from data, allowing computers
             to find hidden insights without being explicitly programmed where to look.
             """
-            )
         )
 
         print(f"📁 created temporary directory: {temp_dir}")
@@ -793,8 +774,7 @@ def demo_multi_query() -> None:
     print("\n🔄 generating query variations...")
 
     query_prompt = ChatPromptTemplate.from_template(
-        cleandoc(
-            """
+        """
         you are an AI assistant that generates alternative search queries.
         given the original query, generate 3 different versions that capture the
         same intent but use different wording.
@@ -803,7 +783,6 @@ def demo_multi_query() -> None:
 
         alternative queries (one per line):
         """
-        )
     )
 
     query_chain = query_prompt | llm | StrOutputParser()
@@ -843,8 +822,7 @@ def demo_multi_query() -> None:
 
     # create RAG prompt
     rag_prompt = ChatPromptTemplate.from_template(
-        cleandoc(
-            """
+        """
         answer the question based only on the following context:
 
         {context}
@@ -853,7 +831,6 @@ def demo_multi_query() -> None:
 
         answer:
         """
-        )
     )
 
     # generate answer
@@ -930,8 +907,7 @@ def demo_chain_comparison() -> None:
     def format_docs(docs: list[Document]) -> str:
         return "\n\n".join(doc.page_content for doc in docs)
 
-    prompt_template = cleandoc(
-        """
+    prompt_template = """
         answer based on the following context:
 
         {context}
@@ -940,7 +916,6 @@ def demo_chain_comparison() -> None:
 
         answer:
         """
-    )
     prompt = ChatPromptTemplate.from_template(prompt_template)
 
     chain1 = (
@@ -965,8 +940,7 @@ def demo_chain_comparison() -> None:
         return "\n\n".join(formatted)
 
     prompt_with_sources = ChatPromptTemplate.from_template(
-        cleandoc(
-            """
+        """
         answer based on the following sources:
 
         {context}
@@ -975,7 +949,6 @@ def demo_chain_comparison() -> None:
 
         answer (cite sources using [1], [2] etc.):
         """
-        )
     )
 
     chain2 = (

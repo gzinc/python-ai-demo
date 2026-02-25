@@ -12,7 +12,6 @@ No API key required - uses mock LLM for demonstrations.
 Run with: uv run python -m phase7_frameworks.02_langgraph.state_basics
 """
 
-from inspect import cleandoc
 from typing import Annotated, TypedDict
 
 from langgraph.graph import END, START, StateGraph
@@ -77,12 +76,12 @@ def demo_simple_state_graph() -> None:
         counter: int
         message: str
 
-    print("\n" + cleandoc("""
+    print("""
         1. State Schema Defined:
            class SimpleState(TypedDict):
                counter: int
                message: str
-    """))
+    """)
 
     # step 2: define node functions
     def increment_node(state: SimpleState) -> dict:
@@ -96,11 +95,11 @@ def demo_simple_state_graph() -> None:
         print(f"   → message_node: setting message='{msg}'")
         return {"message": msg}
 
-    print("\n" + cleandoc("""
+    print("""
         2. Node Functions Defined:
            • increment_node: counter + 1
            • message_node: sets message based on counter
-    """))
+    """)
 
     # step 3: build graph
     graph = StateGraph(SimpleState)
@@ -110,13 +109,13 @@ def demo_simple_state_graph() -> None:
     graph.add_edge("increment", "set_message")
     graph.add_edge("set_message", END)
 
-    print("\n" + cleandoc("""
+    print("""
         3. Graph Structure Built:
 
            ┌───────┐    ┌───────────┐    ┌─────────────┐    ┌─────┐
            │ START │ ─► │ increment │ ─► │ set_message │ ─► │ END │
            └───────┘    └───────────┘    └─────────────┘    └─────┘
-    """))
+    """)
 
     # step 4: compile graph
     app = graph.compile()
@@ -195,7 +194,7 @@ def demo_state_updates() -> None:
 
     app = graph.compile()
 
-    print("\n" + cleandoc("""
+    print("""
         Graph:
 
            ┌───────┐    ┌──────────────┐    ┌───────────────┐    ┌─────┐
@@ -203,7 +202,7 @@ def demo_state_updates() -> None:
            └───────┘    └──────────────┘    └───────────────┘    └─────┘
 
         Execution:
-    """))
+    """)
 
     initial = {"count": 0, "name": "Alice", "status": "pending"}
     print_state(initial, "Initial")
@@ -279,7 +278,7 @@ def demo_message_state() -> None:
 
     app = graph.compile()
 
-    print("\n" + cleandoc("""
+    print("""
         Graph:
 
            ┌───────┐    ┌──────┐    ┌───────────┐    ┌─────┐
@@ -287,16 +286,16 @@ def demo_message_state() -> None:
            └───────┘    └──────┘    └───────────┘    └─────┘
 
         Execution (Watch messages accumulate):
-    """))
+    """)
 
     initial = {"messages": [], "turn": 1}
     result = app.invoke(initial)
 
-    print("\n" + cleandoc(f"""
+    print(f"""
         Final State:
           messages: {result['messages']}
           turn: {result['turn']}
-    """))
+    """)
 
     print("\n✅ Key Takeaway: Annotated[list, add_messages] accumulates, not replaces")
 
@@ -381,27 +380,27 @@ def demo_multi_path_graph() -> None:
 
     app = graph.compile()
 
-    print("\n" + cleandoc("""
+    print("""
         Graph Structure (Sequential):
 
            ┌───────┐    ┌───┐    ┌───┐    ┌───┐    ┌───┐    ┌─────┐
            │ START │ ─► │ A │ ─► │ B │ ─► │ C │ ─► │ D │ ─► │ END │
            └───────┘    └───┘    └───┘    └───┘    └───┘    └─────┘
                          ×2       +10      -3       +5
-    """))
+    """)
 
     print("\nExecution (value=5):")
     result = app.invoke({"value": 5, "path_taken": []})
-    print("\n" + cleandoc(f"""
+    print(f"""
           Final value: {result['value']}
           Path: {' → '.join(result['path_taken'])}
           Calculation: (5 * 2) + 10 - 3 + 5 = {result['value']}
-    """))
+    """)
 
-    print("\n" + cleandoc("""
+    print("""
         ✅ Key Takeaway: Sequential nodes process state in order
         📝 Note: For branching/conditional paths, see conditional_routing.py
-    """))
+    """)
 
 
 # endregion
@@ -463,7 +462,7 @@ def demo_stateful_counter() -> None:
 
     app = graph.compile()
 
-    print("\n" + cleandoc("""
+    print("""
         Graph:
 
            ┌───────┐    ┌───────────┐    ┌─────┐
@@ -471,7 +470,7 @@ def demo_stateful_counter() -> None:
            └───────┘    └───────────┘    └─────┘
 
         Multiple Invocations (State Carries Over):
-    """))
+    """)
 
     # run 1
     state = {"count": 0, "history": []}
@@ -554,7 +553,7 @@ def demo_simple_agent_loop() -> None:
 
     app = graph.compile()
 
-    print("\n" + cleandoc("""
+    print("""
         Agent Loop:
 
            ┌───────┐    ┌───────┐    ┌─────┐    ┌─────┐
@@ -562,7 +561,7 @@ def demo_simple_agent_loop() -> None:
            └───────┘    └───────┘    └─────┘    └─────┘
 
         Execution:
-    """))
+    """)
 
     initial = {
         "messages": ["User: Solve the problem"],
@@ -572,19 +571,19 @@ def demo_simple_agent_loop() -> None:
 
     result = app.invoke(initial)
 
-    print("\n" + cleandoc(f"""
+    print(f"""
         Final State:
           iterations: {result['iterations']}
           message count: {len(result['messages'])}
-    """))
+    """)
     print("\nAll messages:")
     for msg in result["messages"]:
         print(f"  • {msg}")
 
-    print("\n" + cleandoc("""
+    print("""
         ✅ Key Takeaway: Agent pattern = state + loop + messages
         📝 Next: Add conditional routing to make agent decide when to stop!
-    """))
+    """)
 
 
 # endregion
@@ -609,7 +608,7 @@ DEMOS = [
 
 def main() -> None:
     """run all state basics demonstrations"""
-    print(cleandoc("""
+    print("""
         ╔════════════════════════════════════════════════════════════════════╗
         ║                                                                    ║
         ║                   LANGGRAPH STATE BASICS                           ║
@@ -622,7 +621,7 @@ def main() -> None:
         ║  • State flows through graph, gets updated at each node            ║
         ║                                                                    ║
         ╚════════════════════════════════════════════════════════════════════╝
-    """))
+    """)
 
 
     runner = MenuRunner(DEMOS, title="LangGraph State Basics")

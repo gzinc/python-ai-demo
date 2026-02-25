@@ -8,7 +8,6 @@ message structure, and configuration options.
 Run: uv run python -m phase7_frameworks.01_langchain_basics.02_llm_integration.concepts
 """
 
-from inspect import cleandoc
 from typing import Any
 
 from langchain_core.messages import AIMessage, HumanMessage, SystemMessage
@@ -23,7 +22,7 @@ def demo_unified_interface() -> None:
     """demonstrate the unified chat model interface concept"""
     print_section("Demo 1: Unified Chat Interface")
 
-    print(cleandoc('''
+    print('''
         LangChain provides a consistent interface across all LLM providers:
 
         Key Interface Methods:
@@ -34,10 +33,10 @@ def demo_unified_interface() -> None:
         - astream()         → async streaming
 
         All chat models inherit from BaseChatModel and implement these methods.
-    '''))
+    ''')
 
     print("\n## Example Interface Signatures:")
-    print(cleandoc('''
+    print('''
         # OpenAI
         from langchain_openai import ChatOpenAI
         llm = ChatOpenAI(model="gpt-4", temperature=0.7)
@@ -50,7 +49,7 @@ def demo_unified_interface() -> None:
         response = llm.invoke([HumanMessage(content="Hello")])
         for chunk in llm.stream([HumanMessage(content="Hello")]):
             print(chunk.content, end="")
-    '''))
+    ''')
 
     print("\n## Why This Matters:")
     print("- Swap providers without changing application code")
@@ -188,7 +187,7 @@ def demo_streaming_patterns() -> None:
     print_section("Demo 4: Streaming vs Non-Streaming Patterns")
 
     print("## Non-Streaming (Default):")
-    print(cleandoc('''
+    print('''
         # Wait for complete response
         response = llm.invoke(messages)
         print(response.content)  # All tokens at once
@@ -202,10 +201,10 @@ def demo_streaming_patterns() -> None:
         - User waits for entire generation
         - Poor UX for long responses
         - No progress indication
-    '''))
+    ''')
 
     print("\n## Streaming:")
-    print(cleandoc('''
+    print('''
         # Process tokens as they arrive
         for chunk in llm.stream(messages):
             print(chunk.content, end="", flush=True)
@@ -221,7 +220,7 @@ def demo_streaming_patterns() -> None:
         - More complex to implement
         - Harder to handle complete response
         - Requires buffer management
-    '''))
+    ''')
 
     print("\n## Use Case Decision:")
     use_cases = [
@@ -306,7 +305,7 @@ def demo_error_handling() -> None:
         print(f"- {error:25s}: {cause:30s} → {solution}")
 
     print("\n## Error Handling Pattern (Conceptual):")
-    print(cleandoc('''
+    print('''
         try:
             response = llm.invoke(messages)
         except RateLimitError:
@@ -324,7 +323,7 @@ def demo_error_handling() -> None:
             # Catch-all with logging
             logger.error(f"Unexpected error: {e}")
             return default_response
-    '''))
+    ''')
 
     print("\n## Retry Strategy:")
     print("1. Exponential Backoff: 1s, 2s, 4s, 8s...")
@@ -343,7 +342,7 @@ def demo_retry_fallback() -> None:
     print_section("Demo 7: Retry and Fallback Patterns")
 
     print("## Pattern 1: Automatic Retry")
-    print(cleandoc('''
+    print('''
         # Built into LangChain
         llm = ChatOpenAI(
             model="gpt-4",
@@ -355,10 +354,10 @@ def demo_retry_fallback() -> None:
         # - Network issues
         # - Rate limits
         # - Temporary service issues
-    '''))
+    ''')
 
     print("\n## Pattern 2: Provider Fallback")
-    print(cleandoc('''
+    print('''
         from langchain_core.runnables import RunnableWithFallbacks
 
         # Primary: GPT-4 (best quality)
@@ -377,10 +376,10 @@ def demo_retry_fallback() -> None:
         # 1. GPT-4 (if fails...)
         # 2. Claude (if fails...)
         # 3. GPT-3.5 (last resort)
-    '''))
+    ''')
 
     print("\n## Pattern 3: Graceful Degradation")
-    print(cleandoc('''
+    print('''
         # Try advanced model, fallback to simpler one
         try:
             response = gpt4_llm.invoke(messages)
@@ -389,7 +388,7 @@ def demo_retry_fallback() -> None:
             response = gpt35_llm.invoke(messages)
             # Add disclaimer about degraded quality
             response.content = f"[Using fallback model] {response.content}"
-    '''))
+    ''')
 
     print("\n## Decision Matrix:")
     scenarios = [
@@ -418,7 +417,7 @@ def demo_token_cost_estimation() -> None:
     print("- 100 tokens ≈ 75 words")
 
     print("\n## Counting Tokens (Conceptual):")
-    print(cleandoc('''
+    print('''
         from langchain.callbacks import get_openai_callback
 
         # Track token usage
@@ -428,7 +427,7 @@ def demo_token_cost_estimation() -> None:
             print(f"Completion tokens: {cb.completion_tokens}")
             print(f"Total tokens: {cb.total_tokens}")
             print(f"Total cost: ${cb.total_cost:.4f}")
-    '''))
+    ''')
 
     print("\n## Cost Estimation (2024 Pricing):")
 

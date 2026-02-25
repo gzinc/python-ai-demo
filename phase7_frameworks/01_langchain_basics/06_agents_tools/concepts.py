@@ -7,7 +7,6 @@ Demonstrates patterns, architectures, and decision-making flows.
 Run with: uv run python -m phase7_frameworks.01_langchain_basics.06_agents_tools.concepts
 """
 
-from inspect import cleandoc
 
 from common.demo_menu import Demo, MenuRunner
 from common.util.utils import print_section
@@ -19,7 +18,7 @@ def demo_agent_vs_chain() -> None:
     """demonstrate conceptual difference between agents and chains"""
     print_section("Agent vs Chain: Conceptual Difference")
 
-    print(cleandoc("""
+    print("""
         CHAIN: Fixed sequence (deterministic flow)
         ┌────────────────────────────────────────────────────────┐
         │  User Input                                            │
@@ -63,7 +62,7 @@ def demo_agent_vs_chain() -> None:
 
         Key Insight: Agents decide WHICH tools to use and WHEN.
         Chains always execute the same sequence.
-    """))
+    """)
 
 
 # endregion
@@ -76,7 +75,7 @@ def demo_react_pattern() -> None:
     """demonstrate ReAct (Reasoning + Acting) pattern"""
     print_section("ReAct Pattern: How Agents Think")
 
-    print(cleandoc("""
+    print("""
         ReAct = Reason (think) + Act (use tools)
 
         Example: "Who won the 2023 FIFA World Cup?"
@@ -116,7 +115,7 @@ def demo_react_pattern() -> None:
         - Reasoning: LLM thinks before acting
         - Acting: LLM uses tools to get information
         - Combines symbolic reasoning with external actions
-    """))
+    """)
 
 
 # endregion
@@ -129,7 +128,7 @@ def demo_tool_selection() -> None:
     """demonstrate how agents select tools"""
     print_section("Tool Selection: How LLM Chooses Tools")
 
-    print(cleandoc("""
+    print("""
         Agent has access to multiple tools:
 
         Available Tools:
@@ -178,7 +177,7 @@ def demo_tool_selection() -> None:
         - LLM reads tool descriptions to make decisions
         - Better descriptions → better tool selection
         - Vague descriptions confuse the agent
-    """))
+    """)
 
 
 # endregion
@@ -191,7 +190,7 @@ def demo_tool_description_quality() -> None:
     """demonstrate impact of tool description quality"""
     print_section("Tool Description Quality Impact")
 
-    print(cleandoc("""
+    print("""
         BAD Tool Descriptions (Vague, confusing):
         ┌────────────────────────────────────────────────────────┐
         │  Tool 1:                                               │
@@ -238,7 +237,7 @@ def demo_tool_description_quality() -> None:
         3. Specify INPUT format if constrained
         4. Indicate OUTPUT format if relevant
         5. Keep description under 100 words
-    """))
+    """)
 
 
 # endregion
@@ -251,7 +250,7 @@ def demo_agent_memory_integration() -> None:
     """demonstrate how agents integrate with memory"""
     print_section("Agent + Memory Integration")
 
-    print(cleandoc("""
+    print("""
         Agent WITHOUT Memory (stateless):
         ┌────────────────────────────────────────────────────────┐
         │  Turn 1:                                               │
@@ -301,7 +300,7 @@ def demo_agent_memory_integration() -> None:
         - Agent remembers what tools it used
         - Agent remembers tool results
         - User can reference previous actions
-    """))
+    """)
 
 
 # endregion
@@ -314,7 +313,7 @@ def demo_error_handling_strategies() -> None:
     """demonstrate agent error handling approaches"""
     print_section("Agent Error Handling Strategies")
 
-    print(cleandoc("""
+    print("""
         Strategy 1: Graceful Degradation
         ┌────────────────────────────────────────────────────────┐
         │  Tool: weather_api                                     │
@@ -373,7 +372,7 @@ def demo_error_handling_strategies() -> None:
         3. Return helpful error messages from tools
         4. Enable handle_parsing_errors=True
         5. Use try-except in tool implementations
-    """))
+    """)
 
 
 # endregion
@@ -386,7 +385,7 @@ def demo_agent_decision_tree() -> None:
     """demonstrate agent decision-making as a tree"""
     print_section("Agent Decision Tree")
 
-    print(cleandoc("""
+    print("""
         Query: "What's the capital of France and its population?"
 
         ┌─────────────────────────────────────────────────────────┐
@@ -437,7 +436,7 @@ def demo_agent_decision_tree() -> None:
         2. Each tool result informs next decision
         3. Decision tree adapts based on observations
         4. No fixed sequence - dynamic reasoning
-    """))
+    """)
 
 
 # endregion

@@ -15,7 +15,6 @@ No API key required - focuses on patterns and structure.
 Run with: uv run python -m phase7_frameworks.02_langgraph.migration_from_phase4
 """
 
-from inspect import cleandoc
 from typing import Annotated, Literal, TypedDict
 
 from langgraph.checkpoint.memory import MemorySaver
@@ -68,7 +67,7 @@ def pattern_1_router_migration() -> None:
     """
     print_section("Pattern 1: MultiAgentOrchestrator → Router")
 
-    print("\n" + cleandoc("""
+    print("""
         Phase 4 Code (Imperative):
 
         class MultiAgentOrchestrator:
@@ -89,7 +88,7 @@ def pattern_1_router_migration() -> None:
         # usage
         orchestrator = MultiAgentOrchestrator()
         result = orchestrator.route_query("do research on AI")
-    """))
+    """)
 
     print("\n" + "─" * 70)
     print("LangGraph Code (Declarative):")
@@ -151,25 +150,25 @@ def pattern_1_router_migration() -> None:
 
     app = graph.compile()
 
-    print("\n" + cleandoc("""
+    print("""
             # LangGraph implementation
             # (code shown above)
             # usage
             app = graph.compile()
-        """))
+        """)
 
     print("\nExecution:")
     result = app.invoke({"query": "do research on AI", "specialist": "", "result": ""})
     print(f"  Result: {result['result']} (by {result['specialist']})")
 
-    print("\n" + cleandoc("""
+    print("""
             ✅ Benefits of LangGraph:
               • Declarative graph structure (easier to understand)
               • Visual representation with draw_mermaid()
               • Built-in state management
               • Easy to add new specialists
               • Automatic checkpointing available
-        """))
+        """)
 
 
 # endregion
@@ -212,7 +211,7 @@ def pattern_2_agent_loop_migration() -> None:
     """
     print_section("Pattern 2: Agent Loop → ReAct Pattern")
 
-    print("\n" + cleandoc("""
+    print("""
         Phase 4 Code (Imperative Loop):
 
         def execute_agent(query: str, max_iterations: int = 5) -> str:
@@ -239,7 +238,7 @@ def pattern_2_agent_loop_migration() -> None:
 
         # usage
         result = execute_agent("solve problem")
-    """))
+    """)
 
     print("\n" + "─" * 70)
     print("LangGraph Code (Declarative Graph):")
@@ -309,12 +308,12 @@ def pattern_2_agent_loop_migration() -> None:
 
     app = graph.compile()
 
-    print("\n" + cleandoc("""
+    print("""
             # LangGraph implementation
             # (code shown above)
             # usage
             app = graph.compile()
-        """))
+        """)
 
     print("\nExecution:")
     result = app.invoke({
@@ -326,14 +325,14 @@ def pattern_2_agent_loop_migration() -> None:
 
     print(f"\n  Final: {result['iterations']} iterations, complete={result['task_complete']}")
 
-    print("\n" + cleandoc("""
+    print("""
             ✅ Benefits of LangGraph:
               • No manual loop management
               • Visual loop structure in graph
               • Can interrupt/resume execution
               • Checkpoint between iterations
               • Easier to debug and understand
-        """))
+        """)
 
 
 # endregion
@@ -373,7 +372,7 @@ def pattern_3_sequential_migration() -> None:
     """
     print_section("Pattern 3: Sequential Agents → Sequential Handoff")
 
-    print("\n" + cleandoc("""\n        Phase 4 Code (Imperative Sequential):")
+    print("""\n        Phase 4 Code (Imperative Sequential):")
         def process_content_pipeline(topic: str) -> str:
             # step 1: outline
             outline = outliner_agent.create_outline(topic)
@@ -391,13 +390,13 @@ def pattern_3_sequential_migration() -> None:
 
         # usage
         result = process_content_pipeline("AI Agents")
-    """))
+    """)
 
-    print("\n" + cleandoc("""
+    print("""
             " + "─" * 7
             LangGraph Code (Declarative Chain):
             "─" * 70
-        """))
+        """)
 
     class ContentState(TypedDict):
         """content pipeline state"""
@@ -438,12 +437,12 @@ def pattern_3_sequential_migration() -> None:
 
     app = graph.compile()
 
-    print("\n" + cleandoc("""
+    print("""
             # LangGraph implementation
             # (code shown above)
             # usage
             app = graph.compile()
-        """))
+        """)
 
     print("\nExecution:")
     result = app.invoke({
@@ -455,14 +454,14 @@ def pattern_3_sequential_migration() -> None:
 
     print(f"\n  Final output: {result['final']}")
 
-    print("\n" + cleandoc("""
+    print("""
             ✅ Benefits of LangGraph:
               • Clear pipeline visualization
               • Easy to reorder/add/remove steps
               • Automatic state threading
               • Can interrupt between steps for review
               • Visual workflow documentation
-        """))
+        """)
 
 
 # endregion
@@ -507,7 +506,7 @@ def pattern_4_supervisor_migration() -> None:
     """
     print_section("Pattern 4: Supervisor → Supervisor Pattern")
 
-    print("\n" + cleandoc("""
+    print("""
         Phase 4 Code (Imperative Supervisor):
 
         class AgentSupervisor:
@@ -539,13 +538,13 @@ def pattern_4_supervisor_migration() -> None:
         # usage
         supervisor = AgentSupervisor()
         result = supervisor.coordinate("analyze data")
-    """))
+    """)
 
-    print("\n" + cleandoc("""
+    print("""
             " + "─" * 7
             LangGraph Code (Declarative Supervisor):
             "─" * 70
-        """))
+        """)
 
     class SupervisorState(TypedDict):
         """supervisor state"""
@@ -614,12 +613,12 @@ def pattern_4_supervisor_migration() -> None:
 
     app = graph.compile(checkpointer=checkpointer)
 
-    print("\n" + cleandoc("""
+    print("""
             # LangGraph implementation
             # (code shown above)
             # usage
             app = graph.compile(checkpointer=checkpointer)
-        """))
+        """)
 
     print("\nExecution:")
     config = {"configurable": {"thread_id": "supervisor_session"}}
@@ -633,14 +632,14 @@ def pattern_4_supervisor_migration() -> None:
     print(f"\n  Workers completed: {result['workers_done']}")
     print(f"  Task complete: {result['task_complete']}")
 
-    print("\n" + cleandoc("""
+    print("""
             ✅ Benefits of LangGraph:
               • Visual coordination flow
               • Easy to add/remove workers
               • Automatic state tracking
               • Can interrupt for approval
               • Checkpointing built-in
-        """))
+        """)
 
 
 # endregion
@@ -651,7 +650,7 @@ def migration_summary() -> None:
     """summary of migration benefits and patterns"""
     print_section("Migration Summary: Why LangGraph?")
 
-    print("\n" + cleandoc("""
+    print("""
         ╔════════════════════════════════════════════════════════════════════╗
         ║                                                                    ║
         ║                  PHASE 4 → LANGGRAPH BENEFITS                      ║
@@ -782,7 +781,7 @@ def migration_summary() -> None:
         • This Module: Complete examples in previous files
         • Mermaid Live: https://mermaid.live
         • Phase 4 Code: /phase4_ai_agents/
-    """))
+    """)
 
     print("\n✅ You now have all the tools to migrate Phase 4 → LangGraph!")
     print("🚀 Start with your simplest agent and work your way up!")
@@ -809,7 +808,7 @@ DEMOS = [
 
 def main() -> None:
     """run all migration demonstrations"""
-    print("\n" + cleandoc("""
+    print("""
         ╔════════════════════════════════════════════════════════════════════╗
         ║                                                                    ║
         ║          MIGRATION GUIDE: PHASE 4 → LANGGRAPH                      ║
@@ -827,7 +826,7 @@ def main() -> None:
         ║  • Common patterns and their conversions                           ║
         ║                                                                    ║
         ╚════════════════════════════════════════════════════════════════════╝
-    """))
+    """)
 
 
     runner = MenuRunner(DEMOS, title="LangGraph Migration from Phase 4")

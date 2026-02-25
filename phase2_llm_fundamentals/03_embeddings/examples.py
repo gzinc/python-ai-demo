@@ -9,7 +9,6 @@ sentence-transformers runs locally (no API key, no internet required after first
 Run with: uv run python phase2_llm_fundamentals/03_embeddings/examples.py
 """
 
-from inspect import cleandoc
 
 import numpy as np
 
@@ -46,7 +45,7 @@ def demo_what_are_embeddings() -> None:
     """intuition: text → fixed-size vector that encodes meaning"""
     print_section("1. What Are Embeddings?")
 
-    print("\n" + cleandoc("""
+    print("""
         An embedding converts text into a fixed-size list of numbers (a vector).
         The key property: similar meanings → similar vectors.
 
@@ -56,7 +55,7 @@ def demo_what_are_embeddings() -> None:
           dim 2 → how emotional is this?
 
         (Real embeddings have 384–1536 dimensions, not 3.)
-    """))
+    """)
 
     # fake 3D embeddings to build intuition — not real model output
     fake_vocab: dict[str, np.ndarray] = {
@@ -127,22 +126,22 @@ def demo_vector_math() -> None:
     print("   → cosine similarity is scale-invariant: the right tool for text")
 
     print("\n3️⃣  The formula:")
-    print("\n" + cleandoc("""
+    print("""
         cos_sim(A, B) = (A · B) / (||A|| × ||B||)
 
           A · B   = dot product = sum of element-wise products
           ||A||   = L2 norm = sqrt(sum of squared elements)
 
           range: -1 (opposite) → 0 (unrelated) → 1 (identical)
-    """))
+    """)
 
     print("4️⃣  numpy implementation (what sentence-transformers uses internally):")
-    print(cleandoc("""
+    print("""
         import numpy as np
 
         def cosine_similarity(vec_a, vec_b):
             return np.dot(vec_a, vec_b) / (np.linalg.norm(vec_a) * np.linalg.norm(vec_b))
-    """))
+    """)
 
 
 # endregion
@@ -154,13 +153,13 @@ def demo_real_embeddings() -> None:
     """generate actual embeddings with sentence-transformers (no API key)"""
     print_section("3. Real Embeddings with sentence-transformers")
 
-    print("\n" + cleandoc("""
+    print("""
         Model: all-MiniLM-L6-v2
           - 22 MB download, runs entirely locally
           - 384-dimensional output vectors
           - trained on 1 billion sentence pairs
           - no API key required
-    """))
+    """)
 
     try:
         from sentence_transformers import SentenceTransformer
@@ -342,7 +341,7 @@ def demo_word_analogies() -> None:
 
     model = SentenceTransformer("all-MiniLM-L6-v2")
 
-    print("\n" + cleandoc("""
+    print("""
         Classic NLP discovery: you can do arithmetic on word embeddings!
 
             king  - man + woman  ≈ queen
@@ -351,7 +350,7 @@ def demo_word_analogies() -> None:
         This works because embeddings encode semantic relationships —
         the vector from 'man' → 'king' is similar to 'woman' → 'queen'.
         The model learns these gender/royalty/geography axes from training data.
-    """))
+    """)
 
     vocabulary = [
         "king", "queen", "man", "woman", "prince", "princess",
@@ -406,10 +405,10 @@ def demo_rag_connection() -> None:
     """explain how embeddings power the Phase 3 RAG pipeline"""
     print_section("7. Connection to Phase 3: RAG Systems")
 
-    print("\n" + cleandoc("""
+    print("""
         Retrieval Augmented Generation (RAG) is built entirely on embeddings.
         Everything we learned here is the foundation of Phase 3.
-    """))
+    """)
 
     print("""
     ┌────────────────────────────────────────────────────────────────────┐
@@ -440,7 +439,7 @@ def demo_rag_connection() -> None:
 
     print("📝 Phase 3 code you already have (phase3_llm_applications/01_rag_system/):")
     print()
-    print(cleandoc("""
+    print("""
         # embedder.py — this is demo 3 at production scale
         embedder = LocalEmbedder(model="all-MiniLM-L6-v2")
         chunk_vecs = embedder.embed_batch(text_chunks)
@@ -457,7 +456,7 @@ def demo_rag_connection() -> None:
         # rag_pipeline.py — uses retrieved context to ground LLM answer
         context = "\\n\\n".join([chunk.content for chunk in top_chunks])
         answer = llm.answer(question=user_question, context=context)
-    """))
+    """)
 
     print("\n🎯 What you now understand about Phase 3:")
     print("   ✅ Why we embed documents      (enables fast similarity search)")

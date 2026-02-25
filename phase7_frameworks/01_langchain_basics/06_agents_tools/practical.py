@@ -10,7 +10,6 @@ Run with: uv run python -m phase7_frameworks.01_langchain_basics.06_agents_tools
 """
 
 from datetime import datetime
-from inspect import cleandoc
 
 from dotenv import load_dotenv
 from langchain.agents import create_agent
@@ -632,7 +631,7 @@ def demo_phase4_comparison() -> None:
     """
     print_section("Demo 7: Phase 4 vs LangChain Comparison")
 
-    print(cleandoc("""
+    print("""
         Your Phase 4 ReActAgent (Custom Implementation):
         ================================================
 
@@ -662,9 +661,9 @@ def demo_phase4_comparison() -> None:
         ✅ Customization: Easy to modify logic
         ❌ Manual work: Error handling, retries, memory
         ❌ Missing: Streaming, async, advanced features
-    """))
+    """)
 
-    print(cleandoc("""
+    print("""
 
         LangChain / LangGraph Agent (Framework):
         =========================================
@@ -687,7 +686,7 @@ def demo_phase4_comparison() -> None:
         ✅ Production: Battle-tested, maintained
         ❌ Abstraction: Internal logic hidden
         ❌ Less control: Framework makes decisions
-    """))
+    """)
 
     print("\n\nWhen to Use Each:")
     print("-" * 70)

@@ -15,7 +15,6 @@ Prerequisites:
 Run with: uv run python phase7_frameworks/03_llamaindex/02_local_setup.py
 """
 
-from inspect import cleandoc
 
 from llama_index.core import Document, Settings, StorageContext, VectorStoreIndex
 
@@ -53,7 +52,7 @@ def demo_local_basic():
 
     if not check_ollama_available():
         print(
-            cleandoc("""
+            """
             ❌ Ollama not detected or no llama model found!
 
             Setup instructions:
@@ -62,7 +61,7 @@ def demo_local_basic():
             3. Verify: ollama list
 
             Skipping demo...
-        """)
+        """
         )
         return
 
@@ -94,27 +93,27 @@ def demo_local_basic():
     # create sample documents
     documents = [
         Document(
-            text=cleandoc("""
+            text="""
                 Retrieval Augmented Generation (RAG) is a technique that combines
                 retrieval and generation. It retrieves relevant documents from a
                 knowledge base and uses them to generate accurate, grounded responses.
                 This reduces hallucinations and improves factual accuracy.
-            """)
+            """
         ),
         Document(
-            text=cleandoc("""
+            text="""
                 Local LLMs like Llama 3.1 can run entirely on your machine.
                 Benefits include complete privacy, no API costs, and offline capability.
                 Trade-offs include slower inference and lower quality compared to GPT-4.
                 Good hardware (16GB+ RAM, GPU) improves performance significantly.
-            """)
+            """
         ),
         Document(
-            text=cleandoc("""
+            text="""
                 Ollama makes running local LLMs easy. It handles model downloads,
                 server management, and provides a simple API. Popular models include
                 Llama 3.1, Mistral, and CodeLlama. Models run via optimized llama.cpp.
-            """)
+            """
         ),
     ]
 
@@ -189,20 +188,20 @@ def demo_local_persistent():
         # create new documents
         documents = [
             Document(
-                text=cleandoc("""
+                text="""
                     ChromaDB is an open-source vector database designed for AI applications.
                     It stores embeddings and enables fast similarity search.
                     ChromaDB can run in-memory or persist data to disk.
                     It integrates seamlessly with LlamaIndex and LangChain.
-                """)
+                """
             ),
             Document(
-                text=cleandoc("""
+                text="""
                     Vector databases are optimized for similarity search using embeddings.
                     Unlike traditional databases, they find semantically similar content.
                     Popular options include ChromaDB, Pinecone, Qdrant, and Weaviate.
                     Local options (ChromaDB, FAISS) are free but less scalable.
-                """)
+                """
             ),
         ]
 
@@ -224,13 +223,13 @@ def demo_local_persistent():
     print(f"📝 Response:\n{response.response}\n")
 
     print(
-        cleandoc(f"""
+        f"""
         💡 Key Points:
         • Data persisted to: {db_path}
         • Run again to see it load existing data
         • Survives restarts - no re-indexing needed
         • 100% local - no cloud dependencies
-    """)
+    """
     )
 
     # cleanup
@@ -264,21 +263,21 @@ def demo_local_chat():
     # create knowledge base
     documents = [
         Document(
-            text=cleandoc("""
+            text="""
                 LlamaIndex chat engines maintain conversation history automatically.
                 They combine retrieval with conversational context for coherent dialogues.
                 The chat engine remembers previous questions and answers.
                 This enables follow-up questions and multi-turn conversations.
-            """)
+            """
         ),
         Document(
-            text=cleandoc("""
+            text="""
                 Chat engines in LlamaIndex come in different modes:
                 - CondenseQuestion mode reformulates queries based on history
                 - React mode uses an agent loop for complex queries
                 - Simple mode for basic conversational retrieval
                 Each mode balances complexity and performance differently.
-            """)
+            """
         ),
     ]
 
@@ -308,14 +307,14 @@ def demo_local_chat():
         print("-" * 70)
 
     print(
-        cleandoc("""
+        """
 
         💡 Notice:
         • Follow-up questions work without re-stating context
         • Chat engine maintains conversation history
         • Completely local - privacy preserved
         • No conversation data sent to cloud
-    """)
+    """
     )
 
 
@@ -330,7 +329,7 @@ def demo_local_vs_cloud():
     print_section("Demo 4: Local vs Cloud Comparison")
 
     print(
-        cleandoc("""
+        """
         📊 Setup Comparison:
 
         ┌─────────────────┬──────────────────────┬──────────────────────┐
@@ -375,7 +374,7 @@ def demo_local_vs_cloud():
         • Llama 3.1 8B: 7-8/10 (good for most tasks)
         • GPT-4 Turbo: 9-10/10 (excellent)
         • GPT-3.5 Turbo: 7-8/10 (similar to Llama 3.1)
-    """)
+    """
     )
 
 
@@ -397,7 +396,7 @@ def main() -> None:
     """run interactive demo menu"""
     if not check_ollama_available():
         print(
-            cleandoc("""
+            """
             ⚠️  Ollama not detected!
 
             To run these demos:
@@ -407,7 +406,7 @@ def main() -> None:
 
             Most demos will be skipped without Ollama.
             Demo 4 (comparison) will still work.
-        """)
+        """
         )
         print()
 

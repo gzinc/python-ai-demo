@@ -10,7 +10,6 @@ Example tasks:
     - "Look up the latest AI trends"
 """
 
-from inspect import cleandoc
 
 from schemas import AgentProfile
 
@@ -26,7 +25,7 @@ RESEARCH_PROFILE = AgentProfile(
         "fact finding",
         "information retrieval",
     ],
-    system_prompt=cleandoc("""
+    system_prompt="""
         You are a research specialist. Your job is to:
         1. Find accurate, relevant information about the given topic
         2. Gather facts and data from reliable sources
@@ -34,7 +33,7 @@ RESEARCH_PROFILE = AgentProfile(
         4. Cite sources when possible
 
         Focus on accuracy over speed. If you're unsure, say so.
-    """).strip(),
+    """.strip(),
 )
 
 
@@ -71,7 +70,7 @@ class ResearchAgent(BaseSpecialist):
         task_lower = task.lower()
 
         if "python" in task_lower:
-            return cleandoc("""
+            return """
                 Research findings on Python:
 
                 1. **Overview**: Python is a high-level programming language known for readability and versatility.
@@ -89,10 +88,10 @@ class ResearchAgent(BaseSpecialist):
                 4. **Trends**: Growing adoption in AI/ML applications, async programming with asyncio.
 
                 Sources: python.org, Stack Overflow Developer Survey 2024
-            """).strip()
+            """.strip()
 
         elif "ai" in task_lower or "artificial intelligence" in task_lower:
-            return cleandoc("""
+            return """
                 Research findings on AI:
 
                 1. **Current State**: AI has seen rapid advancement, especially in large language models (LLMs).
@@ -112,10 +111,10 @@ class ResearchAgent(BaseSpecialist):
                 4. **Trends**: Multi-modal models, AI agents, smaller efficient models.
 
                 Sources: arxiv.org, OpenAI blog, Anthropic research
-            """).strip()
+            """.strip()
 
         elif "weather" in task_lower:
-            return cleandoc("""
+            return """
                 Research findings on weather:
 
                 1. **Current Conditions**: Variable by location, recommend checking local forecast.
@@ -129,11 +128,11 @@ class ResearchAgent(BaseSpecialist):
                 3. **Weather Patterns**: Climate varies significantly by region and season.
 
                 Sources: weather.gov, metoffice.gov.uk
-            """).strip()
+            """.strip()
 
         else:
             topic = task.replace("research", "").replace("find", "").strip()
-            return cleandoc(f"""
+            return f"""
                 Research findings on "{topic}":
 
                 1. **Overview**: {topic} is a topic that requires further investigation.
@@ -149,4 +148,4 @@ class ResearchAgent(BaseSpecialist):
                    - Expert interviews
 
                 Note: This is a preliminary research summary. More specific questions will yield more detailed results.
-            """).strip()
+            """.strip()

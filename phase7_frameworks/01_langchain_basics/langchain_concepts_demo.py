@@ -10,7 +10,6 @@ Run with: uv run python -m phase7_frameworks.01_langchain_basics.langchain_conce
 """
 
 import os
-from inspect import cleandoc
 
 from common.demo_menu import Demo, MenuRunner
 from common.util.utils import print_section
@@ -33,7 +32,7 @@ def demo_rag_setup() -> None:
     """compare RAG setup: Phase 3 vs LangChain"""
     print_section("1. RAG System Setup")
 
-    phase3_code = cleandoc('''
+    phase3_code = '''
         # Phase 3: Manual RAG setup (5 files, ~300 lines)
 
         # chunking.py
@@ -57,9 +56,9 @@ def demo_rag_setup() -> None:
         context = "\\n\\n".join([result.content for result in results])
         prompt = f"Context: {context}\\n\\nQuestion: {query}"
         answer = openai_client.chat.completions.create(...)
-    ''')
+    '''
 
-    langchain_code = cleandoc('''
+    langchain_code = '''
         # LangChain: Abstracted RAG setup (~20 lines)
 
         from langchain_community.vectorstores import Chroma
@@ -88,7 +87,7 @@ def demo_rag_setup() -> None:
 
         # 4. query
         answer = qa_chain.invoke({"query": "What are embeddings?"})
-    ''')
+    '''
 
     print_code("PHASE 3: Explicit Control", phase3_code)
     print_code("LANGCHAIN: Abstracted", langchain_code)
@@ -104,7 +103,7 @@ def demo_rag_query() -> None:
     print_section("2. RAG Query Flow")
 
     print("\n📋 PHASE 3 FLOW (Explicit Steps):")
-    print(cleandoc('''
+    print('''
         query = "What are embeddings?"
 
         # 1. embed query
@@ -127,10 +126,10 @@ def demo_rag_query() -> None:
         answer = response.choices[0].message.content
 
         # you control each step, easy to debug, can customize everything
-    '''))
+    ''')
 
     print("\n📋 LANGCHAIN FLOW (Abstracted):")
-    print(cleandoc('''
+    print('''
         query = "What are embeddings?"
 
         # all steps combined into one call!
@@ -146,7 +145,7 @@ def demo_rag_query() -> None:
         # - LLM call (automatic)
 
         # faster to write, but less visibility into each step
-    '''))
+    ''')
 
     print("\n💡 TRADE-OFF:")
     print("   - Debugging: Phase 3 easier (see each step)")
@@ -160,7 +159,7 @@ def demo_memory() -> None:
     """compare conversation memory approaches"""
     print_section("3. Conversation Memory")
 
-    phase3_code = cleandoc('''
+    phase3_code = '''
         # Phase 3: Custom ChatMemory class
 
         class ChatMemory:
@@ -184,9 +183,9 @@ def demo_memory() -> None:
         memory = ChatMemory(strategy="sliding_window", max_messages=10)
         memory.add_message("user", "What are embeddings?")
         memory.add_message("assistant", "Embeddings are...")
-    ''')
+    '''
 
-    langchain_code = cleandoc('''
+    langchain_code = '''
         # LangChain: Pre-built memory strategies
 
         from langchain.memory import ConversationBufferWindowMemory
@@ -205,7 +204,7 @@ def demo_memory() -> None:
         # - VectorStoreBackedMemory (semantic retrieval of past conversations)
 
         # pre-built and tested, but less control over custom logic
-    ''')
+    '''
 
     print_code("PHASE 3: Custom Logic", phase3_code)
     print_code("LANGCHAIN: Pre-built Strategies", langchain_code)
@@ -222,7 +221,7 @@ def demo_chains() -> None:
     """demonstrate LangChain Expression Language (LCEL)"""
     print_section("4. Chains & LCEL Syntax")
 
-    phase3_code = cleandoc('''
+    phase3_code = '''
         # Phase 3: Manual function composition
 
         def summarize_then_analyze(text: str) -> dict[str, str]:
@@ -238,9 +237,9 @@ def demo_chains() -> None:
 
         # explicit, easy to debug, clear control flow
         result = summarize_then_analyze("Long text...")
-    ''')
+    '''
 
-    langchain_code = cleandoc('''
+    langchain_code = '''
         # LangChain: LCEL (pipe operator composition)
 
         from langchain_openai import ChatOpenAI
@@ -268,7 +267,7 @@ def demo_chains() -> None:
 
         # benefits: streaming, async, error handling built-in
         # cost: less explicit, harder to debug intermediate steps
-    ''')
+    '''
 
     print_code("PHASE 3: Explicit Functions", phase3_code)
     print_code("LANGCHAIN: LCEL Composition", langchain_code)
@@ -292,7 +291,7 @@ def demo_practical_examples() -> None:
     print_section("5. Practical Examples")
 
     print("\n📝 EXAMPLE 1: Simple RAG Query")
-    print(cleandoc('''
+    print('''
         # what you'd write with LangChain:
         result = qa_chain.invoke({"query": "What are embeddings?"})
         print(result["result"])
@@ -306,10 +305,10 @@ def demo_practical_examples() -> None:
         # 6. extract answer
 
         Trade-off: 1 line vs 30 lines, but less control
-    '''))
+    ''')
 
     print("\n📝 EXAMPLE 2: Streaming Responses")
-    print(cleandoc('''
+    print('''
         # LangChain makes streaming easy:
         for chunk in qa_chain.stream({"query": "Explain RAG"}):
             print(chunk, end="", flush=True)
@@ -320,10 +319,10 @@ def demo_practical_examples() -> None:
         # - accumulating full response
 
         LangChain wins here: streaming abstracted well
-    '''))
+    ''')
 
     print("\n📝 EXAMPLE 3: Hybrid Approach")
-    print(cleandoc('''
+    print('''
         # use LangChain for setup:
         vectorstore = Chroma.from_documents(...)
         retriever = vectorstore.as_retriever()
@@ -342,7 +341,7 @@ def demo_practical_examples() -> None:
             return reranked[:3]
 
         # best of both worlds!
-    '''))
+    ''')
 # endregion
 
 
@@ -372,7 +371,7 @@ def demo_decision_framework() -> None:
     print("   - This is most common in production!")
 
     print("\n📊 COMPLEXITY DECISION:")
-    print(cleandoc('''
+    print('''
         Project Complexity → Best Approach
 
         • Single doc collection, basic search      → Phase 3 (simpler)
@@ -381,7 +380,7 @@ def demo_decision_framework() -> None:
         • Standard RAG + monitoring               → LangChain (built-in tools)
         • Performance critical, cost sensitive     → Phase 3 + Phase 5 (optimized)
         • Multi-agent with tools                   → LangGraph (Module 2)
-    '''))
+    ''')
 # endregion
 
 

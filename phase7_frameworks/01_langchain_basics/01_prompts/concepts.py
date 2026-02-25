@@ -9,7 +9,6 @@ Run: uv run python -m phase7_frameworks.01_langchain_basics.01_prompts.concepts
 No API key required - demonstrates patterns through output inspection.
 """
 
-from inspect import cleandoc
 from typing import Any
 
 from langchain_core.prompts import (
@@ -63,7 +62,7 @@ def demo_basic_templates() -> None:
     print_output("PromptTemplate Result", langchain_prompt)
 
     print_subsection("Why Use PromptTemplate?")
-    benefits = cleandoc('''
+    benefits = '''
         ✅ Reusability: Define once, use many times
         ✅ Validation: Ensures all required variables are provided
         ✅ Type Safety: Clear input/output contracts
@@ -71,7 +70,7 @@ def demo_basic_templates() -> None:
         ✅ Testing: Easier to test templates independently
 
         ❌ Trade-off: More abstraction overhead for simple cases
-    ''')
+    '''
     print(f"\n{benefits}")
 
     # Show validation
@@ -83,7 +82,7 @@ def demo_basic_templates() -> None:
         print_output("Validation Error (expected)", str(e))
 
     print_subsection("When to Use What?")
-    guidance = cleandoc('''
+    guidance = '''
         Use F-Strings when:
         - Simple, one-off prompts
         - Few variables (<3)
@@ -95,7 +94,7 @@ def demo_basic_templates() -> None:
         - Need input validation
         - Combining with LangChain chains
         - Multiple template variations
-    ''')
+    '''
     print(f"\n{guidance}")
 
 
@@ -115,13 +114,13 @@ def demo_partial_templates() -> None:
     template = PromptTemplate(
         input_variables=["question"],
         partial_variables={"company": "Acme Corp", "tone": "friendly"},
-        template=cleandoc('''
+        template='''
             You are a {tone} {company} support agent.
 
             User question: {question}
 
             Provide a helpful response:
-        '''),
+        ''',
     )
 
     print_output("Template Structure", template.template)
@@ -142,7 +141,7 @@ def demo_partial_templates() -> None:
         print(prompt)
 
     print_subsection("Why Use Partial Templates?")
-    benefits = cleandoc('''
+    benefits = '''
         ✅ DRY Principle: Define common variables once
         ✅ Consistency: Ensure consistent tone/branding
         ✅ Flexibility: Override partials when needed
@@ -152,7 +151,7 @@ def demo_partial_templates() -> None:
         - Multi-tenant applications
         - Configurable agents
         - Role-based prompts
-    ''')
+    '''
     print(f"\n{benefits}")
 
 
@@ -201,7 +200,7 @@ def demo_chat_templates() -> None:
         print(f"  [{role}]: {msg.content}")
 
     print_subsection("Why Use ChatPromptTemplate?")
-    benefits = cleandoc('''
+    benefits = '''
         ✅ Structure: Clear role-based message organization
         ✅ Few-Shot: Easy to add example conversations
         ✅ Validation: Ensures proper message format
@@ -212,7 +211,7 @@ def demo_chat_templates() -> None:
         - Role-based prompting
         - Few-shot learning
         - Chat history injection
-    ''')
+    '''
     print(f"\n{benefits}")
 
 
@@ -272,7 +271,7 @@ def demo_messages_placeholder() -> None:
     print(f"\nGenerated {len(messages)} messages (system + {len(long_history)} history + 1 new)")
 
     print_subsection("Why Use MessagesPlaceholder?")
-    benefits = cleandoc('''
+    benefits = '''
         ✅ Dynamic Length: Handles variable chat history
         ✅ Type Safety: Ensures messages are proper format
         ✅ Flexibility: Works with any message type
@@ -283,7 +282,7 @@ def demo_messages_placeholder() -> None:
         - Conversational RAG
         - Multi-turn agents
         - Context-aware responses
-    ''')
+    '''
     print(f"\n{benefits}")
 
 
@@ -353,7 +352,7 @@ def demo_few_shot_templates() -> None:
     print_output("\nLong Input (automatic example reduction)", f"[{len(long_prompt)} chars]")
 
     print_subsection("Why Use FewShotPromptTemplate?")
-    benefits = cleandoc('''
+    benefits = '''
         ✅ In-Context Learning: Teach LLM through examples
         ✅ Consistency: Standardized example formatting
         ✅ Dynamic Selection: Auto-reduce examples for token limits
@@ -364,7 +363,7 @@ def demo_few_shot_templates() -> None:
         - Structured output
         - Task-specific formatting
         - Consistent response patterns
-    ''')
+    '''
     print(f"\n{benefits}")
 
 
@@ -421,7 +420,7 @@ def demo_few_shot_chat_templates() -> None:
         print(f"  [{role}]: {content}")
 
     print_subsection("Why Use FewShotChatMessagePromptTemplate?")
-    benefits = cleandoc('''
+    benefits = '''
         ✅ Response Style: Teach consistent response patterns
         ✅ Chat Format: Natural conversation examples
         ✅ Composability: Combines with ChatPromptTemplate
@@ -432,7 +431,7 @@ def demo_few_shot_chat_templates() -> None:
         - Consistent formatting patterns
         - Educational chatbots
         - Branded response voices
-    ''')
+    '''
     print(f"\n{benefits}")
 
 
@@ -453,10 +452,10 @@ def demo_template_composition() -> None:
         "You are an expert in {domain}"
     )
 
-    context_template = PromptTemplate.from_template(cleandoc('''
+    context_template = PromptTemplate.from_template('''
         Context:
         {context}
-    '''))
+    ''')
 
     question_template = PromptTemplate.from_template(
         "Question: {question}"
@@ -480,12 +479,12 @@ def demo_template_composition() -> None:
 
     # Create reusable components
     rag_system = "You are a RAG system assistant"
-    rag_instructions = cleandoc('''
+    rag_instructions = '''
         Instructions:
         1. Use the provided context
         2. Cite sources when possible
         3. Admit if information is not in context
-    ''')
+    '''
 
     # Pipeline template
     pipeline_template = ChatPromptTemplate.from_messages([
@@ -498,7 +497,7 @@ def demo_template_composition() -> None:
     print_output("\nPipeline Template Structure", pipeline_template.messages)
 
     print_subsection("Why Compose Templates?")
-    benefits = cleandoc('''
+    benefits = '''
         ✅ Modularity: Reuse components across prompts
         ✅ Maintainability: Update components independently
         ✅ Clarity: Clear separation of concerns
@@ -509,7 +508,7 @@ def demo_template_composition() -> None:
         - Multi-stage agents
         - Configurable systems
         - Large prompt libraries
-    ''')
+    '''
     print(f"\n{benefits}")
 
 
@@ -523,7 +522,7 @@ def demo_decision_framework() -> None:
     """demonstrate when to use each template type"""
     print_section("8. Decision Framework: Choosing the Right Template")
 
-    decision_tree = cleandoc('''
+    decision_tree = '''
         ┌─ Need multi-message structure? (system/user/assistant)
         │  ├─ Yes ─> ChatPromptTemplate
         │  │         ├─ Need dynamic history? -> MessagesPlaceholder
@@ -542,7 +541,7 @@ def demo_decision_framework() -> None:
            • Multi-turn chat -> ChatPromptTemplate
            • Teaching by example -> FewShotPromptTemplate
            • Complex systems -> Template composition
-    ''')
+    '''
 
     print(f"\n{decision_tree}")
 
@@ -564,7 +563,7 @@ def demo_decision_framework() -> None:
 
     print_subsection("Trade-offs Summary")
 
-    tradeoffs = cleandoc('''
+    tradeoffs = '''
         F-Strings:
         ✅ Simplicity, speed, familiarity
         ❌ No validation, hard to reuse, testing difficult
@@ -584,7 +583,7 @@ def demo_decision_framework() -> None:
         Composition:
         ✅ Modularity, flexibility, powerful
         ❌ High complexity, harder to debug
-    ''')
+    '''
 
     print(f"\n{tradeoffs}")
 

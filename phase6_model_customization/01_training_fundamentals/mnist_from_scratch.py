@@ -14,7 +14,6 @@ GPU mode: uv run python phase6_model_customization/01_training_fundamentals/mnis
 
 import argparse
 import time
-from inspect import cleandoc
 
 import torch
 import torch.nn as nn
@@ -294,7 +293,7 @@ def main():
     # show what happened to the weights
     print_section("What Just Happened?")
 
-    explanation = cleandoc("""
+    explanation = """
     You just trained a neural network! Here's what happened:
 
     1. INITIALIZATION
@@ -321,7 +320,7 @@ def main():
        - Change epochs (--epochs 10)
        - Change learning rate (--lr 0.01 or --lr 0.0001)
        - Run on GPU (--gpu) to see speed difference
-    """)
+    """
     print(explanation)
 
 

@@ -9,7 +9,6 @@ Run: uv run python -m phase7_frameworks.01_langchain_basics.01_prompts.practical
 Requires: OPENAI_API_KEY in .env
 """
 
-from inspect import cleandoc
 from typing import TYPE_CHECKING
 
 from langchain_core.messages import AIMessage, HumanMessage
@@ -130,14 +129,14 @@ def demo_prompt_template_with_llm() -> None:
         print_llm_output("LLM Response", response.content)
 
     print_subsection("Key Pattern: LCEL Composition")
-    explanation = cleandoc('''
+    explanation = '''
         template | llm
 
         ✅ Pipe operator (|) chains components
         ✅ Template formats prompt
         ✅ LLM processes formatted prompt
         ✅ Returns AIMessage with response
-    ''')
+    '''
     print(f"\n{explanation}")
 
 
@@ -366,12 +365,12 @@ def demo_messages_placeholder_with_llm() -> None:
     print_llm_output("AI", response.content)
 
     print_subsection("Why This Works")
-    explanation = cleandoc('''
+    explanation = '''
         ✅ MessagesPlaceholder injects full conversation history
         ✅ LLM sees all previous context for coherent responses
         ✅ No manual prompt engineering for context
         ✅ Foundation for chat memory systems
-    ''')
+    '''
     print(f"\n{explanation}")
 
 
@@ -485,13 +484,13 @@ def demo_few_shot_with_llm() -> None:
         print(f"  Sentiment: {sentiment}")
 
     print_subsection("Why Few-Shot Works")
-    explanation = cleandoc('''
+    explanation = '''
         ✅ LLM learns format from examples
         ✅ Consistent output structure
         ✅ No fine-tuning required
         ✅ Easy to update examples
         ✅ Works with any classification task
-    ''')
+    '''
     print(f"\n{explanation}")
 
 
@@ -564,7 +563,7 @@ def demo_few_shot_chat_with_llm() -> None:
     examples = [
         {
             "input": "What is a REST API?",
-            "output": cleandoc('''
+            "output": '''
                 A REST API is an interface for communication between systems.
 
                 🔑 Key Points:
@@ -573,11 +572,11 @@ def demo_few_shot_chat_with_llm() -> None:
                 • Resource-based URLs
 
                 💡 Example: GET /users/123 retrieves user #123
-            '''),
+            ''',
         },
         {
             "input": "What is GraphQL?",
-            "output": cleandoc('''
+            "output": '''
                 GraphQL is a query language for APIs that lets clients request exactly the data they need.
 
                 🔑 Key Points:
@@ -586,7 +585,7 @@ def demo_few_shot_chat_with_llm() -> None:
                 • Reduces over-fetching
 
                 💡 Example: Query { user(id: 123) { name, email } }
-            '''),
+            ''',
         },
     ]
 
@@ -622,12 +621,12 @@ def demo_few_shot_chat_with_llm() -> None:
     print_llm_output("Styled Response", response.content)
 
     print_subsection("Why This Pattern Works")
-    explanation = cleandoc('''
+    explanation = '''
         ✅ LLM learns tone and structure from examples
         ✅ Consistent formatting across responses
         ✅ Easy to update style by changing examples
         ✅ Perfect for branded or educational content
-    ''')
+    '''
     print(f"\n{explanation}")
 
 
@@ -760,12 +759,12 @@ def demo_output_parsers() -> None:
     print(json.dumps(result, indent=2))
 
     print_subsection("Why Use Output Parsers?")
-    explanation = cleandoc('''
+    explanation = '''
         ✅ Type Safety: Convert strings to structured data
         ✅ Validation: Ensure LLM output matches schema
         ✅ Integration: Easy to use parsed data in code
         ✅ Error Handling: Catch malformed responses
-    ''')
+    '''
     print(f"\n{explanation}")
 
 
@@ -840,7 +839,7 @@ def demo_partial_with_runtime() -> None:
 
     # Create template with partial callable
     template = PromptTemplate(
-        template=cleandoc('''
+        template='''
             {context}
 
             You are a helpful assistant.
@@ -848,7 +847,7 @@ def demo_partial_with_runtime() -> None:
             Question: {question}
 
             Provide a brief answer considering the current context:
-        '''),
+        ''',
         input_variables=["question"],
         partial_variables={"context": get_current_context},
     )
@@ -863,7 +862,7 @@ def demo_partial_with_runtime() -> None:
     print_llm_output("Context-Aware Response", response.content)
 
     print_subsection("Why Use Partial Callables?")
-    explanation = cleandoc('''
+    explanation = '''
         ✅ Dynamic Data: Inject runtime information automatically
         ✅ DRY Principle: Reuse templates with changing context
         ✅ Consistency: Same context logic across all uses
@@ -873,7 +872,7 @@ def demo_partial_with_runtime() -> None:
         • User session data
         • System configuration
         • Environment context
-    ''')
+    '''
     print(f"\n{explanation}")
 
 

@@ -9,7 +9,6 @@ Run with: uv run python phase2_llm_fundamentals/01_prompt_engineering/examples.p
 """
 
 import json
-from inspect import cleandoc
 
 from common.demo_menu import Demo, MenuRunner
 from common.util.utils import print_section
@@ -49,7 +48,7 @@ def basic_prompts() -> None:
 
     # good prompt
     print("\n✅ GOOD PROMPT (specific):")
-    good_prompt = cleandoc("""
+    good_prompt = """
         Summarize the following document in exactly 3 bullet points.
         Focus on: key decisions made and action items.
         Format: Start each bullet with an action verb.
@@ -59,13 +58,13 @@ def basic_prompts() -> None:
         improving API performance by 50%. Sarah will lead the optimization
         effort. Budget of $10K approved for new monitoring tools.
         Timeline: complete by December 15th.
-    """)
+    """
     print_prompt(good_prompt)
-    print_response(cleandoc("""
+    print_response("""
         • Prioritize API performance improvement targeting 50% speed increase
         • Assign Sarah as lead for the optimization initiative
         • Allocate $10K budget for monitoring tools with Dec 15 deadline
-    """))
+    """)
 
     print("\n💡 Key Principles:")
     print("   1. Be specific about what you want")
@@ -94,20 +93,20 @@ def system_prompts() -> None:
 
     # example 1: coding assistant
     print("\n--- Example 1: Coding Assistant ---")
-    system_prompt = cleandoc("""
+    system_prompt = """
         You are an expert Python developer.
         Follow these rules:
         - Always include type hints
         - Add brief docstrings to functions
         - Prefer simple, readable code over clever tricks
         - If asked to review code, point out bugs AND suggest improvements
-    """)
+    """
     print_prompt(system_prompt, "SYSTEM PROMPT")
 
     user_message = "Write a function to check if a number is prime"
     print_prompt(user_message, "USER MESSAGE")
 
-    print_response(cleandoc("""
+    print_response("""
         def is_prime(n: int) -> bool:
             \"\"\"check if n is a prime number\"\"\"
             if n < 2:
@@ -116,11 +115,11 @@ def system_prompts() -> None:
                 if n % i == 0:
                     return False
             return True
-    """))
+    """)
 
     # example 2: RAG assistant
     print("\n--- Example 2: RAG System Assistant ---")
-    rag_system_prompt = cleandoc("""
+    rag_system_prompt = """
         You are an HR assistant for Acme Corp.
         Your knowledge comes from company documents provided as context.
 
@@ -129,7 +128,7 @@ def system_prompts() -> None:
         - If the answer isn't in the context, say "I don't have that information"
         - Always cite which document the information came from
         - Be concise but complete
-    """)
+    """
     print_prompt(rag_system_prompt, "SYSTEM PROMPT (RAG)")
 
     print("\n💡 System Prompt Best Practices:")
@@ -152,7 +151,7 @@ def few_shot_learning() -> None:
     print("Few-shot = give examples, model learns the pattern\n")
 
     # example: entity extraction
-    few_shot_prompt = cleandoc("""
+    few_shot_prompt = """
         Extract entities from text as JSON.
 
         Examples:
@@ -165,13 +164,13 @@ def few_shot_learning() -> None:
 
         Text: "The CEO of Amazon, Andy Jassy, announced the news from Austin"
         Output:
-    """)
+    """
     print_prompt(few_shot_prompt, "FEW-SHOT PROMPT")
     print_response('{"person": "Andy Jassy", "company": "Amazon", "location": "Austin"}')
 
     # example: sentiment classification
     print("\n--- Few-Shot Classification ---")
-    classification_prompt = cleandoc("""
+    classification_prompt = """
         Classify the sentiment of customer reviews.
 
         Review: "This product is amazing! Best purchase ever!"
@@ -185,7 +184,7 @@ def few_shot_learning() -> None:
 
         Review: "Absolutely love it, exceeded my expectations!"
         Sentiment:
-    """)
+    """
     print_prompt(classification_prompt, "FEW-SHOT CLASSIFICATION")
     print_response("POSITIVE")
 
@@ -210,18 +209,18 @@ def chain_of_thought() -> None:
 
     # without CoT
     print("--- Without CoT (often wrong) ---")
-    simple_prompt = cleandoc("""
+    simple_prompt = """
         Q: A store has 3 shelves. Each shelf has 4 boxes.
            Each box has 5 items. How many items total?
         A:
-    """)
+    """
     print_prompt(simple_prompt, "SIMPLE PROMPT")
     print_response("Answer: 35 items")  # might be wrong
     print("(Model might skip steps and make errors)")
 
     # with CoT
     print("\n--- With Chain-of-Thought (more accurate) ---")
-    cot_prompt = cleandoc("""
+    cot_prompt = """
         Q: A store has 3 shelves. Each shelf has 4 boxes.
            Each box has 5 items. How many items total?
 
@@ -231,32 +230,32 @@ def chain_of_thought() -> None:
         3. Finally, calculate total items
 
         A:
-    """)
+    """
     print_prompt(cot_prompt, "COT PROMPT")
-    print_response(cleandoc("""
+    print_response("""
         Let me work through this:
         1. Each shelf has 4 boxes
         2. Total boxes = 3 shelves × 4 boxes = 12 boxes
         3. Total items = 12 boxes × 5 items = 60 items
 
         Answer: 60 items
-    """))
+    """)
 
     # zero-shot CoT (just add "think step by step")
     print("\n--- Zero-Shot CoT (simple trick) ---")
-    zero_shot_cot = cleandoc("""
+    zero_shot_cot = """
         Q: If a train travels at 60 mph for 2.5 hours, how far does it go?
 
         Think step by step, then give your answer.
-    """)
+    """
     print_prompt(zero_shot_cot, "ZERO-SHOT COT")
-    print_response(cleandoc("""
+    print_response("""
         Step 1: Identify the formula - distance = speed × time
         Step 2: Speed = 60 mph, Time = 2.5 hours
         Step 3: Distance = 60 × 2.5 = 150 miles
 
         Answer: 150 miles
-    """))
+    """)
 
     print("\n💡 When to Use CoT:")
     print("   ✅ Math problems")
@@ -278,7 +277,7 @@ def output_formatting() -> None:
 
     # JSON output
     print("--- JSON Output ---")
-    json_prompt = cleandoc("""
+    json_prompt = """
         Analyze this code and respond in JSON format:
 
         ```python
@@ -293,20 +292,20 @@ def output_formatting() -> None:
             "severity": "low" | "medium" | "high",
             "fix": "suggested fix"
         }
-    """)
+    """
     print_prompt(json_prompt, "JSON FORMAT PROMPT")
-    print_response(cleandoc("""
+    print_response("""
         {
             "has_bugs": true,
             "bugs": ["No handling for division by zero"],
             "severity": "high",
             "fix": "Add check: if b == 0: raise ValueError('Cannot divide by zero')"
         }
-    """))
+    """)
 
     # markdown output
     print("\n--- Markdown Output ---")
-    markdown_prompt = cleandoc("""
+    markdown_prompt = """
         Explain Python decorators.
 
         Format your response as:
@@ -318,9 +317,9 @@ def output_formatting() -> None:
 
         ## When to Use
         (bullet points)
-    """)
+    """
     print_prompt(markdown_prompt, "MARKDOWN FORMAT PROMPT")
-    print_response(cleandoc("""
+    print_response("""
         ## Overview
         Decorators are functions that modify the behavior of other functions.
 
@@ -344,7 +343,7 @@ def output_formatting() -> None:
         - Timing performance
         - Authentication/authorization
         - Caching results
-    """))
+    """)
 
     print("\n💡 Format Tips:")
     print("   1. Show the exact format you want")
@@ -367,14 +366,14 @@ def rag_prompt_patterns() -> None:
 
     # basic RAG pattern
     print("--- Pattern 1: Basic Context + Question ---")
-    basic_rag = cleandoc("""
+    basic_rag = """
         Context:
         {context}
 
         Question: {question}
 
         Answer based only on the context provided.
-    """)
+    """
     print_prompt(basic_rag.format(
         context="Employees receive 15 days of paid vacation per year. "
                 "Unused days roll over up to 30 days maximum.",
@@ -384,7 +383,7 @@ def rag_prompt_patterns() -> None:
 
     # citation pattern
     print("\n--- Pattern 2: With Citations ---")
-    citation_rag = cleandoc("""
+    citation_rag = """
         Context:
         [1] Vacation policy: 15 days PTO annually
         [2] Remote work: 3 days per week allowed
@@ -393,13 +392,13 @@ def rag_prompt_patterns() -> None:
         Question: What are the remote work rules?
 
         Answer with citations in [n] format:
-    """)
+    """
     print_prompt(citation_rag)
     print_response("Employees can work remotely 3 days per week [2].")
 
     # strict grounding pattern
     print("\n--- Pattern 3: Strict Grounding (Reduce Hallucinations) ---")
-    strict_rag = cleandoc("""
+    strict_rag = """
         You are a helpful assistant that answers questions based on provided context.
 
         IMPORTANT RULES:
@@ -414,7 +413,7 @@ def rag_prompt_patterns() -> None:
         Question: {question}
 
         Answer:
-    """)
+    """
     print_prompt(strict_rag.format(
         context="The company was founded in 2020. Headquarters is in Austin, TX.",
         question="Who is the CEO?"
@@ -442,7 +441,7 @@ def error_handling() -> None:
 
     # handling uncertainty
     print("--- Handling Uncertainty ---")
-    uncertainty_prompt = cleandoc("""
+    uncertainty_prompt = """
         Answer the question based on the context.
 
         If you're not sure, respond with:
@@ -455,32 +454,32 @@ def error_handling() -> None:
         Context: Python was created by Guido van Rossum.
 
         Question: When was Python created?
-    """)
+    """
     print_prompt(uncertainty_prompt)
-    print_response(cleandoc("""
+    print_response("""
         {
             "answer": null,
             "confidence": "low",
             "reasoning": "The context mentions the creator but not the creation date"
         }
-    """))
+    """)
 
     # handling bad input
     print("\n--- Handling Bad Input ---")
-    bad_input_prompt = cleandoc("""
+    bad_input_prompt = """
         Extract the email from this text.
         If no valid email is found, return {"email": null, "error": "reason"}.
 
         Text: "Contact me at john [at] gmail"
 
         Response:
-    """)
+    """
     print_prompt(bad_input_prompt)
     print_response('{"email": null, "error": "Obfuscated email format, not a valid address"}')
 
     # multi-language handling
     print("\n--- Language Handling ---")
-    language_prompt = cleandoc("""
+    language_prompt = """
         Detect the language and translate to English if needed.
         Always respond in English.
 
@@ -492,15 +491,15 @@ def error_handling() -> None:
         }
 
         Input: "Bonjour, comment allez-vous?"
-    """)
+    """
     print_prompt(language_prompt)
-    print_response(cleandoc("""
+    print_response("""
         {
             "detected_language": "French",
             "original": "Bonjour, comment allez-vous?",
             "english": "Hello, how are you?"
         }
-    """))
+    """)
 
     print("\n💡 Error Handling Tips:")
     print("   1. Always specify what to do when things go wrong")
@@ -519,7 +518,7 @@ def complete_example() -> None:
     """a complete, production-ready prompt example"""
     print_section("8. Complete Production-Ready Example")
 
-    complete_prompt = cleandoc("""
+    complete_prompt = """
         SYSTEM:
         You are a customer support assistant for TechCorp.
         You help users with product questions based on our documentation.
@@ -552,13 +551,13 @@ def complete_example() -> None:
         3. Suggested next steps (if applicable)
 
         RESPONSE:
-    """)
+    """
 
     print_prompt(complete_prompt.format(
         question="What's the difference between X100 and X200?"
     ))
 
-    print_response(cleandoc("""
+    print_response("""
         1. **Direct Answer:**
            The main differences between X100 and X200 are:
            - Price: X100 is $299, X200 is $499
@@ -572,7 +571,7 @@ def complete_example() -> None:
         3. **Next Steps:**
            Would you like more details about either model, or information
            about current promotions?
-    """))
+    """)
 
     print("\n💡 Production Prompt Checklist:")
     print("   ✅ Clear system role defined")

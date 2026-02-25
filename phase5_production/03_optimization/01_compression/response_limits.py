@@ -15,7 +15,6 @@ PRODUCTION EXAMPLE:
 Run with: uv run python -m phase5_production.03_optimization.01_compression.response_limits
 """
 from dataclasses import dataclass
-from inspect import cleandoc
 from typing import Any
 
 from dotenv import load_dotenv
@@ -159,10 +158,10 @@ def demo_real_openai_comparison() -> None:
 
     test_text = "URGENT: You've won $1,000,000! Click here to claim your prize NOW!!!"
 
-    system_prompt = cleandoc('''
+    system_prompt = '''
         Classify the following text as one of: spam, ham, or unknown.
         Respond with ONLY the classification label.
-    ''')
+    '''
 
     print("=" * 70)
     print("  Real OpenAI Demo: Response Limits in Action")
