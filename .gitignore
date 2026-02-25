@@ -1,4 +1,6 @@
 chroma_rag_db
+chroma_rag_db/
+chroma_rag_db/*
 
 # Python
 __pycache__/
@@ -60,7 +62,6 @@ models/checkpoints/
 *.log
 .chromadb/         # Vector DB storage
 .chromadb
-chroma_rag_db
 
 # Phase 6: Model Customization
 mnist_model.pt     # trained model output
