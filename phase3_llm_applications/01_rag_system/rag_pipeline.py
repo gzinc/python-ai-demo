@@ -21,15 +21,13 @@ Run with: uv run python phase3_llm_applications/01_rag_system/rag_pipeline.py
 """
 
 import os
-from pathlib import Path
 from inspect import cleandoc
-from typing import Optional
+from pathlib import Path
 
-from dotenv import load_dotenv
-
-from schemas import Document, Chunk, RetrievalResult
 from chunking import chunk_by_paragraph
+from dotenv import load_dotenv
 from retrieval import Retriever, assemble_context
+from schemas import Chunk, Document, RetrievalResult
 
 load_dotenv()
 
@@ -188,7 +186,7 @@ class RAGPipeline:
     def retrieve(
         self,
         query: str,
-        top_k: Optional[int] = None,
+        top_k: int | None = None,
     ) -> list[RetrievalResult]:
         """retrieve relevant chunks for a query"""
         return self.retriever.retrieve(query, top_k)
@@ -239,7 +237,7 @@ class RAGPipeline:
     def query(
         self,
         question: str,
-        top_k: Optional[int] = None,
+        top_k: int | None = None,
         return_context: bool = False,
     ) -> str | tuple[str, list[RetrievalResult]]:
         """

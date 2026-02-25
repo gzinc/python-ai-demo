@@ -20,7 +20,6 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from enum import Enum
 from inspect import cleandoc
-from typing import Protocol
 
 
 class MetricType(Enum):
@@ -31,10 +30,7 @@ class MetricType(Enum):
     ANSWER_RELEVANCE = "answer_relevance"
 
 
-# =============================================================================
-# Evaluation Backends
-# =============================================================================
-
+# region Evaluation Backends
 
 class Scorer(ABC):
     """base class for evaluation scorers"""
@@ -188,11 +184,9 @@ class HeuristicScorer(Scorer):
         overlap = len(words_a & words_b)
         return min(1.0, overlap / len(words_a))
 
+# endregion
 
-# =============================================================================
-# RAG Evaluation
-# =============================================================================
-
+# region RAG Evaluation
 
 @dataclass
 class RAGEvaluation:
@@ -400,8 +394,8 @@ class RAGEvaluator:
 
         return (num_score + cap_score) / 2
 
+# endregion
 
-# =============================================================================
 # region Demo Functions
 
 def demo_rag_evaluation() -> None:

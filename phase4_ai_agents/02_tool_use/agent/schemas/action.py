@@ -3,7 +3,7 @@ Agent Action and Result - represents steps and outcomes in the agent loop.
 """
 
 from dataclasses import dataclass, field
-from typing import Any, Optional
+from typing import Any
 
 
 @dataclass
@@ -20,9 +20,9 @@ class AgentAction:
     """
 
     thought: str
-    tool_name: Optional[str] = None
+    tool_name: str | None = None
     tool_args: dict[str, Any] = field(default_factory=dict)
-    observation: Optional[str] = None
+    observation: str | None = None
     is_final: bool = False
 
     @property
@@ -53,7 +53,7 @@ class AgentResult:
     actions: list[AgentAction] = field(default_factory=list)
     iterations: int = 0
     success: bool = True
-    error: Optional[str] = None
+    error: str | None = None
 
     @property
     def total_thoughts(self) -> int:

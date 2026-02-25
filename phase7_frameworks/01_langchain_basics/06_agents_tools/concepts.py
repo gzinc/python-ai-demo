@@ -12,8 +12,6 @@ from inspect import cleandoc
 from common.demo_menu import Demo, MenuRunner
 from common.util.utils import print_section
 
-
-
 # region Demo 1: Agent vs Chain
 
 
@@ -471,7 +469,7 @@ def main() -> None:
     print("  No API key required - demonstrates patterns only")
     print("=" * 70)
 
-    
+
     runner = MenuRunner(DEMOS, title="TODO: Add title")
     runner.run()
 

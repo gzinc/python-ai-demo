@@ -10,20 +10,18 @@ This module demonstrates fundamental LlamaIndex concepts:
 Run with: uv run python phase7_frameworks/03_llamaindex/01_basic_indexing.py
 """
 
-from pathlib import Path
 from inspect import cleandoc
+from pathlib import Path
 
 from llama_index.core import (
-    VectorStoreIndex,
-    SimpleDirectoryReader,
     Document,
-    Settings,
+    SimpleDirectoryReader,
+    VectorStoreIndex,
 )
 from llama_index.core.node_parser import SimpleNodeParser
 
 from common.demo_menu import Demo, MenuRunner
 from common.util.utils import check_api_keys, print_section
-
 
 # region Demo 1: In-Memory Index with Documents
 
@@ -253,7 +251,7 @@ def demo_metadata_filtering():
     index = VectorStoreIndex.from_documents(documents)
 
     # query with metadata filters
-    from llama_index.core.vector_stores import MetadataFilters, ExactMatchFilter
+    from llama_index.core.vector_stores import ExactMatchFilter, MetadataFilters
 
     filters_config = [
         {

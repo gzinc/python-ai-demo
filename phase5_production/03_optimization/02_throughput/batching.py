@@ -11,9 +11,9 @@ Run with: uv run python -m phase5_production.03_optimization.batching
 
 import asyncio
 import time
+from collections.abc import Callable
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
-from typing import Callable
 
 
 @dataclass

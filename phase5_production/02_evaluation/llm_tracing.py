@@ -13,12 +13,11 @@ Run with: uv run python -m phase5_production.02_evaluation.llm_tracing
 """
 
 import uuid
-from dataclasses import dataclass, field
-from datetime import datetime, timezone
-from enum import Enum
+from collections.abc import Generator
 from contextlib import contextmanager
-from typing import Generator
-from inspect import cleandoc
+from dataclasses import dataclass, field
+from datetime import UTC, datetime
+from enum import Enum
 
 
 class SpanKind(Enum):
@@ -38,7 +37,7 @@ class Span:
     trace_id: str
     span_id: str = field(default_factory=lambda: str(uuid.uuid4())[:8])
     parent_id: str | None = None
-    start_time: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
+    start_time: datetime = field(default_factory=lambda: datetime.now(UTC))
     end_time: datetime | None = None
     attributes: dict = field(default_factory=dict)
     status: str = "ok"
@@ -55,7 +54,7 @@ class Span:
         self.attributes[key] = value
 
     def end(self, status: str = "ok", error: str | None = None) -> None:
-        self.end_time = datetime.now(timezone.utc)
+        self.end_time = datetime.now(UTC)
         self.status = status
         self.error = error
 

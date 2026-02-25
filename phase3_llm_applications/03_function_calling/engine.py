@@ -6,12 +6,11 @@ This is the main class you'd use in your application.
 """
 
 import os
-from typing import Optional
 
-from schemas import Tool
-from registry import ToolRegistry
-from executor import ToolExecutor
 from common_tools import get_weather
+from executor import ToolExecutor
+from registry import ToolRegistry
+from schemas import Tool
 
 
 class FunctionCallingEngine:
@@ -58,7 +57,7 @@ class FunctionCallingEngine:
         self,
         tool: Tool,
         function: callable,
-        validator: Optional[callable] = None
+        validator: callable | None = None
     ) -> None:
         """register a tool with its implementation"""
         tool.function = function

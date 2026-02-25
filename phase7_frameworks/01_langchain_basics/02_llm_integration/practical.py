@@ -7,7 +7,6 @@ unified interface. Requires OPENAI_API_KEY and/or ANTHROPIC_API_KEY in .env
 Run: uv run python -m phase7_frameworks.01_langchain_basics.02_llm_integration.practical
 """
 
-from inspect import cleandoc
 
 from langchain_core.messages import HumanMessage, SystemMessage
 
@@ -20,10 +19,10 @@ from common.util.utils import (
     requires_openai,
 )
 
-
 # region Demo 1: ChatOpenAI Basic Usage
 
 
+@requires_openai
 def demo_chatopenai_basic() -> None:
     """
     demonstrate basic ChatOpenAI usage
@@ -71,12 +70,6 @@ def demo_chatopenai_basic() -> None:
     """
     print_section("Demo 1: ChatOpenAI Basic Usage")
 
-    has_openai, _ = check_api_keys()
-    if not has_openai:
-        print("⚠️  OPENAI_API_KEY not found - skipping demo")
-        print("Set OPENAI_API_KEY in .env to run this demo")
-        return
-
     from langchain_openai import ChatOpenAI
 
     # Initialize chat model
@@ -104,7 +97,7 @@ def demo_chatopenai_basic() -> None:
         HumanMessage(content="How do I read a file?"),
     ]
     response = llm.invoke(conversation)
-    print(f"Response: {response.content[:200]}...")
+    print(f"Response:\n{response.content}")
 
 
 # endregion
@@ -112,6 +105,7 @@ def demo_chatopenai_basic() -> None:
 # region Demo 2: ChatAnthropic Basic Usage
 
 
+@requires_anthropic
 def demo_chatanthropic_basic() -> None:
     """
     demonstrate basic ChatAnthropic usage
@@ -156,12 +150,6 @@ def demo_chatanthropic_basic() -> None:
     └─────────────────────────────────────────────────────────────┘
     """
     print_section("Demo 2: ChatAnthropic Basic Usage")
-
-    _, has_anthropic = check_api_keys()
-    if not has_anthropic:
-        print("⚠️  ANTHROPIC_API_KEY not found - skipping demo")
-        print("Set ANTHROPIC_API_KEY in .env to run this demo")
-        return
 
     from langchain_anthropic import ChatAnthropic
 
@@ -346,6 +334,7 @@ def demo_streaming() -> None:
 # region Demo 5: Provider Switching
 
 
+@requires_both_keys
 def demo_provider_switching() -> None:
     """
     demonstrate switching between providers seamlessly
@@ -401,13 +390,6 @@ def demo_provider_switching() -> None:
     """
     print_section("Demo 5: Provider Switching")
 
-    has_openai, has_anthropic = check_api_keys()
-
-    if not (has_openai and has_anthropic):
-        print("⚠️  Both API keys needed for this demo")
-        print("Set OPENAI_API_KEY and ANTHROPIC_API_KEY in .env")
-        return
-
     from langchain_anthropic import ChatAnthropic
     from langchain_openai import ChatOpenAI
 
@@ -439,6 +421,7 @@ def demo_provider_switching() -> None:
 # region Demo 6: Fallback Chains
 
 
+@requires_both_keys
 def demo_fallback_chain() -> None:
     """
     demonstrate fallback from primary to secondary provider
@@ -498,13 +481,6 @@ def demo_fallback_chain() -> None:
     └─────────────────────────────────────────────────────────────┘
     """
     print_section("Demo 6: Fallback Chains")
-
-    has_openai, has_anthropic = check_api_keys()
-
-    if not (has_openai and has_anthropic):
-        print("⚠️  Both API keys needed for this demo")
-        print("Set OPENAI_API_KEY and ANTHROPIC_API_KEY in .env")
-        return
 
     from langchain_anthropic import ChatAnthropic
     from langchain_openai import ChatOpenAI

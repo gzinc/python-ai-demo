@@ -18,11 +18,12 @@ import sys
 if __name__ == "__main__":
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
+from agent import AgentConfig, ReActAgent
 from tools.base import ToolRegistry
-from tools.file_tools import ReadFileTool, WriteFileTool, ListDirectoryTool
-from tools.web_search import WebSearchTool
+from tools.file_tools import ListDirectoryTool, ReadFileTool, WriteFileTool
 from tools.http_tool import HttpGetTool
-from agent import ReActAgent, AgentConfig
+from tools.web_search import WebSearchTool
+
 from common.demo_menu import Demo, MenuRunner
 from common.util.utils import print_section
 
@@ -153,12 +154,6 @@ class ToolAgent:
         """
         return self._agent.run(task)
 
-
-# ==============================================================================
-#   DEMO
-# ==============================================================================
-
-
 # region Demo Functions
 
 def demo_tool_registry():
@@ -199,12 +194,14 @@ def demo_tool_agent():
 
     result = agent.run(task)
 
-    print(f"\n--- Result ---")
+    print("\n--- Result ---")
     print(f"Answer: {result.answer}")
     print(f"Success: {result.success}")
     print(f"Iterations: {result.iterations}")
     print(f"Tool calls: {result.total_tool_calls}")
 
+
+# endregion
 
 # region Demo Menu Configuration
 

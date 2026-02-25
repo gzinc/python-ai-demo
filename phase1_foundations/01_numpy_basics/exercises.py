@@ -14,15 +14,15 @@ import numpy as np
 # import your solutions
 from solutions.exercise_solutions import (
     exercise_1_normalize_rows,
-    exercise_2_euclidean_distance,
     exercise_2_cosine_similarity,
+    exercise_2_euclidean_distance,
     exercise_2_find_nearest,
     exercise_3_batch_normalize,
     exercise_3_pairwise_similarity,
     exercise_4_reshape_for_attention,
 )
-from common.util.utils import print_section
 
+from common.util.utils import print_section
 
 
 def run_tests() -> None:

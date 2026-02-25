@@ -24,7 +24,7 @@ Retrieval Flow:
 Run with: uv run python phase3_llm_applications/01_rag_system/retrieval.py
 """
 
-from typing import Optional, Any
+from typing import Any
 
 from schemas import RetrievalResult
 
@@ -71,9 +71,9 @@ class Retriever:
     def retrieve(
         self,
         query: str,
-        top_k: Optional[int] = None,
-        min_similarity: Optional[float] = None,
-        filter_metadata: Optional[dict] = None,
+        top_k: int | None = None,
+        min_similarity: float | None = None,
+        filter_metadata: dict | None = None,
     ) -> list[RetrievalResult]:
         """
         retrieve relevant chunks for a query
@@ -154,7 +154,7 @@ class Retriever:
     def retrieve_with_scores(
         self,
         query: str,
-        top_k: Optional[int] = None,
+        top_k: int | None = None,
     ) -> list[tuple[RetrievalResult, float]]:
         """
         retrieve with explicit scores for debugging

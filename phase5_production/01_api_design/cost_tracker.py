@@ -10,7 +10,7 @@ Run with: uv run python -m phase5_production.01_api_design.cost_tracker
 """
 
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from enum import Enum
 
 
@@ -35,7 +35,7 @@ class RequestCost:
     model: Model
     prompt_tokens: int
     completion_tokens: int
-    timestamp: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
+    timestamp: datetime = field(default_factory=lambda: datetime.now(UTC))
 
     @property
     def total_tokens(self) -> int:
@@ -161,7 +161,7 @@ def demo_cost_tracking() -> None:
         cost = tracker.track(model, prompt, completion)
         print(f"  {cost}")
 
-    print(f"\nSummary:")
+    print("\nSummary:")
     summary = tracker.summary()
     print(f"  Total requests: {summary['requests']}")
     print(f"  Total tokens: {summary['total_tokens']:,}")

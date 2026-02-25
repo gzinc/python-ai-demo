@@ -10,10 +10,9 @@ Run with: uv run python phase4_ai_agents/01_simple_agent/examples.py
 """
 
 import json
-import os
-from dotenv import load_dotenv
 
 from agent import ReActAgent
+from dotenv import load_dotenv
 from schemas import AgentConfig
 
 from common.demo_menu import Demo, MenuRunner
@@ -139,7 +138,7 @@ def demo_simple_query():
 
     result = agent.run("What's the weather like in Paris right now?")
 
-    print(f"\n📊 Summary:")
+    print("\n📊 Summary:")
     print(f"   Answer: {result.answer}")
     print(f"   Iterations: {result.iterations}")
     print(f"   Tool calls: {result.total_tool_calls}")
@@ -165,7 +164,7 @@ def demo_multi_step_reasoning():
         "Also tell me if I should bring an umbrella."
     )
 
-    print(f"\n📊 Summary:")
+    print("\n📊 Summary:")
     print(f"   Answer: {result.answer}")
     print(f"   Iterations: {result.iterations}")
     print(f"   Tool calls: {result.total_tool_calls}")
@@ -191,7 +190,7 @@ def demo_knowledge_and_calculation():
         "If I stacked 3 of them, how tall would that be?"
     )
 
-    print(f"\n📊 Summary:")
+    print("\n📊 Summary:")
     print(f"   Answer: {result.answer}")
     print(f"   Iterations: {result.iterations}")
     print(f"   Tool calls: {result.total_tool_calls}")
@@ -217,7 +216,7 @@ def demo_compare_cities():
         "Which city is warmer and by how many degrees?"
     )
 
-    print(f"\n📊 Summary:")
+    print("\n📊 Summary:")
     print(f"   Answer: {result.answer}")
     print(f"   Iterations: {result.iterations}")
     print(f"   Tool calls: {result.total_tool_calls}")
@@ -240,7 +239,7 @@ def demo_action_history():
 
     result = agent.run("What's 15% of 200? And what's the weather in London?")
 
-    print(f"\n📜 Full Action History:")
+    print("\n📜 Full Action History:")
     print("-" * 40)
     for i, action in enumerate(result.actions, 1):
         print(f"\nStep {i}:")
@@ -249,7 +248,7 @@ def demo_action_history():
         if action.observation:
             print(f"  👁️  Observation: {action.observation[:100]}...")
 
-    print(f"\n📊 Summary:")
+    print("\n📊 Summary:")
     print(f"   Final answer: {result.answer}")
     print(f"   Total iterations: {result.iterations}")
     print(f"   Total thoughts: {result.total_thoughts}")
@@ -277,7 +276,7 @@ def demo_timeout_handling():
         "Compare them all and tell me which is best for a beach vacation."
     )
 
-    print(f"\n📊 Result:")
+    print("\n📊 Result:")
     print(f"   Success: {result.success}")
     print(f"   Error: {result.error}")
     print(f"   Partial answer: {result.answer}")

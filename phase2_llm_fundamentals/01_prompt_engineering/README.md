@@ -11,7 +11,7 @@ The same LLM can give terrible or amazing results depending on your prompt. Prom
 │                    PROMPT QUALITY → OUTPUT QUALITY                          │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                             │
-│   ❌ VAGUE PROMPT                      ✅ ENGINEERED PROMPT                 │
+│   ❌ VAGUE PROMPT                      ✅ ENGINEERED PROMPT                │
 │   ┌───────────────────┐                ┌───────────────────────────────┐    │
 │   │ "Summarize this"  │                │ "Summarize in 3 bullet points │    │
 │   └─────────┬─────────┘                │  focusing on key decisions"   │    │
@@ -165,7 +165,7 @@ Make the LLM reason step by step:
 │              ▼                                       ▼                      │
 │       ┌──────────────┐                  ┌─────────────────────────────────┐ │
 │       │ Answer: $16  │                  │ Answer: $15                     │ │
-│       │     ❌       │                  │     ✅                         │ │
+│       │     ❌       │                  │     ✅                          │ │
 │       └──────────────┘                  └─────────────────────────────────┘ │
 │   (jumped to answer,                    (showed work, caught errors)        │
 │    made calculation error)                                                  │

@@ -12,18 +12,16 @@ Requirements:
 - chromadb
 """
 
-import numpy as np
 from pathlib import Path
+
+import numpy as np
 from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
-from typing import Dict, List, Tuple
-import chromadb
-from chromadb.config import Settings
+
 from common.util.utils import print_section
 
 
-
-def load_memory_files() -> Dict[str, str]:
+def load_memory_files() -> dict[str, str]:
     """
     load all markdown files from .serena/memories/
 
@@ -49,8 +47,8 @@ def load_memory_files() -> Dict[str, str]:
 
 def generate_embeddings(
     model: SentenceTransformer,
-    memories: Dict[str, str]
-) -> Dict[str, np.ndarray]:
+    memories: dict[str, str]
+) -> dict[str, np.ndarray]:
     """
     generate embeddings for all memory files
 
@@ -80,7 +78,7 @@ def generate_embeddings(
     return embeddings
 
 
-def display_embedding_stats(embeddings: Dict[str, np.ndarray]) -> None:
+def display_embedding_stats(embeddings: dict[str, np.ndarray]) -> None:
     """display statistics about the embeddings"""
     print_section("Embedding Statistics")
 
@@ -95,8 +93,8 @@ def display_embedding_stats(embeddings: Dict[str, np.ndarray]) -> None:
 
 
 def calculate_similarity_matrix(
-    embeddings: Dict[str, np.ndarray]
-) -> Tuple[np.ndarray, List[str]]:
+    embeddings: dict[str, np.ndarray]
+) -> tuple[np.ndarray, list[str]]:
     """
     calculate pairwise cosine similarity between all embeddings
 
@@ -117,7 +115,7 @@ def calculate_similarity_matrix(
 
 def display_similarity_results(
     similarity_matrix: np.ndarray,
-    filenames: List[str]
+    filenames: list[str]
 ) -> None:
     """display similarity matrix and most similar pairs"""
     print_section("Semantic Similarity Between Memories")
@@ -153,7 +151,7 @@ def display_similarity_results(
         print(f"  {sim:.4f} - {file1} ↔ {file2}")
 
 
-def display_embedding_vectors(embeddings: Dict[str, np.ndarray]) -> None:
+def display_embedding_vectors(embeddings: dict[str, np.ndarray]) -> None:
     """display first 10 values of each embedding vector"""
     print_section("Embedding Vectors (First 10 Dimensions)")
 
@@ -218,7 +216,7 @@ def main() -> None:
     print_section("Summary")
     print(f"\n✅ Processed {len(embeddings)} memory files")
     print(f"✅ Generated {model.get_sentence_embedding_dimension()}-dimensional embeddings")
-    print(f"✅ Each embedding is a NumPy array capturing semantic meaning")
+    print("✅ Each embedding is a NumPy array capturing semantic meaning")
 
     print("\n💡 Key Insights:")
     print("   - Embeddings convert text to dense numeric vectors")

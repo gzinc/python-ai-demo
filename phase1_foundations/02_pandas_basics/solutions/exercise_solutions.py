@@ -6,14 +6,10 @@ Fill in each function below. Run the exercises.py to test your solutions.
 Run with: uv run python phase1_foundations/02_pandas_basics/exercises.py
 """
 
+
 import pandas as pd
-import numpy as np
-from typing import List
 
-
-# =============================================================================
-# EXERCISE 1: DataFrame Filtering
-# =============================================================================
+# region Exercise 1: DataFrame Filtering
 
 def exercise_1_filter_by_category(
     df: pd.DataFrame,
@@ -61,10 +57,9 @@ def exercise_1_filter_by_length(
     # YOUR CODE HERE
     pass
 
+# endregion
 
-# =============================================================================
-# EXERCISE 2: Text Processing
-# =============================================================================
+# region Exercise 2: Text Processing
 
 def exercise_2_clean_text(df: pd.DataFrame) -> pd.DataFrame:
     """
@@ -113,10 +108,9 @@ def exercise_2_add_token_estimate(df: pd.DataFrame) -> pd.DataFrame:
     # YOUR CODE HERE
     pass
 
+# endregion
 
-# =============================================================================
-# EXERCISE 3: Aggregation
-# =============================================================================
+# region Exercise 3: Aggregation
 
 def exercise_3_category_stats(df: pd.DataFrame) -> pd.DataFrame:
     """
@@ -171,10 +165,9 @@ def exercise_3_find_top_n(
     # YOUR CODE HERE
     pass
 
+# endregion
 
-# =============================================================================
-# EXERCISE 4: Document Preparation
-# =============================================================================
+# region Exercise 4: Document Preparation
 
 def exercise_4_prepare_for_embedding(df: pd.DataFrame) -> pd.DataFrame:
     """
@@ -228,3 +221,5 @@ def exercise_4_chunk_dataframe(
     """
     # YOUR CODE HERE
     pass
+
+# endregion

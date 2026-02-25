@@ -15,8 +15,8 @@ Usage:
     runner.run()
 """
 
+from collections.abc import Callable
 from dataclasses import dataclass
-from typing import Callable, Optional
 
 
 @dataclass
@@ -47,7 +47,7 @@ class MenuRunner:
         demos: list[Demo],
         title: str = "Demo Menu",
         has_api: bool = True,
-        subtitle: Optional[str] = None,
+        subtitle: str | None = None,
     ):
         self.demos = demos
         self.title = title

@@ -9,7 +9,7 @@ Usage:
     from models import Role, Message
 """
 
-from .role import Role
 from .message import Message
+from .role import Role
 
 __all__ = ["Role", "Message"]

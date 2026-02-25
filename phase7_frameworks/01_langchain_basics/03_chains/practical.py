@@ -9,8 +9,6 @@ Run: uv run python -m phase7_frameworks.01_langchain_basics.03_chains.practical
 
 from inspect import cleandoc
 
-from langchain_core.messages import HumanMessage, SystemMessage
-
 from common.demo_menu import Demo, MenuRunner
 from common.util.utils import (
     check_api_keys,
@@ -18,7 +16,6 @@ from common.util.utils import (
     requires_both_keys,
     requires_openai,
 )
-
 
 # region Demo 1: Basic LCEL Chain
 
@@ -407,7 +404,7 @@ def demo_passthrough_pattern() -> None:
     # simulate retriever (normally would query vector DB)
     def mock_retriever(query: str) -> str:
         """simulate document retrieval"""
-        return f"Retrieved context: Embeddings are vector representations used in AI"
+        return "Retrieved context: Embeddings are vector representations used in AI"
 
     # RAG prompt expecting context + question
     prompt = ChatPromptTemplate.from_template(cleandoc('''
@@ -732,7 +729,7 @@ def demo_batch_processing() -> None:
         print(f"  {i}. {concept_dict['concept']:15s}: {result[:80]}...")
 
     # batch execution
-    print(f"\n")
+    print("\n")
     print("Batch (parallel):")
     start = time.time()
     batch_results = chain.batch(concepts)
@@ -853,7 +850,7 @@ def demo_verbose_debugging() -> None:
                     print(f"  Input: {event['data']['input']}")
 
             elif kind == "on_prompt_end":
-                print(f"\n[PROMPT] Formatted prompt ready")
+                print("\n[PROMPT] Formatted prompt ready")
 
             elif kind == "on_chat_model_start":
                 print(f"\n[LLM] {name} - Generating response...")
@@ -866,7 +863,7 @@ def demo_verbose_debugging() -> None:
 
             elif kind == "on_chain_end":
                 if name == "StrOutputParser":
-                    print(f"\n\n[PARSER] Extracted string output")
+                    print("\n\n[PARSER] Extracted string output")
 
         return final_result
 

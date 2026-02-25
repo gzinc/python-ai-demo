@@ -19,15 +19,13 @@ Run with: uv run python -m phase7_frameworks.02_langgraph.human_in_loop
 """
 
 from inspect import cleandoc
-from typing import Annotated, Literal, TypedDict
+from typing import Literal, TypedDict
 
 from langgraph.checkpoint.memory import MemorySaver
 from langgraph.graph import END, START, StateGraph
-from langgraph.graph.message import add_messages
 
 from common.demo_menu import Demo, MenuRunner
 from common.util.utils import print_section
-
 
 # region Utility Functions
 # endregion
@@ -660,7 +658,7 @@ def demo_update_during_interrupt() -> None:
 
     result2 = app.invoke(edited_state, config)
 
-    print(f"\n   Final State:")
+    print("\n   Final State:")
     print(f"     sent: {result2['sent']}")
 
     print("\n✅ Key Takeaway: Can update state during interrupt before resuming")
@@ -709,7 +707,7 @@ def main() -> None:
         ╚════════════════════════════════════════════════════════════════════╝
     """))
 
-    
+
     runner = MenuRunner(DEMOS, title="LangGraph Human-in-the-Loop")
     runner.run()
 

@@ -10,9 +10,9 @@ Similar to a Response/Result wrapper in Java:
     }
 """
 
-from dataclasses import dataclass
-from typing import Any, Optional
 import json
+from dataclasses import dataclass
+from typing import Any
 
 
 @dataclass
@@ -32,9 +32,9 @@ class ToolResult:
     └─────────────────────────────────────────────────────────────┘
     """
     success: bool
-    data: Optional[Any] = None
-    error: Optional[str] = None
-    tool_call_id: Optional[str] = None
+    data: Any | None = None
+    error: str | None = None
+    tool_call_id: str | None = None
 
     def to_openai_message(self) -> dict:
         """format as OpenAI tool result message"""

@@ -10,7 +10,7 @@ Run with: uv run python -m phase5_production.03_optimization.cost_budget
 """
 
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from enum import Enum
 from inspect import cleandoc
 
@@ -136,7 +136,7 @@ class UserBudget:
 
     def _reset_if_needed(self) -> None:
         """reset daily/monthly counters if period changed"""
-        now = datetime.now(timezone.utc)
+        now = datetime.now(UTC)
 
         if now.day != self._last_reset_day:
             self._daily_usage.clear()

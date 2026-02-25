@@ -5,7 +5,7 @@ Similar to a Spring @ComponentScan or Service Registry in Java.
 Keeps track of all registered tools and provides them in API-specific formats.
 """
 
-from typing import Any, Optional
+from typing import Any
 
 from schemas import Tool
 
@@ -34,7 +34,7 @@ class ToolRegistry:
         """register a tool"""
         self.tools[tool.name] = tool
 
-    def get(self, name: str) -> Optional[Tool]:
+    def get(self, name: str) -> Tool | None:
         """get a tool by name"""
         return self.tools.get(name)
 

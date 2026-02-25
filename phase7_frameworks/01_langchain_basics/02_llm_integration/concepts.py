@@ -16,8 +16,6 @@ from langchain_core.messages import AIMessage, HumanMessage, SystemMessage
 from common.demo_menu import Demo, MenuRunner
 from common.util.utils import print_section
 
-
-
 # region Demo 1: Unified Chat Interface Overview
 
 
@@ -74,24 +72,24 @@ def demo_message_types() -> None:
 
     # System message
     system_msg = SystemMessage(content="You are a helpful AI assistant")
-    print(f"\n1. SystemMessage:")
+    print("\n1. SystemMessage:")
     print(f"   Type: {system_msg.type}")
     print(f"   Content: {system_msg.content}")
-    print(f"   Purpose: Set behavior/context for conversation")
+    print("   Purpose: Set behavior/context for conversation")
 
     # Human message
     human_msg = HumanMessage(content="What are embeddings?")
-    print(f"\n2. HumanMessage:")
+    print("\n2. HumanMessage:")
     print(f"   Type: {human_msg.type}")
     print(f"   Content: {human_msg.content}")
-    print(f"   Purpose: User input/questions")
+    print("   Purpose: User input/questions")
 
     # AI message
     ai_msg = AIMessage(content="Embeddings are vector representations...")
-    print(f"\n3. AIMessage:")
+    print("\n3. AIMessage:")
     print(f"   Type: {ai_msg.type}")
     print(f"   Content: {ai_msg.content}")
-    print(f"   Purpose: Assistant responses")
+    print("   Purpose: Assistant responses")
 
     print("\n## Message Attributes:")
     print(f"- type: {human_msg.type}")
@@ -493,7 +491,7 @@ def main() -> None:
     print("  No API key required - demonstrates patterns only")
     print("=" * 70)
 
-    
+
     runner = MenuRunner(DEMOS, title="TODO: Add title")
     runner.run()
 

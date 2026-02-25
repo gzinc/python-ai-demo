@@ -21,7 +21,6 @@ from langgraph.graph.message import add_messages
 from common.demo_menu import Demo, MenuRunner
 from common.util.utils import print_section
 
-
 # region Utility Functions
 
 def print_state(state: dict, label: str = "State") -> None:
@@ -113,7 +112,10 @@ def demo_simple_state_graph() -> None:
 
     print("\n" + cleandoc("""
         3. Graph Structure Built:
-           START → increment → set_message → END
+
+           ┌───────┐    ┌───────────┐    ┌─────────────┐    ┌─────┐
+           │ START │ ─► │ increment │ ─► │ set_message │ ─► │ END │
+           └───────┘    └───────────┘    └─────────────┘    └─────┘
     """))
 
     # step 4: compile graph
@@ -180,7 +182,7 @@ def demo_state_updates() -> None:
 
     def update_status(state: CounterState) -> dict:
         """update only status field"""
-        print(f"   Node 2: Updating status → 'processed'")
+        print("   Node 2: Updating status → 'processed'")
         return {"status": "processed"}
 
     # build graph
@@ -194,7 +196,11 @@ def demo_state_updates() -> None:
     app = graph.compile()
 
     print("\n" + cleandoc("""
-        Graph: START → update_count → update_status → END
+        Graph:
+
+           ┌───────┐    ┌──────────────┐    ┌───────────────┐    ┌─────┐
+           │ START │ ─► │ update_count │ ─► │ update_status │ ─► │ END │
+           └───────┘    └──────────────┘    └───────────────┘    └─────┘
 
         Execution:
     """))
@@ -274,7 +280,11 @@ def demo_message_state() -> None:
     app = graph.compile()
 
     print("\n" + cleandoc("""
-        Graph: START → user → assistant → END
+        Graph:
+
+           ┌───────┐    ┌──────┐    ┌───────────┐    ┌─────┐
+           │ START │ ─► │ user │ ─► │ assistant │ ─► │ END │
+           └───────┘    └──────┘    └───────────┘    └─────┘
 
         Execution (Watch messages accumulate):
     """))
@@ -373,7 +383,11 @@ def demo_multi_path_graph() -> None:
 
     print("\n" + cleandoc("""
         Graph Structure (Sequential):
-          START → A → B → C → D → END
+
+           ┌───────┐    ┌───┐    ┌───┐    ┌───┐    ┌───┐    ┌─────┐
+           │ START │ ─► │ A │ ─► │ B │ ─► │ C │ ─► │ D │ ─► │ END │
+           └───────┘    └───┘    └───┘    └───┘    └───┘    └─────┘
+                         ×2       +10      -3       +5
     """))
 
     print("\nExecution (value=5):")
@@ -450,7 +464,11 @@ def demo_stateful_counter() -> None:
     app = graph.compile()
 
     print("\n" + cleandoc("""
-        Graph: START → increment → END
+        Graph:
+
+           ┌───────┐    ┌───────────┐    ┌─────┐
+           │ START │ ─► │ increment │ ─► │ END │
+           └───────┘    └───────────┘    └─────┘
 
         Multiple Invocations (State Carries Over):
     """))
@@ -537,7 +555,11 @@ def demo_simple_agent_loop() -> None:
     app = graph.compile()
 
     print("\n" + cleandoc("""
-        Agent Loop: START → think → act → END
+        Agent Loop:
+
+           ┌───────┐    ┌───────┐    ┌─────┐    ┌─────┐
+           │ START │ ─► │ think │ ─► │ act │ ─► │ END │
+           └───────┘    └───────┘    └─────┘    └─────┘
 
         Execution:
     """))
@@ -602,7 +624,7 @@ def main() -> None:
         ╚════════════════════════════════════════════════════════════════════╝
     """))
 
-    
+
     runner = MenuRunner(DEMOS, title="LangGraph State Basics")
     runner.run()
 

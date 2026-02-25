@@ -6,11 +6,11 @@ Run with: uv run python -m phase5_production.03_optimization.01_compression.exam
 
 from inspect import cleandoc
 
-from .compressors import NaiveCompressor, LLMLingua2Compressor
-from .truncation import ContextTruncator
-from .response_limits import ResponseLimiter
-
 from common.demo_menu import Demo, MenuRunner
+
+from .compressors import LLMLingua2Compressor, NaiveCompressor
+from .response_limits import ResponseLimiter
+from .truncation import ContextTruncator
 
 
 def demo_naive_compression() -> None:
@@ -118,7 +118,7 @@ def main() -> None:
     print("  Multiple strategies for token reduction")
     print("=" * 60)
 
-    
+
     runner = MenuRunner(DEMOS, title="Response Compression - Examples")
     runner.run()
 

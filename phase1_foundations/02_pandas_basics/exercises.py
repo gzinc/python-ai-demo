@@ -10,26 +10,22 @@ Run with: uv run python phase1_foundations/02_pandas_basics/exercises.py
 """
 
 import pandas as pd
-import numpy as np
 
 # import your solutions
 from solutions.exercise_solutions import (
     exercise_1_filter_by_category,
     exercise_1_filter_by_length,
-    exercise_2_clean_text,
     exercise_2_add_token_estimate,
+    exercise_2_clean_text,
     exercise_3_category_stats,
     exercise_3_find_top_n,
-    exercise_4_prepare_for_embedding,
     exercise_4_chunk_dataframe,
+    exercise_4_prepare_for_embedding,
 )
+
 from common.util.utils import print_section
 
-
-
-# =============================================================================
-# TEST RUNNER
-# =============================================================================
+# region Test Runner
 
 def run_tests() -> None:
     """run all exercise tests"""
@@ -168,6 +164,9 @@ def run_tests() -> None:
     print("=" * 60)
     print("Implement functions in: solutions/exercise_solutions.py")
     print("=" * 60 + "\n")
+
+
+# endregion
 
 
 if __name__ == "__main__":

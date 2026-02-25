@@ -8,18 +8,14 @@ but understanding them makes you a better AI developer.
 Run with: uv run python phase1_foundations/03_ml_concepts/examples.py
 """
 
-import numpy as np
-from typing import Tuple, List
 import random
+
+import numpy as np
 
 from common.demo_menu import Demo, MenuRunner
 from common.util.utils import print_section
 
-
-
-# =============================================================================
-# 1. FEATURES AND LABELS
-# =============================================================================
+# region 1. Features and Labels
 
 def features_and_labels_demo() -> None:
     """demonstrate the concept of features (X) and labels (y)"""
@@ -44,7 +40,7 @@ def features_and_labels_demo() -> None:
     X = np.array([[email["has_exclamation"], email["word_count"]] for email in emails])
     y = np.array([1 if label == "spam" else 0 for label in labels])
 
-    print(f"\nAs numeric arrays:")
+    print("\nAs numeric arrays:")
     print(f"  Features (X) shape: {X.shape}")
     print(f"  Labels (y) shape: {y.shape}")
     print(f"\n  X = {X}")
@@ -53,10 +49,9 @@ def features_and_labels_demo() -> None:
     print("\n💡 For LLMs: The PROMPT is your features!")
     print("   Your prompt engineering IS feature engineering.")
 
+# endregion
 
-# =============================================================================
-# 2. TRAIN/TEST SPLIT
-# =============================================================================
+# region 2. Train/Test Split
 
 def train_test_split_demo() -> None:
     """demonstrate why we split data into train and test sets"""
@@ -98,7 +93,7 @@ def simple_train_test_split(
     y: np.ndarray,
     test_size: float = 0.2,
     random_seed: int = 42
-) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
+) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
     """simple train/test split implementation"""
     np.random.seed(random_seed)
     indices = np.random.permutation(len(X))
@@ -109,10 +104,9 @@ def simple_train_test_split(
 
     return X[train_idx], X[test_idx], y[train_idx], y[test_idx]
 
+# endregion
 
-# =============================================================================
-# 3. OVERFITTING DEMONSTRATION
-# =============================================================================
+# region 3. Overfitting Demonstration
 
 def overfitting_demo() -> None:
     """demonstrate overfitting vs good generalization"""
@@ -144,10 +138,9 @@ def overfitting_demo() -> None:
     print("  - Too many epochs: Overfitting (memorizes exact examples)")
     print("  - Sweet spot: Usually 1-3 epochs for LLMs!")
 
+# endregion
 
-# =============================================================================
-# 4. EVALUATION METRICS
-# =============================================================================
+# region 4. Evaluation Metrics
 
 def evaluation_metrics_demo() -> None:
     """demonstrate different evaluation metrics"""
@@ -169,12 +162,12 @@ def evaluation_metrics_demo() -> None:
     f1 = 2 * (precision * recall) / (precision + recall) if (precision + recall) > 0 else 0
 
     print("Confusion Matrix:")
-    print(f"                  Predicted")
-    print(f"                  Pos   Neg")
+    print("                  Predicted")
+    print("                  Pos   Neg")
     print(f"  Actual Pos      {tp}     {fn}    (TP, FN)")
     print(f"         Neg      {fp}     {tn}    (FP, TN)")
 
-    print(f"\nMetrics:")
+    print("\nMetrics:")
     print(f"  Accuracy:  {accuracy:.2%} - Overall correct predictions")
     print(f"  Precision: {precision:.2%} - Of predicted positives, how many correct?")
     print(f"  Recall:    {recall:.2%} - Of actual positives, how many found?")
@@ -185,10 +178,9 @@ def evaluation_metrics_demo() -> None:
     print("  - Faithfulness: Does answer match retrieved context?")
     print("  - Groundedness: Is answer supported by evidence?")
 
+# endregion
 
-# =============================================================================
-# 5. LEARNING RATE INTUITION
-# =============================================================================
+# region 5. Learning Rate Intuition
 
 def learning_rate_demo() -> None:
     """demonstrate learning rate concept"""
@@ -197,7 +189,7 @@ def learning_rate_demo() -> None:
     print("Learning rate = How big of a step the model takes when learning\n")
 
     # simulate gradient descent with different learning rates
-    def simulate_learning(lr: float, target: float = 10.0, start: float = 0.0, steps: int = 10) -> List[float]:
+    def simulate_learning(lr: float, target: float = 10.0, start: float = 0.0, steps: int = 10) -> list[float]:
         """simulate simple gradient descent"""
         value = start
         history = [value]
@@ -229,10 +221,9 @@ def learning_rate_demo() -> None:
     print("  - Too high: Model forgets pre-training, outputs garbage")
     print("  - Too low: Takes forever, may not learn new task")
 
+# endregion
 
-# =============================================================================
-# 6. WHEN TO USE WHAT
-# =============================================================================
+# region 6. Decision Framework
 
 def decision_framework_demo() -> None:
     """show when to use prompting vs RAG vs fine-tuning"""
@@ -281,10 +272,9 @@ def decision_framework_demo() -> None:
     print("  2. Add RAG for custom knowledge")
     print("  3. Fine-tune only if above doesn't work")
 
+# endregion
 
-# =============================================================================
-# 7. EMBEDDINGS AS FEATURES
-# =============================================================================
+# region 7. Embeddings as Features
 
 def embeddings_as_features_demo() -> None:
     """show how embeddings ARE feature engineering"""
@@ -325,11 +315,7 @@ def embeddings_as_features_demo() -> None:
         print(f"  '{t1}' vs '{t2}'")
         print(f"    Similarity: {sim:.2f} {'(similar)' if sim > 0.5 else '(different)'}")
 
-
-# =============================================================================
-# MAIN
-# =============================================================================
-
+# endregion
 
 # region Demo Menu Configuration
 
@@ -347,7 +333,7 @@ DEMOS = [
 
 def main() -> None:
     """interactive demo runner"""
-    
+
     runner = MenuRunner(DEMOS, title="ML Concepts - Examples")
     runner.run()
 

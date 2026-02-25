@@ -12,11 +12,10 @@ Usage:
     results = db.search("query text", top_k=3)
 """
 
-import numpy as np
 from pathlib import Path
-from typing import Dict, List, Tuple, Optional
+
 import chromadb
-from chromadb.config import Settings
+import numpy as np
 from sentence_transformers import SentenceTransformer
 
 
@@ -26,7 +25,7 @@ class VectorDB:
     def __init__(
         self,
         collection_name: str = "learning_memories",
-        db_path: Optional[Path] = None
+        db_path: Path | None = None
     ):
         """
         initialize vector database
@@ -96,9 +95,9 @@ class VectorDB:
 
     def save_embeddings(
         self,
-        embeddings: Dict[str, np.ndarray],
-        documents: Dict[str, str],
-        metadata: Optional[Dict[str, Dict]] = None
+        embeddings: dict[str, np.ndarray],
+        documents: dict[str, str],
+        metadata: dict[str, dict] | None = None
     ) -> None:
         """
         save embeddings and documents to ChromaDB
@@ -147,7 +146,7 @@ class VectorDB:
         self,
         query_embedding: np.ndarray,
         top_k: int = 3
-    ) -> Dict:
+    ) -> dict:
         """
         search for similar documents using embedding
 
@@ -173,7 +172,7 @@ class VectorDB:
         query: str,
         model: SentenceTransformer,
         top_k: int = 3
-    ) -> Dict:
+    ) -> dict:
         """
         search using text query (generates embedding automatically)
 
@@ -188,7 +187,7 @@ class VectorDB:
         query_embedding = model.encode(query)
         return self.search(query_embedding, top_k=top_k)
 
-    def get_all(self) -> Dict:
+    def get_all(self) -> dict:
         """
         retrieve all documents from collection
 
@@ -221,7 +220,7 @@ class VectorDB:
         except Exception as e:
             print(f"⚠️  error deleting collection: {e}")
 
-    def list_collections(self) -> List[str]:
+    def list_collections(self) -> list[str]:
         """
         list all collections in database
 
@@ -235,7 +234,7 @@ class VectorDB:
 def demonstrate_search(
     db: VectorDB,
     model: SentenceTransformer,
-    queries: List[str]
+    queries: list[str]
 ) -> None:
     """
     demonstrate semantic search with example queries

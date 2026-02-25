@@ -7,14 +7,12 @@ Focus on understanding memory types, integration patterns, and trade-offs.
 Run: uv run python -m phase7_frameworks.01_langchain_basics.04_memory.concepts
 """
 
-from inspect import cleandoc
 
 from langchain_core.chat_history import InMemoryChatMessageHistory
 from langchain_core.messages import AIMessage, HumanMessage
 
 from common.demo_menu import Demo, MenuRunner
 from common.util.utils import print_section
-
 
 # region Demo 1: InMemoryChatMessageHistory Basics
 
@@ -187,7 +185,7 @@ def demo_token_counting() -> None:
     full_content = "\n".join([msg.content for msg in full_history.messages])
     full_chars = len(full_content)
 
-    print(f"Full History:")
+    print("Full History:")
     print(f"  Messages: {len(full_history.messages)} (5 exchanges)")
     print(f"  Characters: {full_chars}")
     print(f"  Approximate tokens: ~{full_chars // 4}\n")

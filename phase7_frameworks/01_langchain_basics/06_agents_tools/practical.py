@@ -13,16 +13,16 @@ from datetime import datetime
 from inspect import cleandoc
 
 from dotenv import load_dotenv
-from simpleeval import simple_eval
 from langchain.agents import create_agent
 from langchain.tools import BaseTool, tool
 from langchain_community.tools import DuckDuckGoSearchRun
 from langchain_core.messages import HumanMessage
 from langchain_openai import ChatOpenAI
 from pydantic import Field
+from simpleeval import simple_eval
 
 from common.demo_menu import Demo, MenuRunner
-from common.util.utils import print_section, check_api_keys
+from common.util.utils import check_api_keys, print_section
 
 # load environment variables
 load_dotenv()

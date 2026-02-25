@@ -3,7 +3,7 @@ Agent Action - represents one step in the agent loop
 """
 
 from dataclasses import dataclass, field
-from typing import Any, Optional
+from typing import Any
 
 
 @dataclass
@@ -24,9 +24,9 @@ class AgentAction:
     """
 
     thought: str  # reasoning before action
-    tool_name: Optional[str] = None  # tool to call (None if finish)
+    tool_name: str | None = None  # tool to call (None if finish)
     tool_args: dict[str, Any] = field(default_factory=dict)
-    observation: Optional[str] = None  # result after execution
+    observation: str | None = None  # result after execution
     is_final: bool = False  # True if this is finish() action
 
     @property
@@ -59,7 +59,7 @@ class AgentResult:
     actions: list[AgentAction] = field(default_factory=list)  # history
     iterations: int = 0  # how many loops
     success: bool = True  # completed successfully
-    error: Optional[str] = None  # error message if failed
+    error: str | None = None  # error message if failed
 
     @property
     def total_thoughts(self) -> int:

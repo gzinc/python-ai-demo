@@ -13,8 +13,8 @@ Example tasks:
 from inspect import cleandoc
 
 from schemas import AgentProfile
-from .base_specialist import BaseSpecialist
 
+from .base_specialist import BaseSpecialist
 
 # default profile for research specialist
 RESEARCH_PROFILE = AgentProfile(

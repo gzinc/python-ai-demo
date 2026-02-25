@@ -13,7 +13,7 @@ Run with: uv run python phase2_llm_fundamentals/02_api_integration/live_examples
 
 import os
 import sys
-from inspect import cleandoc
+
 from dotenv import load_dotenv
 
 from common.demo_menu import Demo, MenuRunner

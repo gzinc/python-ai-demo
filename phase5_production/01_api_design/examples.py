@@ -13,9 +13,9 @@ import asyncio
 
 from common.demo_menu import Demo, MenuRunner
 
-from .semantic_cache import demo_semantic_cache
-from .llm_streaming import main as streaming_demo_async
 from .cost_tracker import demo_cost_tracking
+from .llm_streaming import main as streaming_demo_async
+from .semantic_cache import demo_semantic_cache
 
 
 def demo_streaming() -> None:

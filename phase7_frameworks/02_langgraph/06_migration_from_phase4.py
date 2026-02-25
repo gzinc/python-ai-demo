@@ -25,7 +25,6 @@ from langgraph.graph.message import add_messages
 from common.demo_menu import Demo, MenuRunner
 from common.util.utils import print_section
 
-
 # region Utility Functions
 # endregion
 
@@ -410,19 +409,19 @@ def pattern_3_sequential_migration() -> None:
     def outliner(state: ContentState) -> dict:
         """step 1: create outline"""
         outline = f"Outline for '{state['topic']}':\\n1. Intro\\n2. Body\\n3. Conclusion"
-        print(f"   📝 Step 1: Created outline")
+        print("   📝 Step 1: Created outline")
         return {"outline": outline}
 
     def writer(state: ContentState) -> dict:
         """step 2: write draft"""
         draft = f"Draft: {state['topic']}... (based on outline)"
-        print(f"   ✍️  Step 2: Wrote draft")
+        print("   ✍️  Step 2: Wrote draft")
         return {"draft": draft}
 
     def editor(state: ContentState) -> dict:
         """step 3: edit and finalize"""
         final = f"Final: Polished article about {state['topic']}"
-        print(f"   ✨ Step 3: Edited and finalized")
+        print("   ✨ Step 3: Edited and finalized")
         return {"final": final}
 
     # build sequential chain
@@ -830,7 +829,7 @@ def main() -> None:
         ╚════════════════════════════════════════════════════════════════════╝
     """))
 
-    
+
     runner = MenuRunner(DEMOS, title="LangGraph Migration from Phase 4")
     runner.run()
 

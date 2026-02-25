@@ -13,21 +13,21 @@ Module Structure:
     agents/   - Specialist agents (Research, Analysis, Writer)
 """
 
-from .schemas import AgentProfile, TeamConfig, DelegationResult, TeamResult
-from .tools import (
-    BaseTool,
-    ToolRegistry,
-    ToolDefinition,
-    ToolParameter,
-    ToolResult,
-)
 from .agents import (
+    AnalysisAgent,
     BaseSpecialist,
     ResearchAgent,
-    AnalysisAgent,
     WriterAgent,
 )
 from .orchestrator import MultiAgentOrchestrator
+from .schemas import AgentProfile, DelegationResult, TeamConfig, TeamResult
+from .tools import (
+    BaseTool,
+    ToolDefinition,
+    ToolParameter,
+    ToolRegistry,
+    ToolResult,
+)
 
 __all__ = [
     # schemas

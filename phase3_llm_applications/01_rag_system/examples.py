@@ -10,14 +10,12 @@ This module demonstrates various ways to use the RAG system:
 Run with: uv run python phase3_llm_applications/01_rag_system/examples.py
 """
 
+from chunking import chunk_document
 from rag_pipeline import RAGPipeline
 from schemas import Document
-from chunking import chunk_document
 
 from common.demo_menu import Demo, MenuRunner
 from common.util.utils import print_section
-
-
 
 # ─────────────────────────────────────────────────────────────
 # SAMPLE DOCUMENTS
@@ -261,7 +259,7 @@ DEMOS = [
 
 def main():
     """interactive demo runner"""
-    
+
     runner = MenuRunner(DEMOS, title="RAG System - Examples")
     runner.run()
 

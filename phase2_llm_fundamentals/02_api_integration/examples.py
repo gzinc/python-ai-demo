@@ -8,16 +8,14 @@ See live_examples.py for real API calls.
 Run with: uv run python phase2_llm_fundamentals/02_api_integration/examples.py
 """
 
-import os
-import time
 import json
-from inspect import cleandoc
-from typing import Generator
+import time
+from collections.abc import Generator
 from dataclasses import dataclass
+from inspect import cleandoc
 
 from common.demo_menu import Demo, MenuRunner
 from common.util.utils import print_section
-
 
 
 # simulated response objects (mirrors real API structure)
@@ -111,7 +109,7 @@ def example_basic_api_call() -> None:
     ]
 
     print("Request:")
-    print(f"  model: gpt-4o")
+    print("  model: gpt-4o")
     print(f"  messages: {json.dumps(messages, indent=4)}")
     print()
 
@@ -523,7 +521,7 @@ DEMOS = [
 
 def main() -> None:
     """interactive demo runner"""
-    
+
     runner = MenuRunner(DEMOS, title="API Integration - Examples")
     runner.run()
 

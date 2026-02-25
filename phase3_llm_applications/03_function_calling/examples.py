@@ -13,18 +13,18 @@ Run with: uv run python phase3_llm_applications/03_function_calling/examples.py
 """
 
 from inspect import cleandoc
-from dotenv import load_dotenv
 
-from schemas import Tool, ToolParameter
-from engine import FunctionCallingEngine
 from common_tools import (
-    create_weather_tool,
+    calculate,
     create_calculator_tool,
     create_search_tool,
+    create_weather_tool,
     get_weather,
-    calculate,
     validate_calculate_args,
 )
+from dotenv import load_dotenv
+from engine import FunctionCallingEngine
+from schemas import Tool, ToolParameter
 
 from common.demo_menu import Demo, MenuRunner
 from common.util.utils import print_section

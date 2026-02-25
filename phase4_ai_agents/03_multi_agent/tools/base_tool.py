@@ -16,11 +16,7 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from typing import Any
 
-
-# =============================================================================
-# Data Classes (defined first - no dependencies)
-# =============================================================================
-
+# region Data Classes
 
 @dataclass
 class ToolParameter:
@@ -121,11 +117,9 @@ class ToolResult:
             return str(self.data)
         return f"ERROR: {self.error}"
 
+# endregion
 
-# =============================================================================
-# Base Classes (depend on data classes above)
-# =============================================================================
-
+# region Base Classes
 
 class BaseTool(ABC):
     """
@@ -216,3 +210,5 @@ class ToolRegistry:
     def __contains__(self, name: str) -> bool:
         """check if a tool is registered"""
         return name in self._tools
+
+# endregion

@@ -1,6 +1,5 @@
 """tests for demo menu system"""
 
-import pytest
 from common.demo_menu import Demo, MenuRunner
 
 

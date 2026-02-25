@@ -17,6 +17,7 @@ Run with: uv run python -m phase5_production.03_optimization.01_compression.resp
 from dataclasses import dataclass
 from inspect import cleandoc
 from typing import Any
+
 from dotenv import load_dotenv
 
 load_dotenv()

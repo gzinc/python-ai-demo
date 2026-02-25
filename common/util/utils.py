@@ -5,8 +5,8 @@ Provides common decorators and helpers for API key checking and demo management.
 """
 
 import os
+from collections.abc import Callable
 from functools import wraps
-from typing import Callable
 
 from dotenv import load_dotenv
 

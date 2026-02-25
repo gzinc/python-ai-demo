@@ -8,13 +8,13 @@ and simulate responses so you can learn the techniques.
 Run with: uv run python phase2_llm_fundamentals/01_prompt_engineering/examples.py
 """
 
-from inspect import cleandoc
-from typing import List, Dict, Any
 import json
+from inspect import cleandoc
 
 from common.demo_menu import Demo, MenuRunner
 from common.util.utils import print_section
 
+# region Utilities
 
 
 def print_prompt(prompt: str, label: str = "PROMPT") -> None:
@@ -31,9 +31,11 @@ def print_response(response: str, label: str = "RESPONSE") -> None:
     print(response.strip())
 
 
-# =============================================================================
-# PART 1: Basic Prompts - Clarity is Key
-# =============================================================================
+# endregion
+
+
+# region Demo 1: Basic Prompts
+
 
 def basic_prompts() -> None:
     """the foundation: clear, specific instructions"""
@@ -72,9 +74,11 @@ def basic_prompts() -> None:
     print("   4. Include constraints (word count, focus areas)")
 
 
-# =============================================================================
-# PART 2: System Prompts - Setting Behavior
-# =============================================================================
+# endregion
+
+
+# region Demo 2: System Prompts
+
 
 def system_prompts() -> None:
     """system prompts define the AI's persona and rules"""
@@ -135,9 +139,11 @@ def system_prompts() -> None:
     print("   4. Keep it focused (not too many rules)")
 
 
-# =============================================================================
-# PART 3: Few-Shot Learning - Teaching by Example
-# =============================================================================
+# endregion
+
+
+# region Demo 3: Few-Shot Learning
+
 
 def few_shot_learning() -> None:
     """teach the model a pattern with examples"""
@@ -190,9 +196,11 @@ def few_shot_learning() -> None:
     print("   4. Order can matter - put best examples first")
 
 
-# =============================================================================
-# PART 4: Chain-of-Thought - Step by Step Reasoning
-# =============================================================================
+# endregion
+
+
+# region Demo 4: Chain-of-Thought
+
 
 def chain_of_thought() -> None:
     """make the model reason step by step for better accuracy"""
@@ -258,9 +266,11 @@ def chain_of_thought() -> None:
     print("   ❌ Simple factual questions (overkill)")
 
 
-# =============================================================================
-# PART 5: Output Formatting - Structured Responses
-# =============================================================================
+# endregion
+
+
+# region Demo 5: Output Formatting
+
 
 def output_formatting() -> None:
     """control the format of LLM responses"""
@@ -343,9 +353,11 @@ def output_formatting() -> None:
     print("   4. Include example values in format spec")
 
 
-# =============================================================================
-# PART 6: RAG Prompt Patterns
-# =============================================================================
+# endregion
+
+
+# region Demo 6: RAG Prompt Patterns
+
 
 def rag_prompt_patterns() -> None:
     """prompt patterns specifically for RAG systems"""
@@ -418,9 +430,11 @@ def rag_prompt_patterns() -> None:
     print("   4. Use strict grounding for factual applications")
 
 
-# =============================================================================
-# PART 7: Error Handling and Edge Cases
-# =============================================================================
+# endregion
+
+
+# region Demo 7: Error Handling
+
 
 def error_handling() -> None:
     """handle edge cases gracefully"""
@@ -495,9 +509,11 @@ def error_handling() -> None:
     print("   4. Handle edge cases explicitly in prompt")
 
 
-# =============================================================================
-# PART 8: Putting It All Together
-# =============================================================================
+# endregion
+
+
+# region Demo 8: Complete Production Example
+
 
 def complete_example() -> None:
     """a complete, production-ready prompt example"""
@@ -567,9 +583,7 @@ def complete_example() -> None:
     print("   ✅ Fallback behavior defined")
 
 
-# =============================================================================
-# Main
-# =============================================================================
+# endregion
 
 
 # region Demo Menu Configuration
@@ -587,9 +601,9 @@ DEMOS = [
 
 # endregion
 
+
 def main() -> None:
     """interactive demo runner"""
-    
     runner = MenuRunner(DEMOS, title="Prompt Engineering - Examples")
     runner.run()
 

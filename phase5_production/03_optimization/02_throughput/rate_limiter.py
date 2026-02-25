@@ -11,7 +11,6 @@ Run with: uv run python -m phase5_production.03_optimization.rate_limiter
 
 import time
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
 from enum import Enum
 from threading import Lock
 

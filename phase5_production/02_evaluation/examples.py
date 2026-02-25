@@ -12,12 +12,12 @@ from common.demo_menu import Demo, MenuRunner
 
 try:
     # when run as module: python -m phase5_production.02_evaluation.examples
-    from .rag_metrics import demo_rag_evaluation
     from .llm_tracing import demo_llm_tracing
+    from .rag_metrics import demo_rag_evaluation
 except ImportError:
     # when run directly: python examples.py (or PyCharm)
-    from rag_metrics import demo_rag_evaluation
     from llm_tracing import demo_llm_tracing
+    from rag_metrics import demo_rag_evaluation
 
 
 # region Demo Menu Configuration

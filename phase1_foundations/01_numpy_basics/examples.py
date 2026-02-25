@@ -4,12 +4,11 @@ NumPy Basics - Practical Examples for AI Development
 Run with: uv run python phase1_foundations/01_numpy_basics/examples.py
 """
 
+
 import numpy as np
-from typing import Tuple
 
 from common.demo_menu import Demo, MenuRunner
 from common.util.utils import print_section
-
 
 
 def array_creation_examples() -> None:

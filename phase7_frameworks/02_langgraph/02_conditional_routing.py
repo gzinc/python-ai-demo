@@ -22,7 +22,6 @@ from langgraph.graph.message import add_messages
 from common.demo_menu import Demo, MenuRunner
 from common.util.utils import print_section
 
-
 # region Utility Functions
 # endregion
 
@@ -636,7 +635,7 @@ def main() -> None:
         ╚════════════════════════════════════════════════════════════════════╝
     """))
 
-    
+
     runner = MenuRunner(DEMOS, title="LangGraph Conditional Routing")
     runner.run()
 

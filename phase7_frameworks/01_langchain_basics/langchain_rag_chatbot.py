@@ -17,6 +17,7 @@ import os
 from inspect import cleandoc
 
 from dotenv import load_dotenv
+
 from common.demo_menu import Demo, MenuRunner
 from common.util.utils import print_section
 

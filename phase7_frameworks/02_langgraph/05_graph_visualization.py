@@ -21,7 +21,6 @@ from langgraph.graph import END, START, StateGraph
 from common.demo_menu import Demo, MenuRunner
 from common.util.utils import print_section
 
-
 # region Utility Functions
 # endregion
 
@@ -560,7 +559,7 @@ def main() -> None:
         ╚════════════════════════════════════════════════════════════════════╝
     """))
 
-    
+
     runner = MenuRunner(DEMOS, title="LangGraph Visualization")
     runner.run()
 

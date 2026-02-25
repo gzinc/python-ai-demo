@@ -21,9 +21,8 @@ import torch.nn as nn
 import torch.optim as optim
 from torch.utils.data import DataLoader
 from torchvision import datasets, transforms
+
 from common.util.utils import print_section
-
-
 
 # -----------------------------------------------------------------------------
 # the model: a simple neural network
@@ -239,7 +238,7 @@ def main():
     # optimizer: Adam (adaptive learning rate)
     optimizer = optim.Adam(model.parameters(), lr=args.lr)
 
-    print(f"\nloss function: CrossEntropyLoss")
+    print("\nloss function: CrossEntropyLoss")
     print(f"optimizer: Adam (lr={args.lr})")
 
     # -------------------------------------------------------------------------
@@ -290,7 +289,7 @@ def main():
     print(f"saved to: {model_path}")
     print(f"file size: {file_size:,} bytes ({file_size / 1024:.1f} KB)")
     print(f"contains: {trainable_params:,} trained parameters")
-    print(f"\nthis file IS the trained model - those 235K numbers that learned to recognize digits")
+    print("\nthis file IS the trained model - those 235K numbers that learned to recognize digits")
 
     # show what happened to the weights
     print_section("What Just Happened?")

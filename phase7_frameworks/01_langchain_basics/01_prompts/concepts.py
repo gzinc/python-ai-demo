@@ -12,7 +12,6 @@ No API key required - demonstrates patterns through output inspection.
 from inspect import cleandoc
 from typing import Any
 
-from common.demo_menu import Demo, MenuRunner
 from langchain_core.prompts import (
     ChatPromptTemplate,
     FewShotPromptTemplate,
@@ -20,8 +19,9 @@ from langchain_core.prompts import (
     PromptTemplate,
 )
 from langchain_core.prompts.few_shot import FewShotChatMessagePromptTemplate
-from common.util.utils import print_section
 
+from common.demo_menu import Demo, MenuRunner
+from common.util.utils import print_section
 
 # region Helper Functions
 
@@ -618,7 +618,7 @@ def main() -> None:
     print("  No API key required - demonstrates patterns only")
     print("=" * 70)
 
-    
+
     runner = MenuRunner(DEMOS, title="LangChain Prompts - Conceptual Understanding")
     runner.run()
 

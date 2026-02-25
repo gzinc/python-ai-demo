@@ -16,16 +16,17 @@ if str(_module_dir) not in sys.path:
 # tool infrastructure from tools/
 from tools import (
     BaseTool,
-    ToolRegistry,
     ToolDefinition,
     ToolParameter,
+    ToolRegistry,
     ToolResult,
 )
+
+from .analysis_agent import AnalysisAgent
 
 # specialist agents
 from .base_specialist import BaseSpecialist
 from .research_agent import ResearchAgent
-from .analysis_agent import AnalysisAgent
 from .writer_agent import WriterAgent
 
 __all__ = [

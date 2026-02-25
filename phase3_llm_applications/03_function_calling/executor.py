@@ -5,8 +5,8 @@ Similar to a Command Executor or Task Runner in Java.
 Handles validation, error handling, and result formatting.
 """
 
-from typing import Any, Callable, Optional
 import json
+from collections.abc import Callable
 
 from schemas import ToolResult
 
@@ -48,7 +48,7 @@ class ToolExecutor:
         self,
         name: str,
         function: Callable,
-        validator: Optional[Callable] = None
+        validator: Callable | None = None
     ) -> None:
         """
         register a function that can be called by LLM
@@ -66,7 +66,7 @@ class ToolExecutor:
         self,
         name: str,
         args: dict,
-        tool_call_id: Optional[str] = None
+        tool_call_id: str | None = None
     ) -> ToolResult:
         """
         safely execute a function

@@ -92,8 +92,8 @@ class HttpGetTool(BaseTool):
                     except json.JSONDecodeError:
                         return ToolResult.ok(response.text)
             except ImportError:
-                import urllib.request
                 import urllib.error
+                import urllib.request
                 request = urllib.request.Request(url, headers={"User-Agent": "Python-Agent-Tool/1.0"})
                 with urllib.request.urlopen(request, timeout=self._timeout_seconds) as response:
                     content = response.read().decode("utf-8")

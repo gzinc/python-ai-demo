@@ -13,13 +13,12 @@ Run with: uv run python phase7_frameworks/03_llamaindex/03_advanced_rag.py
 
 from inspect import cleandoc
 
-from llama_index.core import VectorStoreIndex, Document, Settings
-from llama_index.core.retrievers import VectorIndexRetriever
+from llama_index.core import Document, VectorStoreIndex
 from llama_index.core.query_engine import RetrieverQueryEngine
+from llama_index.core.retrievers import VectorIndexRetriever
 
 from common.demo_menu import Demo, MenuRunner
 from common.util.utils import check_api_keys, print_section
-
 
 # region Demo 1: Custom Retrieval with Top-K
 

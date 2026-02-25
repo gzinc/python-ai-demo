@@ -72,6 +72,31 @@ services:
     networks:
       - glz-network
 
+  # Neo4j - graph database for Graphiti knowledge graph memory
+  neo4j:
+    image: neo4j:5.26.0
+    container_name: glz-neo4j
+    restart: unless-stopped
+    environment:
+      NEO4J_AUTH: neo4j/demodemo
+      NEO4J_server_memory_pagecache_size: 512m
+      NEO4J_server_memory_heap_initial__size: 512m
+      NEO4J_server_memory_heap_max__size: 1G
+    ports:
+      - "7474:7474"  # browser UI
+      - "7687:7687"  # bolt protocol
+    volumes:
+      - neo4j_data:/data
+      - neo4j_logs:/logs
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:7474 || exit 1"]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+    networks:
+      - glz-network
+
 networks:
   glz-network:
     driver: bridge
@@ -84,4 +109,8 @@ volumes:
   pgadmin_data:
     external: true
   redis_data:
+    external: true
+  neo4j_data:
+    external: true
+  neo4j_logs:
     external: true

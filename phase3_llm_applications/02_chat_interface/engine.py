@@ -6,10 +6,9 @@ This is the main class you'd use in your application.
 """
 
 import os
-from typing import Optional
 
 from chat_memory import ChatMemory
-from streaming import stream_openai, stream_anthropic, stream_to_console
+from streaming import stream_anthropic, stream_openai, stream_to_console
 
 
 class ChatEngine:
@@ -39,7 +38,7 @@ class ChatEngine:
         self,
         system_prompt: str = "You are a helpful assistant.",
         provider: str = "openai",  # "openai" or "anthropic"
-        model: Optional[str] = None,
+        model: str | None = None,
         memory_strategy: str = "sliding_window",
         max_messages: int = 20,
         streaming: bool = True,

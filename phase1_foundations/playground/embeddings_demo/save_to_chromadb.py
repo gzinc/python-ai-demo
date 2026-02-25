@@ -11,17 +11,16 @@ Requirements:
 - chromadb
 """
 
-import numpy as np
 from pathlib import Path
-from sentence_transformers import SentenceTransformer
-from typing import Dict
 
+import numpy as np
+from sentence_transformers import SentenceTransformer
 from vector_db import VectorDB, demonstrate_search
+
 from common.util.utils import print_section
 
 
-
-def load_memory_files() -> Dict[str, str]:
+def load_memory_files() -> dict[str, str]:
     """
     load all markdown files from .serena/memories/
 
@@ -47,8 +46,8 @@ def load_memory_files() -> Dict[str, str]:
 
 def generate_embeddings(
     model: SentenceTransformer,
-    memories: Dict[str, str]
-) -> Dict[str, np.ndarray]:
+    memories: dict[str, str]
+) -> dict[str, np.ndarray]:
     """
     generate embeddings for all memory files
 
@@ -138,8 +137,8 @@ def main() -> None:
     # summary
     print_section("Summary")
     print(f"\n✅ saved {len(embeddings)} memory files to ChromaDB")
-    print(f"✅ database location: .serena/chromadb/")
-    print(f"✅ can now perform semantic search over your memories")
+    print("✅ database location: .serena/chromadb/")
+    print("✅ can now perform semantic search over your memories")
 
     print("\n💡 What You Can Do Now:")
     print("   - Search memories by meaning, not just keywords")

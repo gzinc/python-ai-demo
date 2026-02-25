@@ -17,11 +17,10 @@ Run with: uv run python phase4_ai_agents/01_simple_agent/agent.py
 
 import json
 import re
-from typing import Callable
+from collections.abc import Callable
 
 from dotenv import load_dotenv
-
-from schemas import AgentState, AgentAction, AgentResult, AgentConfig
+from schemas import AgentAction, AgentConfig, AgentResult, AgentState
 
 # load environment variables from .env file (like reading .properties in Java)
 load_dotenv()

@@ -9,7 +9,8 @@ Run with: uv run python -m phase5_production.01_api_design.semantic_cache
 """
 
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
+from datetime import UTC, datetime
+
 import numpy as np
 
 
@@ -19,7 +20,7 @@ class CacheEntry:
     query: str
     embedding: np.ndarray
     response: str
-    created_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
+    created_at: datetime = field(default_factory=lambda: datetime.now(UTC))
     hit_count: int = 0
 
 
@@ -157,7 +158,7 @@ def demo_semantic_cache() -> None:
             print(f"  ✗ CACHE MISS: '{query}'")
             if mock_response:
                 cache.set(query, embedding, mock_response)
-                print(f"    → Stored response")
+                print("    → Stored response")
         print()
 
     print(f"Cache stats: {cache.stats()}")

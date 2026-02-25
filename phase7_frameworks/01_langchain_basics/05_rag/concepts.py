@@ -7,13 +7,12 @@ Shows document processing, chunking, embedding concepts, and retrieval logic.
 Run with: uv run python -m phase7_frameworks.01_langchain_basics.05_rag.concepts
 """
 
-from inspect import cleandoc
 import math
+from inspect import cleandoc
 from typing import Any
 
-from common.util.utils import print_section
-
 from common.demo_menu import Demo, MenuRunner
+from common.util.utils import print_section
 
 
 # region Mock Document Classes
@@ -79,7 +78,7 @@ def demo_document_loading() -> None:
         metadata={"source": "rag_notes.txt"},
     )
 
-    print(f"\n📝 loaded text document:")
+    print("\n📝 loaded text document:")
     print(f"  source: {text_doc.metadata['source']}")
     print(f"  content: {text_doc.page_content[:80]}...")
 
@@ -89,7 +88,7 @@ def demo_document_loading() -> None:
         metadata={"source": "https://ai-news.com/article", "title": "AI Progress 2024"},
     )
 
-    print(f"\n🌐 loaded web document:")
+    print("\n🌐 loaded web document:")
     print(f"  url: {web_doc.metadata['source']}")
     print(f"  title: {web_doc.metadata['title']}")
 
@@ -135,7 +134,7 @@ def demo_text_chunking() -> None:
     sentences = sample_text.split(". ")
     sentence_chunks = [sentences[i: i + 2] for i in range(0, len(sentences), 2)]
 
-    print(f"\n✂️ chunking strategy: sentence-based (2 sentences per chunk)")
+    print("\n✂️ chunking strategy: sentence-based (2 sentences per chunk)")
     for i, chunk in enumerate(sentence_chunks, 1):
         chunk_text = ". ".join(chunk)
         print(f"  chunk {i}: '{chunk_text}'")
@@ -265,7 +264,7 @@ def demo_vector_similarity() -> None:
     # sort by similarity (highest first)
     similarities.sort(key=lambda pair: pair[1], reverse=True)
 
-    print(f"\n🎯 top 2 most relevant documents:")
+    print("\n🎯 top 2 most relevant documents:")
     for i, (text, score) in enumerate(similarities[:2], 1):
         print(f"  {i}. ({score:.3f}) '{text}'")
 
@@ -413,7 +412,7 @@ def demo_rag_pipeline() -> None:
     similarities = [(chunk, cosine_sim(query_vector, emb)) for chunk, emb in vector_store]
     similarities.sort(key=lambda pair: pair[1], reverse=True)
 
-    print(f"\n  top 2 retrieved chunks:")
+    print("\n  top 2 retrieved chunks:")
     context_chunks = similarities[:2]
     for i, (chunk, score) in enumerate(context_chunks, 1):
         print(f"    {i}. ({score:.3f}) '{chunk}'")
@@ -426,7 +425,7 @@ def demo_rag_pipeline() -> None:
     # step 7: llm generation (simulated)
     print("\n🤖 step 7: LLM generation (simulated)")
     prompt = f"Context: {context}\n\nQuestion: {query}\n\nAnswer:"
-    print(f"  prompt sent to LLM:")
+    print("  prompt sent to LLM:")
     print(f"  '{prompt}'")
 
     print("\n  simulated LLM response:")
@@ -518,7 +517,7 @@ def main() -> None:
     print("  No API key required - demonstrates patterns only")
     print("=" * 70)
 
-    
+
     runner = MenuRunner(DEMOS, title="TODO: Add title")
     runner.run()
 

@@ -15,15 +15,12 @@ Prerequisites:
 Run with: uv run python phase7_frameworks/03_llamaindex/02_local_setup.py
 """
 
-from pathlib import Path
 from inspect import cleandoc
 
-from llama_index.core import VectorStoreIndex, Document, Settings, StorageContext
-from llama_index.core.node_parser import SentenceSplitter
+from llama_index.core import Document, Settings, StorageContext, VectorStoreIndex
 
 from common.demo_menu import Demo, MenuRunner
 from common.util.utils import print_section
-
 
 # region Utility: Check Ollama
 
@@ -156,8 +153,8 @@ def demo_local_persistent():
         return
 
     # configure local LLM and embeddings
-    from llama_index.llms.ollama import Ollama
     from llama_index.embeddings.huggingface import HuggingFaceEmbedding
+    from llama_index.llms.ollama import Ollama
 
     Settings.llm = Ollama(model="llama3.1:latest", request_timeout=120.0)
     Settings.embed_model = HuggingFaceEmbedding(model_name="BAAI/bge-small-en-v1.5")
@@ -258,8 +255,8 @@ def demo_local_chat():
         return
 
     # configure
-    from llama_index.llms.ollama import Ollama
     from llama_index.embeddings.huggingface import HuggingFaceEmbedding
+    from llama_index.llms.ollama import Ollama
 
     Settings.llm = Ollama(model="llama3.1:latest", request_timeout=120.0)
     Settings.embed_model = HuggingFaceEmbedding(model_name="BAAI/bge-small-en-v1.5")

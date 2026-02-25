@@ -22,7 +22,6 @@ from langgraph.graph.message import add_messages
 from common.demo_menu import Demo, MenuRunner
 from common.util.utils import print_section
 
-
 # region Utility Functions
 # endregion
 
@@ -286,7 +285,7 @@ def demo_supervisor_pattern() -> None:
         "next_worker": "worker_a"  # initial value (will be updated by supervisor)
     })
 
-    print(f"\n✅ Final Results:")
+    print("\n✅ Final Results:")
     for i, res in enumerate(result["results"], 1):
         print(f"   {i}. {res}")
 
@@ -726,7 +725,7 @@ def main() -> None:
         ╚════════════════════════════════════════════════════════════════════╝
     """))
 
-    
+
     runner = MenuRunner(DEMOS, title="LangGraph Multi-Agent")
     runner.run()
 

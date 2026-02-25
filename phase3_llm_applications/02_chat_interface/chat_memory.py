@@ -24,9 +24,10 @@ Run with: uv run python phase3_llm_applications/02_chat_interface/chat_memory.py
 """
 
 from dataclasses import dataclass, field
-from typing import Literal, Optional
+from typing import Literal
 
-from schemas import Role, Message
+from schemas import Message, Role
+
 from common.demo_menu import Demo, MenuRunner
 from common.util.utils import print_section
 
@@ -139,7 +140,7 @@ class ChatMemory:
         """get number of conversation turns (user-assistant pairs)"""
         return len([msg for msg in self.messages if msg.role == Role.USER])
 
-    def get_last_message(self) -> Optional[Message]:
+    def get_last_message(self) -> Message | None:
         """get the most recent message"""
         return self.messages[-1] if self.messages else None
 

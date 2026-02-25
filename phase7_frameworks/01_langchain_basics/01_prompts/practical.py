@@ -12,6 +12,7 @@ Requires: OPENAI_API_KEY in .env
 from inspect import cleandoc
 from typing import TYPE_CHECKING
 
+from langchain_core.messages import AIMessage, HumanMessage
 from langchain_core.prompts import (
     ChatPromptTemplate,
     FewShotChatMessagePromptTemplate,
@@ -19,10 +20,9 @@ from langchain_core.prompts import (
     MessagesPlaceholder,
     PromptTemplate,
 )
-from langchain_core.messages import AIMessage, HumanMessage
 
 from common.demo_menu import Demo, MenuRunner
-from common.util.utils import check_api_keys, print_section, requires_openai
+from common.util.utils import check_api_keys, print_section
 
 if TYPE_CHECKING:
     from langchain_openai import ChatOpenAI

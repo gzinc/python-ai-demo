@@ -19,32 +19,28 @@ _module_dir = Path(__file__).parent
 if str(_module_dir) not in sys.path:
     sys.path.insert(0, str(_module_dir))
 
-from schemas import AgentProfile, TeamConfig, TeamResult
 from agents import (
-    ToolRegistry,
-    ResearchAgent,
     AnalysisAgent,
+    ResearchAgent,
+    ToolRegistry,
     WriterAgent,
 )
 from orchestrator import MultiAgentOrchestrator
+from schemas import AgentProfile, TeamConfig, TeamResult
+
 from common.demo_menu import Demo, MenuRunner
 from common.util.utils import print_section
-
 
 
 def print_result(result: TeamResult) -> None:
     """print a team result nicely"""
     print(f"\n📝 Answer:\n{result.answer[:500]}...")
-    print(f"\n📊 Stats:")
+    print("\n📊 Stats:")
     print(f"   - Iterations: {result.iterations}")
     print(f"   - Delegations: {result.delegation_summary()}")
     print(f"   - Success: {'✅' if result.success else '❌'}")
 
-
-# =============================================================================
-# Demo 1: Basic Delegation
-# =============================================================================
-
+# region Demo 1: Basic Delegation
 
 def demo_basic_delegation():
     """
@@ -65,11 +61,9 @@ def demo_basic_delegation():
 
     print_result(result)
 
+# endregion
 
-# =============================================================================
-# Demo 2: Research Pipeline
-# =============================================================================
-
+# region Demo 2: Research Pipeline
 
 def demo_research_pipeline():
     """
@@ -102,11 +96,9 @@ def demo_research_pipeline():
         print(f"   {i}. [{d.agent_name}] {status}")
         print(f"      Task: {d.task[:60]}...")
 
+# endregion
 
-# =============================================================================
-# Demo 3: Direct Specialist Use
-# =============================================================================
-
+# region Demo 3: Direct Specialist Use
 
 def demo_direct_specialists():
     """
@@ -138,11 +130,9 @@ def demo_direct_specialists():
     print("\n📝 Final Output (from writer):")
     print(writer_result.data[:400] if writer_result.data else "No data")
 
+# endregion
 
-# =============================================================================
-# Demo 4: Custom Specialists
-# =============================================================================
-
+# region Demo 4: Custom Specialists
 
 def demo_custom_specialist():
     """
@@ -187,11 +177,9 @@ def demo_custom_specialist():
     result = registry.execute("code_review_agent", task="Review this authentication code")
     print(f"\n📝 Result: {result.data[:200] if result.data else 'No data'}...")
 
+# endregion
 
-# =============================================================================
-# Demo 5: Team Configuration
-# =============================================================================
-
+# region Demo 5: Team Configuration
 
 def demo_team_config():
     """
@@ -210,7 +198,7 @@ def demo_team_config():
         verbose=True,
     )
 
-    print(f"\nConfiguration:")
+    print("\nConfiguration:")
     print(f"  - Max delegations: {strict_config.max_delegations}")
     print(f"  - Max iterations: {strict_config.max_iterations}")
     print(f"  - Provider: {strict_config.provider}")
@@ -224,11 +212,9 @@ def demo_team_config():
 
     print_result(result)
 
+# endregion
 
-# =============================================================================
-# Demo 6: Real API (Optional)
-# =============================================================================
-
+# region Demo 6: Real API (Optional)
 
 def demo_real_api():
     """
@@ -264,19 +250,17 @@ def demo_real_api():
 
     print_result(result)
 
-
-# =============================================================================
-# Main
-# =============================================================================
-
+# endregion
 
 # region Demo Menu Configuration
 
 DEMOS = [
-    Demo("1", "Two Agent System", "collaborative agents", example_two_agent_system),
-    Demo("2", "Agent Orchestration", "coordinator pattern", example_agent_orchestration),
-    Demo("3", "Hierarchical Agents", "manager-worker pattern", example_hierarchical_agents),
-    Demo("4", "Agent Communication", "message passing between agents", example_agent_communication),
+    Demo("1", "Basic Delegation", "orchestrator delegates to specialists", demo_basic_delegation),
+    Demo("2", "Research Pipeline", "research → analyze → write", demo_research_pipeline),
+    Demo("3", "Direct Specialists", "call specialists without orchestrator", demo_direct_specialists),
+    Demo("4", "Custom Specialist", "build a custom specialist agent", demo_custom_specialist),
+    Demo("5", "Team Config", "configure agent teams", demo_team_config),
+    Demo("6", "Real API Demo", "live LLM orchestration", demo_real_api, needs_api=True),
 ]
 
 # endregion

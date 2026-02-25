@@ -5,7 +5,7 @@ AgentProfile defines a specialist agent's identity and capabilities.
 TeamConfig configures the multi-agent orchestration settings.
 """
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import Literal
 
 

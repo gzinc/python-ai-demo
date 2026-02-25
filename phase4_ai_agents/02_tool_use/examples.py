@@ -21,18 +21,15 @@ from common.demo_menu import Demo, MenuRunner
 if __name__ == "__main__":
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from schemas.tool import ToolParameter, ToolDefinition, ToolResult
+from schemas.tool import ToolDefinition, ToolParameter, ToolResult
 from tools.base import BaseTool, ToolRegistry
-from tools.file_tools import ReadFileTool, WriteFileTool, ListDirectoryTool
-from tools.web_search import WebSearchTool
+from tools.file_tools import ListDirectoryTool, ReadFileTool, WriteFileTool
 from tools.http_tool import HttpGetTool
+from tools.web_search import WebSearchTool
+
 from common.util.utils import print_section
 
-
-
-# ==============================================================================
-#   Example 1: Tool Schema Basics
-# ==============================================================================
+# region Example 1: Tool Schema Basics
 
 def example_tool_schemas():
     """
@@ -85,7 +82,7 @@ def example_tool_schemas():
 
     # convert to OpenAI format
     openai_schema = definition.to_openai_schema()
-    print(f"\nOpenAI schema:")
+    print("\nOpenAI schema:")
     print(f"  {openai_schema}")
 
     # --- ToolResult ---
@@ -102,10 +99,9 @@ def example_tool_schemas():
     print(f"\nFailure result: {failure}")
     print(f"  As observation: {failure.to_observation()}")
 
+# endregion
 
-# ==============================================================================
-#   Example 2: File Tools
-# ==============================================================================
+# region Example 2: File Tools
 
 def example_file_tools():
     """
@@ -159,10 +155,9 @@ def example_file_tools():
         result = restricted_tool.execute(path="/etc/passwd")
         print(f"Restricted access: {result.to_observation()}")
 
+# endregion
 
-# ==============================================================================
-#   Example 3: Web Search Tool
-# ==============================================================================
+# region Example 3: Web Search Tool
 
 def example_web_search():
     """
@@ -193,10 +188,9 @@ def example_web_search():
     result = search_tool.execute(query="weather forecast")
     print(f"Results:\n{result.to_observation()}")
 
+# endregion
 
-# ==============================================================================
-#   Example 4: HTTP Tool
-# ==============================================================================
+# region Example 4: HTTP Tool
 
 def example_http_tool():
     """
@@ -226,10 +220,9 @@ def example_http_tool():
     result = http_tool.execute(url="not-a-valid-url")
     print(f"Response: {result.to_observation()}")
 
+# endregion
 
-# ==============================================================================
-#   Example 5: Tool Registry
-# ==============================================================================
+# region Example 5: Tool Registry
 
 def example_tool_registry():
     """
@@ -280,10 +273,9 @@ def example_tool_registry():
     for tool_schema in openai_tools:
         print(f"  - {tool_schema['function']['name']}")
 
+# endregion
 
-# ==============================================================================
-#   Example 6: Creating Custom Tools
-# ==============================================================================
+# region Example 6: Creating Custom Tools
 
 def example_custom_tool():
     """
@@ -370,18 +362,17 @@ def example_custom_tool():
     result = registry.execute("calculator", operation="subtract", a=100, b=37)
     print(f"Via registry: {result.to_observation()}")
 
-
-# ==============================================================================
-#   Main
-# ==============================================================================
+# endregion
 
 # region Demo Menu Configuration
 
 DEMOS = [
-    Demo("1", "Calculator Tool", "basic math operations", example_calculator_tool),
-    Demo("2", "Web Search Tool", "information retrieval", example_web_search_tool),
-    Demo("3", "Custom Tool Creation", "build your own tools", example_custom_tool),
-    Demo("4", "Tool Composition", "combine multiple tools", example_tool_composition),
+    Demo("1", "Tool Schema Basics", "parameters, definitions, results", example_tool_schemas),
+    Demo("2", "File Tools", "read/write/list files", example_file_tools),
+    Demo("3", "Web Search", "search with Tavily/mock", example_web_search),
+    Demo("4", "HTTP Tool", "make HTTP GET requests", example_http_tool),
+    Demo("5", "Tool Registry", "service container pattern", example_tool_registry),
+    Demo("6", "Custom Tool Creation", "build your own tools", example_custom_tool),
 ]
 
 # endregion

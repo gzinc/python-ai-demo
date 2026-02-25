@@ -16,11 +16,10 @@ Module Structure (Java-like separation):
 Run with: uv run python phase3_llm_applications/02_chat_interface/examples.py
 """
 
-from dotenv import load_dotenv
-
 from chat_memory import ChatMemory
-from streaming import stream_to_console, _simulate_stream
+from dotenv import load_dotenv
 from engine import ChatEngine
+from streaming import _simulate_stream, stream_to_console
 
 from common.demo_menu import Demo, MenuRunner
 from common.util.utils import print_section
@@ -65,7 +64,7 @@ def example_basic_chat():
         print("   Assistant: ", end="")
         engine.chat(user_msg)
 
-    print(f"\n   --- Conversation Stats ---")
+    print("\n   --- Conversation Stats ---")
     print(f"   Turns: {engine.memory.get_turn_count()}")
     print(f"   Messages in memory: {len(engine.memory)}")
 
@@ -107,15 +106,15 @@ def example_memory_strategies():
             budget_memory.add_assistant_message(content)
 
     print("\n   After 4 conversation turns:")
-    print(f"\n   Full Strategy:")
+    print("\n   Full Strategy:")
     print(f"      Messages: {len(full_memory)}")
     print(f"      Tokens: ~{full_memory._estimate_tokens()}")
 
-    print(f"\n   Sliding Window (max 4):")
+    print("\n   Sliding Window (max 4):")
     print(f"      Messages: {len(window_memory)}")
     print(f"      Kept: {[msg.content[:20]+'...' for msg in window_memory.messages]}")
 
-    print(f"\n   Token Budget (max 200):")
+    print("\n   Token Budget (max 200):")
     print(f"      Messages: {len(budget_memory)}")
     print(f"      Tokens: ~{budget_memory._estimate_tokens()}")
 
@@ -174,13 +173,13 @@ def example_reference_resolution():
 
             # show what gets sent to API
             if "its" in content or "them" in content or "one" in content:
-                print(f"         ↑ Reference resolved using conversation history!")
+                print("         ↑ Reference resolved using conversation history!")
         else:
             memory.add_assistant_message(content)
             preview = content[:60] + "..." if len(content) > 60 else content
             print(f"   Assistant: {preview}")
 
-    print(f"\n   --- How References Work ---")
+    print("\n   --- How References Work ---")
     print(f"   Messages sent to API: {len(memory.get_messages())}")
     print("   The LLM sees ALL previous messages, so it knows:")
     print("   • 'its' refers to Tesla")

@@ -9,10 +9,8 @@ Contains:
 """
 
 import math
-from typing import Optional
 
 from schemas import Tool, ToolParameter
-
 
 # ─────────────────────────────────────────────────────────────
 # TOOL CREATORS (Factory methods)
@@ -258,7 +256,7 @@ def web_search(query: str, num_results: int = 5) -> dict:
 # ─────────────────────────────────────────────────────────────
 
 
-def validate_calculate_args(args: dict) -> Optional[str]:
+def validate_calculate_args(args: dict) -> str | None:
     """validator for calculator - check for dangerous operations"""
     expression = args.get("expression", "")
 

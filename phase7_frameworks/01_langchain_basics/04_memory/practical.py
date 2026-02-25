@@ -7,7 +7,6 @@ RunnableWithMessageHistory pattern (LangChain 1.0+ compatible).
 Run: uv run python -m phase7_frameworks.01_langchain_basics.04_memory.practical
 """
 
-from inspect import cleandoc
 
 from langchain_community.chat_message_histories import ChatMessageHistory
 from langchain_core.chat_history import BaseChatMessageHistory
@@ -23,7 +22,6 @@ from common.util.utils import (
     requires_both_keys,
     requires_openai,
 )
-
 
 # region Demo 1: Basic Conversation with Buffer Memory
 
@@ -134,7 +132,7 @@ def demo_buffer_memory_conversation() -> None:
         {"input": "Hi, I'm learning about LangChain memory"},
         config={"configurable": {"session_id": "user1"}},
     )
-    print(f"User: Hi, I'm learning about LangChain memory")
+    print("User: Hi, I'm learning about LangChain memory")
     print(f"Bot:  {response}\n")
 
     # turn 2 (bot remembers context)
@@ -142,7 +140,7 @@ def demo_buffer_memory_conversation() -> None:
         {"input": "What did I say I was learning about?"},
         config={"configurable": {"session_id": "user1"}},
     )
-    print(f"User: What did I say I was learning about?")
+    print("User: What did I say I was learning about?")
     print(f"Bot:  {response}\n")
 
     # inspect memory
@@ -270,7 +268,7 @@ def demo_window_memory_conversation() -> None:
         print(f"[{i}] User: {user_msg}")
         print(f"    Bot:  {response}\n")
 
-    print(f"✓ Window memory keeps last 2 exchanges in history")
+    print("✓ Window memory keeps last 2 exchanges in history")
 
 
 # endregion
@@ -391,7 +389,7 @@ def demo_summary_memory_pattern() -> None:
 
     # test summary works
     response = chain.invoke({"summary": summary, "input": "What do I work on?"})
-    print(f"User: What do I work on?")
+    print("User: What do I work on?")
     print(f"Bot:  {response}")
 
     print("\n✓ Summary pattern compresses history while preserving key information")
@@ -527,7 +525,7 @@ def demo_adaptive_memory_pattern() -> None:
         print(f"[{i}] User: {msg}")
         print(f"    Bot:  {response[:60]}...\n")
 
-    print(f"✓ Adaptive memory keeps important context while managing size")
+    print("✓ Adaptive memory keeps important context while managing size")
 
 
 # endregion
@@ -636,14 +634,14 @@ def demo_multi_session_memory() -> None:
     response = chain_with_memory.invoke(
         {"input": "My name is Alice"}, config={"configurable": {"session_id": "alice"}}
     )
-    print(f"[Alice] User: My name is Alice")
+    print("[Alice] User: My name is Alice")
     print(f"[Alice] Bot:  {response}\n")
 
     # bob's conversation
     response = chain_with_memory.invoke(
         {"input": "My name is Bob"}, config={"configurable": {"session_id": "bob"}}
     )
-    print(f"[Bob] User: My name is Bob")
+    print("[Bob] User: My name is Bob")
     print(f"[Bob] Bot:  {response}\n")
 
     # verify separation
@@ -651,10 +649,10 @@ def demo_multi_session_memory() -> None:
         {"input": "What's my name?"},
         config={"configurable": {"session_id": "alice"}},
     )
-    print(f"[Alice] User: What's my name?")
+    print("[Alice] User: What's my name?")
     print(f"[Alice] Bot:  {response}\n")
 
-    print(f"## Session Store:")
+    print("## Session Store:")
     print(f"  Total sessions: {len(store)}")
     print(f"  Alice messages: {len(store['alice'].messages)}")
     print(f"  Bob messages: {len(store['bob'].messages)}")
@@ -768,14 +766,14 @@ def demo_memory_with_custom_prompt() -> None:
         {"input": "What are list comprehensions?"},
         config={"configurable": {"session_id": "user1"}},
     )
-    print(f"User: What are list comprehensions?")
+    print("User: What are list comprehensions?")
     print(f"Bot:  {response}\n")
 
     response = chain_with_memory.invoke(
         {"input": "Give me an example"},
         config={"configurable": {"session_id": "user1"}},
     )
-    print(f"User: Give me an example")
+    print("User: Give me an example")
     print(f"Bot:  {response}")
 
     print("\n✓ Memory works with custom prompts and system messages")
@@ -892,7 +890,7 @@ def demo_multi_provider_memory() -> None:
         {"input": "I prefer Python over Java"},
         config={"configurable": {"session_id": "shared"}},
     )
-    print(f"[OpenAI] User: I prefer Python over Java")
+    print("[OpenAI] User: I prefer Python over Java")
     print(f"[OpenAI] Bot:  {response}\n")
 
     # switch to Anthropic with same memory
@@ -911,7 +909,7 @@ def demo_multi_provider_memory() -> None:
         {"input": "What language do I prefer?"},
         config={"configurable": {"session_id": "shared"}},
     )
-    print(f"[Anthropic] User: What language do I prefer?")
+    print("[Anthropic] User: What language do I prefer?")
     print(f"[Anthropic] Bot:  {response}")
 
     print("\n✓ Memory is provider-agnostic and works across different LLMs")
@@ -1038,7 +1036,7 @@ def demo_memory_persistence() -> None:
         {"input": "My project is about AI agents"},
         config={"configurable": {"session_id": "user1"}},
     )
-    print(f"User: My project is about AI agents")
+    print("User: My project is about AI agents")
     print(f"Bot:  {response[:60]}...\n")
 
     # save memory
@@ -1058,7 +1056,7 @@ def demo_memory_persistence() -> None:
     print("## Session 2: Load conversation\n")
 
     # load memory
-    with open(temp_file, "r") as f:
+    with open(temp_file) as f:
         loaded_data = json.load(f)
 
     new_history = ChatMessageHistory()
@@ -1076,7 +1074,7 @@ def demo_memory_persistence() -> None:
         {"input": "What is my project about?"},
         config={"configurable": {"session_id": "user1"}},
     )
-    print(f"User: What is my project about?")
+    print("User: What is my project about?")
     print(f"Bot:  {response}")
 
     # cleanup

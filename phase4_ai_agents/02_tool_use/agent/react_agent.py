@@ -9,11 +9,11 @@ The ReAct pattern:
 """
 
 import re
-from typing import Callable
+from collections.abc import Callable
 
 from dotenv import load_dotenv
 
-from .schemas import AgentState, AgentAction, AgentResult, AgentConfig
+from .schemas import AgentAction, AgentConfig, AgentResult, AgentState
 
 load_dotenv()
 

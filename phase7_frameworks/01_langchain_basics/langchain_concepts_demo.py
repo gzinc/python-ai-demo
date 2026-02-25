@@ -11,6 +11,7 @@ Run with: uv run python -m phase7_frameworks.01_langchain_basics.langchain_conce
 
 import os
 from inspect import cleandoc
+
 from common.demo_menu import Demo, MenuRunner
 from common.util.utils import print_section
 
@@ -427,13 +428,13 @@ def demo_recommendations() -> None:
 # region Demo Menu Configuration
 
 DEMOS = [
-    Demo("1", "Prompts", "templates and few-shot examples", demo_prompts),
-    Demo("2", "LLM Wrappers", "unified LLM interface", demo_llm_wrappers),
-    Demo("3", "Chains", "sequential operations and LCEL", demo_chains),
-    Demo("4", "Memory", "conversation context management", demo_memory),
-    Demo("5", "RAG Basics", "retrieval-augmented generation", demo_rag_basics),
-    Demo("6", "Agents", "tool-using autonomous agents", demo_agents),
-    Demo("7", "All Concepts", "run all demos in sequence", demo_all_concepts),
+    Demo("1", "RAG Setup", "LangChain components overview", demo_rag_setup),
+    Demo("2", "RAG Query", "retrieval-augmented generation", demo_rag_query),
+    Demo("3", "Memory", "conversation context management", demo_memory),
+    Demo("4", "Chains", "sequential operations and LCEL", demo_chains),
+    Demo("5", "Practical Examples", "real-world patterns", demo_practical_examples),
+    Demo("6", "Decision Framework", "when to use LangChain", demo_decision_framework),
+    Demo("7", "Recommendations", "framework guidance", demo_recommendations),
 ]
 
 # endregion

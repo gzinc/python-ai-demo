@@ -15,32 +15,26 @@ Key Pattern: Agent-as-Tool
 Run with: uv run python phase4_ai_agents/03_multi_agent/orchestrator.py
 """
 
-import json
 import os
 import re
 import sys
 from pathlib import Path
-from typing import Literal
 
 # enable imports from this package
 _module_dir = Path(__file__).parent
 if str(_module_dir) not in sys.path:
     sys.path.insert(0, str(_module_dir))
 
-from schemas import TeamConfig, TeamResult, DelegationResult
 from agents import (
-    ToolRegistry,
-    ToolResult,
+    AnalysisAgent,
     BaseSpecialist,
     ResearchAgent,
-    AnalysisAgent,
+    ToolRegistry,
     WriterAgent,
 )
+from schemas import DelegationResult, TeamConfig, TeamResult
 
-
-# =============================================================================
-# Orchestrator Prompts
-# =============================================================================
+# region Orchestrator Prompts
 
 ORCHESTRATOR_SYSTEM_PROMPT = """You are a team orchestrator. You coordinate specialist agents to complete complex tasks.
 
@@ -70,11 +64,9 @@ ORCHESTRATOR_USER_PROMPT = """Task: {task}
 
 What's your next step?"""
 
+# endregion
 
-# =============================================================================
-# Orchestrator Class
-# =============================================================================
-
+# region Orchestrator Class
 
 class MultiAgentOrchestrator:
     """
@@ -304,7 +296,7 @@ ACTION: finish(answer="Based on my team's work: The research specialist found ke
         """
         if self.config.verbose:
             print(f"\n{'='*60}")
-            print(f"  🎯 ORCHESTRATOR: Starting task")
+            print("  🎯 ORCHESTRATOR: Starting task")
             print(f"{'='*60}")
             print(f"  Task: {task}")
             print(f"  Specialists: {', '.join(self.registry.list_tools())}")
@@ -332,7 +324,7 @@ ACTION: finish(answer="Based on my team's work: The research specialist found ke
                 answer = action_args.get("answer", "Task completed.")
                 if self.config.verbose:
                     print(f"\n{'='*60}")
-                    print(f"  ✅ ORCHESTRATOR: Task complete!")
+                    print("  ✅ ORCHESTRATOR: Task complete!")
                     print(f"{'='*60}")
 
                 return TeamResult(
@@ -370,7 +362,7 @@ ACTION: finish(answer="Based on my team's work: The research specialist found ke
         # reached max iterations
         if self.config.verbose:
             print(f"\n{'='*60}")
-            print(f"  ⏱️ ORCHESTRATOR: Max iterations reached")
+            print("  ⏱️ ORCHESTRATOR: Max iterations reached")
             print(f"{'='*60}")
 
         return TeamResult(
@@ -381,11 +373,9 @@ ACTION: finish(answer="Based on my team's work: The research specialist found ke
             error="Max iterations reached",
         )
 
+# endregion
 
-# =============================================================================
-# Quick Demo
-# =============================================================================
-
+# region Quick Demo
 
 def _demo():
     """quick demo of the orchestrator"""
@@ -405,6 +395,9 @@ def _demo():
     print(f"\nDelegations: {result.delegation_summary()}")
     print(f"Iterations: {result.iterations}")
     print(f"Success: {result.success}")
+
+
+# endregion
 
 
 if __name__ == "__main__":

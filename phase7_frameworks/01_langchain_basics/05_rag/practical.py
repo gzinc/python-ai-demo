@@ -14,7 +14,6 @@ import tempfile
 from inspect import cleandoc
 from pathlib import Path
 
-from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_chroma import Chroma
 from langchain_community.document_loaders import TextLoader
 from langchain_core.documents import Document
@@ -22,6 +21,7 @@ from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.runnables import RunnablePassthrough
 from langchain_openai import ChatOpenAI, OpenAIEmbeddings
+from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 from common.demo_menu import Demo, MenuRunner
 from common.util.utils import check_api_keys, print_section, requires_openai
@@ -860,7 +860,7 @@ def demo_multi_query() -> None:
     answer_chain = rag_prompt | llm | StrOutputParser()
     answer = answer_chain.invoke({"context": context, "question": original_query})
 
-    print(f"\n📝 final answer:")
+    print("\n📝 final answer:")
     print(f"   {answer[:300]}{'...' if len(answer) > 300 else ''}")
 
     print("\n🎯 next steps after retrieval:")

@@ -2,12 +2,12 @@
 Tool Use Schemas - Data structures for tool definitions and results.
 """
 
+from .config import ToolConfig
 from .tool import (
-    ToolParameter,
     ToolDefinition,
+    ToolParameter,
     ToolResult,
 )
-from .config import ToolConfig
 
 __all__ = [
     "ToolParameter",

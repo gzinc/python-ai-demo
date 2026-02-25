@@ -8,10 +8,7 @@ Run with: uv run python phase1_foundations/01_numpy_basics/exercises.py
 
 import numpy as np
 
-
-# =============================================================================
-# EXERCISE 1: Array Manipulation
-# =============================================================================
+# region Exercise 1: Array Manipulation
 
 def exercise_1_normalize_rows(matrix: np.ndarray) -> np.ndarray:
     """
@@ -26,10 +23,9 @@ def exercise_1_normalize_rows(matrix: np.ndarray) -> np.ndarray:
     """
     return (matrix - matrix.mean(axis=1, keepdims=True)) / matrix.std(axis=1, keepdims=True)
 
+# endregion
 
-# =============================================================================
-# EXERCISE 2: Vector Operations
-# =============================================================================
+# region Exercise 2: Vector Operations
 
 def exercise_2_euclidean_distance(a: np.ndarray, b: np.ndarray) -> float:
     """
@@ -66,10 +62,9 @@ def exercise_2_find_nearest(query: np.ndarray, vectors: np.ndarray) -> int:
     # YOUR CODE HERE
     pass
 
+# endregion
 
-# =============================================================================
-# EXERCISE 3: Batch Operations
-# =============================================================================
+# region Exercise 3: Batch Operations
 
 def exercise_3_batch_normalize(embeddings: np.ndarray) -> np.ndarray:
     """
@@ -97,10 +92,9 @@ def exercise_3_pairwise_similarity(embeddings: np.ndarray) -> np.ndarray:
     # YOUR CODE HERE
     pass
 
+# endregion
 
-# =============================================================================
-# EXERCISE 4: Reshaping Challenge
-# =============================================================================
+# region Exercise 4: Reshaping Challenge
 
 def exercise_4_reshape_for_attention(
     queries: np.ndarray,
@@ -122,3 +116,5 @@ def exercise_4_reshape_for_attention(
     """
     # YOUR CODE HERE
     pass
+
+# endregion

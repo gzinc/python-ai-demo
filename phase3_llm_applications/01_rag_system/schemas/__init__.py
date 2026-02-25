@@ -10,8 +10,8 @@ Usage:
     from models import Document, Chunk, RetrievalResult
 """
 
-from .document import Document
 from .chunk import Chunk
+from .document import Document
 from .retrieval_result import RetrievalResult
 
 __all__ = ["Document", "Chunk", "RetrievalResult"]

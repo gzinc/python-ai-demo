@@ -13,7 +13,6 @@ Requires: OPENAI_API_KEY in .env file or environment
 
 import os
 from inspect import cleandoc
-from pathlib import Path
 
 from dotenv import load_dotenv
 

@@ -12,18 +12,13 @@ Run with: uv run python phase1_foundations/02_pandas_basics/examples.py
 
 from inspect import cleandoc
 
-import pandas as pd
 import numpy as np
-from typing import List, Dict
+import pandas as pd
 
 from common.demo_menu import Demo, MenuRunner
 from common.util.utils import print_section
 
-
-
-# =============================================================================
-# PART 1: DataFrame Basics
-# =============================================================================
+# region Part 1: DataFrame Basics
 
 def dataframe_creation() -> None:
     """creating DataFrames - the foundation of Pandas"""
@@ -54,7 +49,7 @@ def dataframe_creation() -> None:
         {"doc_id": "d002", "embedding": [0.4, 0.5, 0.6]},
     ]
     embeddings_df = pd.DataFrame(embeddings_data)
-    print(f"\nembeddings DataFrame from list of dicts:")
+    print("\nembeddings DataFrame from list of dicts:")
     print(embeddings_df)
 
 
@@ -91,10 +86,9 @@ def dataframe_exploration() -> None:
     print("\ncategory distribution:")
     print(docs["category"].value_counts())
 
+# endregion
 
-# =============================================================================
-# PART 2: Selection and Filtering
-# =============================================================================
+# region Part 2: Selection and Filtering
 
 def selection_and_filtering() -> None:
     """selecting and filtering data - essential for document processing"""
@@ -144,10 +138,9 @@ def selection_and_filtering() -> None:
     print("\nfilter: content contains 'work':")
     print(docs[docs["content"].str.contains("work", case=False)])
 
+# endregion
 
-# =============================================================================
-# PART 3: Text Processing for AI
-# =============================================================================
+# region Part 3: Text Processing for AI
 
 def text_processing() -> None:
     """text processing - preparing documents for embeddings"""
@@ -228,7 +221,7 @@ def document_chunking() -> None:
     print(f"original document: {len(long_doc)} characters")
 
     # simple chunking by character count
-    def chunk_text(text: str, chunk_size: int = 200, overlap: int = 50) -> List[str]:
+    def chunk_text(text: str, chunk_size: int = 200, overlap: int = 50) -> list[str]:
         """chunk text with overlap for context preservation"""
         chunks = []
         start = 0
@@ -263,10 +256,9 @@ def document_chunking() -> None:
     print("   - Overlap preserves context at boundaries")
     print("   - Typical chunk: 500-1000 tokens")
 
+# endregion
 
-# =============================================================================
-# PART 4: Data Transformation
-# =============================================================================
+# region Part 4: Data Transformation
 
 def data_transformation() -> None:
     """data transformation - preparing for batch processing"""
@@ -332,7 +324,7 @@ def batch_processing_pattern() -> None:
     # batch processing pattern (like embedding generation)
     batch_size = 3
 
-    def mock_generate_embeddings(texts: List[str]) -> List[List[float]]:
+    def mock_generate_embeddings(texts: list[str]) -> list[list[float]]:
         """simulate embedding generation"""
         return [[0.1 * i, 0.2 * i, 0.3 * i] for i, _ in enumerate(texts)]
 
@@ -361,10 +353,9 @@ def batch_processing_pattern() -> None:
     print("   - Typical batch size: 32-128 documents")
     print("   - Can resume from last processed if interrupted")
 
+# endregion
 
-# =============================================================================
-# PART 5: Loading and Saving Data
-# =============================================================================
+# region Part 5: Loading and Saving Data
 
 def loading_and_saving() -> None:
     """loading and saving - real-world data sources"""
@@ -409,10 +400,9 @@ def loading_and_saving() -> None:
     print("   - JSONL: streaming, large datasets")
     print("   - Parquet: large datasets, preserves types (Phase 5)")
 
+# endregion
 
-# =============================================================================
-# PART 6: AI Application Example
-# =============================================================================
+# region Part 6: AI Application Example
 
 def ai_application_example() -> None:
     """complete example: prepare documents for RAG"""
@@ -488,11 +478,7 @@ def ai_application_example() -> None:
     print("   3. Build semantic search (you've done this!)")
     print("   4. Add LLM generation = complete RAG system")
 
-
-# =============================================================================
-# Main
-# =============================================================================
-
+# endregion
 
 # region Demo Menu Configuration
 
@@ -512,7 +498,7 @@ DEMOS = [
 
 def main() -> None:
     """interactive demo runner"""
-    
+
     runner = MenuRunner(DEMOS, title="Pandas Basics - Examples")
     runner.run()
 

@@ -5,8 +5,9 @@ These define the schema that tells the LLM what functions are available.
 Think of it like a Java interface definition - describes what exists.
 """
 
+from collections.abc import Callable
 from dataclasses import dataclass, field
-from typing import Any, Callable, Optional
+from typing import Any
 
 
 @dataclass
@@ -24,8 +25,8 @@ class ToolParameter:
     type: str  # "string", "number", "boolean", "array", "object"
     description: str
     required: bool = True
-    enum: Optional[list[str]] = None  # for constrained choices
-    default: Optional[Any] = None
+    enum: list[str] | None = None  # for constrained choices
+    default: Any | None = None
 
 
 @dataclass
@@ -50,7 +51,7 @@ class Tool:
     name: str
     description: str
     parameters: list[ToolParameter] = field(default_factory=list)
-    function: Optional[Callable] = None  # the actual function to execute
+    function: Callable | None = None  # the actual function to execute
 
     def to_openai_schema(self) -> dict:
         """

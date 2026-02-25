@@ -25,11 +25,10 @@ Run with: uv run python phase3_llm_applications/01_rag_system/chunking.py
 """
 
 import re
+from collections.abc import Callable
 from inspect import cleandoc
-from typing import Callable
 
-from schemas import Document, Chunk
-
+from schemas import Chunk, Document
 
 # ─────────────────────────────────────────────────────────────
 # CHUNKING STRATEGIES

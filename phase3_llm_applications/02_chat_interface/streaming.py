@@ -20,12 +20,12 @@ Run with: uv run python phase3_llm_applications/02_chat_interface/streaming.py
 """
 
 import os
-import sys
 import time
-from typing import Generator, Optional, Callable
+from collections.abc import Callable, Generator
 from dataclasses import dataclass
 
 from dotenv import load_dotenv
+
 from common.demo_menu import Demo, MenuRunner
 from common.util.utils import print_section
 
@@ -37,7 +37,7 @@ class StreamChunk:
     """single chunk from streaming response"""
     content: str
     is_final: bool = False
-    metadata: Optional[dict] = None
+    metadata: dict | None = None
 
 
 # ─────────────────────────────────────────────────────────────
@@ -238,8 +238,8 @@ class StreamPrinter:
 
     def __init__(
         self,
-        on_chunk: Optional[Callable[[str], None]] = None,
-        on_complete: Optional[Callable[[str], None]] = None,
+        on_chunk: Callable[[str], None] | None = None,
+        on_complete: Callable[[str], None] | None = None,
         prefix: str = "",
         suffix: str = "\n",
     ):
