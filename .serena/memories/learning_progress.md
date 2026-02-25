@@ -52,13 +52,19 @@ Track your journey through AI development. Update after each session.
 - [x] .env setup with python-dotenv
 
 ### Embeddings
-- [x] Text embeddings basics
-- [x] Semantic similarity
-- [x] Vector databases
-- [x] Similarity search
-- [x] ChromaDB integration
+- [x] Text embeddings basics (intuition: fake 3D space demo)
+- [x] Semantic similarity (cosine similarity formula + why not euclidean)
+- [x] Real embedding generation (sentence-transformers all-MiniLM-L6-v2, local, no API key)
+- [x] Semantic search (rank corpus by query similarity)
+- [x] Semantic vs keyword search (synonym/paraphrase traps demo)
+- [x] Word analogies (king - man + woman = queen, vector arithmetic)
+- [x] RAG connection (how embeddings power Phase 3 pipeline)
+- [x] examples.py (7 demos, all no-API-key, ruff clean)
+- [x] README.md (with ASCII diagrams, cosine formula, similarity table)
 
-**Phase 2 Completion**: 100% (All 3 modules completed! Prompt Engineering + API Integration + Embeddings)
+**Phase 2 Completion**: 100% ✅ (All 3 modules + phase README complete)
+- Added phase2_llm_fundamentals/README.md (was missing)
+- Added phase2_llm_fundamentals/03_embeddings/examples.py + README.md (was empty dir)
 
 ---
 
